@@ -174,6 +174,9 @@ function CreateListing() {
                               ...provided.draggableProps.style,
                             }}
                           >
+                            {container.keyName === ITEMS_RANKED && (
+                              <div className="rank-number">{index + 1}</div>
+                            )}
                             {item.item_name}
                             {item.deletable &&
                               container.keyName === ITEMS_REMAINING && (
