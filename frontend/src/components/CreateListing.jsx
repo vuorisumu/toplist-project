@@ -133,8 +133,23 @@ function CreateListing() {
     }));
   };
 
+  // save ranking
   const saveRanking = () => {
-    console.log("Save ranking here");
+    if (containers[ITEMS_RANKED].items.length === 0 || !rankingName) {
+      console.log("Cannot save");
+      return;
+    }
+
+    console.log(`Template id: ${templateId}
+    Ranking name: ${rankingName}
+    Ranking desc: ${rankingDesc}
+    Creator: ${creatorName}
+    ranking size: ${containers[ITEMS_RANKED].items.length}`);
+  };
+
+  // clear all fields
+  const clearAll = () => {
+    window.location.reload(false);
   };
 
   // handles the drag n drop
@@ -352,6 +367,10 @@ function CreateListing() {
       <div>
         <button type="button" onClick={saveRanking}>
           Save Ranking
+        </button>
+
+        <button type="button" onClick={clearAll}>
+          Reset
         </button>
       </div>
     </div>
