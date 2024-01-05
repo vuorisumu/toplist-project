@@ -133,6 +133,10 @@ function CreateListing() {
     }));
   };
 
+  const saveRanking = () => {
+    console.log("Save ranking here");
+  };
+
   // handles the drag n drop
   const onDragEnd = (res, containers, setContainers) => {
     if (!res.destination) {
@@ -186,11 +190,14 @@ function CreateListing() {
   return (
     <div>
       <h1>Create a Ranking</h1>
+
+      {/* Template information */}
       <div>
         <p>Template name: {template.name}</p>
         <p>Template creator: {template.user_name}</p>
       </div>
 
+      {/* Ranking information */}
       <div>
         <label>Ranking title: </label>
         <input
@@ -216,6 +223,7 @@ function CreateListing() {
         />
       </div>
 
+      {/* Ranking builder */}
       <DragDropContext
         onDragEnd={(res) => onDragEnd(res, containers, setContainers)}
       >
@@ -326,16 +334,26 @@ function CreateListing() {
         ))}
       </DragDropContext>
 
-      <label>New item: </label>
-      <input
-        type="text"
-        value={newEntry}
-        onChange={(e) => setNewEntry(e.target.value)}
-        placeholder="New Item"
-      />
-      <button type="button" onClick={addEntry}>
-        Add
-      </button>
+      {/* Add new items */}
+      <div>
+        <label>New item: </label>
+        <input
+          type="text"
+          value={newEntry}
+          onChange={(e) => setNewEntry(e.target.value)}
+          placeholder="New Item"
+        />
+        <button type="button" onClick={addEntry}>
+          Add
+        </button>
+      </div>
+
+      {/* Save changes */}
+      <div>
+        <button type="button" onClick={saveRanking}>
+          Save Ranking
+        </button>
+      </div>
     </div>
   );
 }
