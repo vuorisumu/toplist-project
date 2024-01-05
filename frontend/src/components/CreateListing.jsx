@@ -33,6 +33,7 @@ function CreateListing() {
   const [rankingDesc, setRankingDesc] = useState("");
   const [creatorName, setCreatorName] = useState("");
   const [newEntry, setNewEntry] = useState("");
+  const [selectedItems, setSelectedItems] = useState([]);
 
   // fetch selected template
   useEffect(() => {
@@ -74,8 +75,49 @@ function CreateListing() {
     }
   };
 
-  const addNote = (item) => {
-    console.log(item.item_name);
+  // update item note on a selected item
+  const updateNote = (note, item) => {
+    const updatedItems = containers[ITEMS_RANKED].items.map((curItem) => {
+      if (curItem.item_name === item.item_name) {
+        return { ...curItem, item_note: note };
+      }
+      return curItem;
+    });
+
+    // set containers again
+    setContainers((prevContainers) => ({
+      ...prevContainers,
+      [ITEMS_RANKED]: {
+        ...prevContainers[ITEMS_RANKED],
+        items: updatedItems,
+      },
+    }));
+  };
+
+  // deletes the item note from a selected item
+  const deleteNote = (itemWithNote) => {
+    const updatedItems = containers[ITEMS_RANKED].items.map((item) => {
+      if (item.item_name === itemWithNote.item_name) {
+        return { ...item, item_note: undefined };
+      }
+      return item;
+    });
+
+    // set containers again
+    setContainers((prevContainers) => ({
+      ...prevContainers,
+      [ITEMS_RANKED]: {
+        ...prevContainers[ITEMS_RANKED],
+        items: updatedItems,
+      },
+    }));
+
+    // delete current item from selected items
+    setSelectedItems((prevSelectedItems) =>
+      prevSelectedItems.filter(
+        (selectedItem) => selectedItem.item_name !== itemWithNote.item_name
+      )
+    );
   };
 
   // delete added entry
@@ -210,7 +252,7 @@ function CreateListing() {
                               ...provided.draggableProps.style,
                             }}
                           >
-                            {/* Rank number */}
+                            {/* Rank number only on ranked container */}
                             {container.keyName === ITEMS_RANKED && (
                               <div className="rank-number">{index + 1}</div>
                             )}
@@ -218,16 +260,50 @@ function CreateListing() {
                             {/* Item */}
                             {item.item_name}
 
+                            {/* Note options only on ranked container */}
                             {container.keyName === ITEMS_RANKED && (
-                              <button
-                                type="button"
-                                onClick={() => addNote(item)}
-                              >
-                                Add note
-                              </button>
+                              <>
+                                {selectedItems.some(
+                                  (selectedItem) =>
+                                    selectedItem.item_name === item.item_name
+                                ) ? (
+                                  <>
+                                    {/* Note field */}
+                                    <textarea
+                                      value={item.item_note}
+                                      onChange={(e) => {
+                                        updateNote(e.target.value, item);
+                                      }}
+                                    />
+
+                                    {/* Delete note */}
+                                    <button
+                                      type="button"
+                                      onClick={() => deleteNote(item)}
+                                    >
+                                      Delete note
+                                    </button>
+                                  </>
+                                ) : (
+                                  <>
+                                    {/* Add note button */}
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        setSelectedItems([
+                                          ...selectedItems,
+                                          item,
+                                        ])
+                                      }
+                                    >
+                                      Add note
+                                    </button>
+                                  </>
+                                )}
+                              </>
                             )}
 
-                            {/* Delete button */}
+                            {/* Delete button only on unranked container */}
                             {item.deletable &&
                               container.keyName === ITEMS_REMAINING && (
                                 <button
