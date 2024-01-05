@@ -29,6 +29,7 @@ function Main() {
         {templates.map((t) => (
           <li key={t.id}>
             <h2>{t.name}</h2>
+            <p>Creator: {t.user_name ? t.user_name : "Anonymous"}</p>
             <ul>
               {JSON.parse(t.items).map((item, index) => (
                 <li key={index}>{item.item_name}</li>

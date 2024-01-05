@@ -17,6 +17,7 @@ const querySchema = Joi.object({
   sortOrder: Joi.string().valid("asc", "desc").default("asc").optional(),
 });
 
+// general query function
 async function query(sql, args) {
   return new Promise((resolve, reject) => {
     pool.query(sql, args, (err, rows) => {
@@ -28,13 +29,14 @@ async function query(sql, args) {
   });
 }
 
-async function filteredQuery(req) {
+// template query with filters
+async function filteredTemplatesQuery(req) {
   const { error, value } = querySchema.validate(req);
   if (error) {
     throw error;
   }
 
-  let filteredQuery = "SELECT * FROM templates";
+  let filteredQuery = `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
 
   // sorting
   if (value.sortBy && ["name", "creatorname"].includes(value.sortBy)) {
@@ -43,7 +45,6 @@ async function filteredQuery(req) {
     // if sorting by creator name
     if (value.sortBy === "creatorname") {
       sortBy = "u.user_name";
-      filteredQuery += ` t LEFT JOIN users u ON t.creator_id = u.user_id`;
     }
 
     // default to asc if desc has not been specified
@@ -51,7 +52,13 @@ async function filteredQuery(req) {
       value.sortOrder && value.sortOrder.toLowerCase() === "desc"
         ? "DESC"
         : "ASC";
-    filteredQuery += ` ORDER BY ${sortBy} ${sortOrder}`;
+
+    if (value.sortBy === "creatorname") {
+      // shows templates by anonymous creators last
+      filteredQuery += ` ORDER BY ${sortBy} IS NULL ASC, ${sortBy} ${sortOrder}`;
+    } else {
+      filteredQuery += ` ORDER BY ${sortBy} ${sortOrder}`;
+    }
   }
 
   // log the query in full
@@ -63,5 +70,5 @@ async function filteredQuery(req) {
 module.exports = {
   pool,
   query,
-  filteredQuery,
+  filteredTemplatesQuery,
 };

@@ -5,17 +5,20 @@ const router = express.Router();
 const databaseError = { msg: "Error retrieving data from database" };
 const notfoundError = { msg: "Location not found" };
 console.log("router accessed");
+
 // get all templates
 router.get("/templates", async (req, res) => {
   try {
     let results;
     if (Object.keys(req.query).length !== 0) {
       // query has filters
-      const { filteredQuery } = await database.filteredQuery(req.query);
+      const { filteredQuery } = await database.filteredTemplatesQuery(
+        req.query
+      );
       results = await database.query(filteredQuery);
     } else {
       // query does not have filters
-      const query = "SELECT * FROM templates";
+      const query = `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
       results = await database.query(query);
     }
 
