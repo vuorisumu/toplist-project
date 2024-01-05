@@ -29,6 +29,9 @@ function CreateListing() {
 
   const [template, setTemplate] = useState(null);
   const [containers, setContainers] = useState(itemContainers);
+  const [rankingName, setRankingName] = useState("");
+  const [rankingDesc, setRankingDesc] = useState("");
+  const [creatorName, setCreatorName] = useState("");
   const [newEntry, setNewEntry] = useState("");
 
   // fetch selected template
@@ -140,6 +143,31 @@ function CreateListing() {
       <div>
         <p>Template name: {template.name}</p>
         <p>Template creator: {template.user_name}</p>
+      </div>
+
+      <div>
+        <label>Ranking title: </label>
+        <input
+          type="text"
+          value={rankingName}
+          onChange={(e) => setRankingName(e.target.value)}
+          placeholder="Ranking Title"
+        />
+
+        <label>Description: </label>
+        <textarea
+          value={rankingDesc}
+          onChange={(e) => setRankingDesc(e.target.value)}
+          placeholder="Ranking description"
+        />
+
+        <label>Creator name: </label>
+        <input
+          type="text"
+          value={creatorName}
+          onChange={(e) => setCreatorName(e.target.value)}
+          placeholder="Creator Name"
+        />
       </div>
 
       <DragDropContext
