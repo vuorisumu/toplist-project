@@ -16,18 +16,19 @@ function CreateListing() {
   const itemContainers = {
     [ITEMS_RANKED]: {
       name: "Ranked",
-      keyName: "rank",
+      keyName: ITEMS_RANKED,
       items: [],
     },
     [ITEMS_REMAINING]: {
       name: "Unused items",
-      keyName: "remaining",
+      keyName: ITEMS_REMAINING,
       items: [],
     },
   };
 
   const [template, setTemplate] = useState(null);
   const [containers, setContainers] = useState(itemContainers);
+  const [newEntry, setNewEntry] = useState("");
 
   // fetch selected template
   useEffect(() => {
@@ -44,16 +45,40 @@ function CreateListing() {
             items: JSON.parse(data[0].items) || [],
           },
         }));
-
-        // test that all items correctly go to remaining container
-        containers[ITEMS_REMAINING].items.map((i) => {
-          console.log(i);
-        });
       })
       .catch((err) => {
         console.log(err);
       });
   }, [templateId]);
+
+  // adds new entry to template
+  const addEntry = () => {
+    if (newEntry.trim() !== "") {
+      setContainers((prevContainers) => ({
+        ...prevContainers,
+        [ITEMS_REMAINING]: {
+          ...prevContainers[ITEMS_REMAINING],
+          items: [
+            ...prevContainers[ITEMS_REMAINING].items,
+            { item_name: newEntry, deletable: true },
+          ],
+        },
+      }));
+      setNewEntry("");
+    }
+  };
+
+  const deleteItem = (index) => {
+    setContainers((prevContainers) => ({
+      ...prevContainers,
+      [ITEMS_REMAINING]: {
+        ...prevContainers[ITEMS_REMAINING],
+        items: prevContainers[ITEMS_REMAINING].items.filter(
+          (_, i) => i !== index
+        ),
+      },
+    }));
+  };
 
   // handles the drag n drop
   const onDragEnd = (res, containers, setContainers) => {
@@ -91,7 +116,6 @@ function CreateListing() {
       const contItems = [...cont.items];
       const [moved] = contItems.splice(source.index, 1);
       contItems.splice(destination.index, 0, moved);
-      console.log(contItems);
       setContainers({
         ...containers,
         [source.droppableId]: {
@@ -151,11 +175,20 @@ function CreateListing() {
                             }}
                           >
                             {item.item_name}
+                            {item.deletable &&
+                              container.keyName === ITEMS_REMAINING && (
+                                <button
+                                  type="button"
+                                  onClick={() => deleteItem(index)}
+                                >
+                                  X
+                                </button>
+                              )}
                           </div>
                         )}
                       </Draggable>
                     ))}
-                    {provided.placeholder} {/* Include the placeholder here */}
+                    {provided.placeholder}
                   </div>
                 )}
               </Droppable>
@@ -163,6 +196,17 @@ function CreateListing() {
           </div>
         ))}
       </DragDropContext>
+
+      <label>New item: </label>
+      <input
+        type="text"
+        value={newEntry}
+        onChange={(e) => setNewEntry(e.target.value)}
+        placeholder="New Item"
+      />
+      <button type="button" onClick={addEntry}>
+        Add
+      </button>
     </div>
   );
 }
