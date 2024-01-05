@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { fetchAllTemplates } from "./api";
+import { fetchAllTemplates, fetchAllTemplatesFiltered } from "./api";
 
 function Main() {
   const [templates, setTemplates] = useState([]);
@@ -12,10 +12,19 @@ function Main() {
       });
   }
 
+  async function fetchAllFiltered(filters) {
+    fetchAllTemplatesFiltered(filters)
+      .then((data) => setTemplates(data))
+      .catch((err) => console.log(err));
+  }
+
   return (
     <>
       <h1>Main</h1>
-      <button onClick={fetchAll}>Fetch</button>
+      <button onClick={fetchAll}>Fetch all</button>
+      <button onClick={() => fetchAllFiltered("sortBy=creatorname")}>
+        Sort by creator name
+      </button>
       <ul>
         {templates.map((t) => (
           <li key={t.id}>

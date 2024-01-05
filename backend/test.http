@@ -3,3 +3,7 @@ get http://localhost:3000/api/templates
 
 ###
 get http://localhost:3000/api/templates/1
+
+###
+get http://localhost:3000/api/templates?sortBy=name&sortOrder=desc
+
