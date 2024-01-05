@@ -10,13 +10,44 @@ function CreateListing() {
     console.error("Invalid templateId: ", templateId);
   }
 
-  const [template, setTemplate] = useState(null);
+  const ITEMS_RANKED = "ranked";
+  const ITEMS_REMAINING = "unused";
+  const itemContainers = {
+    [ITEMS_RANKED]: {
+      name: "Ranked",
+      keyName: "rank",
+      items: [],
+    },
+    [ITEMS_REMAINING]: {
+      name: "Unused items",
+      keyName: "remaining",
+      items: [],
+    },
+  };
 
+  const [template, setTemplate] = useState(null);
+  const [containers, setContainers] = useState(itemContainers);
+
+  // fetch selected template
   useEffect(() => {
     fetchTemplateById(templateId)
       .then((data) => {
         setTemplate(data[0]);
         console.log(data[0]);
+
+        // set initial containers
+        setContainers((cont) => ({
+          [ITEMS_RANKED]: { ...cont[ITEMS_RANKED], items: [] },
+          [ITEMS_REMAINING]: {
+            ...cont[ITEMS_REMAINING],
+            items: JSON.parse(data[0].items) || [],
+          },
+        }));
+
+        // test that all items correctly go to remaining container
+        containers[ITEMS_REMAINING].items.map((i) => {
+          console.log(i);
+        });
       })
       .catch((err) => {
         console.log(err);
