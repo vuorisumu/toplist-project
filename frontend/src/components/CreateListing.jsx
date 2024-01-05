@@ -11,6 +11,7 @@ function CreateListing() {
     console.error("Invalid templateId: ", templateId);
   }
 
+  // drag n drop containers
   const ITEMS_RANKED = "ranked";
   const ITEMS_REMAINING = "unused";
   const itemContainers = {
@@ -35,7 +36,6 @@ function CreateListing() {
     fetchTemplateById(templateId)
       .then((data) => {
         setTemplate(data[0]);
-        console.log(data[0]);
 
         // set initial containers
         setContainers((cont) => ({
@@ -53,6 +53,7 @@ function CreateListing() {
 
   // adds new entry to template
   const addEntry = () => {
+    // only adds new if entry isn't empty
     if (newEntry.trim() !== "") {
       setContainers((prevContainers) => ({
         ...prevContainers,
@@ -64,10 +65,13 @@ function CreateListing() {
           ],
         },
       }));
+
+      // reset entry
       setNewEntry("");
     }
   };
 
+  // delete added entry
   const deleteItem = (index) => {
     setContainers((prevContainers) => ({
       ...prevContainers,
