@@ -74,6 +74,10 @@ function CreateListing() {
     }
   };
 
+  const addNote = (item) => {
+    console.log(item.item_name);
+  };
+
   // delete added entry
   const deleteItem = (index) => {
     setContainers((prevContainers) => ({
@@ -206,10 +210,24 @@ function CreateListing() {
                               ...provided.draggableProps.style,
                             }}
                           >
+                            {/* Rank number */}
                             {container.keyName === ITEMS_RANKED && (
                               <div className="rank-number">{index + 1}</div>
                             )}
+
+                            {/* Item */}
                             {item.item_name}
+
+                            {container.keyName === ITEMS_RANKED && (
+                              <button
+                                type="button"
+                                onClick={() => addNote(item)}
+                              >
+                                Add note
+                              </button>
+                            )}
+
+                            {/* Delete button */}
                             {item.deletable &&
                               container.keyName === ITEMS_REMAINING && (
                                 <button
