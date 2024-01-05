@@ -1,22 +1,16 @@
 import { useState } from "react";
+import { fetchAllTemplates } from "./api";
 
 function Main() {
-  const API_BASE_URL = "http://localhost:3000";
   const [templates, setTemplates] = useState([]);
 
-  const fetchAll = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/templates`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log(data);
-      setTemplates(data);
-    } catch (error) {
-      console.error("Fetch error:", error);
-    }
-  };
+  async function fetchAll() {
+    fetchAllTemplates()
+      .then((data) => setTemplates(data))
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   return (
     <>
