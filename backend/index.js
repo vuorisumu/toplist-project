@@ -10,6 +10,10 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 
 app.use((req, res, next) => {
+  if (req.url.endsWith(".js") || req.url.endsWith(".jsx")) {
+    res.type("application/javascript");
+  }
+
   res.header("Access-Control-Allow-Origin", "*");
   next();
 });
@@ -17,7 +21,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use("/api", routes);
 
-app.use(express.static("./frontend"));
+app.use(express.static("./frontend/dist"));
 
 const server = app
   .listen(port, () => {
