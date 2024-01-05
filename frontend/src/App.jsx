@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import Main from "./components/Main.jsx";
 import NewTemplate from "./components/NewTemplate.jsx";
+import CreateListing from "./components/CreateListing.jsx";
 
 class App extends React.Component {
   render() {
@@ -20,7 +21,12 @@ class App extends React.Component {
         </nav>
         <Routes>
           <Route path="/" element={<Main />} />
+          <Route path="/createlisting" element={<Main />} />
           <Route path="/new-template" element={<NewTemplate />} />
+          <Route
+            path="/createlisting/:templateId"
+            element={<CreateListing />}
+          />
         </Routes>
       </Router>
     );

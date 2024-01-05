@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { fetchAllTemplates, fetchAllTemplatesFiltered } from "./api";
 
 function Main() {
@@ -28,7 +29,9 @@ function Main() {
       <ul>
         {templates.map((t) => (
           <li key={t.id}>
-            <h2>{t.name}</h2>
+            <Link to={`/createlisting/${t.id}`}>
+              <h2>{t.name}</h2>
+            </Link>
             <p>Creator: {t.user_name ? t.user_name : "Anonymous"}</p>
             <ul>
               {JSON.parse(t.items).map((item, index) => (
