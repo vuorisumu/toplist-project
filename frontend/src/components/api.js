@@ -9,3 +9,9 @@ export const fetchAllTemplatesFiltered = (filters) => {
     response.json()
   );
 };
+
+export const fetchTemplateById = (id) => {
+  return fetch(`${API_BASE_URL}/templates/${id}`).then((response) =>
+    response.json()
+  );
+};
