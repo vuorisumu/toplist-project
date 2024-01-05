@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { fetchTemplateById } from "./api";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 function CreateListing() {
   const location = useLocation();
@@ -54,6 +55,53 @@ function CreateListing() {
       });
   }, [templateId]);
 
+  // handles the drag n drop
+  const onDragEnd = (res, containers, setContainers) => {
+    if (!res.destination) {
+      return;
+    }
+    const { source, destination } = res;
+
+    if (source.droppableId !== destination.droppableId) {
+      // set source and destination
+      const sourceCont = containers[source.droppableId];
+      const destCont = containers[destination.droppableId];
+
+      // set items to source and destination
+      const sourceItems = [...sourceCont.items];
+      const destItems = [...destCont.items];
+
+      // deletes and adds items
+      const [moved] = sourceItems.splice(source.index, 1);
+      destItems.splice(destination.index, 0, moved);
+      setContainers({
+        ...containers,
+        [source.droppableId]: {
+          ...sourceCont,
+          items: sourceItems,
+        },
+        [destination.droppableId]: {
+          ...destCont,
+          items: destItems,
+        },
+      });
+    } else {
+      // rearrange container
+      const cont = containers[source.droppableId];
+      const contItems = [...cont.items];
+      const [moved] = contItems.splice(source.index, 1);
+      contItems.splice(destination.index, 0, moved);
+      console.log(contItems);
+      setContainers({
+        ...containers,
+        [source.droppableId]: {
+          ...cont,
+          items: contItems,
+        },
+      });
+    }
+  };
+
   if (!template) {
     return <div>Loading...</div>;
   }
@@ -70,6 +118,18 @@ function CreateListing() {
           <p key={index}>{item.item_name}</p>
         ))}
       </div>
+
+      <DragDropContext
+        onDragEnd={(res) => onDragEnd(res, containers, setContainers)}
+      >
+        {Object.entries(containers).map(([id, container]) => {
+          return (
+            <div key={id}>
+              <h3>{container.name}</h3>
+            </div>
+          );
+        })}
+      </DragDropContext>
     </div>
   );
 }
