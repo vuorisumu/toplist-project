@@ -112,23 +112,56 @@ function CreateListing() {
       <div>
         <p>Template name: {template.name}</p>
         <p>Template creator: {template.user_name}</p>
-
-        <p>Items: </p>
-        {JSON.parse(template.items).map((item, index) => (
-          <p key={index}>{item.item_name}</p>
-        ))}
       </div>
 
       <DragDropContext
         onDragEnd={(res) => onDragEnd(res, containers, setContainers)}
       >
-        {Object.entries(containers).map(([id, container]) => {
-          return (
-            <div key={id}>
-              <h3>{container.name}</h3>
+        {Object.entries(containers).map(([id, container]) => (
+          <div key={id}>
+            <h3>{container.name}</h3>
+            <div id={container.name}>
+              <Droppable droppableId={id} key={id}>
+                {(provided, snapshot) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    style={{
+                      background: snapshot.isDraggingOver
+                        ? "lightgray"
+                        : "darkgray",
+                    }}
+                  >
+                    {container.items.map((item, index) => (
+                      <Draggable
+                        key={item.item_name}
+                        draggableId={item.item_name}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={{
+                              backgroundColor: snapshot.isDragging
+                                ? "darkmagenta"
+                                : "darkgray",
+                              ...provided.draggableProps.style,
+                            }}
+                          >
+                            {item.item_name}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder} {/* Include the placeholder here */}
+                  </div>
+                )}
+              </Droppable>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </DragDropContext>
     </div>
   );
