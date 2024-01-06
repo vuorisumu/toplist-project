@@ -28,3 +28,13 @@ export const addNewRanking = (ranking) => {
     .then((data) => console.log("Response:", data))
     .catch((error) => console.error("Error:", error));
 };
+
+export const fetchAllUsers = () => {
+  return fetch(`${API_BASE_URL}/users`).then((response) => response.json());
+};
+
+export const fetchUserById = (id) => {
+  return fetch(`${API_BASE_URL}/users/${id}`).then((response) =>
+    response.json()
+  );
+};
