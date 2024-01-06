@@ -126,7 +126,6 @@ function CreateListing() {
         rankingData.description = rankingDesc;
       }
 
-      console.log(typeof rankingData.items);
       const res = await addNewRanking(rankingData);
       console.log(res);
     } catch (err) {
