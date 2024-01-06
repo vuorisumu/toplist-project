@@ -7,6 +7,7 @@ import {
   fetchUserByName,
 } from "./api";
 import { DnDContainer } from "./Dnd";
+import { v4 as uuid } from "uuid";
 
 function CreateListing() {
   const location = useLocation();
@@ -44,12 +45,27 @@ function CreateListing() {
       .then((data) => {
         setTemplate(data[0]);
 
+        const blanks = [];
+        for (let i = 0; i < 5; i++) {
+          blanks.push({
+            item_name: " ",
+            blank: true,
+            id: uuid(),
+          });
+        }
+
+        // Add uuid() to each item in data[0].items
+        const setIds = JSON.parse(data[0].items).map((item) => ({
+          ...item,
+          id: uuid(),
+        }));
+
         // set initial containers
         setContainers((cont) => ({
-          [ITEMS_RANKED]: { ...cont[ITEMS_RANKED], items: [] },
+          [ITEMS_RANKED]: { ...cont[ITEMS_RANKED], items: blanks },
           [ITEMS_REMAINING]: {
             ...cont[ITEMS_REMAINING],
-            items: JSON.parse(data[0].items) || [],
+            items: setIds || [],
           },
         }));
       })

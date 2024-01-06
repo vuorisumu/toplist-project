@@ -60,6 +60,10 @@ button:focus-visible {
   font-weight: 800;
 }
 
+.rank-item {
+  min-height: 50px;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

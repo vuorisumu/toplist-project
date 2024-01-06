@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 function DnDContainer({
@@ -10,6 +10,38 @@ function DnDContainer({
 }) {
   // items with notes
   const [selectedItems, setSelectedItems] = useState([]);
+
+  /*
+  // Ensure there are at least five items in ITEMS_RANKED
+  const ensureMinimumItems = () => {
+    const rankedItems = containers[ITEMS_RANKED].items;
+    const requiredBlankItems = 5 - rankedItems.length;
+
+    if (requiredBlankItems > 0) {
+      const blankItems = Array.from(
+        { length: requiredBlankItems },
+        (_, index) => ({
+          item_name: `Blank Item ${index + 1}`,
+          item_note: "",
+          deletable: true,
+          rank_number: rankedItems.length + index + 1,
+        })
+      );
+
+      setContainers((prevContainers) => ({
+        ...prevContainers,
+        [ITEMS_RANKED]: {
+          ...prevContainers[ITEMS_RANKED],
+          items: [...rankedItems, ...blankItems],
+        },
+      }));
+    }
+  };
+
+  // Call ensureMinimumItems when the component mounts
+  useEffect(() => {
+    ensureMinimumItems();
+  }, []);*/
 
   // update item note on a selected item
   const updateNote = (note, item) => {
@@ -144,12 +176,13 @@ function DnDContainer({
                 >
                   {container.items.map((item, index) => (
                     <Draggable
-                      key={item.item_name}
-                      draggableId={item.item_name}
+                      key={item.id}
+                      draggableId={item.id}
                       index={index}
                     >
                       {(provided, snapshot) => (
                         <div
+                          className="rank-item"
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
@@ -195,14 +228,19 @@ function DnDContainer({
                               ) : (
                                 <>
                                   {/* Add note button */}
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      setSelectedItems([...selectedItems, item])
-                                    }
-                                  >
-                                    Add note
-                                  </button>
+                                  {!item.blank && (
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        setSelectedItems([
+                                          ...selectedItems,
+                                          item,
+                                        ])
+                                      }
+                                    >
+                                      Add note
+                                    </button>
+                                  )}
                                 </>
                               )}
                             </>
