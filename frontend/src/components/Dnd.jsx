@@ -85,23 +85,6 @@ function DnDContainer({
       const sourceItems = [...sourceCont.items];
       const destItems = [...destCont.items];
 
-      const draggedItem = sourceCont.items[source.index];
-      if (destCont.keyName === ITEMS_REMAINING) {
-        // drag to unused
-        if (draggedItem.blank) {
-          return;
-        }
-      } else {
-        // drag to ranked
-        if (destItems.length + 1 > destCont.default_size) {
-          for (let i = destItems.length; i >= 0; i--) {
-            if (destItems[i]?.blank) {
-              console.log(i + 1);
-            }
-          }
-        }
-      }
-
       // deletes and adds items
       const [moved] = sourceItems.splice(source.index, 1);
 
@@ -112,6 +95,33 @@ function DnDContainer({
       destItems.forEach((item, index) => {
         item.rank_number = index + 1;
       });
+
+      const draggedItem = sourceCont.items[source.index];
+      if (destCont.keyName === ITEMS_REMAINING) {
+        // dragged to unused
+        if (draggedItem.blank) {
+          return;
+        }
+
+        if (sourceItems.length - 1 < sourceCont.default_size) {
+          console.log("too small");
+        }
+      } else {
+        // dragged to ranked
+        if (destItems.length > destCont.default_size) {
+          // take the last item on ranked list
+          const lastItem = destItems[destItems.length - 1];
+
+          if (lastItem?.blank) {
+            // destroy item if it's blank
+            destItems.splice(destItems.length - 1, 1);
+          } else {
+            // move item to unused if it's not blank
+            const [dropped] = destItems.splice(destItems.length - 1, 1);
+            sourceItems.splice(0, 0, dropped);
+          }
+        }
+      }
 
       setContainers({
         ...containers,
