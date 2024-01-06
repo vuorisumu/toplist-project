@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { addNewUser, fetchTemplateById, fetchUserByName } from "./api";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { DndContainer } from "./Dnd";
 
 function CreateListing() {
   const location = useLocation();
@@ -184,7 +184,7 @@ function CreateListing() {
   };
 
   // handles the drag n drop
-  const onDragEnd = (res, containers, setContainers) => {
+  const onDragEnd = (res, containers) => {
     if (!res.destination) {
       return;
     }
@@ -280,115 +280,7 @@ function CreateListing() {
       </div>
 
       {/* Ranking builder */}
-      <DragDropContext
-        onDragEnd={(res) => onDragEnd(res, containers, setContainers)}
-      >
-        {Object.entries(containers).map(([id, container]) => (
-          <div key={id}>
-            <h3>{container.name}</h3>
-            <div id={container.name}>
-              <Droppable droppableId={id} key={id}>
-                {(provided, snapshot) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    style={{
-                      background: snapshot.isDraggingOver
-                        ? "lightgray"
-                        : "darkgray",
-                    }}
-                  >
-                    {container.items.map((item, index) => (
-                      <Draggable
-                        key={item.item_name}
-                        draggableId={item.item_name}
-                        index={index}
-                      >
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={{
-                              backgroundColor: snapshot.isDragging
-                                ? "darkmagenta"
-                                : "darkgray",
-                              ...provided.draggableProps.style,
-                            }}
-                          >
-                            {/* Rank number only on ranked container */}
-                            {container.keyName === ITEMS_RANKED && (
-                              <div className="rank-number">{index + 1}</div>
-                            )}
-
-                            {/* Item */}
-                            {item.item_name}
-
-                            {/* Note options only on ranked container */}
-                            {container.keyName === ITEMS_RANKED && (
-                              <>
-                                {selectedItems.some(
-                                  (selectedItem) =>
-                                    selectedItem.item_name === item.item_name
-                                ) ? (
-                                  <>
-                                    {/* Note field */}
-                                    <textarea
-                                      value={item.item_note}
-                                      onChange={(e) => {
-                                        updateNote(e.target.value, item);
-                                      }}
-                                    />
-
-                                    {/* Delete note */}
-                                    <button
-                                      type="button"
-                                      onClick={() => deleteNote(item)}
-                                    >
-                                      Delete note
-                                    </button>
-                                  </>
-                                ) : (
-                                  <>
-                                    {/* Add note button */}
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        setSelectedItems([
-                                          ...selectedItems,
-                                          item,
-                                        ])
-                                      }
-                                    >
-                                      Add note
-                                    </button>
-                                  </>
-                                )}
-                              </>
-                            )}
-
-                            {/* Delete button only on unranked container */}
-                            {item.deletable &&
-                              container.keyName === ITEMS_REMAINING && (
-                                <button
-                                  type="button"
-                                  onClick={() => deleteItem(index)}
-                                >
-                                  X
-                                </button>
-                              )}
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </div>
-          </div>
-        ))}
-      </DragDropContext>
+      <DndContainer containers={containers} onDragEnd={onDragEnd} />
 
       {/* Add new items */}
       <div>
