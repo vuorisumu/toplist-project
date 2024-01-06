@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { fetchTemplateById } from "./api";
+import { fetchTemplateById, fetchUserByName } from "./api";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 function CreateListing() {
@@ -133,32 +133,38 @@ function CreateListing() {
   };
 
   // save ranking
-  const saveRanking = () => {
+  const saveRanking = async () => {
     if (containers[ITEMS_RANKED].items.length === 0 || !rankingName) {
       console.log("Cannot save");
       return;
     }
 
-    // store ranking data
-    let rankingData = {
-      ranking_name: rankingName,
-      template_id: templateId,
-      items: containers[ITEMS_RANKED].items,
-    };
+    try {
+      // store ranking data
+      let rankingData = {
+        ranking_name: rankingName,
+        template_id: templateId,
+        items: containers[ITEMS_RANKED].items,
+      };
 
-    if (creatorName !== "") {
-      // fetch creator id here !!!
-      console.log(creatorName);
+      if (creatorName !== "") {
+        const fetchedUser = await fetchUserByName(creatorName.trim());
+        if (fetchedUser.length > 0) {
+          rankingData.creator_id = fetchedUser[0].user_id;
+        }
+      }
+
+      if (rankingDesc !== "") {
+        rankingData.description = rankingDesc;
+      }
+
+      console.log(rankingData.creator_id);
+      rankingData.items.map((item) => {
+        console.log(item.item_name + " ranked at " + item.rank_number);
+      });
+    } catch (err) {
+      console.error(err);
     }
-
-    if (rankingDesc !== "") {
-      rankingData.description = rankingDesc;
-      console.log(rankingDesc);
-    }
-
-    containers[ITEMS_RANKED].items.map((item) => {
-      console.log(item.item_name + " ranked at " + item.rank_number);
-    });
   };
 
   // clear all fields

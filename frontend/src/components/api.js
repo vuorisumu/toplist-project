@@ -38,3 +38,9 @@ export const fetchUserById = (id) => {
     response.json()
   );
 };
+
+export const fetchUserByName = (name) => {
+  return fetch(`${API_BASE_URL}/users?name=${name}`).then((response) =>
+    response.json()
+  );
+};
