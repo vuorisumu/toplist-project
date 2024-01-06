@@ -143,7 +143,7 @@ router.post("/rankings/", async (req, res) => {
     const result = await database.query(query, values);
 
     // successful insert
-    res.status(200).json({
+    res.status(201).json({
       msg: "Added new ranking",
       id: result.insertId,
     });
@@ -214,7 +214,7 @@ router.post("/users/", async (req, res) => {
     const result = await database.query(query, values);
 
     // successful insert
-    res.status(200).json({
+    res.status(201).json({
       msg: "Added new user",
       id: result.insertId,
     });
