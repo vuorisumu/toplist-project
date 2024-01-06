@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const Joi = require("joi");
 const mysql = require("mysql");
 const dotenv = require("dotenv");
@@ -15,6 +16,19 @@ const pool = mysql.createPool({
 const querySchema = Joi.object({
   sortBy: Joi.string().valid("name", "creatorname").optional(),
   sortOrder: Joi.string().valid("asc", "desc").default("asc").optional(),
+});
+
+const rankingSchema = Joi.object({
+  ranking_name: Joi.string().required(),
+  template_id: Joi.number().required(),
+  creator_id: Joi.number().optional(),
+  description: Joi.string().optional(),
+  items: Joi.object().keys({
+    item_name: Joi.string().required(),
+    item_note: Joi.string().optional(),
+    deletable: Joi.boolean().optional(),
+    rank_number: Joi.number().required(),
+  }),
 });
 
 // general query function
@@ -109,4 +123,5 @@ module.exports = {
   pool,
   query,
   filteredTemplatesQuery,
+  rankingSchema,
 };

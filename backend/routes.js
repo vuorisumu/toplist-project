@@ -69,4 +69,65 @@ router.get("/rankings", async (req, res) => {
   }
 });
 
+// get ranking by id
+router.get("/rankings/:id([0-9]+)", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const result = await database.query(
+      `SELECT * FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id LEFT JOIN templates t ON r.template_id = t.id`,
+      id
+    );
+
+    // id not found
+    if (result.length === 0) {
+      return res.status(404).send(notfoundError);
+    }
+
+    // all good
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
+// add new ranking
+router.post("/rankings/", async (req, res) => {
+  try {
+    const { error } = database.rankingSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ msg: error.details[0].message });
+    }
+
+    let query = "INSERT INTO rankings (ranking_name, template_id, items";
+    const values = [];
+    values.push(req.body.ranking_name);
+    values.push(req.body.template_id);
+    values.push(req.body.items);
+
+    if (req.body.creator_id) {
+      query += ", creator_id";
+      values.push(req.body.creator_id);
+    }
+
+    if (req.body.description) {
+      query += ", description";
+      values.push(req.body.description);
+    }
+
+    query += ") VALUES (?)";
+
+    console.log("Full query: " + query);
+
+    const result = await database.query(query, values);
+
+    // successful insert
+    res.status(200).json({
+      msg: "Added new ranking",
+      id: result.insertId,
+    });
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
 module.exports = router;
