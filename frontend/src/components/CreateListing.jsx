@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { fetchTemplateById } from "./api";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
@@ -145,6 +144,10 @@ function CreateListing() {
     Ranking desc: ${rankingDesc}
     Creator: ${creatorName}
     ranking size: ${containers[ITEMS_RANKED].items.length}`);
+
+    containers[ITEMS_RANKED].items.map((item) => {
+      console.log(item.item_name + " ranked at " + item.rank_number);
+    });
   };
 
   // clear all fields
@@ -171,6 +174,11 @@ function CreateListing() {
       // deletes and adds items
       const [moved] = sourceItems.splice(source.index, 1);
       destItems.splice(destination.index, 0, moved);
+
+      destItems.forEach((item, index) => {
+        item.rank_number = index + 1;
+      });
+
       setContainers({
         ...containers,
         [source.droppableId]: {
@@ -188,6 +196,11 @@ function CreateListing() {
       const contItems = [...cont.items];
       const [moved] = contItems.splice(source.index, 1);
       contItems.splice(destination.index, 0, moved);
+
+      contItems.forEach((item, index) => {
+        item.rank_number = index + 1;
+      });
+
       setContainers({
         ...containers,
         [source.droppableId]: {
