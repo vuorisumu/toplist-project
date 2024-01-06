@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { addNewUser, fetchTemplateById, fetchUserByName } from "./api";
-import { DndContainer } from "./Dnd";
+import { DnDContainer } from "./Dnd";
 
 function CreateListing() {
   const location = useLocation();
@@ -32,7 +32,6 @@ function CreateListing() {
   const [rankingDesc, setRankingDesc] = useState("");
   const [creatorName, setCreatorName] = useState("");
   const [newEntry, setNewEntry] = useState("");
-  const [selectedItems, setSelectedItems] = useState([]);
 
   // fetch selected template
   useEffect(() => {
@@ -72,64 +71,6 @@ function CreateListing() {
       // reset entry
       setNewEntry("");
     }
-  };
-
-  // update item note on a selected item
-  const updateNote = (note, item) => {
-    const updatedItems = containers[ITEMS_RANKED].items.map((curItem) => {
-      if (curItem.item_name === item.item_name) {
-        return { ...curItem, item_note: note };
-      }
-      return curItem;
-    });
-
-    // set containers again
-    setContainers((prevContainers) => ({
-      ...prevContainers,
-      [ITEMS_RANKED]: {
-        ...prevContainers[ITEMS_RANKED],
-        items: updatedItems,
-      },
-    }));
-  };
-
-  // deletes the item note from a selected item
-  const deleteNote = (itemWithNote) => {
-    const updatedItems = containers[ITEMS_RANKED].items.map((item) => {
-      if (item.item_name === itemWithNote.item_name) {
-        return { ...item, item_note: undefined };
-      }
-      return item;
-    });
-
-    // set containers again
-    setContainers((prevContainers) => ({
-      ...prevContainers,
-      [ITEMS_RANKED]: {
-        ...prevContainers[ITEMS_RANKED],
-        items: updatedItems,
-      },
-    }));
-
-    // delete current item from selected items
-    setSelectedItems((prevSelectedItems) =>
-      prevSelectedItems.filter(
-        (selectedItem) => selectedItem.item_name !== itemWithNote.item_name
-      )
-    );
-  };
-
-  // delete added entry
-  const deleteItem = (index) => {
-    setContainers((prevContainers) => ({
-      ...prevContainers,
-      [ITEMS_REMAINING]: {
-        ...prevContainers[ITEMS_REMAINING],
-        items: prevContainers[ITEMS_REMAINING].items.filter(
-          (_, i) => i !== index
-        ),
-      },
-    }));
   };
 
   // save ranking
@@ -183,62 +124,6 @@ function CreateListing() {
     window.location.reload(false);
   };
 
-  // handles the drag n drop
-  const onDragEnd = (res, containers) => {
-    if (!res.destination) {
-      return;
-    }
-    const { source, destination } = res;
-
-    if (source.droppableId !== destination.droppableId) {
-      // set source and destination
-      const sourceCont = containers[source.droppableId];
-      const destCont = containers[destination.droppableId];
-
-      // set items to source and destination
-      const sourceItems = [...sourceCont.items];
-      const destItems = [...destCont.items];
-
-      // deletes and adds items
-      const [moved] = sourceItems.splice(source.index, 1);
-      destItems.splice(destination.index, 0, moved);
-
-      destItems.forEach((item, index) => {
-        item.rank_number = index + 1;
-      });
-
-      setContainers({
-        ...containers,
-        [source.droppableId]: {
-          ...sourceCont,
-          items: sourceItems,
-        },
-        [destination.droppableId]: {
-          ...destCont,
-          items: destItems,
-        },
-      });
-    } else {
-      // rearrange container
-      const cont = containers[source.droppableId];
-      const contItems = [...cont.items];
-      const [moved] = contItems.splice(source.index, 1);
-      contItems.splice(destination.index, 0, moved);
-
-      contItems.forEach((item, index) => {
-        item.rank_number = index + 1;
-      });
-
-      setContainers({
-        ...containers,
-        [source.droppableId]: {
-          ...cont,
-          items: contItems,
-        },
-      });
-    }
-  };
-
   if (!template) {
     return <div>Loading...</div>;
   }
@@ -280,7 +165,12 @@ function CreateListing() {
       </div>
 
       {/* Ranking builder */}
-      <DndContainer containers={containers} onDragEnd={onDragEnd} />
+      <DnDContainer
+        containers={containers}
+        setContainers={setContainers}
+        ITEMS_RANKED={ITEMS_RANKED}
+        ITEMS_REMAINING={ITEMS_REMAINING}
+      />
 
       {/* Add new items */}
       <div>
