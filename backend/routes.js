@@ -103,31 +103,43 @@ router.post("/rankings/", async (req, res) => {
       return res.status(400).json({ msg: error.details[0].message });
     }
 
-    let query = "INSERT INTO rankings (ranking_name, template_id, items";
+    console.log(req.body);
+
     const values = [];
+    const fields = [];
 
     // mandatory values
-    values.push(req.body.ranking_name);
-    values.push(req.body.template_id);
-    values.push(req.body.items);
+    fields.push("ranking_name", "template_id", "items");
+    values.push(
+      req.body.ranking_name,
+      req.body.template_id,
+      JSON.stringify(req.body.items)
+    );
 
     // optional creator info
     if (req.body.creator_id) {
-      query += ", creator_id";
+      fields.push("creator_id");
       values.push(req.body.creator_id);
     }
 
     // optional description
     if (req.body.description) {
-      query += ", description";
+      fields.push("description");
       values.push(req.body.description);
     }
 
-    query += ") VALUES (?)";
+    // optional creation time
+    if (req.body.creation_time) {
+      fields.push("creation_time");
+      values.push(req.body.creation_time);
+    }
 
-    // log the full query
-    console.log("Full query: " + query);
+    const placeholdersString = values.map(() => "?").join(", ");
+    const query = `INSERT INTO rankedlists (${fields.join(
+      ", "
+    )}) VALUES (${placeholdersString})`;
 
+    console.log(query);
     const result = await database.query(query, values);
 
     // successful insert

@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-const Joi = require("joi");
+const Joi = require("joi").extend(require("@joi/date"));
 const mysql = require("mysql");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -27,12 +27,15 @@ const rankingSchema = Joi.object({
   template_id: Joi.number().required(),
   creator_id: Joi.number().optional(),
   description: Joi.string().optional(),
-  items: Joi.object().keys({
-    item_name: Joi.string().required(),
-    item_note: Joi.string().optional(),
-    deletable: Joi.boolean().optional(),
-    rank_number: Joi.number().required(),
-  }),
+  items: Joi.array().items(
+    Joi.object().keys({
+      item_name: Joi.string().required(),
+      item_note: Joi.string().optional(),
+      deletable: Joi.boolean().optional(),
+      rank_number: Joi.number().required(),
+    })
+  ),
+  creation_time: Joi.date().format("YYYY-MM-DD HH:mm:ss"),
 });
 
 const userSchema = Joi.object({
