@@ -93,6 +93,7 @@ router.get("/rankings/:id([0-9]+)", async (req, res) => {
 // add new ranking
 router.post("/rankings/", async (req, res) => {
   try {
+    // validate data
     const { error } = database.rankingSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ msg: error.details[0].message });
@@ -100,15 +101,19 @@ router.post("/rankings/", async (req, res) => {
 
     let query = "INSERT INTO rankings (ranking_name, template_id, items";
     const values = [];
+
+    // mandatory values
     values.push(req.body.ranking_name);
     values.push(req.body.template_id);
     values.push(req.body.items);
 
+    // optional creator info
     if (req.body.creator_id) {
       query += ", creator_id";
       values.push(req.body.creator_id);
     }
 
+    // optional description
     if (req.body.description) {
       query += ", description";
       values.push(req.body.description);
@@ -116,6 +121,7 @@ router.post("/rankings/", async (req, res) => {
 
     query += ") VALUES (?)";
 
+    // log the full query
     console.log("Full query: " + query);
 
     const result = await database.query(query, values);
