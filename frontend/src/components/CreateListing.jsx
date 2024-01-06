@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { fetchTemplateById, fetchUserByName } from "./api";
+import { addNewUser, fetchTemplateById, fetchUserByName } from "./api";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 function CreateListing() {
@@ -154,6 +154,12 @@ function CreateListing() {
           rankingData.creator_id = fetchedUser[0].user_id;
         } else {
           // add new user here
+          const newUser = {
+            user_name: creatorName,
+          };
+
+          const newUserResponse = await addNewUser(newUser);
+          console.log(newUserResponse);
         }
       }
 

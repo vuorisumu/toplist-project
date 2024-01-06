@@ -185,4 +185,30 @@ router.get("/users/:id([0-9]+)", async (req, res) => {
   }
 });
 
+// add new ranking
+router.post("/users/", async (req, res) => {
+  try {
+    // validate data
+    const { error } = database.userSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ msg: error.details[0].message });
+    }
+
+    const values = [];
+    values.push(req.body.user_name);
+
+    const query = "INSERT INTO users (user_name) VALUES (?)";
+
+    const result = await database.query(query, values);
+
+    // successful insert
+    res.status(200).json({
+      msg: "Added new user",
+      id: result.insertId,
+    });
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
 module.exports = router;

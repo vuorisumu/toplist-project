@@ -35,6 +35,10 @@ const rankingSchema = Joi.object({
   }),
 });
 
+const userSchema = Joi.object({
+  user_name: Joi.string().required(),
+});
+
 // general query function
 async function query(sql, args) {
   return new Promise((resolve, reject) => {
@@ -155,4 +159,5 @@ module.exports = {
   filteredTemplatesQuery,
   rankingSchema,
   filteredUserQuery,
+  userSchema,
 };
