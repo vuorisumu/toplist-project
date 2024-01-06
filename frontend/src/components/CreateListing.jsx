@@ -73,6 +73,17 @@ function CreateListing() {
     }
   };
 
+  // get current time
+  const getLocalTime = () => {
+    const timeNow = new Date();
+    const offset = timeNow.getTimezoneOffset() * 60000;
+    const localISOTime = new Date(timeNow - offset)
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
+    return localISOTime;
+  };
+
   // save ranking
   const saveRanking = async () => {
     if (containers[ITEMS_RANKED].items.length === 0 || !rankingName) {
@@ -86,6 +97,7 @@ function CreateListing() {
         ranking_name: rankingName,
         template_id: templateId,
         items: containers[ITEMS_RANKED].items,
+        creation_time: getLocalTime(),
       };
 
       // optional creator name
@@ -111,6 +123,7 @@ function CreateListing() {
 
       // testing logs
       console.log(rankingData.creator_id);
+      console.log(rankingData.creation_time);
       rankingData.items.map((item) => {
         console.log(item.item_name + " ranked at " + item.rank_number);
       });
