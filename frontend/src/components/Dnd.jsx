@@ -8,6 +8,7 @@ function DnDContainer({
   ITEMS_RANKED,
   ITEMS_REMAINING,
 }) {
+  // items with notes
   const [selectedItems, setSelectedItems] = useState([]);
 
   // update item note on a selected item
