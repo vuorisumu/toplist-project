@@ -15,3 +15,16 @@ export const fetchTemplateById = (id) => {
     response.json()
   );
 };
+
+export const addNewRanking = (ranking) => {
+  fetch(`${API_BASE_URL}/rankings/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(ranking),
+  })
+    .then((response) => response.json())
+    .then((data) => console.log("Response:", data))
+    .catch((error) => console.error("Error:", error));
+};

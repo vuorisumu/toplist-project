@@ -139,11 +139,22 @@ function CreateListing() {
       return;
     }
 
-    console.log(`Template id: ${templateId}
-    Ranking name: ${rankingName}
-    Ranking desc: ${rankingDesc}
-    Creator: ${creatorName}
-    ranking size: ${containers[ITEMS_RANKED].items.length}`);
+    // store ranking data
+    let rankingData = {
+      ranking_name: rankingName,
+      template_id: templateId,
+      items: containers[ITEMS_RANKED].items,
+    };
+
+    if (creatorName !== "") {
+      // fetch creator id here !!!
+      console.log(creatorName);
+    }
+
+    if (rankingDesc !== "") {
+      rankingData.description = rankingDesc;
+      console.log(rankingDesc);
+    }
 
     containers[ITEMS_RANKED].items.map((item) => {
       console.log(item.item_name + " ranked at " + item.rank_number);
