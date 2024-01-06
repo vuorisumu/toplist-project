@@ -11,38 +11,6 @@ function DnDContainer({
   // items with notes
   const [selectedItems, setSelectedItems] = useState([]);
 
-  /*
-  // Ensure there are at least five items in ITEMS_RANKED
-  const ensureMinimumItems = () => {
-    const rankedItems = containers[ITEMS_RANKED].items;
-    const requiredBlankItems = 5 - rankedItems.length;
-
-    if (requiredBlankItems > 0) {
-      const blankItems = Array.from(
-        { length: requiredBlankItems },
-        (_, index) => ({
-          item_name: `Blank Item ${index + 1}`,
-          item_note: "",
-          deletable: true,
-          rank_number: rankedItems.length + index + 1,
-        })
-      );
-
-      setContainers((prevContainers) => ({
-        ...prevContainers,
-        [ITEMS_RANKED]: {
-          ...prevContainers[ITEMS_RANKED],
-          items: [...rankedItems, ...blankItems],
-        },
-      }));
-    }
-  };
-
-  // Call ensureMinimumItems when the component mounts
-  useEffect(() => {
-    ensureMinimumItems();
-  }, []);*/
-
   // update item note on a selected item
   const updateNote = (note, item) => {
     const updatedItems = containers[ITEMS_RANKED].items.map((curItem) => {
@@ -117,18 +85,28 @@ function DnDContainer({
       const sourceItems = [...sourceCont.items];
       const destItems = [...destCont.items];
 
+      const draggedItem = sourceCont.items[source.index];
+      if (destCont.keyName === ITEMS_REMAINING) {
+        // drag to unused
+        if (draggedItem.blank) {
+          return;
+        }
+      } else {
+        // drag to ranked
+        if (destItems.length + 1 > destCont.default_size) {
+          for (let i = destItems.length; i >= 0; i--) {
+            if (destItems[i]?.blank) {
+              console.log(i + 1);
+            }
+          }
+        }
+      }
+
       // deletes and adds items
       const [moved] = sourceItems.splice(source.index, 1);
 
-      // true when dragging a blank to unused items
-      const preventDrop =
-        destCont.keyName === ITEMS_REMAINING &&
-        sourceCont.items[source.index].blank;
-
       // add to destination
-      if (!preventDrop) {
-        destItems.splice(destination.index, 0, moved);
-      }
+      destItems.splice(destination.index, 0, moved);
 
       // reassign rank numbers
       destItems.forEach((item, index) => {

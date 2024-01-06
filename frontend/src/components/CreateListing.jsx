@@ -24,6 +24,7 @@ function CreateListing() {
       name: "Ranked",
       keyName: ITEMS_RANKED,
       items: [],
+      default_size: 5,
     },
     [ITEMS_REMAINING]: {
       name: "Unused items",
@@ -45,8 +46,9 @@ function CreateListing() {
       .then((data) => {
         setTemplate(data[0]);
 
+        const blankAmount = data[0].default_size || 5;
         const blanks = [];
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < blankAmount; i++) {
           blanks.push({
             item_name: " ",
             blank: true,
@@ -62,7 +64,11 @@ function CreateListing() {
 
         // set initial containers
         setContainers((cont) => ({
-          [ITEMS_RANKED]: { ...cont[ITEMS_RANKED], items: blanks },
+          [ITEMS_RANKED]: {
+            ...cont[ITEMS_RANKED],
+            items: blanks,
+            default_size: blankAmount,
+          },
           [ITEMS_REMAINING]: {
             ...cont[ITEMS_REMAINING],
             items: setIds || [],
