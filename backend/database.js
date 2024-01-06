@@ -33,6 +33,8 @@ const rankingSchema = Joi.object({
       item_note: Joi.string().optional(),
       deletable: Joi.boolean().optional(),
       rank_number: Joi.number().required(),
+      blank: Joi.boolean().optional(),
+      id: Joi.string().optional(),
     })
   ),
   creation_time: Joi.date().format("YYYY-MM-DD HH:mm:ss"),

@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { v4 as uuid } from "uuid";
 
 function DnDContainer({
   containers,
@@ -104,7 +105,14 @@ function DnDContainer({
         }
 
         if (sourceItems.length - 1 < sourceCont.default_size) {
-          console.log("too small");
+          // add new blank to list if it gets too small
+          const newBlank = {
+            item_name: " ",
+            blank: true,
+            id: uuid(),
+          };
+
+          sourceItems.splice(sourceItems.length - 1, 0, newBlank);
         }
       } else {
         // dragged to ranked
