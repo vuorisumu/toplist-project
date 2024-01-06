@@ -8,6 +8,7 @@ import {
 } from "./api";
 import { DnDContainer } from "./Dnd";
 import { v4 as uuid } from "uuid";
+import { getLocalTime } from "./util";
 
 function CreateListing() {
   const location = useLocation();
@@ -98,17 +99,6 @@ function CreateListing() {
       // reset entry
       setNewEntry("");
     }
-  };
-
-  // get current time
-  const getLocalTime = () => {
-    const timeNow = new Date();
-    const offset = timeNow.getTimezoneOffset() * 60000;
-    const localISOTime = new Date(timeNow - offset)
-      .toISOString()
-      .slice(0, 19)
-      .replace("T", " ");
-    return localISOTime;
   };
 
   // save ranking
