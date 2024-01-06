@@ -145,8 +145,19 @@ router.post("/rankings/", async (req, res) => {
 // get all users
 router.get("/users", async (req, res) => {
   try {
-    const query = `SELECT * FROM users`;
-    const results = await database.query(query);
+    let results;
+    if (Object.keys(req.query).length !== 0) {
+      // query has filters
+      const { filteredQuery, queryParams } = await database.filteredUserQuery(
+        req.query
+      );
+      results = await database.query(filteredQuery, queryParams);
+    } else {
+      // query does not have filters
+      const query = `SELECT * FROM users`;
+      results = await database.query(query);
+    }
+
     res.status(200).json(results);
   } catch (err) {
     res.status(500).send(databaseError);

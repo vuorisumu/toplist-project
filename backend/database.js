@@ -18,6 +18,10 @@ const querySchema = Joi.object({
   sortOrder: Joi.string().valid("asc", "desc").default("asc").optional(),
 });
 
+const userQuerySchema = Joi.object({
+  name: Joi.string().optional(),
+});
+
 const rankingSchema = Joi.object({
   ranking_name: Joi.string().required(),
   template_id: Joi.number().required(),
@@ -119,9 +123,36 @@ async function filteredRankingQuery(req) {
   return { filteredQuery };
 }
 
+// users query with conditions
+async function filteredUserQuery(req) {
+  const { error, value } = userQuerySchema.validate(req);
+  if (error) {
+    throw error;
+  }
+
+  let filteredQuery = `SELECT * FROM users`;
+  const conditions = [];
+  const queryParams = [];
+
+  if (value.name) {
+    conditions.push(`user_name = ?`);
+    queryParams.push(value.name);
+  }
+
+  if (conditions.length > 0) {
+    filteredQuery += " WHERE " + conditions.join(" AND ");
+  }
+
+  // log the query in full
+  console.log("Final Query:", filteredQuery);
+
+  return { filteredQuery, queryParams };
+}
+
 module.exports = {
   pool,
   query,
   filteredTemplatesQuery,
   rankingSchema,
+  filteredUserQuery,
 };
