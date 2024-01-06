@@ -49,4 +49,24 @@ router.get("/templates/:id([0-9]+)", async (req, res) => {
   }
 });
 
+// get all rankings
+router.get("/rankings", async (req, res) => {
+  try {
+    let results;
+    if (Object.keys(req.query).length !== 0) {
+      // query has filters
+      const { filteredQuery } = await database.filteredRankingQuery(req.query);
+      results = await database.query(filteredQuery);
+    } else {
+      // query does not have filters
+      const query = `SELECT * FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id LEFT JOIN templates t ON r.template_id = t.id`;
+      results = await database.query(query);
+    }
+
+    res.status(200).json(results);
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
 module.exports = router;

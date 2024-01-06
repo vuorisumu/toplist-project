@@ -67,6 +67,44 @@ async function filteredTemplatesQuery(req) {
   return { filteredQuery };
 }
 
+// ranking query with filters
+async function filteredRankingQuery(req) {
+  const { error, value } = querySchema.validate(req);
+  if (error) {
+    throw error;
+  }
+
+  let filteredQuery = `SELECT * FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id LEFT JOIN templates t ON r.template_id = t.id`;
+
+  // sorting
+  if (value.sortBy && ["name", "creatorname"].includes(value.sortBy)) {
+    let sortBy = value.sortBy;
+
+    // if sorting by creator name
+    if (value.sortBy === "creatorname") {
+      sortBy = "u.user_name";
+    }
+
+    // default to asc if desc has not been specified
+    const sortOrder =
+      value.sortOrder && value.sortOrder.toLowerCase() === "desc"
+        ? "DESC"
+        : "ASC";
+
+    if (value.sortBy === "creatorname") {
+      // shows templates by anonymous creators last
+      filteredQuery += ` ORDER BY ${sortBy} IS NULL ASC, ${sortBy} ${sortOrder}`;
+    } else {
+      filteredQuery += ` ORDER BY ${sortBy} ${sortOrder}`;
+    }
+  }
+
+  // log the query in full
+  console.log("Final Query:", filteredQuery);
+
+  return { filteredQuery };
+}
+
 module.exports = {
   pool,
   query,
