@@ -119,8 +119,18 @@ function DnDContainer({
 
       // deletes and adds items
       const [moved] = sourceItems.splice(source.index, 1);
-      destItems.splice(destination.index, 0, moved);
 
+      // true when dragging a blank to unused items
+      const preventDrop =
+        destCont.keyName === ITEMS_REMAINING &&
+        sourceCont.items[source.index].blank;
+
+      // add to destination
+      if (!preventDrop) {
+        destItems.splice(destination.index, 0, moved);
+      }
+
+      // reassign rank numbers
       destItems.forEach((item, index) => {
         item.rank_number = index + 1;
       });
