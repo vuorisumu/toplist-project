@@ -1,5 +1,6 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
+// --- TEMPLATES ---
 export const fetchAllTemplates = () => {
   return fetch(`${API_BASE_URL}/templates`).then((response) => response.json());
 };
@@ -16,6 +17,7 @@ export const fetchTemplateById = (id) => {
   );
 };
 
+// --- RANKINGS ---
 export const addNewRanking = (ranking) => {
   fetch(`${API_BASE_URL}/rankings/`, {
     method: "POST",
@@ -29,6 +31,7 @@ export const addNewRanking = (ranking) => {
     .catch((error) => console.error("Error:", error));
 };
 
+// --- USERS ---
 export const fetchAllUsers = () => {
   return fetch(`${API_BASE_URL}/users`).then((response) => response.json());
 };
