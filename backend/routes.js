@@ -6,6 +6,8 @@ const databaseError = { msg: "Error retrieving data from database" };
 const notfoundError = { msg: "Location not found" };
 console.log("router accessed");
 
+// --- TEMPLATES ---
+
 // get all templates
 router.get("/templates", async (req, res) => {
   try {
@@ -48,6 +50,8 @@ router.get("/templates/:id([0-9]+)", async (req, res) => {
     res.status(500).send(databaseError);
   }
 });
+
+// --- RANKINGS ---
 
 // get all rankings
 router.get("/rankings", async (req, res) => {
@@ -131,6 +135,40 @@ router.post("/rankings/", async (req, res) => {
       msg: "Added new ranking",
       id: result.insertId,
     });
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
+// --- USERS ---
+
+// get all users
+router.get("/users", async (req, res) => {
+  try {
+    const query = `SELECT * FROM users`;
+    const results = await database.query(query);
+    res.status(200).json(results);
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
+// get user by id
+router.get("/users/:id([0-9]+)", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const result = await database.query(
+      `SELECT * FROM users WHERE user_id = ?`,
+      id
+    );
+
+    // id not found
+    if (result.length === 0) {
+      return res.status(404).send(notfoundError);
+    }
+
+    // all good
+    res.status(200).json(result);
   } catch (err) {
     res.status(500).send(databaseError);
   }
