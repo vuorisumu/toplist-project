@@ -147,17 +147,22 @@ function CreateListing() {
         items: containers[ITEMS_RANKED].items,
       };
 
+      // optional creator name
       if (creatorName !== "") {
         const fetchedUser = await fetchUserByName(creatorName.trim());
         if (fetchedUser.length > 0) {
           rankingData.creator_id = fetchedUser[0].user_id;
+        } else {
+          // add new user here
         }
       }
 
+      // optional description
       if (rankingDesc !== "") {
         rankingData.description = rankingDesc;
       }
 
+      // testing logs
       console.log(rankingData.creator_id);
       rankingData.items.map((item) => {
         console.log(item.item_name + " ranked at " + item.rank_number);
