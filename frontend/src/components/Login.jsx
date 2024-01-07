@@ -17,8 +17,10 @@ function Login({ onLogin }) {
 
       const res = await login(loginData);
       if (!res.error) {
+        // successfully log in
         onLogin(username);
       } else {
+        // clear password
         setPassword("");
       }
     } catch (err) {
@@ -28,12 +30,14 @@ function Login({ onLogin }) {
 
   return (
     <div>
+      <label>User: </label>
       <input
         type="text"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
-
+      <br />
+      <label>Password: </label>
       <input
         type="password"
         value={password}
