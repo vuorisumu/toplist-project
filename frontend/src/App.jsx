@@ -9,17 +9,29 @@ import Login from "./components/Login.jsx";
 class App extends React.Component {
   constructor(props) {
     super(props);
+
+    // get login info
+    const storedAuth = localStorage.getItem("auth");
+    const storedRole = localStorage.getItem("role");
+
     this.state = {
-      isAuthenticated: false,
-      role: "",
+      isAuthenticated: storedAuth || false,
+      role: storedRole || "",
     };
   }
 
   handleLogin = async (role) => {
-    this.setState({
-      isAuthenticated: true,
-      role,
-    });
+    this.setState(
+      {
+        isAuthenticated: true,
+        role,
+      },
+      () => {
+        // store login
+        localStorage.setItem("auth", "true");
+        localStorage.setItem("role", role);
+      }
+    );
   };
 
   render() {
