@@ -15,7 +15,7 @@ class App extends React.Component {
     const storedRole = localStorage.getItem("role");
 
     this.state = {
-      isAuthenticated: storedAuth || false,
+      isAuthenticated: storedAuth === "true" || false,
       role: storedRole || "",
     };
   }
@@ -34,6 +34,19 @@ class App extends React.Component {
     );
   };
 
+  handleLogout = () => {
+    this.setState(
+      {
+        isAuthenticated: false,
+        role: "",
+      },
+      () => {
+        localStorage.setItem("auth", "false");
+        localStorage.setItem("role", "");
+      }
+    );
+  };
+
   render() {
     const { isAuthenticated } = this.state;
 
@@ -43,7 +56,14 @@ class App extends React.Component {
           <ul>
             <li>
               {!isAuthenticated && <Login onLogin={this.handleLogin} />}
-              {isAuthenticated && <p>User is authenticated</p>}
+              {isAuthenticated && (
+                <>
+                  <p>User is authenticated</p>
+                  <button type="button" onClick={this.handleLogout}>
+                    Logout
+                  </button>
+                </>
+              )}
             </li>
             <li>
               <Link to="/">Main</Link>
