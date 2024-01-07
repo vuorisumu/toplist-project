@@ -8,7 +8,7 @@ import {
 } from "./api";
 import { DnDContainer } from "./Dnd";
 import { v4 as uuid } from "uuid";
-import { getLocalTime } from "./util";
+import { getLocalTime, clearAll } from "./util";
 
 function CreateListing() {
   const location = useLocation();
@@ -141,11 +141,6 @@ function CreateListing() {
     } catch (err) {
       console.error(err);
     }
-  };
-
-  // clear all fields
-  const clearAll = () => {
-    window.location.reload(false);
   };
 
   if (!template) {

@@ -8,3 +8,8 @@ export const getLocalTime = () => {
     .replace("T", " ");
   return localISOTime;
 };
+
+// clear all fields
+export const clearAll = () => {
+  window.location.reload(false);
+};

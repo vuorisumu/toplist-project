@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { clearAll } from "./util";
+import { fetchUserByName, addNewUser } from "./api";
 
 function NewTemplate() {
   const [templateName, setTemplateName] = useState("");
@@ -46,6 +48,41 @@ function NewTemplate() {
   const deleteTag = (index) => {
     const updatedTags = tags.filter((_, i) => i !== index);
     setTags(updatedTags);
+  };
+
+  const createTemplate = async () => {
+    console.log("Creating template");
+    // mandatory data
+    const templateData = {
+      name: templateName,
+      items: items,
+    };
+
+    // optional creator info
+    if (creatorName !== "") {
+      const fetchedUser = await fetchUserByName(creatorName.trim());
+      if (fetchedUser.length > 0) {
+        templateData.creator_id = fetchedUser[0].user_id;
+      } else {
+        // add new user here
+        const newUser = {
+          user_name: creatorName,
+        };
+
+        const newUserResponse = await addNewUser(newUser);
+        templateData.creator_id = newUserResponse[0].user_id;
+      }
+    }
+
+    // optional description
+    if (description !== "") {
+      templateData.description = description;
+    }
+
+    // optional editkey
+    if (editKey !== "") {
+      templateData.editKey = editKey;
+    }
   };
 
   return (
@@ -137,8 +174,12 @@ function NewTemplate() {
         />
       </div>
 
-      <button type="button">Create</button>
-      <button type="button">Reset</button>
+      <button type="button" onClick={createTemplate}>
+        Create
+      </button>
+      <button type="button" onClick={clearAll}>
+        Reset
+      </button>
     </>
   );
 }
