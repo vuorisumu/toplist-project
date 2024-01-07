@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import Main from "./components/Main.jsx";
@@ -14,12 +14,14 @@ class App extends React.Component {
     const storedAuth = localStorage.getItem("auth");
     const storedRole = localStorage.getItem("role");
 
+    // set state info
     this.state = {
       isAuthenticated: storedAuth === "true" || false,
       role: storedRole || "",
     };
   }
 
+  // handle user login
   handleLogin = async (role) => {
     this.setState(
       {
@@ -34,6 +36,7 @@ class App extends React.Component {
     );
   };
 
+  // handle user logout
   handleLogout = () => {
     this.setState(
       {
@@ -41,6 +44,7 @@ class App extends React.Component {
         role: "",
       },
       () => {
+        // store logout
         localStorage.setItem("auth", "false");
         localStorage.setItem("role", "");
       }
