@@ -114,8 +114,11 @@ function DnDContainer({
 
           sourceItems.splice(sourceItems.length - 1, 0, newBlank);
         }
+
+        sourceItems.sort((a, b) => (!a?.blank && b?.blank ? -1 : 1));
       } else {
         // dragged to ranked
+        destItems.sort((a, b) => (!a?.blank && b?.blank ? -1 : 1));
         if (destItems.length > destCont.default_size) {
           // take the last item on ranked list
           const lastItem = destItems[destItems.length - 1];
@@ -153,6 +156,7 @@ function DnDContainer({
         item.rank_number = index + 1;
       });
 
+      contItems.sort((a, b) => (!a?.blank && b?.blank ? -1 : 1));
       setContainers({
         ...containers,
         [source.droppableId]: {
