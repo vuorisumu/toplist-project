@@ -104,7 +104,7 @@ function DnDContainer({
           return;
         }
 
-        if (sourceItems.length - 1 < sourceCont.default_size) {
+        if (sourceItems.length < sourceCont.default_size) {
           // add new blank to list if it gets too small
           const newBlank = {
             item_name: " ",
@@ -123,13 +123,9 @@ function DnDContainer({
           // take the last item on ranked list
           const lastItem = destItems[destItems.length - 1];
 
+          // destroy item if it's blank
           if (lastItem?.blank) {
-            // destroy item if it's blank
             destItems.splice(destItems.length - 1, 1);
-          } else {
-            // move item to unused if it's not blank
-            const [dropped] = destItems.splice(destItems.length - 1, 1);
-            sourceItems.splice(0, 0, dropped);
           }
         }
       }
