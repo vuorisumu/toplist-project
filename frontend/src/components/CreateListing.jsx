@@ -40,7 +40,6 @@ function CreateListing() {
   const [rankingDesc, setRankingDesc] = useState("");
   const [creatorName, setCreatorName] = useState("");
   const [newEntry, setNewEntry] = useState("");
-  const [listSize, setListSize] = useState(5);
 
   // fetch selected template
   useEffect(() => {
@@ -48,8 +47,7 @@ function CreateListing() {
       .then((data) => {
         setTemplate(data[0]);
 
-        const blankAmount = data[0].default_size || 5;
-        setListSize(blankAmount);
+        const blankAmount = 5;
         const blanks = [];
         for (let i = 0; i < blankAmount; i++) {
           blanks.push({
@@ -93,7 +91,7 @@ function CreateListing() {
           ...prevContainers[ITEMS_REMAINING],
           items: [
             ...prevContainers[ITEMS_REMAINING].items,
-            { item_name: newEntry, deletable: true },
+            { item_name: newEntry, deletable: true, id: uuid() },
           ],
         },
       }));
@@ -147,36 +145,6 @@ function CreateListing() {
     }
   };
 
-  const newSize = (size) => {
-    let updatedItems = [];
-    if (containers[ITEMS_RANKED].items.length > size) {
-      console.log("more items than size");
-      const firstItems = containers[ITEMS_RANKED].items.splice(0, size);
-      updatedItems = firstItems;
-    } else {
-      console.log("less items than size");
-      updatedItems = containers[ITEMS_RANKED].items;
-      const blankAmount = size - containers[ITEMS_RANKED].items.length;
-      for (let i = 0; i < blankAmount; i++) {
-        updatedItems.push({
-          item_name: " ",
-          blank: true,
-          id: uuid(),
-        });
-      }
-    }
-
-    setContainers((prevContainers) => ({
-      ...prevContainers,
-      [ITEMS_RANKED]: {
-        ...prevContainers[ITEMS_RANKED],
-        default_size: size,
-        items: updatedItems,
-      },
-    }));
-    setListSize(size);
-  };
-
   // clear all fields
   const clearAll = () => {
     window.location.reload(false);
@@ -219,23 +187,6 @@ function CreateListing() {
           value={creatorName}
           onChange={(e) => setCreatorName(e.target.value)}
           placeholder="Creator Name"
-        />
-        <br />
-        <label>Size: </label>
-        <input
-          type="range"
-          id="listSize"
-          min="1"
-          max="50"
-          value={listSize}
-          onChange={(e) => newSize(e.target.value)}
-        />
-        <input
-          type="number"
-          min="1"
-          max="50"
-          value={listSize}
-          onChange={(e) => newSize(e.target.value)}
         />
       </div>
 
