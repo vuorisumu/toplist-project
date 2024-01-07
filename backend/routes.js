@@ -1,9 +1,10 @@
 const database = require("./database");
+const bcrypt = require("bcrypt");
 const express = require("express");
 const router = express.Router();
 
 const databaseError = { msg: "Error retrieving data from database" };
-const notfoundError = { msg: "Location not found" };
+const notfoundError = { msg: "Data not found" };
 console.log("router accessed");
 
 // --- TEMPLATES ---
@@ -220,6 +221,25 @@ router.post("/users/", async (req, res) => {
     });
   } catch (err) {
     res.status(500).send(databaseError);
+  }
+});
+
+// --- ROLES ---
+
+router.post("/login/:role", async (req, res) => {
+  try {
+    const { password } = req.body;
+    const roleData = await database.query(
+      `SELECT * FROM roles WHERE role_name = '${req.params.role}' AND password = PASSWORD('${password}')`
+    );
+
+    if (roleData.length === 0) {
+      return res.status(401).json({ error: "Invalid password" });
+    }
+
+    res.status(200).json({ message: "Authentication successful" });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
