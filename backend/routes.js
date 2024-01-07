@@ -237,7 +237,7 @@ router.post("/login/:role", async (req, res) => {
       return res.status(401).json({ error: "Invalid password" });
     }
 
-    res.status(200).json({ message: "Authentication successful" });
+    res.status(200).json(roleData);
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
   }
