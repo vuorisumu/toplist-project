@@ -11,6 +11,7 @@ function DnDContainer({
 }) {
   // items with notes
   const [selectedItems, setSelectedItems] = useState([]);
+  const minSize = 5;
 
   // update item note on a selected item
   const updateNote = (note, item) => {
@@ -104,7 +105,7 @@ function DnDContainer({
           return;
         }
 
-        if (sourceItems.length < sourceCont.default_size) {
+        if (sourceItems.length < minSize) {
           // add new blank to list if it gets too small
           const newBlank = {
             item_name: " ",
@@ -119,7 +120,7 @@ function DnDContainer({
       } else {
         // dragged to ranked
         destItems.sort((a, b) => (!a?.blank && b?.blank ? -1 : 1));
-        if (destItems.length > destCont.default_size) {
+        if (destItems.length > minSize) {
           // take the last item on ranked list
           const lastItem = destItems[destItems.length - 1];
 

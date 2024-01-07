@@ -25,7 +25,6 @@ function CreateListing() {
       name: "Ranked",
       keyName: ITEMS_RANKED,
       items: [],
-      default_size: 5,
     },
     [ITEMS_REMAINING]: {
       name: "Unused items",
@@ -68,7 +67,6 @@ function CreateListing() {
           [ITEMS_RANKED]: {
             ...cont[ITEMS_RANKED],
             items: blanks,
-            default_size: blankAmount,
           },
           [ITEMS_REMAINING]: {
             ...cont[ITEMS_REMAINING],
