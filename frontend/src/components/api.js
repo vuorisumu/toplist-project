@@ -60,3 +60,16 @@ export const addNewUser = (userData) => {
     .then((data) => console.log("Response:", data))
     .catch((error) => console.error("Error:", error));
 };
+
+// --- ROLES ---
+export const login = (loginData) => {
+  return fetch(`${API_BASE_URL}/login/${loginData.role}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(loginData),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error(error));
+};

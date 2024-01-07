@@ -1,16 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import Main from "./components/Main.jsx";
 import NewTemplate from "./components/NewTemplate.jsx";
 import CreateListing from "./components/CreateListing.jsx";
+import Login from "./components/Login.jsx";
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isAuthenticated: false,
+      role: "",
+    };
+  }
+
+  handleLogin = async (role) => {
+    this.setState({
+      isAuthenticated: true,
+      role,
+    });
+  };
+
   render() {
+    const { isAuthenticated } = this.state;
+
     return (
       <Router>
         <nav>
           <ul>
+            <li>
+              {!isAuthenticated && <Login onLogin={this.handleLogin} />}
+              {isAuthenticated && <p>User is authenticated</p>}
+            </li>
             <li>
               <Link to="/">Main</Link>
             </li>
