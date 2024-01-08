@@ -95,12 +95,12 @@ function NewTemplate() {
     }
 
     // optional description
-    if (description !== "") {
+    if (description.trim() !== "") {
       templateData.description = description;
     }
 
     // optional editkey
-    if (editKey !== "") {
+    if (editKey.trim() !== "") {
       templateData.editKey = editKey;
     }
   };
