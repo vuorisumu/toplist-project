@@ -52,11 +52,8 @@ function NewTemplate() {
 
   // checks if template meets the minimum requirements
   const meetsRequirements = () => {
-    const hasName = templateName !== "";
-    let enoughItems = items.length > 5;
-    if (items.length === 5) {
-      enoughItems = items[items.length - 1] !== "";
-    }
+    const hasName = templateName.trim() !== "";
+    const enoughItems = items.filter((i) => i.trim() !== "").length >= 5;
     return hasName && enoughItems;
   };
 
@@ -66,12 +63,20 @@ function NewTemplate() {
       return;
     }
 
+    const nonEnptyItems = items.filter((i) => i.trim() !== "");
+
     console.log("Creating template");
     // mandatory data
     const templateData = {
       name: templateName,
-      items: items,
+      items: nonEnptyItems,
     };
+
+    // optional tags
+    const nonEmptyTags = tags.filter((t) => t.trim() !== "");
+    if (nonEmptyTags.length > 0) {
+      templateData.tags = nonEmptyTags;
+    }
 
     // optional creator info
     if (creatorName !== "") {
