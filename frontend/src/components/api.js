@@ -17,6 +17,23 @@ export const fetchTemplateById = (id) => {
   );
 };
 
+export const addNewTemplate = (template) => {
+  return fetch(`${API_BASE_URL}/templates/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(template),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => console.error("Error:", error));
+};
+
 // --- RANKINGS ---
 export const addNewRanking = (ranking) => {
   fetch(`${API_BASE_URL}/rankings/`, {

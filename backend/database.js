@@ -22,6 +22,15 @@ const userQuerySchema = Joi.object({
   name: Joi.string().optional(),
 });
 
+const templateSchema = Joi.object({
+  name: Joi.string().required(),
+  creator_id: Joi.number().optional(),
+  description: Joi.string().optional(),
+  items: Joi.array().items(Joi.string()).required(),
+  editkey: Joi.string().optional(),
+  tags: Joi.array().items(Joi.string()).optional(),
+});
+
 const rankingSchema = Joi.object({
   ranking_name: Joi.string().required(),
   template_id: Joi.number().required(),
@@ -165,4 +174,5 @@ module.exports = {
   rankingSchema,
   filteredUserQuery,
   userSchema,
+  templateSchema,
 };

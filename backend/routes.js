@@ -52,6 +52,66 @@ router.get("/templates/:id([0-9]+)", async (req, res) => {
   }
 });
 
+// add new template
+router.post("/templates/", async (req, res) => {
+  try {
+    // validate data
+    const { error } = database.templateSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ msg: error.details[0].message });
+    }
+
+    console.log(req.body);
+
+    const values = [];
+    const fields = [];
+
+    // mandatory values
+    fields.push("name", "items");
+    values.push(req.body.name, JSON.stringify(req.body.items));
+
+    // optional creator info
+    if (req.body.creator_id) {
+      fields.push("creator_id");
+      values.push(req.body.creator_id);
+    }
+
+    // optional description
+    if (req.body.description) {
+      fields.push("description");
+      values.push(req.body.description);
+    }
+
+    // optional tags
+    if (req.body.tags) {
+      fields.push("tags");
+      values.push(JSON.stringify(req.body.tags));
+    }
+
+    // optional creation time
+    if (req.body.editkey) {
+      fields.push("editkey");
+      values.push(`PASSWORD(${req.body.editkey})`);
+    }
+
+    const placeholdersString = values.map(() => "?").join(", ");
+    const query = `INSERT INTO templates (${fields.join(
+      ", "
+    )}) VALUES (${placeholdersString})`;
+
+    console.log(query);
+    const result = await database.query(query, values);
+
+    // successful insert
+    res.status(201).json({
+      msg: "Added new template",
+      id: result.insertId,
+    });
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
 // --- RANKINGS ---
 
 // get all rankings

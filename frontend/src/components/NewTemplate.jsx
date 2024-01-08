@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { clearAll } from "./util";
-import { fetchUserByName, addNewUser } from "./api";
+import { fetchUserByName, addNewUser, addNewTemplate } from "./api";
 
 function NewTemplate() {
   const [templateName, setTemplateName] = useState("");
@@ -65,7 +65,6 @@ function NewTemplate() {
 
     const nonEnptyItems = items.filter((i) => i.trim() !== "");
 
-    console.log("Creating template");
     // mandatory data
     const templateData = {
       name: templateName,
@@ -102,6 +101,13 @@ function NewTemplate() {
     // optional editkey
     if (editKey.trim() !== "") {
       templateData.editKey = editKey;
+    }
+
+    try {
+      const addedTemplate = await addNewTemplate(templateData);
+      console.log("Added: ", addedTemplate);
+    } catch (err) {
+      console.log(err);
     }
   };
 
