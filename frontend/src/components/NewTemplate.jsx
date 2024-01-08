@@ -50,7 +50,22 @@ function NewTemplate() {
     setTags(updatedTags);
   };
 
+  // checks if template meets the minimum requirements
+  const meetsRequirements = () => {
+    const hasName = templateName !== "";
+    let enoughItems = items.length > 5;
+    if (items.length === 5) {
+      enoughItems = items[items.length - 1] !== "";
+    }
+    return hasName && enoughItems;
+  };
+
+  // creates template and adds it to database
   const createTemplate = async () => {
+    if (!meetsRequirements()) {
+      return;
+    }
+
     console.log("Creating template");
     // mandatory data
     const templateData = {
