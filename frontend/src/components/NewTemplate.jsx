@@ -116,7 +116,7 @@ function NewTemplate() {
 
     // optional editkey
     if (editKey.trim() !== "") {
-      templateData.editKey = editKey;
+      templateData.editkey = editKey;
     }
 
     // add template to database

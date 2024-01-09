@@ -91,7 +91,8 @@ router.post("/templates/", async (req, res) => {
     // optional creation time
     if (req.body.editkey) {
       fields.push("editkey");
-      values.push(`PASSWORD(${req.body.editkey})`);
+      const encryptedKey = await bcrypt.hash(req.body.editkey, 10);
+      values.push(`${encryptedKey}`);
     }
 
     const placeholdersString = values.map(() => "?").join(", ");
