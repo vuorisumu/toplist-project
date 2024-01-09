@@ -17,6 +17,25 @@ export const fetchTemplateById = (id) => {
   );
 };
 
+export const enterTemplateEditMode = (id, password) => {
+  return fetch(`${API_BASE_URL}/templates/${id}/edit/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      editkey: password,
+    }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => console.error("Error:", error));
+};
+
 export const addNewTemplate = (template) => {
   return fetch(`${API_BASE_URL}/templates/`, {
     method: "POST",

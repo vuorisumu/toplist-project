@@ -52,6 +52,36 @@ router.get("/templates/:id([0-9]+)", async (req, res) => {
   }
 });
 
+// enter editkey to enter edit mode
+router.post("/templates/:id([0-9]+)/edit/", async (req, res) => {
+  try {
+    const { editkey } = req.body;
+    const templateData = await database.query(
+      `SELECT * FROM templates WHERE id = ?`,
+      [req.params.id]
+    );
+
+    if (templateData.length > 0) {
+      const hashedPassword = templateData[0].editkey;
+      bcrypt.compare(editkey, hashedPassword, (bcryptErr, bcryptRes) => {
+        if (bcryptErr) {
+          throw bcryptErr;
+        }
+
+        if (bcryptRes) {
+          res.status(200).json({ msg: "Login successful", data: templateData });
+        } else {
+          res.status(401).json({ msg: "Invalid editkey" });
+        }
+      });
+    } else {
+      res.status(401).json({ msg: "Invalid id" });
+    }
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
 // add new template
 router.post("/templates/", async (req, res) => {
   try {

@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import { checkAdminStatus } from "./util";
+import { enterTemplateEditMode } from "./api";
 
 function EditTemplate() {
   const [editKey, setEditKey] = useState("");
@@ -12,7 +13,8 @@ function EditTemplate() {
   }
 
   const checkEditKey = async () => {
-    console.log("Checking edit key");
+    const res = await enterTemplateEditMode(templateId, editKey);
+    console.log(res.data[0]);
   };
 
   if (!checkAdminStatus()) {
