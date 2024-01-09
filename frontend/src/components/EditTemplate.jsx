@@ -1,10 +1,11 @@
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { checkAdminStatus } from "./util";
 import { enterTemplateEditMode } from "./api";
 
 function EditTemplate() {
   const [editKey, setEditKey] = useState("");
+  const [template, setTemplate] = useState(null);
 
   const location = useLocation();
   const templateId = parseInt(location.pathname.replace("/edit-template/", ""));
@@ -14,8 +15,19 @@ function EditTemplate() {
 
   const checkEditKey = async () => {
     const res = await enterTemplateEditMode(templateId, editKey);
-    console.log(res.data[0]);
+
+    if (res.data) {
+      // correct edit key
+      setTemplate(res.data[0]);
+    } else {
+      // incorrect edit key
+      setEditKey("");
+    }
   };
+
+  useEffect(() => {
+    console.log(template);
+  }, [template]);
 
   if (!checkAdminStatus()) {
     return (
