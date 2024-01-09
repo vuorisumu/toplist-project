@@ -70,11 +70,18 @@ function NewTemplate() {
     }
 
     const nonEnptyItems = items.filter((i) => i.trim() !== "");
+    const itemObjects = [];
+    nonEnptyItems.map((i) => {
+      const newItem = {
+        item_name: i,
+      };
+      itemObjects.push(newItem);
+    });
 
     // mandatory data
     const templateData = {
       name: templateName,
-      items: nonEnptyItems,
+      items: itemObjects,
     };
 
     // optional tags

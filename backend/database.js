@@ -26,7 +26,13 @@ const templateSchema = Joi.object({
   name: Joi.string().required(),
   creator_id: Joi.number().optional(),
   description: Joi.string().optional(),
-  items: Joi.array().items(Joi.string()).required(),
+  items: Joi.array()
+    .items(
+      Joi.object().keys({
+        item_name: Joi.string().required(),
+      })
+    )
+    .required(),
   editkey: Joi.string().optional(),
   tags: Joi.array().items(Joi.number()).optional(),
 });
@@ -36,16 +42,18 @@ const rankingSchema = Joi.object({
   template_id: Joi.number().required(),
   creator_id: Joi.number().optional(),
   description: Joi.string().optional(),
-  items: Joi.array().items(
-    Joi.object().keys({
-      item_name: Joi.string().required(),
-      item_note: Joi.string().optional(),
-      deletable: Joi.boolean().optional(),
-      rank_number: Joi.number().required(),
-      blank: Joi.boolean().optional(),
-      id: Joi.string().optional(),
-    })
-  ),
+  items: Joi.array()
+    .items(
+      Joi.object().keys({
+        item_name: Joi.string().required(),
+        item_note: Joi.string().optional(),
+        deletable: Joi.boolean().optional(),
+        rank_number: Joi.number().required(),
+        blank: Joi.boolean().optional(),
+        id: Joi.string().optional(),
+      })
+    )
+    .required(),
   creation_time: Joi.date().format("YYYY-MM-DD HH:mm:ss"),
 });
 
