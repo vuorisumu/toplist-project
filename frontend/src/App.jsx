@@ -5,6 +5,7 @@ import Main from "./components/Main.jsx";
 import NewTemplate from "./components/NewTemplate.jsx";
 import CreateListing from "./components/CreateListing.jsx";
 import Login from "./components/Login.jsx";
+import EditTemplate from "./components/EditTemplate.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -89,6 +90,7 @@ class App extends React.Component {
             path="/createlisting/:templateId"
             element={<CreateListing />}
           />
+          <Route path="/edit-template/:templateid" element={<EditTemplate />} />
         </Routes>
       </Router>
     );
