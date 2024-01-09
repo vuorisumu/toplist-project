@@ -48,6 +48,34 @@ export const addNewRanking = (ranking) => {
     .catch((error) => console.error("Error:", error));
 };
 
+// --- TAGS ---
+export const fetchAllTags = () => {
+  return fetch(`${API_BASE_URL}/tags`).then((response) => response.json());
+};
+
+export const fetchTagByName = (name) => {
+  return fetch(`${API_BASE_URL}/tags?name=${name}`).then((response) =>
+    response.json()
+  );
+};
+
+export const addNewTag = (tagData) => {
+  return fetch(`${API_BASE_URL}/tags/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(tagData),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => console.error("Error:", error));
+};
+
 // --- USERS ---
 export const fetchAllUsers = () => {
   return fetch(`${API_BASE_URL}/users`).then((response) => response.json());

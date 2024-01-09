@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { clearAll } from "./util";
-import { fetchUserByName, addNewUser, addNewTemplate } from "./api";
+import {
+  fetchUserByName,
+  addNewUser,
+  addNewTemplate,
+  fetchTagByName,
+  addNewTag,
+} from "./api";
 
 function NewTemplate() {
   const [templateName, setTemplateName] = useState("");
@@ -74,7 +80,10 @@ function NewTemplate() {
     // optional tags
     const nonEmptyTags = tags.filter((t) => t.trim() !== "");
     if (nonEmptyTags.length > 0) {
-      templateData.tags = nonEmptyTags;
+      console.log("Tags found");
+      const tagNumbers = await getTagNumbers(nonEmptyTags);
+      console.log("Tags converted");
+      templateData.tags = tagNumbers;
     }
 
     // optional creator info
@@ -108,6 +117,35 @@ function NewTemplate() {
       console.log("Added: ", addedTemplate);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const getTagNumbers = async (tagNames) => {
+    const tagNumbers = [];
+    try {
+      await Promise.all(
+        tagNames.map(async (t) => {
+          console.log("Checking tag: " + t);
+          const fetchedTag = await fetchTagByName(t.trim());
+          let newId;
+          if (fetchedTag.length > 0) {
+            newId = fetchedTag[0].id;
+          } else {
+            const newTag = {
+              name: t,
+            };
+            const newTagRes = await addNewTag(newTag);
+            newId = newTagRes.id;
+          }
+          console.log("Added " + newId);
+          tagNumbers.push(newId);
+        })
+      );
+
+      console.log("Tag count: " + tagNumbers.length);
+      return tagNumbers;
+    } catch (err) {
+      console.error(err);
     }
   };
 
