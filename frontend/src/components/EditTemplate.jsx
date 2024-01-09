@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { checkAdminStatus } from "./util";
-import { enterTemplateEditMode, fetchTemplateById } from "./api";
+import { enterTemplateEditMode } from "./api";
 
 function EditTemplate() {
   const [editKey, setEditKey] = useState("");
@@ -17,7 +17,7 @@ function EditTemplate() {
     await enterTemplateEditMode(templateId, editKey)
       .then((res) => {
         if (res.data) {
-          setTemplate(res.data);
+          handleSetTemplate(res.data[0]);
         } else {
           setEditKey("");
         }
@@ -25,26 +25,35 @@ function EditTemplate() {
       .catch((err) => console.log(err));
   };
 
-  useEffect(() => {
-    if (checkAdminStatus()) {
-      fetchTemplateById(templateId)
-        .then((data) => {
-          const templateData = data[0];
-          const templateItems = JSON.parse(data[0].items);
-          templateData.items = templateItems;
+  const handleSetTemplate = (data) => {
+    const tempData = data;
+    const tempItems = JSON.parse(data.items);
+    tempData.items = tempItems;
 
-          if (data[0].tags) {
-            const templateTags = JSON.parse(data[0].tags);
-            templateData.tags = templateTags;
-          }
-
-          setTemplate(templateData);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    if (data.tags) {
+      const tempTags = JSON.parse(data.tags);
+      tempData.tags = tempTags;
     }
-  });
+
+    setTemplate(tempData);
+  };
+
+  const updateItemName = (newName, index) => {
+    const newItems = template.items;
+    newItems[index].item_name = newName;
+    setTemplate((prevTemp) => ({
+      ...prevTemp,
+      items: newItems,
+    }));
+  };
+
+  const deleteItem = (index) => {
+    const newItems = template.items.filter((_, i) => i !== index);
+    setTemplate((prevTemp) => ({
+      ...prevTemp,
+      items: newItems,
+    }));
+  };
 
   if (!checkAdminStatus() && !template) {
     return (
@@ -82,7 +91,20 @@ function EditTemplate() {
 
       <div>
         <h2>Items</h2>
-        <ul></ul>
+        <ul>
+          {template.items.map((i, index) => (
+            <li key={"item" + index}>
+              <input
+                type="text"
+                value={i.item_name}
+                onChange={(e) => updateItemName(e.target.value, index)}
+              />
+              <button type="button" onClick={() => deleteItem(index)}>
+                x
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <p>{JSON.stringify(template.items)}</p>
