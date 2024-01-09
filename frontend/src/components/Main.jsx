@@ -5,6 +5,11 @@ import { fetchAllTemplates, fetchAllTemplatesFiltered } from "./api";
 function Main() {
   const [templates, setTemplates] = useState([]);
 
+  const storedAuth = localStorage.getItem("auth");
+  const storedRole = localStorage.getItem("role");
+
+  const canEdit = storedAuth && storedRole === "admin";
+
   async function fetchAll() {
     fetchAllTemplates()
       .then((data) => setTemplates(data))
@@ -33,6 +38,7 @@ function Main() {
               <h2>{t.name}</h2>
             </Link>
             <p>Creator: {t.user_name ? t.user_name : "Anonymous"}</p>
+            {(t.editkey || canEdit) && <p>Can be edited</p>}
             <ul>
               {JSON.parse(t.items).map((item, index) => (
                 <li key={index}>{item.item_name}</li>

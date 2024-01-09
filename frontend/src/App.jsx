@@ -34,6 +34,8 @@ class App extends React.Component {
         localStorage.setItem("role", role);
       }
     );
+
+    window.location.reload(false);
   };
 
   // handle user logout
@@ -49,6 +51,8 @@ class App extends React.Component {
         localStorage.setItem("role", "");
       }
     );
+
+    window.location.reload(false);
   };
 
   render() {

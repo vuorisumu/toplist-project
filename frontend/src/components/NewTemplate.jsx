@@ -119,14 +119,13 @@ function NewTemplate() {
       templateData.editkey = editKey;
     }
 
-    /*
     // add template to database
     try {
       const addedTemplate = await addNewTemplate(templateData);
       console.log("Added: ", addedTemplate);
     } catch (err) {
       console.log(err);
-    }*/
+    }
   };
 
   // convert tag names to tag ids
