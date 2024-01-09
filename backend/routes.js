@@ -214,6 +214,8 @@ router.post("/rankings/", async (req, res) => {
 });
 
 // --- TAGS ---
+
+// get all tags
 router.get("/tags", async (req, res) => {
   try {
     let results;
@@ -235,6 +237,7 @@ router.get("/tags", async (req, res) => {
   }
 });
 
+// add new tag
 router.post("/tags/", async (req, res) => {
   try {
     console.log("Adding new tag");
@@ -306,7 +309,7 @@ router.get("/users/:id([0-9]+)", async (req, res) => {
   }
 });
 
-// add new ranking
+// add new user
 router.post("/users/", async (req, res) => {
   try {
     // validate data
