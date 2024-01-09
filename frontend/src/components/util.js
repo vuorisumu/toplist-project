@@ -13,3 +13,10 @@ export const getLocalTime = () => {
 export const clearAll = () => {
   window.location.reload(false);
 };
+
+export const checkAdminStatus = () => {
+  const storedAuth = localStorage.getItem("auth");
+  const storedRole = localStorage.getItem("role");
+
+  return storedAuth && storedRole === "admin";
+};

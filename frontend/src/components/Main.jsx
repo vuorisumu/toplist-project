@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchAllTemplates, fetchAllTemplatesFiltered } from "./api";
+import { checkAdminStatus } from "./util";
 
 function Main() {
   const [templates, setTemplates] = useState([]);
-
-  const storedAuth = localStorage.getItem("auth");
-  const storedRole = localStorage.getItem("role");
-
-  const canEdit = storedAuth && storedRole === "admin";
 
   async function fetchAll() {
     fetchAllTemplates()
@@ -38,7 +34,9 @@ function Main() {
               <h2>{t.name}</h2>
             </Link>
             <p>Creator: {t.user_name ? t.user_name : "Anonymous"}</p>
-            {(t.editkey || canEdit) && <p>Can be edited</p>}
+            {(t.editkey || checkAdminStatus()) && (
+              <Link to={`/edit-template/${t.id}`}>Edit template</Link>
+            )}
             <ul>
               {JSON.parse(t.items).map((item, index) => (
                 <li key={index}>{item.item_name}</li>
