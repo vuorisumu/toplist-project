@@ -164,9 +164,9 @@ async function filteredUserQuery(req) {
   const conditions = [];
   const queryParams = [];
 
-  if (value.name) {
+  if (value.user_name) {
     conditions.push(`user_name = ?`);
-    queryParams.push(value.name);
+    queryParams.push(value.user_name);
   }
 
   if (conditions.length > 0) {
