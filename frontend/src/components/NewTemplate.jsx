@@ -88,8 +88,10 @@ function NewTemplate() {
 
     // optional creator info
     if (creatorName !== "") {
+      console.log("Trying to add user: " + creatorName);
       const fetchedUser = await fetchUserByName(creatorName.trim());
       if (fetchedUser.length > 0) {
+        console.log("User found with id " + fetchedUser[0].user_id);
         templateData.creator_id = fetchedUser[0].user_id;
       } else {
         // add new user here
@@ -97,8 +99,11 @@ function NewTemplate() {
           user_name: creatorName,
         };
 
+        console.log("Not found. Adding...");
         const newUserResponse = await addNewUser(newUser);
-        templateData.creator_id = newUserResponse[0].user_id;
+        console.log("New user data: " + JSON.stringify(newUserResponse));
+        templateData.creator_id = newUserResponse.id;
+        console.log("User id in data: " + templateData.creator_id);
       }
     }
 
@@ -112,12 +117,14 @@ function NewTemplate() {
       templateData.editKey = editKey;
     }
 
+    console.log("Stop adding it's just a test");
+    /*
     try {
       const addedTemplate = await addNewTemplate(templateData);
       console.log("Added: ", addedTemplate);
     } catch (err) {
       console.log(err);
-    }
+    }*/
   };
 
   const getTagNumbers = async (tagNames) => {

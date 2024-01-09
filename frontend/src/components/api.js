@@ -94,15 +94,19 @@ export const fetchUserByName = (name) => {
 };
 
 export const addNewUser = (userData) => {
-  fetch(`${API_BASE_URL}/users/`, {
+  return fetch(`${API_BASE_URL}/users/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(userData),
   })
-    .then((response) => response.json())
-    .then((data) => console.log("Response:", data))
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      return data;
+    })
     .catch((error) => console.error("Error:", error));
 };
 
