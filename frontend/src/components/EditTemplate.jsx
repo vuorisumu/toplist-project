@@ -13,6 +13,7 @@ function EditTemplate() {
     console.error("Invalid templateId: ", templateId);
   }
 
+  // authentication
   const checkEditKey = async () => {
     await enterTemplateEditMode(templateId, editKey)
       .then((res) => {
@@ -25,6 +26,7 @@ function EditTemplate() {
       .catch((err) => console.log(err));
   };
 
+  // set template data
   const handleSetTemplate = (data) => {
     const tempData = data;
     const tempItems = JSON.parse(data.items);
@@ -38,6 +40,7 @@ function EditTemplate() {
     setTemplate(tempData);
   };
 
+  // update item names
   const updateItemName = (newName, index) => {
     const newItems = template.items;
     newItems[index].item_name = newName;
@@ -47,12 +50,26 @@ function EditTemplate() {
     }));
   };
 
+  // delete item from index
   const deleteItem = (index) => {
     const newItems = template.items.filter((_, i) => i !== index);
     setTemplate((prevTemp) => ({
       ...prevTemp,
       items: newItems,
     }));
+  };
+
+  // add new input field for items
+  const addNewField = () => {
+    const lastItem = template.items[template.items.length - 1];
+    if (lastItem.item_name.trim() === "") {
+      return;
+    }
+    setTemplate((prevTemp) => ({
+      ...prevTemp,
+      items: [...prevTemp.items, { item_name: "" }],
+    }));
+    console.log("Add");
   };
 
   if (!checkAdminStatus() && !template) {
@@ -104,6 +121,9 @@ function EditTemplate() {
               </button>
             </li>
           ))}
+          <button type="button" onClick={addNewField}>
+            Add item
+          </button>
         </ul>
       </div>
 
