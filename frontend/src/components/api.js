@@ -27,12 +27,7 @@ export const enterTemplateEditMode = (id, password) => {
       editkey: password,
     }),
   })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      return data;
-    })
+    .then((response) => response.json())
     .catch((error) => console.error("Error:", error));
 };
 

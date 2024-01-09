@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { checkAdminStatus } from "./util";
-import { enterTemplateEditMode } from "./api";
+import { enterTemplateEditMode, fetchTemplateById } from "./api";
 
 function EditTemplate() {
   const [editKey, setEditKey] = useState("");
@@ -14,22 +14,39 @@ function EditTemplate() {
   }
 
   const checkEditKey = async () => {
-    const res = await enterTemplateEditMode(templateId, editKey);
-
-    if (res.data) {
-      // correct edit key
-      setTemplate(res.data[0]);
-    } else {
-      // incorrect edit key
-      setEditKey("");
-    }
+    await enterTemplateEditMode(templateId, editKey)
+      .then((res) => {
+        if (res.data) {
+          setTemplate(res.data);
+        } else {
+          setEditKey("");
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    console.log(template);
-  }, [template]);
+    if (checkAdminStatus()) {
+      fetchTemplateById(templateId)
+        .then((data) => {
+          const templateData = data[0];
+          const templateItems = JSON.parse(data[0].items);
+          templateData.items = templateItems;
 
-  if (!checkAdminStatus()) {
+          if (data[0].tags) {
+            const templateTags = JSON.parse(data[0].tags);
+            templateData.tags = templateTags;
+          }
+
+          setTemplate(templateData);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  });
+
+  if (!checkAdminStatus() && !template) {
     return (
       <div>
         <p>Not admin</p>
@@ -51,6 +68,24 @@ function EditTemplate() {
   return (
     <div>
       <h1>Edit template</h1>
+
+      <div>
+        <label>Template name: </label>
+        <input type="text" />
+        <br />
+        <label>Description: </label>
+        <textarea />
+        <br />
+        <label>Creator: </label>
+        <input type="text" />
+      </div>
+
+      <div>
+        <h2>Items</h2>
+        <ul></ul>
+      </div>
+
+      <p>{JSON.stringify(template.items)}</p>
     </div>
   );
 }
