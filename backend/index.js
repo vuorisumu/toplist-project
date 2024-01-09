@@ -1,5 +1,9 @@
 const express = require("express");
-const routes = require("./routes");
+const rankRoutes = require("./rankingRoutes");
+const roleRoutes = require("./roleRoutes");
+const tagRoutes = require("./tagRoutes");
+const templateRoutes = require("./templateRoutes");
+const userRoutes = require("./userRoutes");
 const { pool } = require("./database");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -19,7 +23,11 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use("/api", routes);
+app.use("/api/rankings", rankRoutes);
+app.use("/api/templates", templateRoutes);
+app.use("/api/login", roleRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/tags", tagRoutes);
 
 app.use(express.static("./frontend/dist"));
 
