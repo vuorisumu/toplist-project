@@ -1,11 +1,11 @@
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
-import { checkAdminStatus } from "./util";
-import { enterTemplateEditMode } from "./api";
+import { useState, useEffect } from "react";
+import { enterTemplateEditMode, fetchTemplateById } from "./api";
 
-function EditTemplate() {
+function EditTemplate(props) {
   const [editKey, setEditKey] = useState("");
   const [template, setTemplate] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const location = useLocation();
   const templateId = parseInt(location.pathname.replace("/edit-template/", ""));
@@ -22,6 +22,21 @@ function EditTemplate() {
         } else {
           setEditKey("");
         }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    if (props.auth) {
+      fetchTemplate();
+    }
+  }, [props.auth]);
+
+  const fetchTemplate = async () => {
+    await fetchTemplateById(templateId)
+      .then((data) => {
+        handleSetTemplate(data[0]);
+        setIsAdmin(true);
       })
       .catch((err) => console.log(err));
   };
@@ -72,7 +87,7 @@ function EditTemplate() {
     console.log("Add");
   };
 
-  if (!checkAdminStatus() && !template) {
+  if (!isAdmin && !template) {
     return (
       <div>
         <p>Not admin</p>

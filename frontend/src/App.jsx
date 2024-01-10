@@ -90,7 +90,10 @@ class App extends React.Component {
             path="/createlisting/:templateId"
             element={<CreateListing />}
           />
-          <Route path="/edit-template/:templateid" element={<EditTemplate />} />
+          <Route
+            path="/edit-template/:templateid"
+            element={<EditTemplate auth={this.state.isAuthenticated} />}
+          />
         </Routes>
       </Router>
     );
