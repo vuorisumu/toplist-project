@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { enterTemplateEditMode, fetchTemplateById } from "./api";
 
@@ -146,5 +147,9 @@ function EditTemplate(props) {
     </div>
   );
 }
+
+EditTemplate.propTypes = {
+  auth: PropTypes.bool.isRequired,
+};
 
 export default EditTemplate;
