@@ -91,6 +91,20 @@ function EditTemplate(props) {
     setTags(newTags);
   };
 
+  // add new tag field
+  const addNewTagField = () => {
+    const lastTag = tags[tags.length - 1];
+    if (lastTag.trim() === "") {
+      return;
+    }
+    setTags((prevTags) => {
+      const tempTags = [...prevTags];
+      tempTags.push("");
+      return tempTags;
+    });
+    console.log("Add");
+  };
+
   // update item names
   const updateItemName = (newName, index) => {
     const newItems = template.items;
@@ -193,6 +207,11 @@ function EditTemplate(props) {
               </button>
             </li>
           ))}
+          <li>
+            <button type="button" onClick={addNewTagField}>
+              Add tag
+            </button>
+          </li>
         </ul>
       </div>
 
