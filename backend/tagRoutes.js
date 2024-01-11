@@ -28,6 +28,24 @@ tagRouter.get("/", async (req, res) => {
   }
 });
 
+// get tag by id
+tagRouter.get("/:id([0-9]+)", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const result = await database.query(`SELECT * FROM tags WHERE id = ?`, id);
+
+    // id not found
+    if (result.length === 0) {
+      return res.status(404).send(notfoundError);
+    }
+
+    // all good
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
 // add new tag
 tagRouter.post("/", async (req, res) => {
   try {

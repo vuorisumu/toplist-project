@@ -1,12 +1,13 @@
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import { enterTemplateEditMode, fetchTemplateById } from "./api";
+import { enterTemplateEditMode, fetchTemplateById, fetchTagById } from "./api";
 
 function EditTemplate(props) {
   const [editKey, setEditKey] = useState("");
   const [template, setTemplate] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [tags, setTags] = useState([""]);
 
   const location = useLocation();
   const templateId = parseInt(location.pathname.replace("/edit-template/", ""));
@@ -51,9 +52,37 @@ function EditTemplate(props) {
     if (data.tags) {
       const tempTags = JSON.parse(data.tags);
       tempData.tags = tempTags;
+      fetchTagNames(tempData);
     }
 
     setTemplate(tempData);
+  };
+
+  // fetch and set all tag names
+  const fetchTagNames = async (tempData) => {
+    console.log("called");
+    const fetchedNames = [];
+    await Promise.all(
+      tempData.tags.map(async (t) => {
+        await fetchTagById(t)
+          .then((data) => {
+            fetchedNames.push(data[0].name);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+    );
+    setTags(fetchedNames);
+  };
+
+  // update tag names
+  const updateTagName = (newName, index) => {
+    setTags((prev) => {
+      const tempTags = [...prev];
+      tempTags[index] = newName;
+      return tempTags;
+    });
   };
 
   // update item names
@@ -143,7 +172,23 @@ function EditTemplate(props) {
         </ul>
       </div>
 
+      <div>
+        <h2>Tags</h2>
+        <ul>
+          {tags.map((t, index) => (
+            <li key={"tag" + index}>
+              <input
+                type="text"
+                value={t}
+                onChange={(e) => updateTagName(e.target.value, index)}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+
       <p>{JSON.stringify(template.items)}</p>
+      <p>{tags}</p>
     </div>
   );
 }

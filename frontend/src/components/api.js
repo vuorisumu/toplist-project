@@ -67,6 +67,12 @@ export const fetchAllTags = () => {
   return fetch(`${API_BASE_URL}/tags`).then((response) => response.json());
 };
 
+export const fetchTagById = (id) => {
+  return fetch(`${API_BASE_URL}/tags/${id}`).then((response) =>
+    response.json()
+  );
+};
+
 export const fetchTagByName = (name) => {
   return fetch(`${API_BASE_URL}/tags?name=${name}`).then((response) =>
     response.json()
