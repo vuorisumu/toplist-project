@@ -20,6 +20,7 @@ function EditTemplate(props) {
     await enterTemplateEditMode(templateId, editKey)
       .then((res) => {
         if (res.data) {
+          localStorage.setItem("edit" + templateId, true);
           handleSetTemplate(res.data[0]);
         } else {
           setEditKey("");
@@ -29,7 +30,7 @@ function EditTemplate(props) {
   };
 
   useEffect(() => {
-    if (props.auth) {
+    if (props.auth || localStorage.getItem("edit" + templateId)) {
       fetchTemplate();
     }
   }, [props.auth]);
@@ -137,6 +138,10 @@ function EditTemplate(props) {
     console.log("Add");
   };
 
+  const saveChanges = async () => {
+    console.log("Save");
+  };
+
   if (!isAdmin && !template) {
     return (
       <div>
@@ -216,6 +221,10 @@ function EditTemplate(props) {
           </li>
         </ul>
       </div>
+
+      <button type="button" onClick={saveChanges}>
+        Save changes
+      </button>
 
       <p>{JSON.stringify(template.items)}</p>
       <p>{tags}</p>
