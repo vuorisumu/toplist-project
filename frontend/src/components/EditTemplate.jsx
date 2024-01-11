@@ -12,7 +12,7 @@ import {
 function EditTemplate(props) {
   const [editKey, setEditKey] = useState("");
   const [template, setTemplate] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [canEdit, setCanEdit] = useState(false);
   const [tags, setTags] = useState([""]);
 
   const location = useLocation();
@@ -45,7 +45,7 @@ function EditTemplate(props) {
     await fetchTemplateById(templateId)
       .then((data) => {
         handleSetTemplate(data[0]);
-        setIsAdmin(true);
+        setCanEdit(true);
       })
       .catch((err) => console.log(err));
   };
@@ -201,7 +201,7 @@ function EditTemplate(props) {
     updateTemplate(templateId, updatedData);
   };
 
-  if (!isAdmin && !template) {
+  if (!canEdit && !template) {
     return (
       <div>
         <p>Not admin</p>
