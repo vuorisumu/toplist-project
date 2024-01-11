@@ -186,9 +186,11 @@ function EditTemplate(props) {
               </button>
             </li>
           ))}
-          <button type="button" onClick={addNewField}>
-            Add item
-          </button>
+          <li>
+            <button type="button" onClick={addNewField}>
+              Add item
+            </button>
+          </li>
         </ul>
       </div>
 
