@@ -85,6 +85,12 @@ function EditTemplate(props) {
     });
   };
 
+  // delete tag from index
+  const deleteTag = (index) => {
+    const newTags = tags.filter((_, i) => i !== index);
+    setTags(newTags);
+  };
+
   // update item names
   const updateItemName = (newName, index) => {
     const newItems = template.items;
@@ -182,6 +188,9 @@ function EditTemplate(props) {
                 value={t}
                 onChange={(e) => updateTagName(e.target.value, index)}
               />
+              <button type="button" onClick={() => deleteTag(index)}>
+                x
+              </button>
             </li>
           ))}
         </ul>
