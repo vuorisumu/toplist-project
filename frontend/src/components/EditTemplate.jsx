@@ -7,8 +7,6 @@ import {
   fetchTemplateById,
   fetchTagById,
   updateTemplate,
-  fetchUserById,
-  fetchUserByName,
 } from "./api";
 
 function EditTemplate(props) {
@@ -114,6 +112,7 @@ function EditTemplate(props) {
     console.log("Add");
   };
 
+  // update template name
   const updateTemplateName = (newName) => {
     setTemplate((prev) => ({
       ...prev,
@@ -121,6 +120,7 @@ function EditTemplate(props) {
     }));
   };
 
+  // update template description
   const updateDescription = (newDesc) => {
     setTemplate((prev) => ({
       ...prev,
@@ -128,6 +128,7 @@ function EditTemplate(props) {
     }));
   };
 
+  // update creator name
   const updateCreatorName = (newCreator) => {
     setTemplate((prev) => ({
       ...prev,
@@ -167,14 +168,21 @@ function EditTemplate(props) {
     console.log("Add");
   };
 
+  // save changes to template
   const saveChanges = async () => {
-    console.log("Save");
+    // fetch tag numbers of non empty tags
     const nonEmptyTags = tags.filter((t) => t.trim() !== "");
     const tagNumbers = await getTagNumbers(nonEmptyTags);
+
+    // get the creator id
     const userNumber = await getUserId(template.user_name);
+
+    // only store non empty items
     const nonEmptyItems = template.items.filter(
       (t) => t.item_name.trim() !== ""
     );
+
+    // build data
     const updatedData = {
       name: template.name,
       items: nonEmptyItems,
@@ -189,7 +197,7 @@ function EditTemplate(props) {
       updatedData.description = template.description;
     }
 
-    console.log(updatedData);
+    // save changes to database
     updateTemplate(templateId, updatedData);
   };
 
