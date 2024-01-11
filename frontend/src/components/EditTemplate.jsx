@@ -1,7 +1,15 @@
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import { enterTemplateEditMode, fetchTemplateById, fetchTagById } from "./api";
+import { clearAll, getTagNumbers, getUserId } from "./util";
+import {
+  enterTemplateEditMode,
+  fetchTemplateById,
+  fetchTagById,
+  updateTemplate,
+  fetchUserById,
+  fetchUserByName,
+} from "./api";
 
 function EditTemplate(props) {
   const [editKey, setEditKey] = useState("");
@@ -106,6 +114,27 @@ function EditTemplate(props) {
     console.log("Add");
   };
 
+  const updateTemplateName = (newName) => {
+    setTemplate((prev) => ({
+      ...prev,
+      name: newName,
+    }));
+  };
+
+  const updateDescription = (newDesc) => {
+    setTemplate((prev) => ({
+      ...prev,
+      description: newDesc,
+    }));
+  };
+
+  const updateCreatorName = (newCreator) => {
+    setTemplate((prev) => ({
+      ...prev,
+      user_name: newCreator,
+    }));
+  };
+
   // update item names
   const updateItemName = (newName, index) => {
     const newItems = template.items;
@@ -140,6 +169,28 @@ function EditTemplate(props) {
 
   const saveChanges = async () => {
     console.log("Save");
+    const nonEmptyTags = tags.filter((t) => t.trim() !== "");
+    const tagNumbers = await getTagNumbers(nonEmptyTags);
+    const userNumber = await getUserId(template.user_name);
+    const nonEmptyItems = template.items.filter(
+      (t) => t.item_name.trim() !== ""
+    );
+    const updatedData = {
+      name: template.name,
+      items: nonEmptyItems,
+      creator_id: userNumber,
+    };
+
+    if (tagNumbers.length > 0) {
+      updatedData.tags = tagNumbers;
+    }
+
+    if (template.description) {
+      updatedData.description = template.description;
+    }
+
+    console.log(updatedData);
+    updateTemplate(templateId, updatedData);
   };
 
   if (!isAdmin && !template) {
@@ -167,13 +218,24 @@ function EditTemplate(props) {
 
       <div>
         <label>Template name: </label>
-        <input type="text" />
+        <input
+          type="text"
+          value={template.name}
+          onChange={(e) => updateTemplateName(e.target.value)}
+        />
         <br />
         <label>Description: </label>
-        <textarea />
+        <textarea
+          value={template.description || ""}
+          onChange={(e) => updateDescription(e.target.value)}
+        />
         <br />
         <label>Creator: </label>
-        <input type="text" />
+        <input
+          type="text"
+          value={template.user_name}
+          onChange={(e) => updateCreatorName(e.target.value)}
+        />
       </div>
 
       <div>
@@ -224,6 +286,9 @@ function EditTemplate(props) {
 
       <button type="button" onClick={saveChanges}>
         Save changes
+      </button>
+      <button type="button" onClick={clearAll}>
+        Reset
       </button>
 
       <p>{JSON.stringify(template.items)}</p>

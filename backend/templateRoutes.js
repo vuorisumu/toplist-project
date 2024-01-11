@@ -141,4 +141,77 @@ templateRouter.post("/", async (req, res) => {
   }
 });
 
+templateRouter.patch("/:id([0-9]+)", async (req, res) => {
+  try {
+    // check if template exists
+    const exists = await database.query(
+      "SELECT * FROM templates WHERE id = ?",
+      [req.params.id]
+    );
+    if (exists.length === 0) {
+      return res.status(404).json({ msg: "Template not found" });
+    }
+
+    // validate data
+    const { error } = database.templateSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ msg: error.details[0].message });
+    }
+
+    console.log(req.body);
+
+    const values = [];
+    const fields = [];
+
+    if (req.body.name) {
+      fields.push("name = ?");
+      values.push(req.body.name);
+    }
+
+    if (req.body.items) {
+      fields.push("items = ?");
+      values.push(JSON.stringify(req.body.items));
+    }
+
+    if (req.body.creator_id) {
+      fields.push("creator_id = ?");
+      values.push(req.body.creator_id);
+    }
+
+    if (req.body.description) {
+      fields.push("description = ?");
+      values.push(req.body.description);
+    }
+
+    if (req.body.tags) {
+      fields.push("tags = ?");
+      values.push(JSON.stringify(req.body.tags));
+    }
+
+    if (req.body.editkey) {
+      fields.push("editkey = ?");
+      const encryptedKey = await bcrypt.hash(req.body.editkey, 10);
+      values.push(`${encryptedKey}`);
+    }
+
+    const updateString = fields.join(", ");
+    const query = `UPDATE templates SET ${updateString} WHERE id = ?`;
+
+    console.log(query);
+    const result = await database.query(query, [...values, req.params.id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(500).json({ msg: "Failed to update template" });
+    }
+
+    // successful insert
+    res.status(201).json({
+      msg: "Added new template",
+      id: req.params.id,
+    });
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
 module.exports = templateRouter;

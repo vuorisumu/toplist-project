@@ -1,12 +1,6 @@
 import { useState } from "react";
-import { clearAll } from "./util";
-import {
-  fetchUserByName,
-  addNewUser,
-  addNewTemplate,
-  fetchTagByName,
-  addNewTag,
-} from "./api";
+import { clearAll, getTagNumbers, getUserId } from "./util";
+import { addNewTemplate } from "./api";
 
 function NewTemplate() {
   const [templateName, setTemplateName] = useState("");
@@ -94,19 +88,7 @@ function NewTemplate() {
 
     // optional creator info
     if (creatorName !== "") {
-      const fetchedUser = await fetchUserByName(creatorName.trim());
-      if (fetchedUser.length > 0) {
-        // use the id of user that already exists
-        templateData.creator_id = fetchedUser[0].user_id;
-      } else {
-        // add new user that's not already in database
-        const newUser = {
-          user_name: creatorName,
-        };
-
-        const newUserResponse = await addNewUser(newUser);
-        templateData.creator_id = newUserResponse.id;
-      }
+      templateData.creator_id = await getUserId(creatorName);
     }
 
     // optional description
@@ -125,34 +107,6 @@ function NewTemplate() {
       console.log("Added: ", addedTemplate);
     } catch (err) {
       console.log(err);
-    }
-  };
-
-  // convert tag names to tag ids
-  const getTagNumbers = async (tagNames) => {
-    const tagNumbers = [];
-    try {
-      await Promise.all(
-        tagNames.map(async (t) => {
-          const fetchedTag = await fetchTagByName(t.trim());
-          let newId;
-          if (fetchedTag.length > 0) {
-            // tag already exists in database
-            newId = fetchedTag[0].id;
-          } else {
-            // add new tag to database
-            const newTag = {
-              name: t,
-            };
-            const newTagRes = await addNewTag(newTag);
-            newId = newTagRes.id;
-          }
-          tagNumbers.push(newId);
-        })
-      );
-      return tagNumbers;
-    } catch (err) {
-      console.error(err);
     }
   };
 

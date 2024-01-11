@@ -164,9 +164,9 @@ async function filteredUserQuery(req) {
   const conditions = [];
   const queryParams = [];
 
-  if (value.user_name) {
+  if (value.name) {
     conditions.push(`user_name = ?`);
-    queryParams.push(value.user_name);
+    queryParams.push(value.name);
   }
 
   if (conditions.length > 0) {
@@ -174,7 +174,7 @@ async function filteredUserQuery(req) {
   }
 
   // log the query in full
-  console.log("Final Query:", filteredQuery);
+  console.log("Final user Query:", filteredQuery);
 
   return { filteredQuery, queryParams };
 }

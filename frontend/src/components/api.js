@@ -48,6 +48,18 @@ export const addNewTemplate = (template) => {
     .catch((error) => console.error("Error:", error));
 };
 
+export const updateTemplate = (id, templateData) => {
+  return fetch(`${API_BASE_URL}/templates/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(templateData),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
 // --- RANKINGS ---
 export const addNewRanking = (ranking) => {
   fetch(`${API_BASE_URL}/rankings/`, {
