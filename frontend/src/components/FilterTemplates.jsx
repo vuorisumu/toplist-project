@@ -72,6 +72,9 @@ function FilterTemplates({ search, clear }) {
   };
 
   const handleClear = () => {
+    const clearChecks = [...tags];
+    clearChecks.forEach((t) => (t.check = false));
+    setTags(clearChecks);
     clear();
   };
 
