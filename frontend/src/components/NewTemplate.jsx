@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { clearAll, getTagNumbers, getUserId } from "./util";
-import { addNewTemplate } from "./api";
+import { addNewTemplate, fetchAllTags } from "./api";
 import TagInput from "./TagInput";
 
 function NewTemplate() {
@@ -9,9 +9,18 @@ function NewTemplate() {
   const [creatorName, setCreatorName] = useState("");
   const [items, setItems] = useState([""]);
   const [tags, setTags] = useState([""]);
+  const [suggestions, setSuggestions] = useState([""]);
   const [editKey, setEditKey] = useState("");
 
-  const suggestions = ["Testi", "Aa", "Bee", "Cee"];
+  useEffect(() => {
+    fetchAllTags()
+      .then((data) => {
+        const tagNames = data.map((tag) => tag.name);
+        setSuggestions(tagNames);
+        console.log(suggestions.length + " tags added");
+      })
+      .catch((err) => console.log(err));
+  }, [suggestions.length]);
 
   const printTags = () => {
     tags.map((t) => {
