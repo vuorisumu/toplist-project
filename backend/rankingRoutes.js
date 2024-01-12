@@ -85,9 +85,9 @@ rankRouter.post("/", async (req, res) => {
     }
 
     // optional description
-    if (req.body.description) {
-      fields.push("description");
-      values.push(req.body.description);
+    if (req.body.ranking_desc) {
+      fields.push("ranking_desc");
+      values.push(req.body.ranking_desc);
     }
 
     // optional creation time

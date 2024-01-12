@@ -97,9 +97,14 @@ async function filteredRankingQuery(req) {
   const queryParams = [];
 
   // add conditions
+  if (value.tempId) {
+    conditions.push("t.id = ?");
+    queryParams.push(value.tempId);
+  }
+
   if (value.tname) {
     conditions.push("t.name LIKE ?");
-    queryParams.push(`${value.tname}`);
+    queryParams.push(`${value.tname}%`);
   }
   if (value.rname) {
     conditions.push("r.ranking_name LIKE ?");
@@ -149,6 +154,10 @@ async function filteredRankingQuery(req) {
     } else {
       filteredQuery += ` ORDER BY ${sortBy} ${sortOrder}`;
     }
+  }
+
+  if (value.limit) {
+    filteredQuery += ` LIMIT ${value.limit}`;
   }
 
   // log the query in full

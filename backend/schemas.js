@@ -15,6 +15,7 @@ const querySchema = Joi.object({
 });
 
 const rankingQuerySchema = Joi.object({
+  tempId: Joi.number().optional(),
   tname: Joi.string().optional(),
   rname: Joi.string().optional(),
   uname: Joi.string().optional(),
@@ -53,7 +54,7 @@ const rankingSchema = Joi.object({
   ranking_name: Joi.string().required(),
   template_id: Joi.number().required(),
   creator_id: Joi.number().optional(),
-  description: Joi.string().optional(),
+  ranking_desc: Joi.string().optional(),
   items: Joi.array()
     .items(
       Joi.object().keys({
