@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 
-function TagInput({
+function SearchInput({
   initValue,
   placeholder,
   suggestionData,
@@ -79,7 +79,7 @@ function TagInput({
   );
 }
 
-TagInput.propTypes = {
+SearchInput.propTypes = {
   initValue: PropTypes.string,
   placeholder: PropTypes.string,
   suggestionData: PropTypes.array.isRequired,
@@ -87,4 +87,4 @@ TagInput.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-export default TagInput;
+export default SearchInput;

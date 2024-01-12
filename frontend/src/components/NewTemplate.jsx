@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { clearAll, getTagNumbers, getUserId } from "./util";
 import { addNewTemplate, fetchAllTags } from "./api";
-import TagInput from "./TagInput";
+import SearchInput from "./SearchInput";
 
 function NewTemplate() {
   const [templateName, setTemplateName] = useState("");
@@ -187,7 +187,7 @@ function NewTemplate() {
         <ul>
           {tags.map((i, index) => (
             <li key={"tag" + index}>
-              <TagInput
+              <SearchInput
                 initValue={i}
                 suggestionData={suggestions}
                 onChange={(val) => handleTagEdits(index, val)}
