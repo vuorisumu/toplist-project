@@ -37,6 +37,7 @@ function Main() {
   async function fetchRecent() {
     fetchAllTemplatesFiltered(`sortBy=id&sortOrder=desc&limit=${loadSize}`)
       .then((data) => {
+        setFilters("sortBy=id&sortOrder=desc");
         setIsDefaultSearch(true);
         setTemplates(data);
         setLoadedTemplates(loadedTemplates + loadSize);
@@ -56,6 +57,7 @@ function Main() {
 
   // load more templates with current search filters
   async function loadMore() {
+    console.log(filters);
     let limit = `${loadedTemplates},${loadSize}`;
     fetchAllTemplatesFiltered(`${filters}&limit=${limit}`)
       .then((data) => {
