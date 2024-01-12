@@ -22,8 +22,14 @@ function BrowSeRankings() {
     <>
       <h1>Browse</h1>
       <button onClick={fetchAll}>Fetch all</button>
+      <button onClick={() => fetchAllFiltered("sortBy=name")}>
+        Sort alphabetically
+      </button>
       <button onClick={() => fetchAllFiltered("sortBy=creatorname")}>
         Sort by creator name
+      </button>
+      <button onClick={() => fetchAllFiltered("sortBy=templatename")}>
+        Sort by template name
       </button>
       <ul>
         {rankings.map((t) => (

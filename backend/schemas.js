@@ -6,6 +6,11 @@ const querySchema = Joi.object({
   sortOrder: Joi.string().valid("asc", "desc").default("asc").optional(),
 });
 
+const rankingQuerySchema = Joi.object({
+  sortBy: Joi.string().valid("name", "creatorname", "templatename").optional(),
+  sortOrder: Joi.string().valid("asc", "desc").default("asc").optional(),
+});
+
 const userQuerySchema = Joi.object({
   name: Joi.string().optional(),
 });
@@ -55,6 +60,7 @@ const tagSchema = Joi.object({
 
 module.exports = {
   querySchema,
+  rankingQuerySchema,
   userQuerySchema,
   templateSchema,
   rankingSchema,

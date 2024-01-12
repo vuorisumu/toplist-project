@@ -65,7 +65,7 @@ async function filteredTemplatesQuery(req) {
 
 // ranking query with filters
 async function filteredRankingQuery(req) {
-  const { error, value } = schemas.querySchema.validate(req);
+  const { error, value } = schemas.rankingQuerySchema.validate(req);
   if (error) {
     throw error;
   }
@@ -73,12 +73,19 @@ async function filteredRankingQuery(req) {
   let filteredQuery = `SELECT * FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id LEFT JOIN templates t ON r.template_id = t.id`;
 
   // sorting
-  if (value.sortBy && ["name", "creatorname"].includes(value.sortBy)) {
-    let sortBy = value.sortBy;
+  if (
+    value.sortBy &&
+    ["name", "creatorname", "templatename"].includes(value.sortBy)
+  ) {
+    let sortBy = "r.ranking_name";
 
     // if sorting by creator name
     if (value.sortBy === "creatorname") {
       sortBy = "u.user_name";
+    }
+
+    if (value.sortBy === "templatename") {
+      sortBy = "t.name";
     }
 
     // default to asc if desc has not been specified
@@ -157,6 +164,7 @@ module.exports = {
   pool,
   query,
   filteredTemplatesQuery,
+  filteredRankingQuery,
   filteredUserQuery,
   filteredTagQuery,
 };
