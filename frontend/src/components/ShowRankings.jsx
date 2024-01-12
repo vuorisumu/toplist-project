@@ -5,8 +5,8 @@ import { fetchAllRankingsFiltered } from "./api";
 function ShowRankings({ id }) {
   const [allRankings, setAllRankings] = useState([]);
   const [loadedRankings, setLoadedRankings] = useState([]);
-  const [loadedLists, setLoadedLists] = useState(0);
-  const loadSize = 5;
+  const [rankCount, setRankCount] = useState(0);
+  const loadSize = 2;
   const defaultQuery = `sortBy=id&sortOrder=desc`;
 
   useEffect(() => {
@@ -17,13 +17,23 @@ function ShowRankings({ id }) {
     fetchAllRankingsFiltered(`tempId=${id}&${defaultQuery}&limit=${loadSize}`)
       .then((data) => {
         setLoadedRankings(data);
-        setLoadedLists(loadSize);
+        setRankCount(loadSize);
       })
       .catch((err) => console.log(err));
   };
 
-  const loadMore = () => {
-    console.log("Load more");
+  const loadMore = async () => {
+    let limit = `${rankCount},${loadSize}`;
+    fetchAllRankingsFiltered(`tempId=${id}&${defaultQuery}&limit=${limit}`)
+      .then((data) => {
+        if (rankCount === 0) {
+          setLoadedRankings(data);
+        } else {
+          setLoadedRankings((prevTemplates) => [...prevTemplates, ...data]);
+        }
+        setRankCount(rankCount + loadSize);
+      })
+      .catch((err) => console.log(err));
   };
 
   if (!loadedRankings) {
