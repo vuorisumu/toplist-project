@@ -32,8 +32,6 @@ async function filteredTemplatesQuery(req) {
     throw error;
   }
 
-  console.log(value);
-
   let filteredQuery = `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
   const conditions = [];
   const queryParams = [];
@@ -199,8 +197,6 @@ async function filteredUserQuery(req) {
       filteredQuery += ` AND r.template_id = ?`;
       queryParams.push(value.tempId);
     }
-
-    console.log(filteredQuery);
     return { filteredQuery, queryParams };
   }
 
@@ -211,7 +207,6 @@ async function filteredUserQuery(req) {
       queryParams.push(value.tempId);
     }
 
-    console.log(filteredQuery);
     return { filteredQuery, queryParams };
   }
 
