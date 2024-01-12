@@ -1,18 +1,43 @@
 // import { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
-function Dropdown({ isOpen, openTrigger, items, onSelect }) {
+function Dropdown({ label, placeholder, items, onSelect }) {
   const [selectedItem, setSelectedItem] = useState(null);
+  const [hideOptions, setHideOptions] = useState(true);
+  const ref = useRef(null);
+
+  // Hide options box on unfocus
+  useEffect(() => {
+    const clickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setHideOptions(true);
+      }
+    };
+
+    document.addEventListener("click", clickOutside);
+
+    return () => {
+      document.removeEventListener("click", clickOutside);
+    };
+  }, [ref]);
+
+  const handleOpen = () => {
+    setHideOptions(!hideOptions);
+  };
+
   const handleItemClick = (item) => {
     setSelectedItem(item);
-    onSelect(item); // Pass the selected item to the parent component
+    setHideOptions(true);
+    onSelect(item);
   };
 
   return (
     <div>
-      {openTrigger}
-      {isOpen ? (
+      <button type="button" onClick={handleOpen}>
+        {label || "Selected"}: {selectedItem || placeholder}
+      </button>
+      <div style={{ display: hideOptions ? "none" : "block" }}>
         <ul>
           {items.map((i, index) => (
             <li key={index} onClick={() => handleItemClick(i)}>
@@ -20,15 +45,14 @@ function Dropdown({ isOpen, openTrigger, items, onSelect }) {
             </li>
           ))}
         </ul>
-      ) : null}
-      <p>Selected: {selectedItem}</p>
+      </div>
     </div>
   );
 }
 
 Dropdown.propTypes = {
-  isOpen: PropTypes.bool,
-  openTrigger: PropTypes.element,
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
   items: PropTypes.array,
   onSelect: PropTypes.func,
 };

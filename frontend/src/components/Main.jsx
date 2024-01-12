@@ -14,11 +14,6 @@ function Main() {
     fetchRecent();
   }, []);
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => {
-    setOpen(!open);
-  };
-
   const selectFromDropdown = (val) => {
     console.log(val);
   };
@@ -75,8 +70,8 @@ function Main() {
           Sort by creator name
         </button>
         <Dropdown
-          isOpen={open}
-          openTrigger={<button onClick={handleOpen}>Dropdown</button>}
+          label={"Sort by"}
+          placeholder={"Name"}
           items={["Yksi", "Kaksi"]}
           onSelect={selectFromDropdown}
         />
