@@ -37,16 +37,23 @@ function Main() {
       .then((data) => {
         if (loadedTemplates === 0) {
           setTemplates(data);
-        } else {
-          setTemplates((prevTemplates) => [...prevTemplates, ...data]);
         }
         setLoadedTemplates(loadedTemplates + loadSize);
       })
       .catch((err) => console.log(err));
   }
 
+  async function newSearch(query) {
+    fetchAllTemplatesFiltered(`${query}&limit=${loadSize}`)
+      .then((data) => {
+        setTemplates(data);
+        setLoadedTemplates(loadedTemplates + loadSize);
+      })
+      .catch((err) => console.log(err));
+  }
+
   // load more templates with current search filters
-  async function fetchMore() {
+  async function loadMore() {
     let limit = `${loadedTemplates},${loadSize}`;
     fetchAllTemplatesFiltered(`${filters}&limit=${limit}`)
       .then((data) => {
@@ -108,7 +115,11 @@ function Main() {
     if (searchConditions.length > 0) {
       searchQuery = searchConditions.join("&");
     }
-    console.log(searchQuery);
+
+    if (searchQuery !== "") {
+      setFilters(searchQuery);
+      newSearch(searchQuery);
+    }
   };
 
   return (
@@ -158,7 +169,7 @@ function Main() {
             </li>
           ))}
         </ul>
-        <button type="button" onClick={fetchMore}>
+        <button type="button" onClick={loadMore}>
           Load more
         </button>
       </div>

@@ -33,6 +33,23 @@ async function filteredTemplatesQuery(req) {
   }
 
   let filteredQuery = `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
+  const conditions = [];
+  const queryParams = [];
+
+  // add conditions
+  if (value.tname) {
+    conditions.push("t.name LIKE ?");
+    queryParams.push(`${value.tname}%`);
+  }
+
+  if (value.uname) {
+    conditions.push("u.user_name LIKE ?");
+    queryParams.push(`${value.uname}%`);
+  }
+
+  if (conditions.length > 0) {
+    filteredQuery += " WHERE " + conditions.join(" AND ");
+  }
 
   // sorting
   if (value.sortBy && ["id", "name", "creatorname"].includes(value.sortBy)) {
@@ -65,7 +82,7 @@ async function filteredTemplatesQuery(req) {
     filteredQuery += ` LIMIT ${value.limit}`;
   }
 
-  return { filteredQuery };
+  return { filteredQuery, queryParams };
 }
 
 // ranking query with filters

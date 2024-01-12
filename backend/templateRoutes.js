@@ -18,10 +18,9 @@ templateRouter.get("/", async (req, res) => {
         results = await database.query(`SELECT DISTINCT name FROM templates`);
       } else {
         // query has filters
-        const { filteredQuery } = await database.filteredTemplatesQuery(
-          req.query
-        );
-        results = await database.query(filteredQuery);
+        const { filteredQuery, queryParams } =
+          await database.filteredTemplatesQuery(req.query);
+        results = await database.query(filteredQuery, queryParams);
       }
     } else {
       // query does not have filters
