@@ -93,6 +93,27 @@ async function filteredRankingQuery(req) {
   }
 
   let filteredQuery = `SELECT * FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id LEFT JOIN templates t ON r.template_id = t.id`;
+  const conditions = [];
+  const queryParams = [];
+
+  // add conditions
+  if (value.tname) {
+    conditions.push("t.name LIKE ?");
+    queryParams.push(`${value.tname}`);
+  }
+  if (value.rname) {
+    conditions.push("r.ranking_name LIKE ?");
+    queryParams.push(`${value.rname}%`);
+  }
+
+  if (value.uname) {
+    conditions.push("u.user_name LIKE ?");
+    queryParams.push(`${value.uname}%`);
+  }
+
+  if (conditions.length > 0) {
+    filteredQuery += " WHERE " + conditions.join(" AND ");
+  }
 
   // sorting
   if (
@@ -101,11 +122,17 @@ async function filteredRankingQuery(req) {
   ) {
     let sortBy = "r.ranking_name";
 
+    // if sorting by id
+    if (value.sortBy === "id") {
+      sortBy = "r.ranking_id";
+    }
+
     // if sorting by creator name
     if (value.sortBy === "creatorname") {
       sortBy = "u.user_name";
     }
 
+    // if sorting by template name
     if (value.sortBy === "templatename") {
       sortBy = "t.name";
     }
@@ -127,7 +154,7 @@ async function filteredRankingQuery(req) {
   // log the query in full
   console.log("Final Query:", filteredQuery);
 
-  return { filteredQuery };
+  return { filteredQuery, queryParams };
 }
 
 // users query with conditions
