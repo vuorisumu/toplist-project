@@ -92,7 +92,13 @@ async function filteredRankingQuery(req) {
     throw error;
   }
 
-  let filteredQuery = `SELECT * FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id LEFT JOIN templates t ON r.template_id = t.id`;
+  let filteredQuery = "SELECT";
+  if (value.distinct) {
+    filteredQuery += " DISTINCT r.ranking_name";
+  } else {
+    filteredQuery += " *";
+  }
+  filteredQuery += ` FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id LEFT JOIN templates t ON r.template_id = t.id`;
   const conditions = [];
   const queryParams = [];
 

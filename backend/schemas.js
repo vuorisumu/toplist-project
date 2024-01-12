@@ -15,6 +15,7 @@ const querySchema = Joi.object({
 });
 
 const rankingQuerySchema = Joi.object({
+  distinct: Joi.boolean().optional(),
   tempId: Joi.number().optional(),
   tname: Joi.string().optional(),
   rname: Joi.string().optional(),

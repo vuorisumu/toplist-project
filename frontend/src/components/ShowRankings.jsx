@@ -1,15 +1,23 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { fetchAllRankingsFiltered } from "./api";
+import { fetchAllRankingsFiltered, fetchAllUsersWithTemplates } from "./api";
+import SearchInput from "./SearchInput";
 
 function ShowRankings({ id }) {
-  const [allRankings, setAllRankings] = useState([]);
   const [loadedRankings, setLoadedRankings] = useState([]);
   const [rankCount, setRankCount] = useState(0);
   const loadSize = 2;
   const defaultQuery = `sortBy=id&sortOrder=desc`;
 
+  const [openFilters, setOpenFilters] = useState(false);
+  const [searchRanking, setSearchRanking] = useState("");
+  const [searchUser, setSearchUser] = useState("");
+  const [userNames, setUserNames] = useState([]);
+  const [listNames, setListNames] = useState([]);
+
   useEffect(() => {
+    fetchRankingNames();
+    handleFetchUserNames();
     getAllRankings();
   }, []);
 
@@ -36,6 +44,30 @@ function ShowRankings({ id }) {
       .catch((err) => console.log(err));
   };
 
+  const toggleShowFilters = () => {
+    setOpenFilters(!openFilters);
+  };
+
+  const handleRankingName = (val) => {
+    setSearchRanking(val);
+  };
+
+  const handleCreatorName = (val) => {
+    setSearchUser(val);
+  };
+
+  async function fetchRankingNames() {
+    fetchAllRankingsFiltered(`distinct=true&tempId=${id}`)
+      .then((data) => setListNames(data.map((r) => r.ranking_name)))
+      .catch((err) => console.log(err));
+  }
+
+  const handleFetchUserNames = async () => {
+    fetchAllUsersWithTemplates()
+      .then((data) => setUserNames(data.map((u) => u.user_name)))
+      .catch((err) => console.log(err));
+  };
+
   if (!loadedRankings) {
     return <p>Loading</p>;
   }
@@ -43,6 +75,34 @@ function ShowRankings({ id }) {
   return (
     <div>
       <h2>Lists using this template</h2>
+      <div>
+        {openFilters ? (
+          <div>
+            {/* Ranking name search */}
+            <label>Search list by name: </label>
+            <SearchInput
+              suggestionData={listNames}
+              onChange={handleRankingName}
+              onSelected={handleRankingName}
+            />
+
+            {/* Username search */}
+            <label>Search from creator: </label>
+            <SearchInput
+              suggestionData={userNames}
+              onChange={handleCreatorName}
+              onSelected={handleCreatorName}
+            />
+            <button type="button" onClick={toggleShowFilters}>
+              Close filters
+            </button>
+          </div>
+        ) : (
+          <button type="button" onClick={toggleShowFilters}>
+            Show filters
+          </button>
+        )}
+      </div>
       {loadedRankings.map((list) => (
         <div key={list.ranking_id}>{list.ranking_name}</div>
       ))}

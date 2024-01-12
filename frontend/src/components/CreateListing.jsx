@@ -9,6 +9,7 @@ import {
 import { DnDContainer } from "./Dnd";
 import { v4 as uuid } from "uuid";
 import { getLocalTime, clearAll, checkAdminStatus } from "./util";
+import ShowRankings from "./ShowRankings";
 
 function CreateListing() {
   const location = useLocation();
@@ -133,7 +134,7 @@ function CreateListing() {
 
       // optional description
       if (rankingDesc !== "") {
-        rankingData.description = rankingDesc;
+        rankingData.ranking_desc = rankingDesc;
       }
 
       const res = await addNewRanking(rankingData);
@@ -148,78 +149,81 @@ function CreateListing() {
   }
 
   return (
-    <div>
-      <h1>Create a Ranking</h1>
-
-      {(template.editkey || checkAdminStatus()) && (
-        <Link to={`/edit-template/${template.id}`}>Edit template</Link>
-      )}
-
-      {/* Template information */}
+    <>
       <div>
-        <p>Template name: {template.name}</p>
-        <p>Template creator: {template.user_name}</p>
-      </div>
+        <h1>Create a Ranking</h1>
 
-      {/* Ranking information */}
-      <div>
-        <label>Ranking title: </label>
-        <input
-          type="text"
-          value={rankingName}
-          onChange={(e) => setRankingName(e.target.value)}
-          placeholder="Ranking Title"
+        {(template.editkey || checkAdminStatus()) && (
+          <Link to={`/edit-template/${template.id}`}>Edit template</Link>
+        )}
+
+        {/* Template information */}
+        <div>
+          <p>Template name: {template.name}</p>
+          <p>Template creator: {template.user_name}</p>
+        </div>
+
+        {/* Ranking information */}
+        <div>
+          <label>Ranking title: </label>
+          <input
+            type="text"
+            value={rankingName}
+            onChange={(e) => setRankingName(e.target.value)}
+            placeholder="Ranking Title"
+          />
+          <br />
+          <label>Description: </label>
+          <textarea
+            value={rankingDesc}
+            onChange={(e) => setRankingDesc(e.target.value)}
+            placeholder="Ranking description"
+          />
+          <br />
+          <label>Creator name: </label>
+          <input
+            type="text"
+            value={creatorName}
+            onChange={(e) => setCreatorName(e.target.value)}
+            placeholder="Creator Name"
+          />
+        </div>
+
+        {/* Ranking builder */}
+        <DnDContainer
+          containers={containers}
+          setContainers={setContainers}
+          ITEMS_RANKED={ITEMS_RANKED}
+          ITEMS_REMAINING={ITEMS_REMAINING}
         />
-        <br />
-        <label>Description: </label>
-        <textarea
-          value={rankingDesc}
-          onChange={(e) => setRankingDesc(e.target.value)}
-          placeholder="Ranking description"
-        />
-        <br />
-        <label>Creator name: </label>
-        <input
-          type="text"
-          value={creatorName}
-          onChange={(e) => setCreatorName(e.target.value)}
-          placeholder="Creator Name"
-        />
+
+        {/* Add new items */}
+        <div>
+          <label>New item: </label>
+          <input
+            type="text"
+            value={newEntry}
+            onChange={(e) => setNewEntry(e.target.value)}
+            placeholder="New Item"
+          />
+          <button type="button" onClick={addEntry}>
+            Add
+          </button>
+        </div>
+
+        {/* Save changes */}
+        <div>
+          <button type="button" onClick={saveRanking}>
+            Save Ranking
+          </button>
+
+          <button type="button" onClick={clearAll}>
+            Reset
+          </button>
+        </div>
       </div>
-
-      {/* Ranking builder */}
-      <DnDContainer
-        containers={containers}
-        setContainers={setContainers}
-        ITEMS_RANKED={ITEMS_RANKED}
-        ITEMS_REMAINING={ITEMS_REMAINING}
-      />
-
-      {/* Add new items */}
-      <div>
-        <label>New item: </label>
-        <input
-          type="text"
-          value={newEntry}
-          onChange={(e) => setNewEntry(e.target.value)}
-          placeholder="New Item"
-        />
-        <button type="button" onClick={addEntry}>
-          Add
-        </button>
-      </div>
-
-      {/* Save changes */}
-      <div>
-        <button type="button" onClick={saveRanking}>
-          Save Ranking
-        </button>
-
-        <button type="button" onClick={clearAll}>
-          Reset
-        </button>
-      </div>
-    </div>
+      <ShowRankings id={templateId} />
+    </>
   );
 }
 
