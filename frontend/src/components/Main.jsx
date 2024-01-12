@@ -5,6 +5,9 @@ import { checkAdminStatus } from "./util";
 
 function Main() {
   const [templates, setTemplates] = useState([]);
+  const [loadedTemplates, setLoadedTemplates] = useState(0);
+  const loadSize = 5;
+  const [filters, setFilters] = useState("sortBy=id&sortOrder=desc");
 
   useEffect(() => {
     fetchRecent();
@@ -12,8 +15,29 @@ function Main() {
 
   // fetch the newest templates
   async function fetchRecent() {
-    fetchAllTemplatesFiltered("sortBy=id&sortOrder=desc&limit=5")
-      .then((data) => setTemplates(data))
+    fetchAllTemplatesFiltered(`sortBy=id&sortOrder=desc&limit=${loadSize}`)
+      .then((data) => {
+        if (loadedTemplates === 0) {
+          setTemplates(data);
+        } else {
+          setTemplates((prevTemplates) => [...prevTemplates, ...data]);
+        }
+        setLoadedTemplates(loadedTemplates + loadSize);
+      })
+      .catch((err) => console.log(err));
+  }
+
+  async function fetchMore() {
+    let limit = `${loadedTemplates},${loadSize}`;
+    fetchAllTemplatesFiltered(`${filters}&limit=${limit}`)
+      .then((data) => {
+        if (loadedTemplates === 0) {
+          setTemplates(data);
+        } else {
+          setTemplates((prevTemplates) => [...prevTemplates, ...data]);
+        }
+        setLoadedTemplates(loadedTemplates + loadSize);
+      })
       .catch((err) => console.log(err));
   }
 
@@ -56,6 +80,9 @@ function Main() {
           </li>
         ))}
       </ul>
+      <button type="button" onClick={fetchMore}>
+        Load more
+      </button>
     </>
   );
 }
