@@ -9,14 +9,18 @@ function Main() {
   const [loadedTemplates, setLoadedTemplates] = useState(0);
   const loadSize = 5;
   const [filters, setFilters] = useState("sortBy=id&sortOrder=desc");
+  const [sortBy, setSortBy] = useState("");
+
+  const sortByOptions = [
+    "Template name",
+    "Oldest first",
+    "Newest first",
+    "Creator name",
+  ];
 
   useEffect(() => {
     fetchRecent();
   }, []);
-
-  const selectFromDropdown = (val) => {
-    console.log(val);
-  };
 
   // fetch the newest templates
   async function fetchRecent() {
@@ -60,6 +64,10 @@ function Main() {
       .catch((err) => console.log(err));
   }
 
+  const selectFromDropdown = (val) => {
+    setSortBy(val);
+  };
+
   return (
     <>
       <h1>Main</h1>
@@ -72,7 +80,7 @@ function Main() {
         <Dropdown
           label={"Sort by"}
           placeholder={"Name"}
-          items={["Yksi", "Kaksi"]}
+          items={sortByOptions}
           onSelect={selectFromDropdown}
         />
       </div>
