@@ -3,12 +3,13 @@ import Dropdown from "./Dropdown";
 import SearchInput from "./SearchInput";
 import PropTypes from "prop-types";
 import { getAllTemplateNames } from "./util";
-import { fetchAllUsersWithTemplates } from "./api";
+import { fetchAllUsersWithTemplates, fetchAllTags } from "./api";
 
 function FilterTemplates({ search, clear }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [templateNames, setTemplateNames] = useState([]);
   const [userNames, setUserNames] = useState([]);
+  const [tags, setTags] = useState({});
   const [searchTemplate, setSearchTemplate] = useState("");
   const [searchUser, setSearchUser] = useState("");
   const [sortBy, setSortBy] = useState("");
@@ -23,7 +24,8 @@ function FilterTemplates({ search, clear }) {
 
   useEffect(() => {
     fetchTemplateNames();
-    handleFetchUserNames();
+    fetchUserNames();
+    fetchTagNames();
   }, []);
 
   // get all template names
@@ -35,9 +37,20 @@ function FilterTemplates({ search, clear }) {
   };
 
   // get all usernames
-  const handleFetchUserNames = async () => {
+  const fetchUserNames = async () => {
     fetchAllUsersWithTemplates()
       .then((data) => setUserNames(data.map((u) => u.user_name)))
+      .catch((err) => console.log(err));
+  };
+
+  // get all tag names
+  const fetchTagNames = async () => {
+    fetchAllTags()
+      .then((data) => {
+        const tagData = data;
+        tagData.map((t) => (t.check = false));
+        setTags(tagData);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -66,6 +79,14 @@ function FilterTemplates({ search, clear }) {
   const handleSearch = () => {
     let searchQuery = "";
     let searchConditions = [];
+
+    const checkedTags = tags.filter((t) => t.check).map((t) => t.id);
+    if (checkedTags.length > 0) {
+      const tagSearch = checkedTags.map((tag) => `tag=${tag}`).join("&");
+      searchConditions.push(tagSearch);
+      console.log(tagSearch);
+    }
+
     if (searchTemplate.trim() !== "") {
       searchConditions.push(`tname=${searchTemplate.trim()}`);
     }
@@ -90,8 +111,14 @@ function FilterTemplates({ search, clear }) {
     // send final string forward
     if (searchQuery !== "") {
       console.log("Sending " + searchQuery);
-      search(searchQuery);
+      // search(searchQuery);
     }
+  };
+
+  const tagCheck = (index) => {
+    const checkedTag = [...tags];
+    checkedTag[index].check = !tags[index].check;
+    setTags(checkedTag);
   };
 
   return (
@@ -117,6 +144,19 @@ function FilterTemplates({ search, clear }) {
               onChange={handleCreatorName}
               onSelected={handleCreatorName}
             />
+
+            <ul>
+              {tags.map((tag, index) => (
+                <li key={"tag" + index} onClick={() => tagCheck(index)}>
+                  <input
+                    type="checkbox"
+                    checked={tag.check}
+                    onChange={() => tagCheck(index)}
+                  />
+                  {tag.name}
+                </li>
+              ))}
+            </ul>
 
             {/* Sort by options */}
             <Dropdown
