@@ -14,6 +14,7 @@ function Main() {
   const [searchUser, setSearchUser] = useState("");
   const [sortBy, setSortBy] = useState("");
 
+  // sort by options as srings
   const sortByOptions = {
     TEMPLATE_NAME: "Template name",
     OLDEST_FIRST: "Oldest first",
@@ -41,6 +42,7 @@ function Main() {
       .catch((err) => console.log(err));
   }
 
+  // load more templates with current search filters
   async function fetchMore() {
     let limit = `${loadedTemplates},${loadSize}`;
     fetchAllTemplatesFiltered(`${filters}&limit=${limit}`)
@@ -81,6 +83,7 @@ function Main() {
     setSortBy(val);
   };
 
+  // filtered template search
   const filteredSearch = () => {
     let searchQuery = "";
     let searchConditions = [];
