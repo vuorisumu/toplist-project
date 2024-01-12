@@ -5,6 +5,8 @@ import {
   fetchAllTemplatesFiltered,
   fetchAllUsersWithTemplates,
 } from "./api";
+import Dropdown from "./Dropdown";
+import SearchInput from "./SearchInput";
 
 function BrowSeRankings() {
   const [rankings, setRankings] = useState([]);
@@ -12,11 +14,29 @@ function BrowSeRankings() {
   const [userNames, setUserNames] = useState([]);
   const [templateNames, setTemplateNames] = useState([]);
 
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [searchRanking, setSearchRanking] = useState("");
+  const [searchTemplate, setSearchTemplate] = useState("");
+  const [searchUser, setSearchUser] = useState("");
+  const [sortBy, setSortBy] = useState("");
+
+  // sort by options as srings
+  const sortByOptions = {
+    TEMPLATE_NAME: "Template name",
+    OLDEST_FIRST: "Oldest first",
+    NEWEST_FIRST: "Newest first",
+    CREATOR_NAME: "Creator name",
+  };
+
   useEffect(() => {
     getRankingNames();
     getTemplateNames();
     getUserNames();
   }, []);
+
+  const fetchRecent = async () => {
+    console.log("fetch recent");
+  };
 
   const getRankingNames = async () => {
     fetchAllRankingsFiltered("distinct=true")
@@ -50,6 +70,30 @@ function BrowSeRankings() {
       .catch((err) => console.log(err));
   }
 
+  const handleRankingName = (val) => {
+    setSearchRanking(val);
+  };
+
+  const handleTemplateName = (val) => {
+    setSearchTemplate(val);
+  };
+
+  const handleCreatorName = (val) => {
+    setSearchUser(val);
+  };
+
+  const selectFromDropdown = (val) => {
+    setSortBy(val);
+  };
+
+  const filteredSearch = () => {
+    console.log("Search button");
+  };
+
+  const toggleFilterMenu = () => {
+    setFiltersOpen(!filtersOpen);
+  };
+
   const test = () => {
     console.log(rankingNames);
   };
@@ -60,30 +104,78 @@ function BrowSeRankings() {
       <button onClick={test}>Test button</button>
       <br />
 
-      <button onClick={fetchAll}>Fetch all</button>
-      <button onClick={() => fetchAllFiltered("sortBy=name")}>
-        Sort alphabetically
-      </button>
-      <button onClick={() => fetchAllFiltered("sortBy=creatorname")}>
-        Sort by creator name
-      </button>
-      <button onClick={() => fetchAllFiltered("sortBy=templatename")}>
-        Sort by template name
-      </button>
-      <ul>
-        {rankings.map((t) => (
-          <li key={t.ranking_id}>
-            <h2>{t.ranking_name}</h2>
-            <p>Creator: {t.user_name ? t.user_name : "Anonymous"}</p>
-            <p>Template: {t.template_id}</p>
-            <ul>
-              {JSON.parse(t.items).map((item, index) => (
-                <li key={index}>{item.item_name}</li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ul>
+      {/* Filter box */}
+      {filtersOpen ? (
+        <div>
+          <div>
+            <h2>Filter rankings</h2>
+
+            {/* Ranking name search */}
+            <label>Search ranking by name: </label>
+            <SearchInput
+              suggestionData={rankingNames}
+              onChange={handleRankingName}
+              onSelected={handleRankingName}
+            />
+
+            {/* Template name search */}
+            <label>Search by template name: </label>
+            <SearchInput
+              suggestionData={templateNames}
+              onChange={handleTemplateName}
+              onSelected={handleTemplateName}
+            />
+
+            {/* Username search */}
+            <label>Search from creator: </label>
+            <SearchInput
+              suggestionData={userNames}
+              onChange={handleCreatorName}
+              onSelected={handleCreatorName}
+            />
+
+            {/* Sort by options */}
+            <Dropdown
+              label={"Sort by"}
+              placeholder={"Template name"}
+              items={Object.values(sortByOptions)}
+              onSelect={selectFromDropdown}
+            />
+          </div>
+
+          <button type="button" onClick={filteredSearch}>
+            Search
+          </button>
+          <button type="button" onClick={fetchRecent}>
+            Clear filters
+          </button>
+
+          <button type="button" onClick={toggleFilterMenu}>
+            Close filters
+          </button>
+        </div>
+      ) : (
+        <button type="button" onClick={toggleFilterMenu}>
+          Open filters
+        </button>
+      )}
+
+      <div>
+        <ul>
+          {rankings.map((t) => (
+            <li key={t.ranking_id}>
+              <h2>{t.ranking_name}</h2>
+              <p>Creator: {t.user_name ? t.user_name : "Anonymous"}</p>
+              <p>Template: {t.template_id}</p>
+              <ul>
+                {JSON.parse(t.items).map((item, index) => (
+                  <li key={index}>{item.item_name}</li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
     </>
   );
 }
