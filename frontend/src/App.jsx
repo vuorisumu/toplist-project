@@ -6,6 +6,7 @@ import NewTemplate from "./components/NewTemplate.jsx";
 import CreateListing from "./components/CreateListing.jsx";
 import Login from "./components/Login.jsx";
 import EditTemplate from "./components/EditTemplate.jsx";
+import BrowSeRankings from "./components/BrowseRankings.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -78,6 +79,9 @@ class App extends React.Component {
               <Link to="/">Main</Link>
             </li>
             <li>
+              <Link to="/rankings">Browse rankings</Link>
+            </li>
+            <li>
               <Link to="/new-template">New template</Link>
             </li>
           </ul>
@@ -85,6 +89,7 @@ class App extends React.Component {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/createlisting" element={<Main />} />
+          <Route path="/rankings" element={<BrowSeRankings />} />
           <Route path="/new-template" element={<NewTemplate />} />
           <Route
             path="/createlisting/:templateId"

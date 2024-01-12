@@ -61,6 +61,16 @@ export const updateTemplate = (id, templateData) => {
 };
 
 // --- RANKINGS ---
+export const fetchAllRankings = () => {
+  return fetch(`${API_BASE_URL}/rankings`).then((response) => response.json());
+};
+
+export const fetchAllRankingsFiltered = (filters) => {
+  return fetch(`${API_BASE_URL}/rankings?${filters}`).then((response) =>
+    response.json()
+  );
+};
+
 export const addNewRanking = (ranking) => {
   fetch(`${API_BASE_URL}/rankings/`, {
     method: "POST",
