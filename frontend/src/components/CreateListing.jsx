@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import {
   addNewRanking,
   addNewUser,
@@ -8,7 +8,7 @@ import {
 } from "./api";
 import { DnDContainer } from "./Dnd";
 import { v4 as uuid } from "uuid";
-import { getLocalTime, clearAll } from "./util";
+import { getLocalTime, clearAll, checkAdminStatus } from "./util";
 
 function CreateListing() {
   const location = useLocation();
@@ -150,6 +150,10 @@ function CreateListing() {
   return (
     <div>
       <h1>Create a Ranking</h1>
+
+      {(template.editkey || checkAdminStatus()) && (
+        <Link to={`/edit-template/${template.id}`}>Edit template</Link>
+      )}
 
       {/* Template information */}
       <div>
