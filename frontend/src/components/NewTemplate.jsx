@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { clearAll, getTagNumbers, getUserId } from "./util";
 import { addNewTemplate } from "./api";
+import TagInput from "./TagInput";
 
 function NewTemplate() {
   const [templateName, setTemplateName] = useState("");
@@ -9,6 +10,16 @@ function NewTemplate() {
   const [items, setItems] = useState([""]);
   const [tags, setTags] = useState([""]);
   const [editKey, setEditKey] = useState("");
+
+  const suggestions = ["Testi", "Aa", "Bee", "Cee"];
+
+  const getChange = (val) => {
+    console.log("change: " + val);
+  };
+
+  const getSelected = (val) => {
+    console.log("selected: " + val);
+  };
 
   // add new item
   const addItem = () => {
@@ -169,11 +180,10 @@ function NewTemplate() {
         <ul>
           {tags.map((i, index) => (
             <li key={"tag" + index}>
-              <input
-                type="text"
-                placeholder="Tag"
-                value={i}
-                onChange={(e) => handleTagEdits(index, e.target.value)}
+              <TagInput
+                suggestionData={suggestions}
+                onChange={getChange}
+                onSelected={getSelected}
               />
               {index !== tags.length - 1 ? (
                 <button type="button" onClick={() => deleteTag(index)}>
