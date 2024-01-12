@@ -26,13 +26,15 @@ function FilterTemplates({ search, clear }) {
     handleFetchUserNames();
   }, []);
 
-  async function fetchTemplateNames() {
+  // get all template names
+  const fetchTemplateNames = async () => {
     const tempNames = await getAllTemplateNames();
     if (tempNames.length > 0) {
       setTemplateNames(tempNames);
     }
-  }
+  };
 
+  // get all usernames
   const handleFetchUserNames = async () => {
     fetchAllUsersWithTemplates()
       .then((data) => setUserNames(data.map((u) => u.user_name)))
@@ -51,6 +53,7 @@ function FilterTemplates({ search, clear }) {
     setSortBy(val);
   };
 
+  // open and close filters
   const toggleFilterMenu = () => {
     setFiltersOpen(!filtersOpen);
   };
@@ -84,6 +87,7 @@ function FilterTemplates({ search, clear }) {
       searchQuery = searchConditions.join("&");
     }
 
+    // send final string forward
     if (searchQuery !== "") {
       console.log("Sending " + searchQuery);
       search(searchQuery);
