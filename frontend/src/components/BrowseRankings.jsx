@@ -1,8 +1,40 @@
-import { useState } from "react";
-import { fetchAllRankings, fetchAllRankingsFiltered } from "./api";
+import { useState, useEffect } from "react";
+import {
+  fetchAllRankings,
+  fetchAllRankingsFiltered,
+  fetchAllTemplatesFiltered,
+  fetchAllUsersWithTemplates,
+} from "./api";
 
 function BrowSeRankings() {
   const [rankings, setRankings] = useState([]);
+  const [rankingNames, setRankingNames] = useState([]);
+  const [userNames, setUserNames] = useState([]);
+  const [templateNames, setTemplateNames] = useState([]);
+
+  useEffect(() => {
+    getRankingNames();
+    getTemplateNames();
+    getUserNames();
+  }, []);
+
+  const getRankingNames = async () => {
+    fetchAllRankingsFiltered("distinct=true")
+      .then((data) => setRankingNames(data.map((r) => r.ranking_name)))
+      .catch((err) => console.log(err));
+  };
+
+  const getTemplateNames = async () => {
+    fetchAllTemplatesFiltered("distinct=true")
+      .then((data) => setTemplateNames(data.map((t) => t.name)))
+      .catch((err) => console.log(err));
+  };
+
+  const getUserNames = async () => {
+    fetchAllUsersWithTemplates()
+      .then((data) => setUserNames(data.map((u) => u.user_name)))
+      .catch((err) => console.log(err));
+  };
 
   async function fetchAll() {
     fetchAllRankings()
@@ -18,9 +50,16 @@ function BrowSeRankings() {
       .catch((err) => console.log(err));
   }
 
+  const test = () => {
+    console.log(rankingNames);
+  };
+
   return (
     <>
       <h1>Browse</h1>
+      <button onClick={test}>Test button</button>
+      <br />
+
       <button onClick={fetchAll}>Fetch all</button>
       <button onClick={() => fetchAllFiltered("sortBy=name")}>
         Sort alphabetically
