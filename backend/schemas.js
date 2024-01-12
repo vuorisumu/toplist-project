@@ -43,6 +43,11 @@ const userQuerySchema = Joi.object({
   tempId: Joi.number().optional(),
 });
 
+const tagQuerySchema = Joi.object({
+  count: Joi.boolean().optional(),
+  name: Joi.string().optional(),
+});
+
 const templateSchema = Joi.object({
   name: Joi.string().required(),
   creator_id: Joi.number().optional(),
@@ -90,6 +95,7 @@ module.exports = {
   querySchema,
   rankingQuerySchema,
   userQuerySchema,
+  tagQuerySchema,
   templateSchema,
   rankingSchema,
   userSchema,

@@ -3,7 +3,7 @@ import Dropdown from "./Dropdown";
 import SearchInput from "./SearchInput";
 import PropTypes from "prop-types";
 import { getAllTemplateNames } from "./util";
-import { fetchAllUsersWithTemplates, fetchAllTags } from "./api";
+import { fetchAllUsersWithTemplates, fetchAllTagsFiltered } from "./api";
 
 function FilterTemplates({ search, clear }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -45,7 +45,7 @@ function FilterTemplates({ search, clear }) {
 
   // get all tag names
   const fetchTagNames = async () => {
-    fetchAllTags()
+    fetchAllTagsFiltered("count=true")
       .then((data) => {
         const tagData = data;
         tagData.map((t) => (t.check = false));
@@ -156,7 +156,7 @@ function FilterTemplates({ search, clear }) {
                     checked={tag.check}
                     onChange={() => tagCheck(index)}
                   />
-                  {tag.name}
+                  {tag.name} ({tag.count})
                 </li>
               ))}
             </ul>

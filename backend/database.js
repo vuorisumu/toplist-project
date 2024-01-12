@@ -231,17 +231,29 @@ async function filteredUserQuery(req) {
 
 // tag query with conditions
 async function filteredTagQuery(req) {
-  const { error, value } = schemas.tagSchema.validate(req);
+  const { error, value } = schemas.tagQuerySchema.validate(req);
   if (error) {
     throw error;
   }
 
-  let filteredQuery = `SELECT * FROM tags`;
+  let filteredQuery = "";
   const conditions = [];
   const queryParams = [];
 
+  if (value.count) {
+    filteredQuery = `SELECT tags.id, tags.name, COUNT(t.id) AS count
+    FROM tags
+    LEFT JOIN templates t
+    ON JSON_CONTAINS(t.tags, CAST(tags.id AS CHAR), '$')
+    GROUP BY tags.id
+    HAVING count > 0`;
+    return { filteredQuery, queryParams };
+  }
+
+  filteredQuery = `SELECT * FROM tags t`;
+
   if (value.name) {
-    conditions.push(`name = ?`);
+    conditions.push(`t.name = ?`);
     queryParams.push(value.name);
   }
 
