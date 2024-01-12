@@ -4,6 +4,10 @@ const Joi = require("joi").extend(require("@joi/date"));
 const querySchema = Joi.object({
   tname: Joi.string().optional(),
   uname: Joi.string().optional(),
+  tag: Joi.alternatives(
+    Joi.number().integer().optional(),
+    Joi.array().items(Joi.number()).optional()
+  ),
   sortBy: Joi.string().valid("id", "name", "creatorname").optional(),
   sortOrder: Joi.string().valid("asc", "desc").default("asc").optional(),
   limit: Joi.alternatives(

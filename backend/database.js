@@ -32,6 +32,8 @@ async function filteredTemplatesQuery(req) {
     throw error;
   }
 
+  console.log(value);
+
   let filteredQuery = `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
   const conditions = [];
   const queryParams = [];
@@ -45,6 +47,17 @@ async function filteredTemplatesQuery(req) {
   if (value.uname) {
     conditions.push("u.user_name LIKE ?");
     queryParams.push(`${value.uname}%`);
+  }
+
+  if (value.tag) {
+    const tags = Array.isArray(value.tag) ? value.tag : [value.tag];
+    const tagConditions = [];
+    for (let i = 0; i < tags.length; i++) {
+      tagConditions.push(`JSON_CONTAINS(tags, '?', '$')`);
+      queryParams.push(tags[i]);
+    }
+    const tagQuery = "(" + tagConditions.join(" OR ") + ")";
+    conditions.push(tagQuery);
   }
 
   if (conditions.length > 0) {
