@@ -1,10 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import {
-  fetchAllTemplates,
-  fetchAllTemplatesFiltered,
-  fetchAllUsersWithTemplates,
-} from "./api";
+import { fetchAllTemplatesFiltered, fetchAllUsersWithTemplates } from "./api";
 import { checkAdminStatus } from "./util";
 import Dropdown from "./Dropdown";
 import SearchInput from "./SearchInput";
@@ -19,6 +15,7 @@ function Main() {
   const [sortBy, setSortBy] = useState("");
 
   const [userNames, setUserNames] = useState([]);
+  const [templateNames, setTemplateNames] = useState([]);
 
   // sort by options as srings
   const sortByOptions = {
@@ -28,10 +25,9 @@ function Main() {
     CREATOR_NAME: "Creator name",
   };
 
-  const creatorNames = ["Testi", "Testi 2"];
-
   useEffect(() => {
     fetchRecent();
+    fetchTemplateNames();
     handleFetchUserNames();
   }, []);
 
@@ -64,17 +60,9 @@ function Main() {
       .catch((err) => console.log(err));
   }
 
-  async function fetchAll() {
-    fetchAllTemplates()
-      .then((data) => setTemplates(data))
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  async function fetchAllFiltered(filters) {
-    fetchAllTemplatesFiltered(filters)
-      .then((data) => setTemplates(data))
+  async function fetchTemplateNames() {
+    fetchAllTemplatesFiltered("distinct=true")
+      .then((data) => setTemplateNames(data.map((t) => t.name)))
       .catch((err) => console.log(err));
   }
 
@@ -130,7 +118,7 @@ function Main() {
         <h2>Filter templates</h2>
         <label>Search template by name: </label>
         <SearchInput
-          suggestionData={creatorNames}
+          suggestionData={templateNames}
           onChange={handleTemplateName}
           onSelected={handleTemplateName}
         />
