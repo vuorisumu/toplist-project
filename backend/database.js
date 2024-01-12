@@ -129,7 +129,7 @@ async function filteredRankingQuery(req) {
   // sorting
   if (
     value.sortBy &&
-    ["name", "creatorname", "templatename"].includes(value.sortBy)
+    ["id", "name", "creatorname", "templatename"].includes(value.sortBy)
   ) {
     let sortBy = "r.ranking_name";
 

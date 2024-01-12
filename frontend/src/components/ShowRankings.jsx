@@ -81,12 +81,12 @@ function ShowRankings({ id }) {
     setSortBy(val);
   };
 
-  async function fetchRankingNames() {
+  const fetchRankingNames = async () => {
     const fetchedNames = await getRankingNames(id);
     if (fetchedNames.length > 0) {
       setListNames(fetchedNames);
     }
-  }
+  };
 
   const handleFetchUserNames = async () => {
     fetchAllUsersWithRankings(id)
@@ -95,7 +95,6 @@ function ShowRankings({ id }) {
   };
 
   const filteredSearch = async () => {
-    console.log("Search");
     let searchQuery = "";
     let searchConditions = [];
 
