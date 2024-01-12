@@ -10,6 +10,7 @@ function Main() {
   const [loadedTemplates, setLoadedTemplates] = useState(0);
   const loadSize = 5;
   const [filters, setFilters] = useState("sortBy=id&sortOrder=desc");
+  const [isDefaultSearch, setIsDefaultSearch] = useState(true);
   const [searchTemplate, setSearchTemplate] = useState("");
   const [searchUser, setSearchUser] = useState("");
   const [sortBy, setSortBy] = useState("");
@@ -36,6 +37,7 @@ function Main() {
   async function fetchRecent() {
     fetchAllTemplatesFiltered(`sortBy=id&sortOrder=desc&limit=${loadSize}`)
       .then((data) => {
+        setIsDefaultSearch(true);
         setTemplates(data);
         setLoadedTemplates(loadedTemplates + loadSize);
       })
@@ -45,6 +47,7 @@ function Main() {
   async function newSearch(query) {
     fetchAllTemplatesFiltered(`${query}&limit=${loadSize}`)
       .then((data) => {
+        setIsDefaultSearch(false);
         setTemplates(data);
         setLoadedTemplates(loadedTemplates + loadSize);
       })
@@ -127,23 +130,30 @@ function Main() {
 
   return (
     <>
-      <h1>Main</h1>
+      <h1>Browse templates</h1>
+      {/* Filter box */}
       {filtersOpen ? (
         <div>
           <div>
             <h2>Filter templates</h2>
+
+            {/* Template name search */}
             <label>Search template by name: </label>
             <SearchInput
               suggestionData={templateNames}
               onChange={handleTemplateName}
               onSelected={handleTemplateName}
             />
+
+            {/* Username search */}
             <label>Search from creator: </label>
             <SearchInput
               suggestionData={userNames}
               onChange={handleCreatorName}
               onSelected={handleCreatorName}
             />
+
+            {/* Sort by options */}
             <Dropdown
               label={"Sort by"}
               placeholder={"Template name"}
@@ -170,6 +180,10 @@ function Main() {
       )}
 
       <div>
+        {/* Title */}
+        {isDefaultSearch ? <h2>Recent templates</h2> : <h2>Search results</h2>}
+
+        {/* Template list */}
         <ul>
           {templates.map((t) => (
             <li key={t.id}>
@@ -188,6 +202,8 @@ function Main() {
             </li>
           ))}
         </ul>
+
+        {/* Load more button */}
         <button type="button" onClick={loadMore}>
           Load more
         </button>
