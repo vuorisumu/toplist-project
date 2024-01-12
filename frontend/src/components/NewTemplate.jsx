@@ -13,6 +13,12 @@ function NewTemplate() {
 
   const suggestions = ["Testi", "Aa", "Bee", "Cee"];
 
+  const printTags = () => {
+    tags.map((t) => {
+      console.log(t);
+    });
+  };
+
   // add new item
   const addItem = () => {
     if (items[items.length - 1].trim() !== "") {
@@ -190,6 +196,10 @@ function NewTemplate() {
             </li>
           ))}
         </ul>
+
+        <button type="button" onClick={printTags}>
+          Test tags
+        </button>
       </div>
 
       <div>
