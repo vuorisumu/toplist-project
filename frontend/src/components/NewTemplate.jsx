@@ -13,14 +13,6 @@ function NewTemplate() {
 
   const suggestions = ["Testi", "Aa", "Bee", "Cee"];
 
-  const getChange = (val) => {
-    console.log("change: " + val);
-  };
-
-  const getSelected = (val) => {
-    console.log("selected: " + val);
-  };
-
   // add new item
   const addItem = () => {
     if (items[items.length - 1].trim() !== "") {
@@ -181,9 +173,10 @@ function NewTemplate() {
           {tags.map((i, index) => (
             <li key={"tag" + index}>
               <TagInput
+                initValue={i}
                 suggestionData={suggestions}
-                onChange={getChange}
-                onSelected={getSelected}
+                onChange={(val) => handleTagEdits(index, val)}
+                onSelected={(val) => handleTagEdits(index, val)}
               />
               {index !== tags.length - 1 ? (
                 <button type="button" onClick={() => deleteTag(index)}>

@@ -1,10 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 
-function TagInput({ placeholder, suggestionData, onSelected, onChange }) {
+function TagInput({
+  initValue,
+  placeholder,
+  suggestionData,
+  onSelected,
+  onChange,
+}) {
   const [suggestions, setSugesstions] = useState([]);
   const [hideSuggestions, setHideSuggestions] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedValue, setSelectedValue] = useState(initValue || "");
   const suggRef = useRef(null);
 
   // Hide suggestion box on unfocus
@@ -75,6 +81,7 @@ function TagInput({ placeholder, suggestionData, onSelected, onChange }) {
 }
 
 TagInput.propTypes = {
+  initValue: PropTypes.string,
   placeholder: PropTypes.string,
   suggestionData: PropTypes.array.isRequired,
   onSelected: PropTypes.func,
