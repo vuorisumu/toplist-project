@@ -1,10 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { fetchAllTemplates, fetchAllTemplatesFiltered } from "./api";
 import { checkAdminStatus } from "./util";
 
 function Main() {
   const [templates, setTemplates] = useState([]);
+
+  useEffect(() => {
+    fetchRecent();
+  }, []);
+
+  // fetch the newest templates
+  async function fetchRecent() {
+    fetchAllTemplatesFiltered("sortBy=id&sortOrder=desc&limit=5")
+      .then((data) => setTemplates(data))
+      .catch((err) => console.log(err));
+  }
 
   async function fetchAll() {
     fetchAllTemplates()

@@ -35,8 +35,12 @@ async function filteredTemplatesQuery(req) {
   let filteredQuery = `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
 
   // sorting
-  if (value.sortBy && ["name", "creatorname"].includes(value.sortBy)) {
+  if (value.sortBy && ["id", "name", "creatorname"].includes(value.sortBy)) {
     let sortBy = value.sortBy;
+
+    if (value.sortBy === "id") {
+      sortBy = "t.id";
+    }
 
     // if sorting by creator name
     if (value.sortBy === "creatorname") {
@@ -55,6 +59,10 @@ async function filteredTemplatesQuery(req) {
     } else {
       filteredQuery += ` ORDER BY ${sortBy} ${sortOrder}`;
     }
+  }
+
+  if (value.limit) {
+    filteredQuery += ` LIMIT ${value.limit}`;
   }
 
   // log the query in full

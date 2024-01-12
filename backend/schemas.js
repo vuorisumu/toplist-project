@@ -2,8 +2,9 @@
 const Joi = require("joi").extend(require("@joi/date"));
 
 const querySchema = Joi.object({
-  sortBy: Joi.string().valid("name", "creatorname").optional(),
+  sortBy: Joi.string().valid("id", "name", "creatorname").optional(),
   sortOrder: Joi.string().valid("asc", "desc").default("asc").optional(),
+  limit: Joi.number().optional(),
 });
 
 const rankingQuerySchema = Joi.object({
