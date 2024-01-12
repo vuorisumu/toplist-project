@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { fetchAllTemplatesFiltered, fetchAllUsersWithTemplates } from "./api";
-import { checkAdminStatus } from "./util";
+import { checkAdminStatus, getAllTemplateNames } from "./util";
 import Dropdown from "./Dropdown";
 import SearchInput from "./SearchInput";
 
@@ -72,9 +72,10 @@ function Main() {
   }
 
   async function fetchTemplateNames() {
-    fetchAllTemplatesFiltered("distinct=true")
-      .then((data) => setTemplateNames(data.map((t) => t.name)))
-      .catch((err) => console.log(err));
+    const tempNames = await getAllTemplateNames();
+    if (tempNames.length > 0) {
+      setTemplateNames(tempNames);
+    }
   }
 
   const handleFetchUserNames = async () => {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { fetchAllRankingsFiltered, fetchAllUsersWithTemplates } from "./api";
+import { getRankingNames } from "./util";
+import { fetchAllRankingsFiltered, fetchAllUsersWithRankings } from "./api";
 import SearchInput from "./SearchInput";
 
 function ShowRankings({ id }) {
@@ -57,13 +58,14 @@ function ShowRankings({ id }) {
   };
 
   async function fetchRankingNames() {
-    fetchAllRankingsFiltered(`distinct=true&tempId=${id}`)
-      .then((data) => setListNames(data.map((r) => r.ranking_name)))
-      .catch((err) => console.log(err));
+    const fetchedNames = await getRankingNames(id);
+    if (fetchedNames.length > 0) {
+      setListNames(fetchedNames);
+    }
   }
 
   const handleFetchUserNames = async () => {
-    fetchAllUsersWithTemplates()
+    fetchAllUsersWithRankings(id)
       .then((data) => setUserNames(data.map((u) => u.user_name)))
       .catch((err) => console.log(err));
   };

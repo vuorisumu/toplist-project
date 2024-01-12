@@ -1,4 +1,11 @@
-import { fetchTagByName, addNewTag, addNewUser, fetchUserByName } from "./api";
+import {
+  fetchTagByName,
+  addNewTag,
+  addNewUser,
+  fetchUserByName,
+  fetchAllTemplatesFiltered,
+  fetchAllRankingsFiltered,
+} from "./api";
 
 // get current time
 export const getLocalTime = () => {
@@ -64,5 +71,27 @@ export const getUserId = async (username) => {
 
     const newUserResponse = await addNewUser(newUser);
     return newUserResponse.id;
+  }
+};
+
+export const getAllTemplateNames = async () => {
+  try {
+    const templates = await fetchAllTemplatesFiltered("distinct=true");
+    return templates.map((template) => template.name);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getRankingNames = async (id) => {
+  try {
+    let filter = `distinct=true`;
+    if (id > 0) {
+      filter += `&tempId=${id}`;
+    }
+    const lists = await fetchAllRankingsFiltered(filter);
+    return lists.map((list) => list.ranking_name);
+  } catch (err) {
+    console.error(err);
   }
 };

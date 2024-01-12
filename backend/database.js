@@ -166,9 +166,6 @@ async function filteredRankingQuery(req) {
     filteredQuery += ` LIMIT ${value.limit}`;
   }
 
-  // log the query in full
-  console.log("Final Query:", filteredQuery);
-
   return { filteredQuery, queryParams };
 }
 
@@ -179,9 +176,33 @@ async function filteredUserQuery(req) {
     throw error;
   }
 
-  let filteredQuery = `SELECT * FROM users`;
+  let filteredQuery = "";
   const conditions = [];
   const queryParams = [];
+
+  if (value.hasRankings) {
+    filteredQuery = `SELECT DISTINCT u.user_name FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id WHERE u.user_name IS NOT NULL`;
+    if (value.tempId) {
+      filteredQuery += ` AND r.template_id = ?`;
+      queryParams.push(value.tempId);
+    }
+
+    console.log(filteredQuery);
+    return { filteredQuery, queryParams };
+  }
+
+  if (value.hasTemplates) {
+    filteredQuery = `SELECT DISTINCT u.user_name FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id WHERE u.user_name IS NOT NULL`;
+    if (value.tempId) {
+      filteredQuery += ` AND t.id = ?`;
+      queryParams.push(value.tempId);
+    }
+
+    console.log(filteredQuery);
+    return { filteredQuery, queryParams };
+  }
+
+  filteredQuery = `SELECT * FROM users`;
 
   if (value.name) {
     conditions.push(`user_name = ?`);
@@ -191,9 +212,6 @@ async function filteredUserQuery(req) {
   if (conditions.length > 0) {
     filteredQuery += " WHERE " + conditions.join(" AND ");
   }
-
-  // log the query in full
-  console.log("Final user Query:", filteredQuery);
 
   return { filteredQuery, queryParams };
 }
@@ -217,9 +235,6 @@ async function filteredTagQuery(req) {
   if (conditions.length > 0) {
     filteredQuery += " WHERE " + conditions.join(" AND ");
   }
-
-  // log the query in full
-  console.log("Final Query:", filteredQuery);
 
   return { filteredQuery, queryParams };
 }

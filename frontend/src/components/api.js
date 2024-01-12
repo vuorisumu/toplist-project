@@ -123,10 +123,20 @@ export const fetchAllUsers = () => {
   return fetch(`${API_BASE_URL}/users`).then((response) => response.json());
 };
 
-export const fetchAllUsersWithTemplates = () => {
-  return fetch(`${API_BASE_URL}/users?hasTemplates=true`).then((response) =>
-    response.json()
-  );
+export const fetchAllUsersWithTemplates = (id) => {
+  let searchQuery = `${API_BASE_URL}/users?hasTemplates=true`;
+  if (id > 0) {
+    searchQuery += `&tempId=${id}`;
+  }
+  return fetch(searchQuery).then((response) => response.json());
+};
+
+export const fetchAllUsersWithRankings = (id) => {
+  let searchQuery = `${API_BASE_URL}/users?hasRankings=true`;
+  if (id > 0) {
+    searchQuery += `&tempId=${id}`;
+  }
+  return fetch(searchQuery).then((response) => response.json());
 };
 
 export const fetchUserById = (id) => {

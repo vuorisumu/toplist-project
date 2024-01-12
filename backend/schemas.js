@@ -33,7 +33,10 @@ const rankingQuerySchema = Joi.object({
 });
 
 const userQuerySchema = Joi.object({
+  hasRankings: Joi.boolean().optional(),
+  hasTemplates: Joi.boolean().optional(),
   name: Joi.string().optional(),
+  tempId: Joi.number().optional(),
 });
 
 const templateSchema = Joi.object({
