@@ -13,6 +13,7 @@ function Main() {
   const [searchTemplate, setSearchTemplate] = useState("");
   const [searchUser, setSearchUser] = useState("");
   const [sortBy, setSortBy] = useState("");
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const [userNames, setUserNames] = useState([]);
   const [templateNames, setTemplateNames] = useState([]);
@@ -35,9 +36,7 @@ function Main() {
   async function fetchRecent() {
     fetchAllTemplatesFiltered(`sortBy=id&sortOrder=desc&limit=${loadSize}`)
       .then((data) => {
-        if (loadedTemplates === 0) {
-          setTemplates(data);
-        }
+        setTemplates(data);
         setLoadedTemplates(loadedTemplates + loadSize);
       })
       .catch((err) => console.log(err));
@@ -122,34 +121,54 @@ function Main() {
     }
   };
 
+  const toggleFilterMenu = () => {
+    setFiltersOpen(!filtersOpen);
+  };
+
   return (
     <>
       <h1>Main</h1>
-      <div>
-        <h2>Filter templates</h2>
-        <label>Search template by name: </label>
-        <SearchInput
-          suggestionData={templateNames}
-          onChange={handleTemplateName}
-          onSelected={handleTemplateName}
-        />
-        <label>Search from creator: </label>
-        <SearchInput
-          suggestionData={userNames}
-          onChange={handleCreatorName}
-          onSelected={handleCreatorName}
-        />
-        <Dropdown
-          label={"Sort by"}
-          placeholder={"Template name"}
-          items={Object.values(sortByOptions)}
-          onSelect={selectFromDropdown}
-        />
+      {filtersOpen ? (
+        <div>
+          <div>
+            <h2>Filter templates</h2>
+            <label>Search template by name: </label>
+            <SearchInput
+              suggestionData={templateNames}
+              onChange={handleTemplateName}
+              onSelected={handleTemplateName}
+            />
+            <label>Search from creator: </label>
+            <SearchInput
+              suggestionData={userNames}
+              onChange={handleCreatorName}
+              onSelected={handleCreatorName}
+            />
+            <Dropdown
+              label={"Sort by"}
+              placeholder={"Template name"}
+              items={Object.values(sortByOptions)}
+              onSelect={selectFromDropdown}
+            />
+          </div>
 
-        <button type="button" onClick={filteredSearch}>
-          Search
+          <button type="button" onClick={filteredSearch}>
+            Search
+          </button>
+          <button type="button" onClick={fetchRecent}>
+            Clear filters
+          </button>
+
+          <button type="button" onClick={toggleFilterMenu}>
+            Close filters
+          </button>
+        </div>
+      ) : (
+        <button type="button" onClick={toggleFilterMenu}>
+          Open filters
         </button>
-      </div>
+      )}
+
       <div>
         <ul>
           {templates.map((t) => (
