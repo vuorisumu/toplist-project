@@ -30,11 +30,10 @@ function TagInput({
 
   // filter suggestion based on given value
   const filterSuggestions = (e) => {
-    setSugesstions(
-      suggestionData.filter((i) =>
-        i.toUpperCase().startsWith(e.target.value.toUpperCase())
-      )
+    const filteredSuggestions = suggestionData.filter((i) =>
+      i.toUpperCase().startsWith(e.target.value.toUpperCase())
     );
+    setSugesstions(filteredSuggestions.slice(0, 20));
   };
 
   // handle value change based on user input
