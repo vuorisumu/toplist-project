@@ -1,7 +1,7 @@
-/* eslint-disable camelcase */
-const Joi = require("joi").extend(require("@joi/date"));
 const mysql = require("mysql");
 const dotenv = require("dotenv");
+const schemas = require("./schemas");
+
 dotenv.config();
 
 const pool = mysql.createPool({
@@ -11,58 +11,6 @@ const pool = mysql.createPool({
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE,
-});
-
-const querySchema = Joi.object({
-  sortBy: Joi.string().valid("name", "creatorname").optional(),
-  sortOrder: Joi.string().valid("asc", "desc").default("asc").optional(),
-});
-
-const userQuerySchema = Joi.object({
-  name: Joi.string().optional(),
-});
-
-const templateSchema = Joi.object({
-  name: Joi.string().required(),
-  creator_id: Joi.number().optional(),
-  description: Joi.string().optional(),
-  items: Joi.array()
-    .items(
-      Joi.object().keys({
-        item_name: Joi.string().required(),
-      })
-    )
-    .required(),
-  editkey: Joi.string().optional(),
-  tags: Joi.array().items(Joi.number()).optional(),
-});
-
-const rankingSchema = Joi.object({
-  ranking_name: Joi.string().required(),
-  template_id: Joi.number().required(),
-  creator_id: Joi.number().optional(),
-  description: Joi.string().optional(),
-  items: Joi.array()
-    .items(
-      Joi.object().keys({
-        item_name: Joi.string().required(),
-        item_note: Joi.string().optional(),
-        deletable: Joi.boolean().optional(),
-        rank_number: Joi.number().required(),
-        blank: Joi.boolean().optional(),
-        id: Joi.string().optional(),
-      })
-    )
-    .required(),
-  creation_time: Joi.date().format("YYYY-MM-DD HH:mm:ss"),
-});
-
-const userSchema = Joi.object({
-  user_name: Joi.string().required(),
-});
-
-const tagSchema = Joi.object({
-  name: Joi.string().required(),
 });
 
 // general query function
@@ -79,7 +27,7 @@ async function query(sql, args) {
 
 // template query with filters
 async function filteredTemplatesQuery(req) {
-  const { error, value } = querySchema.validate(req);
+  const { error, value } = schemas.querySchema.validate(req);
   if (error) {
     throw error;
   }
@@ -117,7 +65,7 @@ async function filteredTemplatesQuery(req) {
 
 // ranking query with filters
 async function filteredRankingQuery(req) {
-  const { error, value } = querySchema.validate(req);
+  const { error, value } = schemas.querySchema.validate(req);
   if (error) {
     throw error;
   }
@@ -155,7 +103,7 @@ async function filteredRankingQuery(req) {
 
 // users query with conditions
 async function filteredUserQuery(req) {
-  const { error, value } = userQuerySchema.validate(req);
+  const { error, value } = schemas.userQuerySchema.validate(req);
   if (error) {
     throw error;
   }
@@ -181,7 +129,7 @@ async function filteredUserQuery(req) {
 
 // tag query with conditions
 async function filteredTagQuery(req) {
-  const { error, value } = tagSchema.validate(req);
+  const { error, value } = schemas.tagSchema.validate(req);
   if (error) {
     throw error;
   }
@@ -209,10 +157,6 @@ module.exports = {
   pool,
   query,
   filteredTemplatesQuery,
-  rankingSchema,
   filteredUserQuery,
-  userSchema,
-  templateSchema,
-  tagSchema,
   filteredTagQuery,
 };

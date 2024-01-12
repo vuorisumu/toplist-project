@@ -1,4 +1,5 @@
 const database = require("./database");
+const schemas = require("./schemas");
 const bcrypt = require("bcrypt");
 const express = require("express");
 const templateRouter = express.Router();
@@ -84,7 +85,7 @@ templateRouter.post("/:id([0-9]+)/edit/", async (req, res) => {
 templateRouter.post("/", async (req, res) => {
   try {
     // validate data
-    const { error } = database.templateSchema.validate(req.body);
+    const { error } = schemas.templateSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ msg: error.details[0].message });
     }
@@ -153,7 +154,7 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     }
 
     // validate data
-    const { error } = database.templateSchema.validate(req.body);
+    const { error } = schemas.templateSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ msg: error.details[0].message });
     }

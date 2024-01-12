@@ -1,4 +1,5 @@
 const database = require("./database");
+const schemas = require("./schemas");
 const express = require("express");
 const rankRouter = express.Router();
 
@@ -51,7 +52,7 @@ rankRouter.get("/:id([0-9]+)", async (req, res) => {
 rankRouter.post("/", async (req, res) => {
   try {
     // validate data
-    const { error } = database.rankingSchema.validate(req.body);
+    const { error } = schemas.rankingSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ msg: error.details[0].message });
     }

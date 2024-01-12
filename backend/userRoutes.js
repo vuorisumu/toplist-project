@@ -1,4 +1,5 @@
 const database = require("./database");
+const schemas = require("./schemas");
 const express = require("express");
 const userRouter = express.Router();
 
@@ -53,7 +54,7 @@ userRouter.get("/:id([0-9]+)", async (req, res) => {
 userRouter.post("/", async (req, res) => {
   try {
     // validate data
-    const { error } = database.userSchema.validate(req.body);
+    const { error } = schemas.userSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ msg: error.details[0].message });
     }

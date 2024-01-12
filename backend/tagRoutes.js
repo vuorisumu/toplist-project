@@ -1,4 +1,5 @@
 const database = require("./database");
+const schemas = require("./schemas");
 const express = require("express");
 const tagRouter = express.Router();
 
@@ -51,7 +52,7 @@ tagRouter.post("/", async (req, res) => {
   try {
     console.log("Adding new tag");
     // validate data
-    const { error } = database.tagSchema.validate(req.body);
+    const { error } = schemas.tagSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ msg: error.details[0].message });
     }
