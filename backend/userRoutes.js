@@ -12,11 +12,18 @@ userRouter.get("/", async (req, res) => {
   try {
     let results;
     if (Object.keys(req.query).length !== 0) {
-      // query has filters
-      const { filteredQuery, queryParams } = await database.filteredUserQuery(
-        req.query
-      );
-      results = await database.query(filteredQuery, queryParams);
+      if (req.query.hasTemplates) {
+        // get all users with templates
+        results = await database.query(
+          `SELECT DISTINCT u.user_name FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id WHERE u.user_name IS NOT NULL`
+        );
+      } else {
+        // query has filters
+        const { filteredQuery, queryParams } = await database.filteredUserQuery(
+          req.query
+        );
+        results = await database.query(filteredQuery, queryParams);
+      }
     } else {
       // query does not have filters
       const query = `SELECT * FROM users`;

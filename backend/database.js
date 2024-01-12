@@ -123,6 +123,11 @@ async function filteredUserQuery(req) {
     throw error;
   }
 
+  /*
+  if (value.hasTemplates) {
+    return `SELECT DISTINCT u.user_name FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id WHERE u.user_name IS NOT NULL`;
+  }*/
+
   let filteredQuery = `SELECT * FROM users`;
   const conditions = [];
   const queryParams = [];

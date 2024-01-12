@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchAllTemplates, fetchAllTemplatesFiltered } from "./api";
+import {
+  fetchAllTemplates,
+  fetchAllTemplatesFiltered,
+  fetchAllUsersWithTemplates,
+} from "./api";
 import { checkAdminStatus } from "./util";
 import Dropdown from "./Dropdown";
 import SearchInput from "./SearchInput";
@@ -14,6 +18,8 @@ function Main() {
   const [searchUser, setSearchUser] = useState("");
   const [sortBy, setSortBy] = useState("");
 
+  const [userNames, setUserNames] = useState([]);
+
   // sort by options as srings
   const sortByOptions = {
     TEMPLATE_NAME: "Template name",
@@ -26,6 +32,7 @@ function Main() {
 
   useEffect(() => {
     fetchRecent();
+    handleFetchUserNames();
   }, []);
 
   // fetch the newest templates
@@ -70,6 +77,12 @@ function Main() {
       .then((data) => setTemplates(data))
       .catch((err) => console.log(err));
   }
+
+  const handleFetchUserNames = async () => {
+    fetchAllUsersWithTemplates()
+      .then((data) => setUserNames(data.map((u) => u.user_name)))
+      .catch((err) => console.log(err));
+  };
 
   const handleTemplateName = (val) => {
     setSearchTemplate(val);
@@ -123,7 +136,7 @@ function Main() {
         />
         <label>Search from creator: </label>
         <SearchInput
-          suggestionData={creatorNames}
+          suggestionData={userNames}
           onChange={handleCreatorName}
           onSelected={handleCreatorName}
         />

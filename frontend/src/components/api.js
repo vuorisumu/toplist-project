@@ -123,6 +123,12 @@ export const fetchAllUsers = () => {
   return fetch(`${API_BASE_URL}/users`).then((response) => response.json());
 };
 
+export const fetchAllUsersWithTemplates = () => {
+  return fetch(`${API_BASE_URL}/users?hasTemplates=true`).then((response) =>
+    response.json()
+  );
+};
+
 export const fetchUserById = (id) => {
   return fetch(`${API_BASE_URL}/users/${id}`).then((response) =>
     response.json()
