@@ -12,14 +12,14 @@ function Main() {
   const [filters, setFilters] = useState("sortBy=id&sortOrder=desc");
   const [searchTemplate, setSearchTemplate] = useState("");
   const [searchUser, setSearchUser] = useState("");
-  const [sortBy, setSortBy] = useState("Name");
+  const [sortBy, setSortBy] = useState("");
 
-  const sortByOptions = [
-    "Template name",
-    "Oldest first",
-    "Newest first",
-    "Creator name",
-  ];
+  const sortByOptions = {
+    TEMPLATE_NAME: "Template name",
+    OLDEST_FIRST: "Oldest first",
+    NEWEST_FIRST: "Newest first",
+    CREATOR_NAME: "Creator name",
+  };
 
   const creatorNames = ["Testi", "Testi 2"];
 
@@ -82,10 +82,29 @@ function Main() {
   };
 
   const filteredSearch = () => {
-    console.log("Searching");
-    console.log("Template name: " + searchTemplate);
-    console.log("User name: " + searchUser);
-    console.log("Sort by: " + sortBy);
+    let searchQuery = "";
+    let searchConditions = [];
+    if (searchTemplate.trim() !== "") {
+      searchConditions.push(`tname=${searchTemplate.trim()}`);
+    }
+    if (searchUser.trim() !== "") {
+      searchConditions.push(`uname=${searchUser.trim()}`);
+    }
+    if (sortBy !== "") {
+      if (sortBy === sortByOptions.TEMPLATE_NAME) {
+        searchConditions.push(`sortBy=name`);
+      } else if (sortBy === sortByOptions.CREATOR_NAME) {
+        searchConditions.push(`sortBy=creatorname`);
+      } else if (sortBy === sortByOptions.NEWEST_FIRST) {
+        searchConditions.push(`sortBy=id&sortOrder=desc`);
+      } else {
+        searchConditions.push(`sortBy=id&sortOrder=asc`);
+      }
+    }
+    if (searchConditions.length > 0) {
+      searchQuery = searchConditions.join("&");
+    }
+    console.log(searchQuery);
   };
 
   return (
@@ -107,8 +126,8 @@ function Main() {
         />
         <Dropdown
           label={"Sort by"}
-          placeholder={"Name"}
-          items={sortByOptions}
+          placeholder={"Template name"}
+          items={Object.values(sortByOptions)}
           onSelect={selectFromDropdown}
         />
 
