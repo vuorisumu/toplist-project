@@ -3,13 +3,16 @@ import { Link } from "react-router-dom";
 import { fetchAllTemplates, fetchAllTemplatesFiltered } from "./api";
 import { checkAdminStatus } from "./util";
 import Dropdown from "./Dropdown";
+import SearchInput from "./SearchInput";
 
 function Main() {
   const [templates, setTemplates] = useState([]);
   const [loadedTemplates, setLoadedTemplates] = useState(0);
   const loadSize = 5;
   const [filters, setFilters] = useState("sortBy=id&sortOrder=desc");
-  const [sortBy, setSortBy] = useState("");
+  const [searchTemplate, setSearchTemplate] = useState("");
+  const [searchUser, setSearchUser] = useState("");
+  const [sortBy, setSortBy] = useState("Name");
 
   const sortByOptions = [
     "Template name",
@@ -17,6 +20,8 @@ function Main() {
     "Newest first",
     "Creator name",
   ];
+
+  const creatorNames = ["Testi", "Testi 2"];
 
   useEffect(() => {
     fetchRecent();
@@ -64,8 +69,23 @@ function Main() {
       .catch((err) => console.log(err));
   }
 
+  const handleTemplateName = (val) => {
+    setSearchTemplate(val);
+  };
+
+  const handleCreatorName = (val) => {
+    setSearchUser(val);
+  };
+
   const selectFromDropdown = (val) => {
     setSortBy(val);
+  };
+
+  const filteredSearch = () => {
+    console.log("Searching");
+    console.log("Template name: " + searchTemplate);
+    console.log("User name: " + searchUser);
+    console.log("Sort by: " + sortBy);
   };
 
   return (
@@ -73,16 +93,28 @@ function Main() {
       <h1>Main</h1>
       <div>
         <h2>Filter templates</h2>
-        <button onClick={fetchAll}>Fetch all</button>
-        <button onClick={() => fetchAllFiltered("sortBy=creatorname")}>
-          Sort by creator name
-        </button>
+        <label>Search template by name: </label>
+        <SearchInput
+          suggestionData={creatorNames}
+          onChange={handleTemplateName}
+          onSelected={handleTemplateName}
+        />
+        <label>Search from creator: </label>
+        <SearchInput
+          suggestionData={creatorNames}
+          onChange={handleCreatorName}
+          onSelected={handleCreatorName}
+        />
         <Dropdown
           label={"Sort by"}
           placeholder={"Name"}
           items={sortByOptions}
           onSelect={selectFromDropdown}
         />
+
+        <button type="button" onClick={filteredSearch}>
+          Search
+        </button>
       </div>
       <div>
         <ul>
