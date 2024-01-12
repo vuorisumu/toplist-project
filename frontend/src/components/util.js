@@ -95,3 +95,17 @@ export const getRankingNames = async (id) => {
     console.error(err);
   }
 };
+
+export const formatDate = (date) => {
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  };
+
+  const formattedDate = new Date(date).toLocaleString(undefined, options);
+
+  return formattedDate;
+};

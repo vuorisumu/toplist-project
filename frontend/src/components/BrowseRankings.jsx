@@ -95,6 +95,7 @@ function BrowSeRankings() {
   };
 
   const test = () => {
+    fetchAll();
     console.log(rankingNames);
   };
 
@@ -168,7 +169,7 @@ function BrowSeRankings() {
               <p>Creator: {t.user_name ? t.user_name : "Anonymous"}</p>
               <p>Template: {t.template_id}</p>
               <ul>
-                {JSON.parse(t.items).map((item, index) => (
+                {JSON.parse(t.ranked_items).map((item, index) => (
                   <li key={index}>{item.item_name}</li>
                 ))}
               </ul>

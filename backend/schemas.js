@@ -59,7 +59,7 @@ const rankingSchema = Joi.object({
   template_id: Joi.number().required(),
   creator_id: Joi.number().optional(),
   ranking_desc: Joi.string().optional(),
-  items: Joi.array()
+  ranked_items: Joi.array()
     .items(
       Joi.object().keys({
         item_name: Joi.string().required(),

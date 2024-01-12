@@ -64,11 +64,11 @@ rankRouter.post("/", async (req, res) => {
     const fields = [];
 
     // mandatory values
-    fields.push("ranking_name", "template_id", "items");
+    fields.push("ranking_name", "template_id", "ranked_items");
     values.push(
       req.body.ranking_name,
       req.body.template_id,
-      JSON.stringify(req.body.items)
+      JSON.stringify(req.body.ranked_items)
     );
 
     // optional creator info

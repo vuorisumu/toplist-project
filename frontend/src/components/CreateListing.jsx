@@ -112,7 +112,7 @@ function CreateListing() {
       let rankingData = {
         ranking_name: rankingName,
         template_id: templateId,
-        items: containers[ITEMS_RANKED].items,
+        ranked_items: containers[ITEMS_RANKED].items,
         creation_time: getLocalTime(),
       };
 
