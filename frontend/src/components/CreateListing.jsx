@@ -109,11 +109,15 @@ function CreateListing() {
     }
 
     try {
+      const nonEmptyRanked = containers[ITEMS_RANKED].items.filter(
+        (i) => i.item_name.trim() !== ""
+      );
+
       // store ranking data
       let rankingData = {
         ranking_name: rankingName,
         template_id: templateId,
-        ranked_items: containers[ITEMS_RANKED].items,
+        ranked_items: nonEmptyRanked,
         creation_time: getLocalTime(),
       };
 
@@ -138,8 +142,8 @@ function CreateListing() {
         rankingData.ranking_desc = rankingDesc;
       }
 
-      const res = await addNewRanking(rankingData);
-      navigate(`/rankings/${res.id}`);
+      // const res = await addNewRanking(rankingData);
+      // navigate(`/rankings/${res.id}`);
     } catch (err) {
       console.error(err);
     }
