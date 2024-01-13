@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import {
   addNewRanking,
   addNewUser,
@@ -13,6 +13,7 @@ import ShowRankings from "./ShowRankings";
 
 function CreateListing() {
   const location = useLocation();
+  const navigate = useNavigate();
   const templateId = parseInt(location.pathname.replace("/createlisting/", ""));
   if (isNaN(templateId)) {
     console.error("Invalid templateId: ", templateId);
@@ -138,7 +139,7 @@ function CreateListing() {
       }
 
       const res = await addNewRanking(rankingData);
-      console.log(res);
+      navigate(`/rankings/${res.id}`);
     } catch (err) {
       console.error(err);
     }
