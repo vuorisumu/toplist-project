@@ -71,6 +71,12 @@ export const fetchAllRankingsFiltered = (filters) => {
   );
 };
 
+export const fetchRankingById = (id) => {
+  return fetch(`${API_BASE_URL}/rankings/${id}`).then((response) =>
+    response.json()
+  );
+};
+
 export const addNewRanking = (ranking) => {
   fetch(`${API_BASE_URL}/rankings/`, {
     method: "POST",

@@ -7,6 +7,7 @@ import CreateListing from "./components/CreateListing.jsx";
 import Login from "./components/Login.jsx";
 import EditTemplate from "./components/EditTemplate.jsx";
 import BrowSeRankings from "./components/BrowseRankings.jsx";
+import Ranking from "./components/Ranking.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -99,6 +100,7 @@ class App extends React.Component {
             path="/edit-template/:templateid"
             element={<EditTemplate auth={this.state.isAuthenticated} />}
           />
+          <Route path="/rankings/:rankId" element={<Ranking />} />
         </Routes>
       </Router>
     );

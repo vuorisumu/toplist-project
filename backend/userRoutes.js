@@ -12,7 +12,6 @@ userRouter.get("/", async (req, res) => {
   try {
     let results;
     if (Object.keys(req.query).length !== 0) {
-      console.log(req.query);
       // query has filters
       const { filteredQuery, queryParams } = await database.filteredUserQuery(
         req.query

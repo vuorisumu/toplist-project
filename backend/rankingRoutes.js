@@ -33,7 +33,10 @@ rankRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const result = await database.query(
-      `SELECT * FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id LEFT JOIN templates t ON r.template_id = t.id`,
+      `SELECT * FROM rankedlists r
+      LEFT JOIN users u ON r.creator_id = u.user_id
+      LEFT JOIN templates t ON r.template_id = t.id
+      WHERE r.ranking_id = ?`,
       id
     );
 
