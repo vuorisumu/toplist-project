@@ -142,8 +142,8 @@ function CreateListing() {
         rankingData.ranking_desc = rankingDesc;
       }
 
-      // const res = await addNewRanking(rankingData);
-      // navigate(`/rankings/${res.id}`);
+      const res = await addNewRanking(rankingData);
+      navigate(`/rankings/${res.id}`);
     } catch (err) {
       console.error(err);
     }
