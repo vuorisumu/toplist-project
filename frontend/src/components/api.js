@@ -100,6 +100,17 @@ export const addNewRanking = (ranking) => {
     .catch((error) => console.error("Error:", error));
 };
 
+export const deleteRanking = (id) => {
+  return fetch(`${API_BASE_URL}/rankings/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
 // --- TAGS ---
 export const fetchAllTags = () => {
   return fetch(`${API_BASE_URL}/tags`).then((response) => response.json());

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
-import { fetchAllRankingsFiltered } from "./api";
+import { deleteRanking, fetchAllRankingsFiltered } from "./api";
 import FilteredSearch from "./FilteredSearch";
+import { checkAdminStatus } from "./util";
+import ButtonPrompt from "./ButtonPrompt";
 
 function BrowSeRankings() {
   const [rankings, setRankings] = useState([]);
@@ -55,6 +57,15 @@ function BrowSeRankings() {
     newSearch(val);
   };
 
+  const handleDelete = (id) => {
+    deleteRanking(id)
+      .then((res) => {
+        console.log(res);
+        window.location.reload(false);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <>
       <h1>Browse rankings</h1>
@@ -78,6 +89,13 @@ function BrowSeRankings() {
                   <li key={index}>{item.item_name}</li>
                 ))}
               </ul>
+
+              {checkAdminStatus() && (
+                <ButtonPrompt
+                  buttonName="Delete ranking"
+                  confirm={() => handleDelete(t.ranking_id)}
+                />
+              )}
             </li>
           ))}
         </ul>

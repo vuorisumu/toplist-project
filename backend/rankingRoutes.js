@@ -110,4 +110,23 @@ rankRouter.post("/", async (req, res) => {
   }
 });
 
+// delete ranking
+rankRouter.delete("/:id([0-9]+)", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const result = await database.query(
+      "DELETE FROM rankedlists WHERE ranking_id = ?",
+      id
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).send(notfoundError);
+    }
+
+    res.status(200).json({ msg: `Deleted ranking ${id} successfully` });
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
 module.exports = rankRouter;
