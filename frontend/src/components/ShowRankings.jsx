@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { formatDate } from "./util";
-import { fetchAllRankingsFiltered } from "./api";
+import { formatDate, checkAdminStatus } from "./util";
+import { fetchAllRankingsFiltered, deleteRanking } from "./api";
 import FilteredSearch from "./FilteredSearch";
+import ButtonPrompt from "./ButtonPrompt";
 
 function ShowRankings({ id }) {
   const [loadedRankings, setLoadedRankings] = useState([]);
   const [rankCount, setRankCount] = useState(0);
-  const loadSize = 2;
+  const loadSize = 5;
   const defaultQuery = `sortBy=id&sortOrder=desc`;
   const [filters, setFilters] = useState(defaultQuery);
 
@@ -59,13 +60,22 @@ function ShowRankings({ id }) {
     newSearch(val);
   };
 
+  const handleDelete = (id) => {
+    deleteRanking(id)
+      .then((res) => {
+        console.log(res);
+        window.location.reload(false);
+      })
+      .catch((err) => console.log(err));
+  };
+
   if (!loadedRankings) {
     return <p>Loading</p>;
   }
 
   return (
     <div>
-      <h2>Lists using this template</h2>
+      {id > 0 && <h2>Lists using this template</h2>}
       <FilteredSearch
         search={handleFilteredSearch}
         clear={loadDefaultRankings}
@@ -78,6 +88,12 @@ function ShowRankings({ id }) {
             <h3>{list.ranking_name}</h3>
           </Link>
           <p>List creator: {list.user_name || "Anonymous"}</p>
+          {id === 0 && (
+            <p>
+              Template:{" "}
+              <Link to={`/createlisting/${list.template_id}`}>{list.name}</Link>
+            </p>
+          )}
           <p>Creation date: {formatDate(list.creation_time)}</p>
           {list.ranking_desc && <p>{list.ranking_desc}</p>}
 
@@ -89,6 +105,13 @@ function ShowRankings({ id }) {
               </li>
             ))}
           </ol>
+
+          {checkAdminStatus() && (
+            <ButtonPrompt
+              buttonName="Delete ranking"
+              confirm={() => handleDelete(list.ranking_id)}
+            />
+          )}
         </div>
       ))}
 
