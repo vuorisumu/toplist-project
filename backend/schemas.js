@@ -20,6 +20,7 @@ const querySchema = Joi.object({
 });
 
 const rankingQuerySchema = Joi.object({
+  search: Joi.string().optional(),
   distinct: Joi.boolean().optional(),
   tempId: Joi.number().optional(),
   tname: Joi.string().optional(),

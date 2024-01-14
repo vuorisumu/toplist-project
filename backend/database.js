@@ -121,6 +121,13 @@ async function filteredRankingQuery(req) {
   const queryParams = [];
 
   // add conditions
+  if (value.search) {
+    conditions.push("(r.ranking_name LIKE ? OR u.user_name LIKE ?)");
+    for (let i = 0; i < 2; i++) {
+      queryParams.push(`%${value.search}%`);
+    }
+  }
+
   if (value.tempId) {
     conditions.push("t.id = ?");
     queryParams.push(value.tempId);
