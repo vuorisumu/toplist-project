@@ -8,6 +8,7 @@ import {
   fetchTagById,
   updateTemplate,
 } from "./api";
+import ButtonPrompt from "./ButtonPrompt";
 
 function EditTemplate(props) {
   const [editKey, setEditKey] = useState("");
@@ -296,8 +297,7 @@ function EditTemplate(props) {
         Reset
       </button>
 
-      <p>{JSON.stringify(template.items)}</p>
-      <p>{tags}</p>
+      <ButtonPrompt buttonName="Delete template" prompt="Are you sure?" />
     </div>
   );
 }
