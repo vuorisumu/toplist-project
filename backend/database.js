@@ -37,6 +37,13 @@ async function filteredTemplatesQuery(req) {
   const queryParams = [];
 
   // add conditions
+  if (value.search) {
+    conditions.push("(t.name LIKE ? OR u.user_name LIKE ?)");
+    for (let i = 0; i < 2; i++) {
+      queryParams.push(`%${value.search}%`);
+    }
+  }
+
   if (value.tname) {
     conditions.push("t.name LIKE ?");
     queryParams.push(`${value.tname}%`);
@@ -93,6 +100,7 @@ async function filteredTemplatesQuery(req) {
     filteredQuery += ` LIMIT ${value.limit}`;
   }
 
+  console.log(filteredQuery + " " + queryParams);
   return { filteredQuery, queryParams };
 }
 

@@ -7,9 +7,11 @@ import { fetchAllUsersWithTemplates, fetchAllTagsFiltered } from "./api";
 
 function FilterTemplates({ search, clear }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [allNames, setAllNames] = useState([]);
   const [templateNames, setTemplateNames] = useState([]);
   const [userNames, setUserNames] = useState([]);
   const [tags, setTags] = useState({});
+  const [searchInput, setSearchInput] = useState("");
   const [searchTemplate, setSearchTemplate] = useState("");
   const [searchUser, setSearchUser] = useState("");
   const [sortBy, setSortBy] = useState("");
@@ -23,10 +25,29 @@ function FilterTemplates({ search, clear }) {
   };
 
   useEffect(() => {
+    fetchAllNamesTemps();
     fetchTemplateNames();
     fetchUserNames();
     fetchTagNames();
   }, []);
+
+  // get all names
+  const fetchAllNamesTemps = async () => {
+    getAllTemplateNames()
+      .then((tempNames) => {
+        const temp = [];
+        temp.push(...tempNames);
+        fetchAllUsersWithTemplates().then((users) => {
+          const tempUsers = users.map((u) => u.user_name);
+          temp.push(...tempUsers);
+        });
+        return temp;
+      })
+      .then((t) => {
+        setAllNames(t);
+      })
+      .catch((err) => console.log(err));
+  };
 
   // get all template names
   const fetchTemplateNames = async () => {
@@ -52,6 +73,10 @@ function FilterTemplates({ search, clear }) {
         setTags(tagData);
       })
       .catch((err) => console.log(err));
+  };
+
+  const handleSearchInput = (val) => {
+    setSearchInput(val);
   };
 
   const handleTemplateName = (val) => {
@@ -88,6 +113,10 @@ function FilterTemplates({ search, clear }) {
       const tagSearch = checkedTags.map((tag) => `tag=${tag}`).join("&");
       searchConditions.push(tagSearch);
       console.log(tagSearch);
+    }
+
+    if (searchInput.trim() !== "") {
+      searchConditions.push(`search=${searchInput.trim()}`);
     }
 
     if (searchTemplate.trim() !== "") {
@@ -131,6 +160,13 @@ function FilterTemplates({ search, clear }) {
         <div>
           <div>
             <h2>Filter templates</h2>
+            {/* Search from all */}
+            <label>Search: </label>
+            <SearchInput
+              suggestionData={allNames}
+              onChange={handleSearchInput}
+              onSelected={handleSearchInput}
+            />
 
             {/* Template name search */}
             <label>Search template by name: </label>
