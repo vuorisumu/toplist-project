@@ -38,8 +38,8 @@ function FilteredSearch({ search, clear, searchRankings }) {
   useEffect(() => {
     fetchAllNames();
 
+    // only fetch ranking names or template names
     if (searchRankings) {
-      console.log("rank search");
       fetchRankingNames();
     } else {
       fetchTemplateNames();
@@ -49,9 +49,10 @@ function FilteredSearch({ search, clear, searchRankings }) {
     fetchTagNames();
   }, []);
 
-  // get all names - templates edition
+  // get all names
   const fetchAllNames = async () => {
     if (searchRankings) {
+      // get all names: ranking edition
       getAllRankingNames()
         .then((rankNames) => {
           console.log(rankNames);
@@ -68,6 +69,7 @@ function FilteredSearch({ search, clear, searchRankings }) {
         })
         .catch((err) => console.log(err));
     } else {
+      // get all names: template edition
       getAllTemplateNames()
         .then((tempNames) => {
           const temp = [];
@@ -104,10 +106,12 @@ function FilteredSearch({ search, clear, searchRankings }) {
   // get all usernames
   const fetchUserNames = async () => {
     if (searchRankings) {
+      // user names who have made rankings
       fetchAllUsersWithRankings()
         .then((data) => setUserNames(data.map((u) => u.user_name)))
         .catch((err) => console.log(err));
     } else {
+      // user names who have made templates
       fetchAllUsersWithTemplates()
         .then((data) => setUserNames(data.map((u) => u.user_name)))
         .catch((err) => console.log(err));
@@ -125,25 +129,12 @@ function FilteredSearch({ search, clear, searchRankings }) {
       .catch((err) => console.log(err));
   };
 
-  const handleSearchInput = (val) => {
-    setSearchInput(val);
-  };
-
-  const handleRankingName = (val) => {
-    setSearchRanking(val);
-  };
-
-  const handleTemplateName = (val) => {
-    setSearchTemplate(val);
-  };
-
-  const handleCreatorName = (val) => {
-    setSearchUser(val);
-  };
-
-  const selectFromDropdown = (val) => {
-    setSortBy(val);
-  };
+  // search input handlers
+  const handleSearchInput = (val) => setSearchInput(val);
+  const handleRankingName = (val) => setSearchRanking(val);
+  const handleTemplateName = (val) => setSearchTemplate(val);
+  const handleCreatorName = (val) => setSearchUser(val);
+  const selectFromDropdown = (val) => setSortBy(val);
 
   // open and close filters
   const toggleFilterMenu = () => {

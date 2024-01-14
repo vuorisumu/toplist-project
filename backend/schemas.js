@@ -26,6 +26,10 @@ const rankingQuerySchema = Joi.object({
   tname: Joi.string().optional(),
   rname: Joi.string().optional(),
   uname: Joi.string().optional(),
+  tag: Joi.alternatives(
+    Joi.number().integer().optional(),
+    Joi.array().items(Joi.number()).optional()
+  ),
   sortBy: Joi.string()
     .valid("id", "name", "creatorname", "templatename")
     .optional(),
