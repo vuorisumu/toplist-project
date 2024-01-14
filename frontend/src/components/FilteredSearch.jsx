@@ -247,10 +247,6 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
         onSelected={handleSearchInput}
       />
 
-      <button type="button" onClick={handleSearch}>
-        Search
-      </button>
-
       {/* Filter box */}
       {filtersOpen ? (
         <div>
@@ -325,6 +321,10 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
           </button>
         </div>
       )}
+
+      <button type="button" onClick={handleSearch}>
+        Search
+      </button>
     </div>
   );
 }
