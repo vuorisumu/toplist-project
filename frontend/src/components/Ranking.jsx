@@ -41,7 +41,7 @@ function Ranking() {
           {JSON.parse(list.ranked_items).map((item, index) => (
             <li key={"item" + index}>
               <p>{item.item_name}</p>
-              <p>{item.item_note}</p>
+              {item.item_note && <p>{item.item_note}</p>}
             </li>
           ))}
         </ol>
