@@ -51,6 +51,7 @@ const userQuerySchema = Joi.object({
 
 const tagQuerySchema = Joi.object({
   count: Joi.boolean().optional(),
+  rcount: Joi.boolean().optional(),
   name: Joi.string().optional(),
 });
 

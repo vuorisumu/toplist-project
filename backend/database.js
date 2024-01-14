@@ -270,6 +270,16 @@ async function filteredTagQuery(req) {
     return { filteredQuery, queryParams };
   }
 
+  if (value.rcount) {
+    filteredQuery = `SELECT tags.id, tags.name, COUNT(r.ranking_id) AS count
+    FROM tags
+    LEFT JOIN templates t ON JSON_CONTAINS(t.tags, CAST(tags.id AS CHAR), '$')
+    LEFT JOIN rankedlists r ON t.id = r.template_id
+    GROUP BY tags.id
+    HAVING count > 0`;
+    return { filteredQuery, queryParams };
+  }
+
   filteredQuery = `SELECT * FROM tags t`;
 
   if (value.name) {
