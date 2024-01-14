@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchAllTemplatesFiltered } from "./api";
+import { fetchAllTemplatesFiltered, deleteTemplate } from "./api";
 import { checkAdminStatus } from "./util";
 import FilteredSearch from "./FilteredSearch";
+import ButtonPrompt from "./ButtonPrompt";
 
 function Main() {
   const [templates, setTemplates] = useState([]);
@@ -58,6 +59,16 @@ function Main() {
     newSearch(val);
   };
 
+  // delete template
+  const handleDelete = (id) => {
+    deleteTemplate(id)
+      .then((res) => {
+        console.log(res);
+        window.location.reload(false);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <>
       <h1>Browse templates</h1>
@@ -87,6 +98,12 @@ function Main() {
                   <li key={index}>{item.item_name}</li>
                 ))}
               </ul>
+              {checkAdminStatus() && (
+                <ButtonPrompt
+                  buttonName="Delete template"
+                  confirm={() => handleDelete(t.id)}
+                />
+              )}
             </li>
           ))}
         </ul>
