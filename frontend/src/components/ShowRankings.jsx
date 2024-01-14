@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { formatDate } from "./util";
 import { fetchAllRankingsFiltered } from "./api";
@@ -67,7 +68,9 @@ function ShowRankings({ id }) {
       />
       {loadedRankings.map((list) => (
         <div key={list.ranking_id}>
-          <h3>{list.ranking_name}</h3>
+          <Link to={`/rankings/${list.ranking_id}`}>
+            <h3>{list.ranking_name}</h3>
+          </Link>
           <p>List creator: {list.user_name || "Anonymous"}</p>
           <p>Creation date: {formatDate(list.creation_time)}</p>
           {list.ranking_desc && <p>{list.ranking_desc}</p>}
