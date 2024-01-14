@@ -14,12 +14,14 @@ class App extends React.Component {
     super(props);
 
     // get login info
-    const storedAuth = localStorage.getItem("auth");
+    const storedAdmin = localStorage.getItem("admin");
+    const storedLogin = localStorage.getItem("login");
     const storedRole = localStorage.getItem("role");
 
     // set state info
     this.state = {
-      isAuthenticated: storedAuth === "true" || false,
+      isAdmin: storedAdmin === "true" || false,
+      loggedIn: storedLogin === "true" || false,
       role: storedRole || "",
     };
   }
@@ -28,12 +30,14 @@ class App extends React.Component {
   handleLogin = async (role) => {
     this.setState(
       {
-        isAuthenticated: true,
+        isAdmin: role === "admin",
+        loggedIn: true,
         role,
       },
       () => {
         // store login
-        localStorage.setItem("auth", "true");
+        localStorage.setItem("admin", role === "admin" ? "true" : "false");
+        localStorage.setItem("login", "true");
         localStorage.setItem("role", role);
       }
     );
@@ -50,7 +54,8 @@ class App extends React.Component {
       },
       () => {
         // store logout
-        localStorage.setItem("auth", "false");
+        localStorage.setItem("admin", "false");
+        localStorage.setItem("login", "false");
         localStorage.setItem("role", "");
       }
     );
@@ -59,15 +64,15 @@ class App extends React.Component {
   };
 
   render() {
-    const { isAuthenticated } = this.state;
+    const { loggedIn } = this.state;
 
     return (
       <Router>
         <nav>
           <ul>
             <li>
-              {!isAuthenticated && <Login onLogin={this.handleLogin} />}
-              {isAuthenticated && (
+              {!loggedIn && <Login onLogin={this.handleLogin} />}
+              {loggedIn && (
                 <>
                   <p>User is authenticated</p>
                   <button type="button" onClick={this.handleLogout}>
@@ -98,7 +103,7 @@ class App extends React.Component {
           />
           <Route
             path="/edit-template/:templateid"
-            element={<EditTemplate auth={this.state.isAuthenticated} />}
+            element={<EditTemplate admin={this.state.isAdmin} />}
           />
           <Route path="/rankings/:rankId" element={<Ranking />} />
         </Routes>

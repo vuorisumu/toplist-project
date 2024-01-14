@@ -36,10 +36,10 @@ function EditTemplate(props) {
   };
 
   useEffect(() => {
-    if (props.auth || localStorage.getItem("edit" + templateId)) {
+    if (props.admin || localStorage.getItem("edit" + templateId)) {
       fetchTemplate();
     }
-  }, [props.auth]);
+  }, [props.admin]);
 
   const fetchTemplate = async () => {
     await fetchTemplateById(templateId)
@@ -67,7 +67,6 @@ function EditTemplate(props) {
 
   // fetch and set all tag names
   const fetchTagNames = async (tempData) => {
-    console.log("called");
     const fetchedNames = [];
     await Promise.all(
       tempData.tags.map(async (t) => {
@@ -109,7 +108,6 @@ function EditTemplate(props) {
       tempTags.push("");
       return tempTags;
     });
-    console.log("Add");
   };
 
   // update template name
@@ -165,7 +163,6 @@ function EditTemplate(props) {
       ...prevTemp,
       items: [...prevTemp.items, { item_name: "" }],
     }));
-    console.log("Add");
   };
 
   // save changes to template
@@ -306,7 +303,7 @@ function EditTemplate(props) {
 }
 
 EditTemplate.propTypes = {
-  auth: PropTypes.bool.isRequired,
+  admin: PropTypes.bool.isRequired,
 };
 
 export default EditTemplate;
