@@ -1,15 +1,11 @@
 import { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
-import PropTypes from "prop-types";
-import { getAllRankingNames, formatDate } from "./util";
-import {
-  fetchAllRankingsFiltered,
-  fetchAllUsersWithRankings,
-  fetchRankingById,
-} from "./api";
+import { useLocation, useNavigate, Link } from "react-router-dom";
+import { formatDate } from "./util";
+import { fetchRankingById } from "./api";
 
 function Ranking() {
   const location = useLocation();
+  const navigate = useNavigate();
   const rankingId = parseInt(location.pathname.replace("/rankings/", ""));
   if (isNaN(rankingId)) {
     console.error("Invalid ranking id: ", rankingId);
@@ -50,6 +46,8 @@ function Ranking() {
           ))}
         </ol>
       </div>
+
+      <button onClick={() => navigate(-1)}>Back</button>
     </div>
   );
 }
