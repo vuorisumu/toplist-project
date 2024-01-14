@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { getRankingNames, formatDate } from "./util";
+import { getAllRankingNames, formatDate } from "./util";
 import { fetchAllRankingsFiltered, fetchAllUsersWithRankings } from "./api";
 import SearchInput from "./SearchInput";
 import Dropdown from "./Dropdown";
@@ -82,7 +82,7 @@ function ShowRankings({ id }) {
   };
 
   const fetchRankingNames = async () => {
-    const fetchedNames = await getRankingNames(id);
+    const fetchedNames = await getAllRankingNames(id);
     if (fetchedNames.length > 0) {
       setListNames(fetchedNames);
     }

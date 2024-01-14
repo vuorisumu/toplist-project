@@ -2,19 +2,25 @@ import { useState, useEffect } from "react";
 import Dropdown from "./Dropdown";
 import SearchInput from "./SearchInput";
 import PropTypes from "prop-types";
-import { getAllTemplateNames } from "./util";
-import { fetchAllUsersWithTemplates, fetchAllTagsFiltered } from "./api";
+import { getAllTemplateNames, getAllRankingNames } from "./util";
+import {
+  fetchAllUsersWithTemplates,
+  fetchAllUsersWithRankings,
+  fetchAllTagsFiltered,
+} from "./api";
 
-function FilteredSearch({ search, clear }) {
+function FilteredSearch({ search, clear, searchRankings }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   // search suggestions
   const [allNames, setAllNames] = useState([]);
+  const [rankingNames, setRankingNames] = useState([]);
   const [templateNames, setTemplateNames] = useState([]);
   const [userNames, setUserNames] = useState([]);
 
   // search inputs
   const [searchInput, setSearchInput] = useState("");
+  const [searchRanking, setSearchRanking] = useState("");
   const [searchTemplate, setSearchTemplate] = useState("");
   const [searchUser, setSearchUser] = useState("");
 
@@ -30,28 +36,61 @@ function FilteredSearch({ search, clear }) {
   };
 
   useEffect(() => {
-    fetchAllNamesTemps();
-    fetchTemplateNames();
+    fetchAllNames();
+
+    if (searchRankings) {
+      console.log("rank search");
+      fetchRankingNames();
+    } else {
+      fetchTemplateNames();
+    }
+
     fetchUserNames();
     fetchTagNames();
   }, []);
 
-  // get all names
-  const fetchAllNamesTemps = async () => {
-    getAllTemplateNames()
-      .then((tempNames) => {
-        const temp = [];
-        temp.push(...tempNames);
-        fetchAllUsersWithTemplates().then((users) => {
-          const tempUsers = users.map((u) => u.user_name);
-          temp.push(...tempUsers);
-        });
-        return temp;
-      })
-      .then((t) => {
-        setAllNames(t);
-      })
-      .catch((err) => console.log(err));
+  // get all names - templates edition
+  const fetchAllNames = async () => {
+    if (searchRankings) {
+      getAllRankingNames()
+        .then((rankNames) => {
+          console.log(rankNames);
+          const temp = [];
+          temp.push(...rankNames);
+          fetchAllUsersWithRankings().then((users) => {
+            const tempUsers = users.map((u) => u.user_name);
+            temp.push(...tempUsers);
+          });
+          return temp;
+        })
+        .then((t) => {
+          setAllNames(t);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      getAllTemplateNames()
+        .then((tempNames) => {
+          const temp = [];
+          temp.push(...tempNames);
+          fetchAllUsersWithTemplates().then((users) => {
+            const tempUsers = users.map((u) => u.user_name);
+            temp.push(...tempUsers);
+          });
+          return temp;
+        })
+        .then((t) => {
+          setAllNames(t);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  // get all ranking names
+  const fetchRankingNames = async () => {
+    const rankNames = await getAllRankingNames();
+    if (rankNames.length > 0) {
+      setRankingNames(rankNames);
+    }
   };
 
   // get all template names
@@ -64,9 +103,15 @@ function FilteredSearch({ search, clear }) {
 
   // get all usernames
   const fetchUserNames = async () => {
-    fetchAllUsersWithTemplates()
-      .then((data) => setUserNames(data.map((u) => u.user_name)))
-      .catch((err) => console.log(err));
+    if (searchRankings) {
+      fetchAllUsersWithRankings()
+        .then((data) => setUserNames(data.map((u) => u.user_name)))
+        .catch((err) => console.log(err));
+    } else {
+      fetchAllUsersWithTemplates()
+        .then((data) => setUserNames(data.map((u) => u.user_name)))
+        .catch((err) => console.log(err));
+    }
   };
 
   // get all tag names
@@ -82,6 +127,10 @@ function FilteredSearch({ search, clear }) {
 
   const handleSearchInput = (val) => {
     setSearchInput(val);
+  };
+
+  const handleRankingName = (val) => {
+    setSearchRanking(val);
   };
 
   const handleTemplateName = (val) => {
@@ -122,6 +171,10 @@ function FilteredSearch({ search, clear }) {
 
     if (searchInput.trim() !== "") {
       searchConditions.push(`search=${searchInput.trim()}`);
+    }
+
+    if (searchRanking.trim() !== "") {
+      searchConditions.push(`rname=${searchRanking.trim()}`);
     }
 
     if (searchTemplate.trim() !== "") {
@@ -173,13 +226,27 @@ function FilteredSearch({ search, clear }) {
               onSelected={handleSearchInput}
             />
 
-            {/* Template name search */}
-            <label>Search template by name: </label>
-            <SearchInput
-              suggestionData={templateNames}
-              onChange={handleTemplateName}
-              onSelected={handleTemplateName}
-            />
+            {searchRankings ? (
+              <>
+                {/* Ranking name search */}
+                <label>Search ranking by name: </label>
+                <SearchInput
+                  suggestionData={rankingNames}
+                  onChange={handleRankingName}
+                  onSelected={handleRankingName}
+                />
+              </>
+            ) : (
+              <>
+                {/* Template name search */}
+                <label>Search template by name: </label>
+                <SearchInput
+                  suggestionData={templateNames}
+                  onChange={handleTemplateName}
+                  onSelected={handleTemplateName}
+                />
+              </>
+            )}
 
             {/* Username search */}
             <label>Search from creator: </label>
@@ -197,7 +264,7 @@ function FilteredSearch({ search, clear }) {
                     checked={tag.check}
                     onChange={() => tagCheck(index)}
                   />
-                  {tag.name} ({tag.count})
+                  {tag.name} {!searchRankings && `(${tag.count})`}
                 </li>
               ))}
             </ul>
@@ -234,6 +301,7 @@ function FilteredSearch({ search, clear }) {
 FilteredSearch.propTypes = {
   search: PropTypes.func,
   clear: PropTypes.func,
+  searchRankings: PropTypes.bool.isRequired,
 };
 
 export default FilteredSearch;

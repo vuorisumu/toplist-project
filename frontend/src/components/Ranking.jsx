@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { getRankingNames, formatDate } from "./util";
+import { getAllRankingNames, formatDate } from "./util";
 import {
   fetchAllRankingsFiltered,
   fetchAllUsersWithRankings,

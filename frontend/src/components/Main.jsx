@@ -61,7 +61,11 @@ function Main() {
   return (
     <>
       <h1>Browse templates</h1>
-      <FilteredSearch search={handleFilteredSearch} clear={fetchRecent} />
+      <FilteredSearch
+        search={handleFilteredSearch}
+        clear={fetchRecent}
+        searchRankings={false}
+      />
 
       <div>
         {/* Title */}

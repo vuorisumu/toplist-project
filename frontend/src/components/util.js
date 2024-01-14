@@ -83,7 +83,7 @@ export const getAllTemplateNames = async () => {
   }
 };
 
-export const getRankingNames = async (id) => {
+export const getAllRankingNames = async (id) => {
   try {
     let filter = `distinct=true`;
     if (id > 0) {

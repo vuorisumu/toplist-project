@@ -100,7 +100,6 @@ async function filteredTemplatesQuery(req) {
     filteredQuery += ` LIMIT ${value.limit}`;
   }
 
-  console.log(filteredQuery + " " + queryParams);
   return { filteredQuery, queryParams };
 }
 
