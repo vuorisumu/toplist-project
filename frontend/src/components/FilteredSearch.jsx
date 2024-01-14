@@ -147,6 +147,7 @@ function FilteredSearch({ search, clear, searchRankings }) {
 
   const handleClear = () => {
     const clearChecks = [...tags];
+    setSortBy("");
     clearChecks.forEach((t) => (t.check = false));
     setTags(clearChecks);
     clear();
@@ -207,20 +208,24 @@ function FilteredSearch({ search, clear, searchRankings }) {
   };
 
   return (
-    <>
+    <div>
+      {/* Search from all */}
+      <label>Search: </label>
+      <SearchInput
+        suggestionData={allNames}
+        onChange={handleSearchInput}
+        onSelected={handleSearchInput}
+      />
+
+      <button type="button" onClick={handleSearch}>
+        Search
+      </button>
+
       {/* Filter box */}
       {filtersOpen ? (
         <div>
           <div>
-            <h2>Filter templates</h2>
-            {/* Search from all */}
-            <label>Search: </label>
-            <SearchInput
-              suggestionData={allNames}
-              onChange={handleSearchInput}
-              onSelected={handleSearchInput}
-            />
-
+            <h3>Advanced search:</h3>
             {searchRankings ? (
               <>
                 {/* Ranking name search */}
@@ -273,9 +278,6 @@ function FilteredSearch({ search, clear, searchRankings }) {
             />
           </div>
 
-          <button type="button" onClick={handleSearch}>
-            Search
-          </button>
           <button type="button" onClick={handleClear}>
             Clear filters
           </button>
@@ -285,11 +287,13 @@ function FilteredSearch({ search, clear, searchRankings }) {
           </button>
         </div>
       ) : (
-        <button type="button" onClick={toggleFilterMenu}>
-          Open filters
-        </button>
+        <div>
+          <button type="button" onClick={toggleFilterMenu}>
+            Advanced search
+          </button>
+        </div>
       )}
-    </>
+    </div>
   );
 }
 
