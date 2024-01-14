@@ -189,10 +189,12 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
     let searchQuery = "";
     let searchConditions = [];
 
-    const checkedTags = tags.filter((t) => t.check).map((t) => t.id);
-    if (checkedTags.length > 0) {
-      const tagSearch = checkedTags.map((tag) => `tag=${tag}`).join("&");
-      searchConditions.push(tagSearch);
+    if (!searchRankings) {
+      const checkedTags = tags.filter((t) => t.check).map((t) => t.id);
+      if (checkedTags.length > 0) {
+        const tagSearch = checkedTags.map((tag) => `tag=${tag}`).join("&");
+        searchConditions.push(tagSearch);
+      }
     }
 
     if (searchInput.trim() !== "") {

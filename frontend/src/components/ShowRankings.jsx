@@ -17,7 +17,9 @@ function ShowRankings({ id }) {
   }, []);
 
   const loadDefaultRankings = async () => {
-    fetchAllRankingsFiltered(`tempId=${id}&${defaultQuery}&limit=${loadSize}`)
+    let q = id > 0 ? `tempId=${id}&` : ``;
+    q += `${defaultQuery}&limit=${loadSize}`;
+    fetchAllRankingsFiltered(q)
       .then((data) => {
         setLoadedRankings(data);
         setRankCount(loadSize);
@@ -26,7 +28,9 @@ function ShowRankings({ id }) {
   };
 
   const newSearch = async (query) => {
-    fetchAllRankingsFiltered(`tempId=${id}&${query}&limit=${loadSize}`)
+    let q = id > 0 ? `tempId=${id}&` : ``;
+    q += `${query}&limit=${loadSize}`;
+    fetchAllRankingsFiltered(q)
       .then((data) => {
         setLoadedRankings(data);
         setRankCount(loadSize);
@@ -36,7 +40,9 @@ function ShowRankings({ id }) {
 
   const loadMore = async () => {
     let limit = `${rankCount},${loadSize}`;
-    fetchAllRankingsFiltered(`tempId=${id}&${filters}&limit=${limit}`)
+    let q = id > 0 ? `tempId=${id}&` : ``;
+    q += `${filters}&limit=${limit}`;
+    fetchAllRankingsFiltered(q)
       .then((data) => {
         if (rankCount === 0) {
           setLoadedRankings(data);
