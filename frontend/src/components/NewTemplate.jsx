@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { clearAll, getTagNumbers, getUserId } from "./util";
+import { clearAll, getTagNumbers, getUserId, checkCreatorStatus } from "./util";
 import { addNewTemplate, fetchAllTags } from "./api";
 import SearchInput from "./SearchInput";
 
@@ -11,15 +11,21 @@ function NewTemplate() {
   const [tags, setTags] = useState([""]);
   const [suggestions, setSuggestions] = useState([""]);
   const [editKey, setEditKey] = useState("");
+  const [canCreate, setCanCreate] = useState(false);
 
   useEffect(() => {
-    fetchAllTags()
-      .then((data) => {
-        const tagNames = data.map((tag) => tag.name);
-        setSuggestions(tagNames);
-        console.log(suggestions.length + " tags added");
-      })
-      .catch((err) => console.log(err));
+    if (checkCreatorStatus()) {
+      setCanCreate(true);
+      fetchAllTags()
+        .then((data) => {
+          const tagNames = data.map((tag) => tag.name);
+          setSuggestions(tagNames);
+          console.log(suggestions.length + " tags added");
+        })
+        .catch((err) => console.log(err));
+    } else {
+      setCanCreate(false);
+    }
   }, [suggestions.length]);
 
   const printTags = () => {
@@ -127,6 +133,14 @@ function NewTemplate() {
       console.log(err);
     }
   };
+
+  if (!canCreate) {
+    return (
+      <div>
+        <p>Please login to create new template</p>
+      </div>
+    );
+  }
 
   return (
     <>

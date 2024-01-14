@@ -24,10 +24,18 @@ export const clearAll = () => {
 };
 
 export const checkAdminStatus = () => {
-  const storedAuth = localStorage.getItem("auth");
+  const storedAdmin = localStorage.getItem("admin");
+  const storedLogin = localStorage.getItem("login");
   const storedRole = localStorage.getItem("role");
 
-  return storedAuth && storedRole === "admin";
+  return storedAdmin && storedLogin && storedRole === "admin";
+};
+
+export const checkCreatorStatus = () => {
+  const storedLogin = localStorage.getItem("login");
+  const storedRole = localStorage.getItem("role");
+
+  return storedLogin && (storedRole === "admin" || storedRole === "creator");
 };
 
 // convert tag names to tag ids
