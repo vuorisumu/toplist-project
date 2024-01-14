@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { getAllRankingNames, formatDate } from "./util";
-import { fetchAllRankingsFiltered, fetchAllUsersWithRankings } from "./api";
-import SearchInput from "./SearchInput";
-import Dropdown from "./Dropdown";
+import { formatDate } from "./util";
+import { fetchAllRankingsFiltered } from "./api";
 import FilteredSearch from "./FilteredSearch";
 
 function ShowRankings({ id }) {
@@ -11,26 +9,9 @@ function ShowRankings({ id }) {
   const [rankCount, setRankCount] = useState(0);
   const loadSize = 2;
   const defaultQuery = `sortBy=id&sortOrder=desc`;
-
-  const [openFilters, setOpenFilters] = useState(false);
   const [filters, setFilters] = useState(defaultQuery);
-  const [searchRanking, setSearchRanking] = useState("");
-  const [searchUser, setSearchUser] = useState("");
-  const [sortBy, setSortBy] = useState("");
-  const [userNames, setUserNames] = useState([]);
-  const [listNames, setListNames] = useState([]);
-
-  // sort by options as srings
-  const sortByOptions = {
-    LIST_NAME: "List name",
-    CREATOR_NAME: "Creator name",
-    OLDEST_FIRST: "Oldest first",
-    NEWEST_FIRST: "Newest first",
-  };
 
   useEffect(() => {
-    fetchRankingNames();
-    handleFetchUserNames();
     newSearch(defaultQuery);
   }, []);
 
@@ -64,66 +45,6 @@ function ShowRankings({ id }) {
         setRankCount(rankCount + loadSize);
       })
       .catch((err) => console.log(err));
-  };
-
-  const toggleShowFilters = () => {
-    setOpenFilters(!openFilters);
-  };
-
-  const handleRankingName = (val) => {
-    setSearchRanking(val);
-  };
-
-  const handleCreatorName = (val) => {
-    setSearchUser(val);
-  };
-
-  const selectFromDropdown = (val) => {
-    setSortBy(val);
-  };
-
-  const fetchRankingNames = async () => {
-    const fetchedNames = await getAllRankingNames(id);
-    if (fetchedNames.length > 0) {
-      setListNames(fetchedNames);
-    }
-  };
-
-  const handleFetchUserNames = async () => {
-    fetchAllUsersWithRankings(id)
-      .then((data) => setUserNames(data.map((u) => u.user_name)))
-      .catch((err) => console.log(err));
-  };
-
-  const filteredSearch = async () => {
-    let searchQuery = "";
-    let searchConditions = [];
-
-    if (searchRanking.trim() !== "") {
-      searchConditions.push(`tname=${searchRanking.trim()}`);
-    }
-    if (searchUser.trim() !== "") {
-      searchConditions.push(`uname=${searchUser.trim()}`);
-    }
-    if (sortBy !== "") {
-      if (sortBy === sortByOptions.LIST_NAME) {
-        searchConditions.push(`sortBy=name`);
-      } else if (sortBy === sortByOptions.CREATOR_NAME) {
-        searchConditions.push(`sortBy=creatorname`);
-      } else if (sortBy === sortByOptions.NEWEST_FIRST) {
-        searchConditions.push(`sortBy=id&sortOrder=desc`);
-      } else {
-        searchConditions.push(`sortBy=id&sortOrder=asc`);
-      }
-    }
-    if (searchConditions.length > 0) {
-      searchQuery = searchConditions.join("&");
-    }
-
-    if (searchQuery !== "") {
-      setFilters(searchQuery);
-      newSearch(searchQuery);
-    }
   };
 
   const handleFilteredSearch = (val) => {
