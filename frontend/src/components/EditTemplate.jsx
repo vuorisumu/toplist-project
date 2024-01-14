@@ -199,6 +199,10 @@ function EditTemplate(props) {
     updateTemplate(templateId, updatedData);
   };
 
+  const handleDeleteTemplate = () => {
+    console.log("Delete template here");
+  };
+
   if (!canEdit && !template) {
     return (
       <div>
@@ -297,7 +301,11 @@ function EditTemplate(props) {
         Reset
       </button>
 
-      <ButtonPrompt buttonName="Delete template" prompt="Are you sure?" />
+      <ButtonPrompt
+        buttonName="Delete template"
+        prompt="Are you sure?"
+        confirm={handleDeleteTemplate}
+      />
     </div>
   );
 }
