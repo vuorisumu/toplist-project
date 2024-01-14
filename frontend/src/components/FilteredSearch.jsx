@@ -29,11 +29,13 @@ function FilteredSearch({ search, clear, searchRankings }) {
 
   // sort by options as srings
   const sortByOptions = {
-    TEMPLATE_NAME: "Template name",
+    LIST_NAME: searchRankings ? "Ranking name" : "Template name",
     OLDEST_FIRST: "Oldest first",
     NEWEST_FIRST: "Newest first",
     CREATOR_NAME: "Creator name",
   };
+
+  const placeholder = sortByOptions.LIST_NAME;
 
   useEffect(() => {
     fetchAllNames();
@@ -120,7 +122,9 @@ function FilteredSearch({ search, clear, searchRankings }) {
 
   // get all tag names
   const fetchTagNames = async () => {
-    fetchAllTagsFiltered("count=true")
+    const tagCount = searchRankings ? "rcount=true" : "count=true";
+    console.log(tagCount);
+    fetchAllTagsFiltered(tagCount)
       .then((data) => {
         const tagData = data;
         tagData.map((t) => (t.check = false));
@@ -175,7 +179,7 @@ function FilteredSearch({ search, clear, searchRankings }) {
       searchConditions.push(`uname=${searchUser.trim()}`);
     }
     if (sortBy !== "") {
-      if (sortBy === sortByOptions.TEMPLATE_NAME) {
+      if (sortBy === sortByOptions.LIST_NAME) {
         searchConditions.push(`sortBy=name`);
       } else if (sortBy === sortByOptions.CREATOR_NAME) {
         searchConditions.push(`sortBy=creatorname`);
@@ -255,7 +259,7 @@ function FilteredSearch({ search, clear, searchRankings }) {
                     checked={tag.check}
                     onChange={() => tagCheck(index)}
                   />
-                  {tag.name} {!searchRankings && `(${tag.count})`}
+                  {tag.name} ({tag.count})
                 </li>
               ))}
             </ul>
@@ -263,7 +267,7 @@ function FilteredSearch({ search, clear, searchRankings }) {
             {/* Sort by options */}
             <Dropdown
               label={"Sort by"}
-              placeholder={"Template name"}
+              placeholder={placeholder}
               items={Object.values(sortByOptions)}
               onSelect={selectFromDropdown}
             />
