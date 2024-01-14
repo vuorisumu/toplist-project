@@ -146,6 +146,7 @@ templateRouter.post("/", async (req, res) => {
   }
 });
 
+// edit template
 templateRouter.patch("/:id([0-9]+)", async (req, res) => {
   try {
     // check if template exists
@@ -214,6 +215,24 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
       msg: "Added new template",
       id: req.params.id,
     });
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
+templateRouter.delete("/:id([0-9]+)", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const result = await database.query(
+      "DELETE FROM templates WHERE id = ?",
+      id
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).send(notfoundError);
+    }
+
+    res.status(200).json({ msg: `Deleted template ${id} successfully` });
   } catch (err) {
     res.status(500).send(databaseError);
   }

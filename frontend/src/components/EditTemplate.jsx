@@ -7,6 +7,7 @@ import {
   fetchTemplateById,
   fetchTagById,
   updateTemplate,
+  deleteTemplate,
 } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
 
@@ -14,6 +15,7 @@ function EditTemplate(props) {
   const [editKey, setEditKey] = useState("");
   const [template, setTemplate] = useState(null);
   const [canEdit, setCanEdit] = useState(false);
+  const [notFound, setNotFound] = useState(false);
   const [tags, setTags] = useState([""]);
 
   const location = useLocation();
@@ -48,7 +50,10 @@ function EditTemplate(props) {
         handleSetTemplate(data[0]);
         setCanEdit(true);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setNotFound(true);
+        console.log(err);
+      });
   };
 
   // set template data
@@ -200,8 +205,17 @@ function EditTemplate(props) {
   };
 
   const handleDeleteTemplate = () => {
-    console.log("Delete template here");
+    deleteTemplate(templateId)
+      .then((res) => {
+        clearAll();
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
   };
+
+  if (notFound) {
+    return <p>{`Template doesn't exist or it has been deleted`}</p>;
+  }
 
   if (!canEdit && !template) {
     return (

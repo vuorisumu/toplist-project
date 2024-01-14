@@ -60,6 +60,17 @@ export const updateTemplate = (id, templateData) => {
     .catch((error) => console.error("Error:", error));
 };
 
+export const deleteTemplate = (id) => {
+  return fetch(`${API_BASE_URL}/templates/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
 // --- RANKINGS ---
 export const fetchAllRankings = () => {
   return fetch(`${API_BASE_URL}/rankings`).then((response) => response.json());
