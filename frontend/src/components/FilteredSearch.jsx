@@ -5,15 +5,20 @@ import PropTypes from "prop-types";
 import { getAllTemplateNames } from "./util";
 import { fetchAllUsersWithTemplates, fetchAllTagsFiltered } from "./api";
 
-function FilterTemplates({ search, clear }) {
+function FilteredSearch({ search, clear }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  // search suggestions
   const [allNames, setAllNames] = useState([]);
   const [templateNames, setTemplateNames] = useState([]);
   const [userNames, setUserNames] = useState([]);
-  const [tags, setTags] = useState({});
+
+  // search inputs
   const [searchInput, setSearchInput] = useState("");
   const [searchTemplate, setSearchTemplate] = useState("");
   const [searchUser, setSearchUser] = useState("");
+
+  const [tags, setTags] = useState({});
   const [sortBy, setSortBy] = useState("");
 
   // sort by options as srings
@@ -226,9 +231,9 @@ function FilterTemplates({ search, clear }) {
   );
 }
 
-FilterTemplates.propTypes = {
+FilteredSearch.propTypes = {
   search: PropTypes.func,
   clear: PropTypes.func,
 };
 
-export default FilterTemplates;
+export default FilteredSearch;

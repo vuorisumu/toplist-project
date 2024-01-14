@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { fetchAllTemplatesFiltered } from "./api";
 import { checkAdminStatus } from "./util";
-import FilterTemplates from "./FilterTemplates";
+import FilteredSearch from "./FilteredSearch";
 
 function Main() {
   const [templates, setTemplates] = useState([]);
@@ -61,7 +61,7 @@ function Main() {
   return (
     <>
       <h1>Browse templates</h1>
-      <FilterTemplates search={handleFilteredSearch} clear={fetchRecent} />
+      <FilteredSearch search={handleFilteredSearch} clear={fetchRecent} />
 
       <div>
         {/* Title */}
