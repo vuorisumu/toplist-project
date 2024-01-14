@@ -86,7 +86,7 @@ function Main() {
         <ul>
           {templates.map((t) => (
             <li key={t.id}>
-              <Link to={`/createlisting/${t.id}`}>
+              <Link to={`/createranking/${t.id}`}>
                 <h2>{t.name}</h2>
               </Link>
               <p>Creator: {t.user_name ? t.user_name : "Anonymous"}</p>

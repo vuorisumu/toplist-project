@@ -51,11 +51,11 @@ class App extends React.Component {
         </nav>
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/createlisting" element={<Main />} />
+          <Route path="/createranking" element={<Main />} />
           <Route path="/rankings" element={<BrowSeRankings />} />
           <Route path="/new-template" element={<NewTemplate />} />
           <Route
-            path="/createlisting/:templateId"
+            path="/createranking/:templateId"
             element={<CreateListing />}
           />
           <Route

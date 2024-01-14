@@ -14,7 +14,7 @@ import ShowRankings from "./ShowRankings";
 function CreateListing() {
   const location = useLocation();
   const navigate = useNavigate();
-  const templateId = parseInt(location.pathname.replace("/createlisting/", ""));
+  const templateId = parseInt(location.pathname.replace("/createranking/", ""));
   if (isNaN(templateId)) {
     console.error("Invalid templateId: ", templateId);
   }
