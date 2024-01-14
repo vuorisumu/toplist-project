@@ -9,7 +9,7 @@ import {
   fetchAllTagsFiltered,
 } from "./api";
 
-function FilteredSearch({ search, clear, searchRankings }) {
+function FilteredSearch({ search, clear, searchRankings, id }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   // search suggestions
@@ -48,16 +48,34 @@ function FilteredSearch({ search, clear, searchRankings }) {
     }
 
     fetchUserNames();
-    fetchTagNames();
+
+    if (!id) {
+      fetchTagNames();
+    }
   }, []);
 
   // get all names
   const fetchAllNames = async () => {
-    if (searchRankings) {
+    if (id) {
+      // get all names: id edition
+      getAllRankingNames(id)
+        .then((rankNames) => {
+          const temp = [];
+          temp.push(...rankNames);
+          fetchAllUsersWithRankings(id).then((users) => {
+            const tempUsers = users.map((u) => u.user_name);
+            temp.push(...tempUsers);
+          });
+          return temp;
+        })
+        .then((t) => {
+          setAllNames(t);
+        })
+        .catch((err) => console.log(err));
+    } else if (searchRankings) {
       // get all names: ranking edition
       getAllRankingNames()
         .then((rankNames) => {
-          console.log(rankNames);
           const temp = [];
           temp.push(...rankNames);
           fetchAllUsersWithRankings().then((users) => {
@@ -91,9 +109,18 @@ function FilteredSearch({ search, clear, searchRankings }) {
 
   // get all ranking names
   const fetchRankingNames = async () => {
-    const rankNames = await getAllRankingNames();
-    if (rankNames.length > 0) {
-      setRankingNames(rankNames);
+    if (id) {
+      // if id is specified
+      const rankNames = await getAllRankingNames(id);
+      if (rankNames.length > 0) {
+        setRankingNames(rankNames);
+      }
+    } else {
+      // if id is not specified
+      const rankNames = await getAllRankingNames();
+      if (rankNames.length > 0) {
+        setRankingNames(rankNames);
+      }
     }
   };
 
@@ -107,7 +134,12 @@ function FilteredSearch({ search, clear, searchRankings }) {
 
   // get all usernames
   const fetchUserNames = async () => {
-    if (searchRankings) {
+    if (id) {
+      // user names who have made rankings with specific id
+      fetchAllUsersWithRankings(id)
+        .then((data) => setUserNames(data.map((u) => u.user_name)))
+        .catch((err) => console.log(err));
+    } else if (searchRankings) {
       // user names who have made rankings
       fetchAllUsersWithRankings()
         .then((data) => setUserNames(data.map((u) => u.user_name)))
@@ -123,7 +155,6 @@ function FilteredSearch({ search, clear, searchRankings }) {
   // get all tag names
   const fetchTagNames = async () => {
     const tagCount = searchRankings ? "rcount=true" : "count=true";
-    console.log(tagCount);
     fetchAllTagsFiltered(tagCount)
       .then((data) => {
         const tagData = data;
@@ -162,7 +193,6 @@ function FilteredSearch({ search, clear, searchRankings }) {
     if (checkedTags.length > 0) {
       const tagSearch = checkedTags.map((tag) => `tag=${tag}`).join("&");
       searchConditions.push(tagSearch);
-      console.log(tagSearch);
     }
 
     if (searchInput.trim() !== "") {
@@ -256,18 +286,20 @@ function FilteredSearch({ search, clear, searchRankings }) {
               onSelected={handleCreatorName}
             />
 
-            <ul>
-              {tags.map((tag, index) => (
-                <li key={"tag" + index} onClick={() => tagCheck(index)}>
-                  <input
-                    type="checkbox"
-                    checked={tag.check}
-                    onChange={() => tagCheck(index)}
-                  />
-                  {tag.name} ({tag.count})
-                </li>
-              ))}
-            </ul>
+            {!id && (
+              <ul>
+                {tags.map((tag, index) => (
+                  <li key={"tag" + index} onClick={() => tagCheck(index)}>
+                    <input
+                      type="checkbox"
+                      checked={tag.check}
+                      onChange={() => tagCheck(index)}
+                    />
+                    {tag.name} ({tag.count})
+                  </li>
+                ))}
+              </ul>
+            )}
 
             {/* Sort by options */}
             <Dropdown
@@ -301,6 +333,7 @@ FilteredSearch.propTypes = {
   search: PropTypes.func,
   clear: PropTypes.func,
   searchRankings: PropTypes.bool.isRequired,
+  id: PropTypes.number,
 };
 
 export default FilteredSearch;

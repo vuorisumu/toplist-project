@@ -245,7 +245,6 @@ async function filteredUserQuery(req) {
   if (conditions.length > 0) {
     filteredQuery += " WHERE " + conditions.join(" AND ");
   }
-
   return { filteredQuery, queryParams };
 }
 

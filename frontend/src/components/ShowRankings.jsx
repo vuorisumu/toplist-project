@@ -4,6 +4,7 @@ import { getAllRankingNames, formatDate } from "./util";
 import { fetchAllRankingsFiltered, fetchAllUsersWithRankings } from "./api";
 import SearchInput from "./SearchInput";
 import Dropdown from "./Dropdown";
+import FilteredSearch from "./FilteredSearch";
 
 function ShowRankings({ id }) {
   const [loadedRankings, setLoadedRankings] = useState([]);
@@ -125,6 +126,11 @@ function ShowRankings({ id }) {
     }
   };
 
+  const handleFilteredSearch = (val) => {
+    setFilters(val);
+    newSearch(val);
+  };
+
   if (!loadedRankings) {
     return <p>Loading</p>;
   }
@@ -132,50 +138,12 @@ function ShowRankings({ id }) {
   return (
     <div>
       <h2>Lists using this template</h2>
-      <div>
-        {openFilters ? (
-          <div>
-            {/* Ranking name search */}
-            <label>Search list by name: </label>
-            <SearchInput
-              suggestionData={listNames}
-              onChange={handleRankingName}
-              onSelected={handleRankingName}
-            />
-
-            {/* Username search */}
-            <label>Search from creator: </label>
-            <SearchInput
-              suggestionData={userNames}
-              onChange={handleCreatorName}
-              onSelected={handleCreatorName}
-            />
-
-            {/* Sort by options */}
-            <Dropdown
-              label={"Sort by"}
-              placeholder={"List name"}
-              items={Object.values(sortByOptions)}
-              onSelect={selectFromDropdown}
-            />
-
-            <button type="button" onClick={filteredSearch}>
-              Search
-            </button>
-            <button type="button" onClick={loadDefaultRankings}>
-              Clear filters
-            </button>
-
-            <button type="button" onClick={toggleShowFilters}>
-              Close filters
-            </button>
-          </div>
-        ) : (
-          <button type="button" onClick={toggleShowFilters}>
-            Show filters
-          </button>
-        )}
-      </div>
+      <FilteredSearch
+        search={handleFilteredSearch}
+        clear={loadDefaultRankings}
+        searchRankings={true}
+        id={id}
+      />
       {loadedRankings.map((list) => (
         <div key={list.ranking_id}>
           <h3>{list.ranking_name}</h3>

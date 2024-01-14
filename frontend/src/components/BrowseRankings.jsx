@@ -57,7 +57,7 @@ function BrowSeRankings() {
 
   return (
     <>
-      <h1>Browse</h1>
+      <h1>Browse rankings</h1>
       <FilteredSearch
         search={handleFilteredSearch}
         clear={fetchRecent}
