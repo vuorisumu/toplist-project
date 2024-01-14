@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { clearAll, getTagNumbers, getUserId, checkCreatorStatus } from "./util";
 import { addNewTemplate, fetchAllTags } from "./api";
 import SearchInput from "./SearchInput";
+import Login from "./Login";
 
 function NewTemplate() {
   const [templateName, setTemplateName] = useState("");
@@ -138,6 +139,7 @@ function NewTemplate() {
     return (
       <div>
         <p>Please login to create new template</p>
+        <Login />
       </div>
     );
   }

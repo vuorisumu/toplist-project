@@ -39,6 +39,12 @@ function Login() {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  };
+
   // handle user login
   const onLogin = async (role) => {
     localStorage.setItem("admin", role === "admin" ? "true" : "false");
@@ -65,6 +71,7 @@ function Login() {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <br />
           <label>Password: </label>
@@ -72,6 +79,7 @@ function Login() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
 
           <button onClick={handleLogin}>Login</button>
