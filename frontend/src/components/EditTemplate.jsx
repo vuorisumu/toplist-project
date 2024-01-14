@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import { clearAll, getTagNumbers, getUserId } from "./util";
+import { checkAdminStatus, clearAll, getTagNumbers, getUserId } from "./util";
 import {
   enterTemplateEditMode,
   fetchTemplateById,
@@ -11,7 +11,7 @@ import {
 } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
 
-function EditTemplate(props) {
+function EditTemplate() {
   const [editKey, setEditKey] = useState("");
   const [template, setTemplate] = useState(null);
   const [canEdit, setCanEdit] = useState(false);
@@ -39,10 +39,10 @@ function EditTemplate(props) {
   };
 
   useEffect(() => {
-    if (props.admin || localStorage.getItem("edit" + templateId)) {
+    if (checkAdminStatus() || localStorage.getItem("edit" + templateId)) {
       fetchTemplate();
     }
-  }, [props.admin]);
+  }, []);
 
   const fetchTemplate = async () => {
     await fetchTemplateById(templateId)

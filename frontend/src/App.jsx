@@ -12,74 +12,15 @@ import Ranking from "./components/Ranking.jsx";
 class App extends React.Component {
   constructor(props) {
     super(props);
-
-    // get login info
-    const storedAdmin = localStorage.getItem("admin");
-    const storedLogin = localStorage.getItem("login");
-    const storedRole = localStorage.getItem("role");
-
-    // set state info
-    this.state = {
-      isAdmin: storedAdmin === "true" || false,
-      loggedIn: storedLogin === "true" || false,
-      role: storedRole || "",
-    };
   }
 
-  // handle user login
-  handleLogin = async (role) => {
-    this.setState(
-      {
-        isAdmin: role === "admin",
-        loggedIn: true,
-        role,
-      },
-      () => {
-        // store login
-        localStorage.setItem("admin", role === "admin" ? "true" : "false");
-        localStorage.setItem("login", "true");
-        localStorage.setItem("role", role);
-      }
-    );
-
-    window.location.reload(false);
-  };
-
-  // handle user logout
-  handleLogout = () => {
-    this.setState(
-      {
-        isAuthenticated: false,
-        role: "",
-      },
-      () => {
-        // store logout
-        localStorage.setItem("admin", "false");
-        localStorage.setItem("login", "false");
-        localStorage.setItem("role", "");
-      }
-    );
-
-    window.location.reload(false);
-  };
-
   render() {
-    const { loggedIn } = this.state;
-
     return (
       <Router>
         <nav>
           <ul>
             <li>
-              {!loggedIn && <Login onLogin={this.handleLogin} />}
-              {loggedIn && (
-                <>
-                  <p>User is authenticated</p>
-                  <button type="button" onClick={this.handleLogout}>
-                    Logout
-                  </button>
-                </>
-              )}
+              <Login />
             </li>
             <li>
               <Link to="/">Main</Link>
@@ -103,7 +44,7 @@ class App extends React.Component {
           />
           <Route
             path="/edit-template/:templateid"
-            element={<EditTemplate admin={this.state.isAdmin} />}
+            element={<EditTemplate admin={true} />}
           />
           <Route path="/rankings/:rankId" element={<Ranking />} />
         </Routes>

@@ -1,10 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { login } from "./api";
-import PropTypes from "prop-types";
+import { checkCreatorStatus } from "./util";
 
-function Login({ onLogin }) {
+function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    if (checkCreatorStatus()) {
+      setLoggedIn(true);
+      setRole(localStorage.getItem("role"));
+    } else {
+      setLoggedIn(false);
+    }
+  }, []);
 
   const handleLogin = async () => {
     if (username === "" || password === "") return;
@@ -28,29 +39,53 @@ function Login({ onLogin }) {
     }
   };
 
-  return (
-    <div>
-      <label>User: </label>
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <br />
-      <label>Password: </label>
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+  // handle user login
+  const onLogin = async (role) => {
+    localStorage.setItem("admin", role === "admin" ? "true" : "false");
+    localStorage.setItem("login", "true");
+    localStorage.setItem("role", role);
+    window.location.reload(false);
+  };
 
-      <button onClick={handleLogin}>Login</button>
-    </div>
+  // handle user logout
+  const onLogout = () => {
+    // store logout
+    localStorage.setItem("admin", "false");
+    localStorage.setItem("login", "false");
+    localStorage.setItem("role", "");
+    window.location.reload(false);
+  };
+
+  return (
+    <>
+      {!loggedIn ? (
+        <div>
+          <label>User: </label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <br />
+          <label>Password: </label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <button onClick={handleLogin}>Login</button>
+        </div>
+      ) : (
+        <div>
+          <p>{`Logged in as ${role}`}</p>
+          <button type="button" onClick={onLogout}>
+            Logout
+          </button>
+        </div>
+      )}
+    </>
   );
 }
-
-Login.propTypes = {
-  onLogin: PropTypes.func.isRequired,
-};
 
 export default Login;
