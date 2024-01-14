@@ -7,7 +7,10 @@ const databaseError = { msg: "Error retrieving data from database" };
 const notfoundError = { msg: "Data not found" };
 console.log("Tag router accessed");
 
-// get all tags
+/**
+ * Gets tags from database
+ * If a query is found, construct an SQL query with given filters
+ */
 tagRouter.get("/", async (req, res) => {
   try {
     let results;
@@ -29,7 +32,9 @@ tagRouter.get("/", async (req, res) => {
   }
 });
 
-// get tag by id
+/**
+ * Gets a tag from database with given ID
+ */
 tagRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -47,7 +52,10 @@ tagRouter.get("/:id([0-9]+)", async (req, res) => {
   }
 });
 
-// add new tag
+/**
+ * Adds a new tag to database
+ * Responds with newly added tag ID on successful insert
+ */
 tagRouter.post("/", async (req, res) => {
   try {
     console.log("Adding new tag");

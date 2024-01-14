@@ -7,6 +7,10 @@ const databaseError = { msg: "Error retrieving data from database" };
 const notfoundError = { msg: "Data not found" };
 console.log("Role router accessed");
 
+/**
+ * Sends login information to database
+ * Responds with role data on successful login
+ */
 roleRouter.post("/:role", async (req, res) => {
   try {
     const { password } = req.body;
@@ -20,7 +24,7 @@ roleRouter.post("/:role", async (req, res) => {
 
     res.status(200).json(roleData);
   } catch (err) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).send(databaseError);
   }
 });
 

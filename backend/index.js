@@ -31,6 +31,9 @@ app.use("/api/tags", tagRoutes);
 
 app.use(express.static("./frontend/dist"));
 
+/**
+ * Server instance listening on specified port
+ */
 const server = app
   .listen(port, () => {
     console.log(`SERVER: listening on port ${port}`);
@@ -41,6 +44,9 @@ const server = app
     process.exit(1);
   });
 
+/**
+ * Handles graceful shutdown of the connection
+ */
 const gracefulShutdown = () => {
   console.log("Starting graceful shutdown...");
   server.close(() => {

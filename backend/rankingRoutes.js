@@ -7,7 +7,10 @@ const databaseError = { msg: "Error retrieving data from database" };
 const notfoundError = { msg: "Data not found" };
 console.log("Ranking router accessed");
 
-// get all rankings
+/**
+ * Gets rankings from database
+ * If a query is found, construct an SQL query with given filters
+ */
 rankRouter.get("/", async (req, res) => {
   try {
     let results;
@@ -22,13 +25,19 @@ rankRouter.get("/", async (req, res) => {
       results = await database.query(query);
     }
 
+    if (results.length === 0) {
+      return res.status(404).send(notfoundError);
+    }
+
     res.status(200).json(results);
   } catch (err) {
     res.status(500).send(databaseError);
   }
 });
 
-// get ranking by id
+/**
+ * Gets a ranking from database by given ID
+ */
 rankRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -52,7 +61,10 @@ rankRouter.get("/:id([0-9]+)", async (req, res) => {
   }
 });
 
-// add new ranking
+/**
+ * Validates given data and adds a new ranking to database
+ * On successful insert, responds with an object including newly added ID
+ */
 rankRouter.post("/", async (req, res) => {
   try {
     // validate data
@@ -110,7 +122,9 @@ rankRouter.post("/", async (req, res) => {
   }
 });
 
-// delete ranking
+/**
+ * Deletes a ranking from database with a given ID
+ */
 rankRouter.delete("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);

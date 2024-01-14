@@ -8,7 +8,10 @@ const databaseError = { msg: "Error retrieving data from database" };
 const notfoundError = { msg: "Data not found" };
 console.log("Template router accessed");
 
-// get all templates
+/**
+ * Gets templates from database
+ * If a query is found, construct an SQL query with given filters
+ */
 templateRouter.get("/", async (req, res) => {
   try {
     let results;
@@ -34,7 +37,9 @@ templateRouter.get("/", async (req, res) => {
   }
 });
 
-// get template by id
+/**
+ * Gets a template from database with given ID
+ */
 templateRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -55,7 +60,10 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
   }
 });
 
-// enter editkey to enter edit mode
+/**
+ * Sends edit key information to database with a specified ID
+ * Responds with template data on successful query
+ */
 templateRouter.post("/:id([0-9]+)/edit/", async (req, res) => {
   try {
     const { editkey } = req.body;
@@ -85,7 +93,10 @@ templateRouter.post("/:id([0-9]+)/edit/", async (req, res) => {
   }
 });
 
-// add new template
+/**
+ * Validates data and adds new template to database
+ * Responds with newly added template ID on successful insert
+ */
 templateRouter.post("/", async (req, res) => {
   try {
     // validate data
@@ -146,7 +157,9 @@ templateRouter.post("/", async (req, res) => {
   }
 });
 
-// edit template
+/**
+ * Validates data and edits a template with given ID
+ */
 templateRouter.patch("/:id([0-9]+)", async (req, res) => {
   try {
     // check if template exists
@@ -220,6 +233,9 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
   }
 });
 
+/**
+ * Deletes a template with given ID from the database
+ */
 templateRouter.delete("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);

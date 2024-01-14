@@ -13,7 +13,12 @@ const pool = mysql.createPool({
   database: process.env.MYSQL_DATABASE,
 });
 
-// general query function
+/**
+ * Makes an SQL query
+ * @param {string} sql - SQL query
+ * @param {Array} args - parameters for the query
+ * @returns a promise containing query response
+ */
 async function query(sql, args) {
   return new Promise((resolve, reject) => {
     pool.query(sql, args, (err, rows) => {
@@ -25,7 +30,11 @@ async function query(sql, args) {
   });
 }
 
-// template query with filters
+/**
+ * Constructs an SQL query with filters and/or sorting for template related queries
+ * @param {Object} req - object containing requested filters
+ * @returns an object containing the full query and an array with all parameters
+ */
 async function filteredTemplatesQuery(req) {
   const { error, value } = schemas.querySchema.validate(req);
   if (error) {
@@ -103,7 +112,11 @@ async function filteredTemplatesQuery(req) {
   return { filteredQuery, queryParams };
 }
 
-// ranking query with filters
+/**
+ * Constructs an SQL query with filters and/or sorting for ranking related queries
+ * @param {Object} req - object containing requested filters
+ * @returns an object containing the full query and an array with all parameters
+ */
 async function filteredRankingQuery(req) {
   const { error, value } = schemas.rankingQuerySchema.validate(req);
   if (error) {
@@ -205,7 +218,11 @@ async function filteredRankingQuery(req) {
   return { filteredQuery, queryParams };
 }
 
-// users query with conditions
+/**
+ * Constructs an SQL query with filters and/or sorting for user related queries
+ * @param {Object} req - object containing requested filters
+ * @returns an object containing the full query and an array with all parameters
+ */
 async function filteredUserQuery(req) {
   const { error, value } = schemas.userQuerySchema.validate(req);
   if (error) {
@@ -248,7 +265,11 @@ async function filteredUserQuery(req) {
   return { filteredQuery, queryParams };
 }
 
-// tag query with conditions
+/**
+ * Constructs an SQL query with filters and/or sorting for tag related queries
+ * @param {Object} req - object containing requested filters
+ * @returns an object containing the full query and an array with all parameters
+ */
 async function filteredTagQuery(req) {
   const { error, value } = schemas.tagQuerySchema.validate(req);
   if (error) {

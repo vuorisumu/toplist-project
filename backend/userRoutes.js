@@ -7,7 +7,10 @@ const databaseError = { msg: "Error retrieving data from database" };
 const notfoundError = { msg: "Data not found" };
 console.log("User router accessed");
 
-// get all users
+/**
+ * Gets users from database
+ * If a query is found, construct an SQL query with given filters
+ */
 userRouter.get("/", async (req, res) => {
   try {
     let results;
@@ -30,7 +33,9 @@ userRouter.get("/", async (req, res) => {
   }
 });
 
-// get user by id
+/**
+ * Gets a user with given ID from the database
+ */
 userRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -51,7 +56,10 @@ userRouter.get("/:id([0-9]+)", async (req, res) => {
   }
 });
 
-// add new user
+/**
+ * Validates data and adds a new user to database
+ * Responds with a newly added user ID on successful insert
+ */
 userRouter.post("/", async (req, res) => {
   try {
     // validate data
