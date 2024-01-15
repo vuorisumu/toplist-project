@@ -1,1 +1,51 @@
-/*# sourceMappingURL=main.css.map */
+nav {
+  width: 100%;
+  position: absolute;
+}
+nav ul {
+  list-style: none;
+  padding: 0;
+  padding-right: 55px;
+  display: flex;
+  justify-content: space-evenly;
+}
+nav ul li {
+  display: inline-block;
+}
+
+.toggleLogin {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+#loginCont {
+  position: absolute;
+  width: 100%;
+  top: -150px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: #272323;
+  transition: 0.3s;
+}
+#loginCont div {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  justify-items: end;
+  align-items: center;
+  gap: 10px;
+}
+#loginCont div .buttonCont {
+  grid-column: 1/3;
+  width: 100%;
+}
+#loginCont div .buttonCont button {
+  width: 100%;
+  margin: auto;
+}
+#loginCont.active {
+  top: 0;
+}/*# sourceMappingURL=main.css.map */

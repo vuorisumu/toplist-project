@@ -80,38 +80,55 @@ function Login() {
     window.location.reload(false);
   };
 
+  const toggleLogin = () => {
+    document.getElementById("loginCont").classList.toggle("active");
+  };
+
   return (
     <>
-      {!loggedIn ? (
+      <div className="toggleLogin" onClick={toggleLogin}>
+        <span className="material-symbols-outlined">lock</span>
+      </div>
+      <div id="loginCont">
         <div>
-          <label>User: </label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <br />
-          <label>Password: </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
+          {!loggedIn ? (
+            <>
+              <label>User: </label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
 
-          <button type="button" onClick={handleLogin} className="loginButton">
-            Login
-          </button>
+              <label>Password: </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+
+              <div className="buttonCont">
+                <button
+                  type="button"
+                  onClick={handleLogin}
+                  className="loginButton"
+                >
+                  Login
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <p>{`Logged in as ${role}`}</p>
+              <button type="button" onClick={onLogout} className="logoutButton">
+                Logout
+              </button>
+            </>
+          )}
         </div>
-      ) : (
-        <div>
-          <p>{`Logged in as ${role}`}</p>
-          <button type="button" onClick={onLogout} className="logoutButton">
-            Logout
-          </button>
-        </div>
-      )}
+      </div>
     </>
   );
 }

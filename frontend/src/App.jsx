@@ -36,9 +36,6 @@ class App extends React.Component {
         <nav>
           <ul>
             <li>
-              <Login />
-            </li>
-            <li>
               <Link to="/">Main</Link>
             </li>
             <li>
@@ -48,6 +45,7 @@ class App extends React.Component {
               <Link to="/new-template">New template</Link>
             </li>
           </ul>
+          <Login />
         </nav>
         <Routes>
           <Route path="/" element={<Main />} />
