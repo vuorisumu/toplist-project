@@ -50,6 +50,8 @@ function CreateListing() {
   const [creatorName, setCreatorName] = useState("");
   const [newEntry, setNewEntry] = useState("");
 
+  const [errorMessages, setErrorMessages] = useState([]);
+
   /**
    * On page load, fetch necessary template data from the database
    * and buiild the necessary containers for the items to be used in the ranking
@@ -122,16 +124,31 @@ function CreateListing() {
    * Trims all input fields from possible extra spaces
    */
   const saveRanking = async () => {
-    if (containers[ITEMS_RANKED].items.length === 0 || !rankingName) {
-      console.log("Cannot save");
+    const errors = [];
+    const nonEmptyRanked = containers[ITEMS_RANKED].items.filter(
+      (i) => i.item_name.trim() !== ""
+    );
+
+    if (nonEmptyRanked.length === 0) {
+      errors.push("Ranked container must have at least one item");
+      document.getElementById("Ranked").classList.add("error");
+    } else {
+      document.getElementById("Ranked").classList.add("error");
+    }
+
+    if (!rankingName) {
+      errors.push("Ranking must have a title");
+      document.getElementById("addRankTitle").classList.add("error");
+    } else {
+      document.getElementById("addRankTitle").classList.remove("error");
+    }
+
+    if (errors.length > 0) {
+      setErrorMessages(errors);
       return;
     }
 
     try {
-      const nonEmptyRanked = containers[ITEMS_RANKED].items.filter(
-        (i) => i.item_name.trim() !== ""
-      );
-
       // store ranking data
       let rankingData = {
         ranking_name: rankingName,
@@ -189,28 +206,34 @@ function CreateListing() {
 
         {/* Ranking information */}
         <div>
-          <label>Ranking title: </label>
-          <input
-            type="text"
-            value={rankingName}
-            onChange={(e) => setRankingName(e.target.value)}
-            placeholder="Ranking Title"
-          />
-          <br />
-          <label>Description: </label>
-          <textarea
-            value={rankingDesc}
-            onChange={(e) => setRankingDesc(e.target.value)}
-            placeholder="Ranking description"
-          />
-          <br />
-          <label>Creator name: </label>
-          <input
-            type="text"
-            value={creatorName}
-            onChange={(e) => setCreatorName(e.target.value)}
-            placeholder="Creator Name"
-          />
+          <div id="addRankTitle">
+            <label>Ranking title: </label>
+            <input
+              type="text"
+              value={rankingName}
+              onChange={(e) => setRankingName(e.target.value)}
+              placeholder="Ranking Title"
+            />
+          </div>
+
+          <div id="addRankDesc">
+            <label>Description: </label>
+            <textarea
+              value={rankingDesc}
+              onChange={(e) => setRankingDesc(e.target.value)}
+              placeholder="Ranking description"
+            />
+          </div>
+
+          <div id="addRankCreator">
+            <label>Creator name: </label>
+            <input
+              type="text"
+              value={creatorName}
+              onChange={(e) => setCreatorName(e.target.value)}
+              placeholder="Creator Name"
+            />
+          </div>
         </div>
 
         {/* Ranking builder */}
@@ -237,6 +260,13 @@ function CreateListing() {
 
         {/* Save changes */}
         <div>
+          {errorMessages.length > 0 && (
+            <ul>
+              {errorMessages.map((err, index) => (
+                <li key={"error" + index}>{err}</li>
+              ))}
+            </ul>
+          )}
           <button type="button" onClick={saveRanking}>
             Save Ranking
           </button>
