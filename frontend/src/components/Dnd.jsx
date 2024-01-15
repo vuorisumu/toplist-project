@@ -3,6 +3,17 @@ import { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { v4 as uuid } from "uuid";
 
+/**
+ * Renders a Drag n Drop element with two containers, the first one of which is where the user makes the
+ * ranking, and the second one containing all the items in the chosen template. Elements can be rearranges by
+ * dragging the items. The ranked container shows five placeholder elements, but can be expanded by adding more
+ * than five elements to it.
+ * @param {JSON} props.containers - container objects that can be used as drag and drop fields
+ * @param {useState} props.setContainers - callback setContainers for resetting the container data
+ * @param {string} props.ITEMS_RANKED - name variable of the ranked items container
+ * @param {string} props.ITEMS_REMAINING - name variable of the unranked items container
+ * @returns JSX element containing Drag n Drop functionality
+ */
 function DnDContainer({
   containers,
   setContainers,
