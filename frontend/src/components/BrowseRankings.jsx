@@ -1,6 +1,10 @@
 import ShowRankings from "./ShowRankings";
 
-function BrowSeRankings() {
+/**
+ * View where the user can browse through all rankings
+ * @returns the title and content of the view
+ */
+function BrowseRankings() {
   return (
     <>
       <h1>Browse rankings</h1>
@@ -9,4 +13,4 @@ function BrowSeRankings() {
   );
 }
 
-export default BrowSeRankings;
+export default BrowseRankings;

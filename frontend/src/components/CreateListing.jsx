@@ -11,6 +11,14 @@ import { v4 as uuid } from "uuid";
 import { getLocalTime, clearAll, checkAdminStatus } from "./util";
 import ShowRankings from "./ShowRankings";
 
+/**
+ * View where the user can create a new list from a chosen template.
+ * The template ID is taken from the current pathname.
+ * Shows the template name and creator and asks for user input for the ranking name, description and creator.
+ * Uses DnD component for building the ranked list.
+ * Provides an option to add new items to be used in the ranking.
+ * Finally renders a ShowRankings component with current template ID
+ */
 function CreateListing() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -42,7 +50,10 @@ function CreateListing() {
   const [creatorName, setCreatorName] = useState("");
   const [newEntry, setNewEntry] = useState("");
 
-  // fetch selected template
+  /**
+   * On page load, fetch necessary template data from the database
+   * and buiild the necessary containers for the items to be used in the ranking
+   */
   useEffect(() => {
     fetchTemplateById(templateId)
       .then((data) => {
@@ -81,7 +92,11 @@ function CreateListing() {
       });
   }, [templateId]);
 
-  // adds new entry to template
+  /**
+   * Adds a new item to be used in the ranking. Will not save the item to the actual template,
+   * and can be deleted during the ranking, unlike the items that belong to the original template.
+   * Only adds a new item if the name of the entry is not blank
+   */
   const addEntry = () => {
     // only adds new if entry isn't empty
     if (newEntry.trim() !== "") {
@@ -101,7 +116,11 @@ function CreateListing() {
     }
   };
 
-  // save ranking
+  /**
+   * Saves the ranking data to database if the minimum requirements are met.
+   * Minimum requirements are: at least one item ranked and the list is given a name.
+   * Trims all input fields from possible extra spaces
+   */
   const saveRanking = async () => {
     if (containers[ITEMS_RANKED].items.length === 0 || !rankingName) {
       console.log("Cannot save");

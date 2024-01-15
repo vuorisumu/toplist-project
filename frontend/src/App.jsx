@@ -6,7 +6,7 @@ import NewTemplate from "./components/NewTemplate.jsx";
 import CreateListing from "./components/CreateListing.jsx";
 import Login from "./components/Login.jsx";
 import EditTemplate from "./components/EditTemplate.jsx";
-import BrowSeRankings from "./components/BrowseRankings.jsx";
+import BrowseRankings from "./components/BrowseRankings.jsx";
 import Ranking from "./components/Ranking.jsx";
 
 class App extends React.Component {
@@ -52,7 +52,7 @@ class App extends React.Component {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/createranking" element={<Main />} />
-          <Route path="/rankings" element={<BrowSeRankings />} />
+          <Route path="/rankings" element={<BrowseRankings />} />
           <Route path="/new-template" element={<NewTemplate />} />
           <Route
             path="/createranking/:templateId"
