@@ -50,9 +50,9 @@ function Ranking() {
   }
 
   return (
-    <div>
+    <div className="rank-container">
       <h2>{list.ranking_name}</h2>
-      <div>
+      <div className="info">
         <p>
           Template:{" "}
           <Link to={`/createlisting/${list.template_id}`}>{list.name}</Link>
@@ -63,7 +63,7 @@ function Ranking() {
       </div>
 
       <div>
-        <ol>
+        <ol className="rank">
           {JSON.parse(list.ranked_items).map((item, index) => (
             <li key={"item" + index}>
               <p>{item.item_name}</p>

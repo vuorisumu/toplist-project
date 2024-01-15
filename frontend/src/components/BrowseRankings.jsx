@@ -6,10 +6,10 @@ import ShowRankings from "./ShowRankings";
  */
 function BrowseRankings() {
   return (
-    <>
+    <div className="container">
       <h1>Browse rankings</h1>
       <ShowRankings id={0} />
-    </>
+    </div>
   );
 }
 

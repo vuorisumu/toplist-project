@@ -100,12 +100,14 @@ function Login() {
             onKeyDown={handleKeyDown}
           />
 
-          <button onClick={handleLogin}>Login</button>
+          <button type="button" onClick={handleLogin} className="loginButton">
+            Login
+          </button>
         </div>
       ) : (
         <div>
           <p>{`Logged in as ${role}`}</p>
-          <button type="button" onClick={onLogout}>
+          <button type="button" onClick={onLogout} className="logoutButton">
             Logout
           </button>
         </div>

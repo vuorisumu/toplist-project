@@ -172,9 +172,9 @@ function NewTemplate() {
   }
 
   return (
-    <>
+    <div className="container">
       <h1>New Template</h1>
-      <div>
+      <div className="info">
         <h2>Template info</h2>
         <label>Template name: </label>
         <input
@@ -200,7 +200,7 @@ function NewTemplate() {
         />
       </div>
 
-      <div>
+      <div className="addCont addItems">
         <h2>Template items</h2>
         <ul>
           {items.map((i, index) => (
@@ -212,11 +212,15 @@ function NewTemplate() {
                 onChange={(e) => handleItemEdits(index, e.target.value)}
               />
               {index !== items.length - 1 ? (
-                <button type="button" onClick={() => deleteItem(index)}>
+                <button
+                  type="button"
+                  onClick={() => deleteItem(index)}
+                  className="deleteButton"
+                >
                   Delete
                 </button>
               ) : (
-                <button type="button" onClick={addItem}>
+                <button type="button" onClick={addItem} className="addButton">
                   Add
                 </button>
               )}
@@ -225,7 +229,7 @@ function NewTemplate() {
         </ul>
       </div>
 
-      <div>
+      <div className="addCont addTags">
         <h2>Tags</h2>
         <ul>
           {tags.map((i, index) => (
@@ -237,11 +241,15 @@ function NewTemplate() {
                 onSelected={(val) => handleTagEdits(index, val)}
               />
               {index !== tags.length - 1 ? (
-                <button type="button" onClick={() => deleteTag(index)}>
+                <button
+                  type="button"
+                  onClick={() => deleteTag(index)}
+                  className="deleteButton"
+                >
                   Delete
                 </button>
               ) : (
-                <button type="button" onClick={addTag}>
+                <button type="button" onClick={addTag} className="addButton">
                   Add
                 </button>
               )}
@@ -250,7 +258,7 @@ function NewTemplate() {
         </ul>
       </div>
 
-      <div>
+      <div className="inputField">
         <label>Edit key: </label>
         <input
           type="text"
@@ -260,13 +268,13 @@ function NewTemplate() {
         />
       </div>
 
-      <button type="button" onClick={createTemplate}>
+      <button type="button" onClick={createTemplate} className="createButton">
         Create
       </button>
-      <button type="button" onClick={clearAll}>
+      <button type="button" onClick={clearAll} className="resetButton">
         Reset
       </button>
-    </>
+    </div>
   );
 }
 

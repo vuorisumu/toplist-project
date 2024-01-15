@@ -274,7 +274,7 @@ function EditTemplate() {
 
   if (!canEdit && !template) {
     return (
-      <div>
+      <div className="container">
         <p>Not admin</p>
         <label>Edit key: </label>
         <input
@@ -284,7 +284,7 @@ function EditTemplate() {
           onChange={(e) => setEditKey(e.target.value)}
         />
         <br />
-        <button type="button" onClick={checkEditKey}>
+        <button type="button" onClick={checkEditKey} className="loginButton">
           Enter
         </button>
       </div>
@@ -292,10 +292,10 @@ function EditTemplate() {
   }
 
   return (
-    <div>
+    <div className="container">
       <h1>Edit template</h1>
 
-      <div>
+      <div className="info">
         <label>Template name: </label>
         <input
           type="text"
@@ -317,7 +317,7 @@ function EditTemplate() {
         />
       </div>
 
-      <div>
+      <div className="addCont addItems">
         <h2>Items</h2>
         <ul>
           {template.items.map((i, index) => (
@@ -327,20 +327,24 @@ function EditTemplate() {
                 value={i.item_name}
                 onChange={(e) => updateItemName(e.target.value, index)}
               />
-              <button type="button" onClick={() => deleteItem(index)}>
+              <button
+                type="button"
+                onClick={() => deleteItem(index)}
+                className="deleteButton"
+              >
                 x
               </button>
             </li>
           ))}
           <li>
-            <button type="button" onClick={addNewField}>
+            <button type="button" onClick={addNewField} className="addButton">
               Add item
             </button>
           </li>
         </ul>
       </div>
 
-      <div>
+      <div className="addCont addTags">
         <h2>Tags</h2>
         <ul>
           {tags.map((t, index) => (
@@ -350,13 +354,21 @@ function EditTemplate() {
                 value={t}
                 onChange={(e) => updateTagName(e.target.value, index)}
               />
-              <button type="button" onClick={() => deleteTag(index)}>
+              <button
+                type="button"
+                onClick={() => deleteTag(index)}
+                className="deleteButton"
+              >
                 x
               </button>
             </li>
           ))}
           <li>
-            <button type="button" onClick={addNewTagField}>
+            <button
+              type="button"
+              onClick={addNewTagField}
+              className="addButton"
+            >
               Add tag
             </button>
           </li>

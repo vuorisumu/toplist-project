@@ -122,7 +122,7 @@ function ShowRankings({ id }) {
   }
 
   return (
-    <div>
+    <div className="rankingsCont">
       {id > 0 && <h2>Lists using this template</h2>}
       <FilteredSearch
         search={handleFilteredSearch}
@@ -131,7 +131,7 @@ function ShowRankings({ id }) {
         id={id}
       />
       {loadedRankings.map((list) => (
-        <div key={list.ranking_id}>
+        <div key={list.ranking_id} className="rank-container">
           <Link to={`/rankings/${list.ranking_id}`}>
             <h3>{list.ranking_name}</h3>
           </Link>
@@ -145,7 +145,7 @@ function ShowRankings({ id }) {
           <p>Creation date: {formatDate(list.creation_time)}</p>
           {list.ranking_desc && <p>{list.ranking_desc}</p>}
 
-          <ol>
+          <ol className="rank">
             {JSON.parse(list.ranked_items).map((i) => (
               <li key={list.ranking_id + " " + i.rank_number}>
                 <p>{i.item_name}</p>
@@ -164,7 +164,7 @@ function ShowRankings({ id }) {
       ))}
 
       {rankCount < fullCount && (
-        <button type="button" onClick={loadMore}>
+        <button type="button" onClick={loadMore} className="loadMoreButton">
           Load more
         </button>
       )}

@@ -279,7 +279,7 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
   };
 
   return (
-    <div>
+    <div className="searchContainer">
       {/* Search from all */}
       <label>Search: </label>
       <SearchInput
@@ -290,11 +290,11 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
 
       {/* Filter box */}
       {filtersOpen ? (
-        <div>
+        <div className="filtersContainer">
           <div>
             <h3>Advanced search:</h3>
             {searchRankings ? (
-              <>
+              <div className="searchInput">
                 {/* Ranking name search */}
                 <label>Search ranking by name: </label>
                 <SearchInput
@@ -302,9 +302,9 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
                   onChange={handleRankingName}
                   onSelected={handleRankingName}
                 />
-              </>
+              </div>
             ) : (
-              <>
+              <div className="searchInput">
                 {/* Template name search */}
                 <label>Search template by name: </label>
                 <SearchInput
@@ -312,19 +312,21 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
                   onChange={handleTemplateName}
                   onSelected={handleTemplateName}
                 />
-              </>
+              </div>
             )}
 
-            {/* Username search */}
-            <label>Search from creator: </label>
-            <SearchInput
-              suggestionData={userNames}
-              onChange={handleCreatorName}
-              onSelected={handleCreatorName}
-            />
+            <div className="searchInput">
+              {/* Username search */}
+              <label>Search from creator: </label>
+              <SearchInput
+                suggestionData={userNames}
+                onChange={handleCreatorName}
+                onSelected={handleCreatorName}
+              />
+            </div>
 
             {!id && (
-              <ul>
+              <ul className="tagFilters">
                 {tags.map((tag, index) => (
                   <li key={"tag" + index} onClick={() => tagCheck(index)}>
                     <input
@@ -347,23 +349,31 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
             />
           </div>
 
-          <button type="button" onClick={handleClear}>
+          <button type="button" onClick={handleClear} className="clearButton">
             Clear filters
           </button>
 
-          <button type="button" onClick={toggleFilterMenu}>
+          <button
+            type="button"
+            onClick={toggleFilterMenu}
+            className="closeButton"
+          >
             Close filters
           </button>
         </div>
       ) : (
         <div>
-          <button type="button" onClick={toggleFilterMenu}>
+          <button
+            type="button"
+            onClick={toggleFilterMenu}
+            className="showAdvancedButton"
+          >
             Advanced search
           </button>
         </div>
       )}
 
-      <button type="button" onClick={handleSearch}>
+      <button type="button" onClick={handleSearch} className="searchButton">
         Search
       </button>
     </div>

@@ -26,19 +26,19 @@ function ButtonPrompt({ buttonName, prompt, confirm }) {
   };
 
   return (
-    <div>
+    <div className="promptCont">
       {promptVisible ? (
         <>
           <p>{prompt || "Are you sure?"}</p>
-          <button type="button" onClick={confirm}>
+          <button type="button" onClick={confirm} className="confirmButton">
             {buttonName}
           </button>
-          <button type="button" onClick={cancel}>
+          <button type="button" onClick={cancel} className="cancelButton">
             Cancel
           </button>
         </>
       ) : (
-        <button type="button" onClick={showPrompt}>
+        <button type="button" onClick={showPrompt} className="confirmButton">
           {buttonName}
         </button>
       )}

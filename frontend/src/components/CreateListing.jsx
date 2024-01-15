@@ -190,8 +190,8 @@ function CreateListing() {
   }
 
   return (
-    <>
-      <div>
+    <div className="container">
+      <div className="createRank">
         <h1>Create a Ranking</h1>
 
         {(template.editkey || checkAdminStatus()) && (
@@ -199,13 +199,13 @@ function CreateListing() {
         )}
 
         {/* Template information */}
-        <div>
+        <div className="templateInfo">
           <p>Template name: {template.name}</p>
           <p>Template creator: {template.user_name}</p>
         </div>
 
         {/* Ranking information */}
-        <div>
+        <div className="rankInfo">
           <div id="addRankTitle">
             <label>Ranking title: </label>
             <input
@@ -245,7 +245,7 @@ function CreateListing() {
         />
 
         {/* Add new items */}
-        <div>
+        <div className="newItemsCont">
           <label>New item: </label>
           <input
             type="text"
@@ -277,7 +277,7 @@ function CreateListing() {
         </div>
       </div>
       <ShowRankings id={templateId} />
-    </>
+    </div>
   );
 }
 

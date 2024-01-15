@@ -54,11 +54,14 @@ function Dropdown({ label, placeholder, items, onSelect }) {
   };
 
   return (
-    <div>
-      <button type="button" onClick={handleOpen}>
+    <div className="dropdownCont">
+      <button type="button" onClick={handleOpen} className="dropdownButton">
         {label || "Selected"}: {selectedItem || placeholder}
       </button>
-      <div style={{ display: hideOptions ? "none" : "block" }}>
+      <div
+        style={{ display: hideOptions ? "none" : "block" }}
+        className="dropdownItems"
+      >
         <ul>
           {items.map((i, index) => (
             <li key={index} onClick={() => handleItemClick(i)}>

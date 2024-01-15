@@ -114,7 +114,7 @@ function Main() {
   };
 
   return (
-    <>
+    <div className="container">
       <h1>Browse templates</h1>
       <FilteredSearch
         search={handleFilteredSearch}
@@ -154,12 +154,12 @@ function Main() {
 
         {/* Load more button */}
         {loadCount < fullCount && (
-          <button type="button" onClick={loadMore}>
+          <button type="button" onClick={loadMore} className="loadMoreButton">
             Load more
           </button>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

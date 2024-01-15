@@ -196,7 +196,7 @@ function DnDContainer({
   return (
     <DragDropContext onDragEnd={(res) => onDragEnd(res, containers)}>
       {Object.entries(containers).map(([id, container]) => (
-        <div key={id}>
+        <div key={id} className="dndCont">
           <h3>{container.name}</h3>
           <div id={container.name}>
             <Droppable droppableId={id} key={id}>
