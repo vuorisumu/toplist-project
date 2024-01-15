@@ -55,7 +55,7 @@ function Ranking() {
       <div className="info">
         <p>
           Template:{" "}
-          <Link to={`/createlisting/${list.template_id}`}>{list.name}</Link>
+          <Link to={`/createranking/${list.template_id}`}>{list.name}</Link>
         </p>
         <p>Creator: {list.user_name || "Anonymous"}</p>
         <p>Creation date: {formatDate(list.creation_time)}</p>

@@ -1,0 +1,53 @@
+@use "theme";
+
+@mixin defaultTemplate() {
+  background-color: theme.$secondary-color;
+  border-bottom: 1px solid #ddd;
+
+  ul,
+  ol {
+    border-top: 1px solid #ddd;
+  }
+
+  h2,
+  a h3 {
+    padding-top: 15px;
+  }
+
+  .confirmButton {
+    margin-bottom: 15px;
+  }
+}
+
+.template {
+  @include defaultTemplate();
+
+  ul {
+    padding: 15px 0;
+
+    li {
+      display: inline-block;
+      padding: 5px 20px;
+    }
+  }
+
+  p.creator {
+    font-size: 12pt;
+  }
+
+  .editButton {
+    position: relative;
+    float: right;
+    padding-top: 20px;
+    width: 0;
+    right: 40px;
+  }
+}
+
+.rank-container {
+  @include defaultTemplate();
+}
+
+.loadMoreButton {
+  margin-top: 15px;
+}

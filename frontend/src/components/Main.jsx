@@ -129,14 +129,24 @@ function Main() {
         {/* Template list */}
         <ul>
           {templates.map((t) => (
-            <li key={t.id}>
+            <li key={t.id} className="template">
+              {(t.editkey || checkAdminStatus()) && (
+                <Link to={`/edit-template/${t.id}`} className="editButton">
+                  <span
+                    className="material-symbols-outlined"
+                    aria-label="edit template"
+                  >
+                    edit_square
+                  </span>
+                </Link>
+              )}
               <Link to={`/createranking/${t.id}`}>
                 <h2>{t.name}</h2>
               </Link>
-              <p>Creator: {t.user_name ? t.user_name : "Anonymous"}</p>
-              {(t.editkey || checkAdminStatus()) && (
-                <Link to={`/edit-template/${t.id}`}>Edit template</Link>
-              )}
+              <p className="creator">
+                Creator: {t.user_name ? t.user_name : "Anonymous"}
+              </p>
+              {t.description && <p className="description">{t.description}</p>}
               <ul>
                 {JSON.parse(t.items).map((item, index) => (
                   <li key={index}>{item.item_name}</li>

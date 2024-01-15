@@ -1,5 +1,16 @@
 @use "nav";
 @use "lists";
+@use "theme";
+
+:root {
+  background-color: theme.$primary-color;
+  color: theme.$text-primary;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
 
 .container {
   max-width: 600px;

@@ -28,7 +28,7 @@ nav ul li {
   top: -150px;
   padding-top: 15px;
   padding-bottom: 15px;
-  background-color: #272323;
+  background-color: #272727;
   transition: 0.3s;
 }
 #loginCont div {
@@ -49,6 +49,69 @@ nav ul li {
 }
 #loginCont.active {
   top: 0;
+}
+
+.template {
+  background-color: #323232;
+  border-bottom: 1px solid #ddd;
+}
+.template ul,
+.template ol {
+  border-top: 1px solid #ddd;
+}
+.template h2,
+.template a h3 {
+  padding-top: 15px;
+}
+.template .confirmButton {
+  margin-bottom: 15px;
+}
+.template ul {
+  padding: 15px 0;
+}
+.template ul li {
+  display: inline-block;
+  padding: 5px 20px;
+}
+.template p.creator {
+  font-size: 12pt;
+}
+.template .editButton {
+  position: relative;
+  float: right;
+  padding-top: 20px;
+  width: 0;
+  right: 40px;
+}
+
+.rank-container {
+  background-color: #323232;
+  border-bottom: 1px solid #ddd;
+}
+.rank-container ul,
+.rank-container ol {
+  border-top: 1px solid #ddd;
+}
+.rank-container h2,
+.rank-container a h3 {
+  padding-top: 15px;
+}
+.rank-container .confirmButton {
+  margin-bottom: 15px;
+}
+
+.loadMoreButton {
+  margin-top: 15px;
+}
+
+:root {
+  background-color: #272727;
+  color: #fff3f0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
 }
 
 .container {
