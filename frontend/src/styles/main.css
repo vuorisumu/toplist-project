@@ -104,6 +104,16 @@ nav ul li {
   margin-top: 15px;
 }
 
+.dndCont .dragOver {
+  background-color: lightgray;
+}
+.dndCont .no-drag {
+  background-color: darkgray;
+}
+.dndCont .dragging {
+  background-color: darkmagenta;
+}
+
 :root {
   background-color: #272727;
   color: #fff3f0;

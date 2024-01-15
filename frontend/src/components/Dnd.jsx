@@ -204,11 +204,7 @@ function DnDContainer({
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  style={{
-                    background: snapshot.isDraggingOver
-                      ? "lightgray"
-                      : "darkgray",
-                  }}
+                  className={snapshot.isDraggingOver ? "dragOver" : "no-drag"}
                 >
                   {container.items.map((item, index) => (
                     <Draggable
@@ -218,16 +214,12 @@ function DnDContainer({
                     >
                       {(provided, snapshot) => (
                         <div
-                          className="rank-item"
+                          className={`rank-item ${
+                            snapshot.isDragging ? "dragging" : "no-drag"
+                          }`}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          style={{
-                            backgroundColor: snapshot.isDragging
-                              ? "darkmagenta"
-                              : "darkgray",
-                            ...provided.draggableProps.style,
-                          }}
                         >
                           {/* Rank number only on ranked container */}
                           {container.keyName === ITEMS_RANKED && (
