@@ -125,6 +125,16 @@ export const fetchAllRankingsFiltered = (filters) => {
 };
 
 /**
+ * Fetches the count of rankings from the database
+ * @returns data containing the count of ranking lists
+ */
+export const fetchRankingCount = () => {
+  return fetch(`${API_BASE_URL}/rankings?count=true}`).then((response) =>
+    response.json()
+  );
+};
+
+/**
  * Fetch ranking with given ID from the database
  * @param {number} id - ID of the ranking
  * @returns data of the fetched ranking

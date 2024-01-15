@@ -15,10 +15,17 @@ rankRouter.get("/", async (req, res) => {
   try {
     let results;
     if (Object.keys(req.query).length !== 0) {
-      // query has filters
-      const { filteredQuery, queryParams } =
-        await database.filteredRankingQuery(req.query);
-      results = await database.query(filteredQuery, queryParams);
+      if (req.query.count) {
+        results = await database.query(
+          `SELECT COUNT(ranking_id) AS count
+          FROM rankedlists`
+        );
+      } else {
+        // query has filters
+        const { filteredQuery, queryParams } =
+          await database.filteredRankingQuery(req.query);
+        results = await database.query(filteredQuery, queryParams);
+      }
     } else {
       // query does not have filters
       const query = `SELECT * FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id LEFT JOIN templates t ON r.template_id = t.id`;

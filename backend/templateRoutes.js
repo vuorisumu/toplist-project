@@ -16,7 +16,11 @@ templateRouter.get("/", async (req, res) => {
   try {
     let results;
     if (Object.keys(req.query).length !== 0) {
-      if (req.query.distinct) {
+      if (req.query.count) {
+        results = await database.query(
+          `SELECT COUNT(id) AS count FROM templates`
+        );
+      } else if (req.query.distinct) {
         // fetch distinct names for suggestions
         results = await database.query(`SELECT DISTINCT name FROM templates`);
       } else {

@@ -2,20 +2,32 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { formatDate, checkAdminStatus } from "./util";
-import { fetchAllRankingsFiltered, deleteRanking } from "./api";
+import {
+  fetchAllRankingsFiltered,
+  deleteRanking,
+  fetchRankingCount,
+} from "./api";
 import FilteredSearch from "./FilteredSearch";
 import ButtonPrompt from "./ButtonPrompt";
 
 function ShowRankings({ id }) {
   const [loadedRankings, setLoadedRankings] = useState([]);
   const [rankCount, setRankCount] = useState(0);
-  const loadSize = 5;
+  const loadSize = 3;
   const defaultQuery = `sortBy=id&sortOrder=desc`;
   const [filters, setFilters] = useState(defaultQuery);
+  const [fullCount, setFullCount] = useState(0);
 
   useEffect(() => {
+    getRankingCount();
     newSearch(defaultQuery);
   }, []);
+
+  const getRankingCount = async () => {
+    fetchRankingCount()
+      .then((data) => setFullCount(data[0].count))
+      .catch((err) => console.log(err));
+  };
 
   const loadDefaultRankings = async () => {
     let q = id > 0 ? `tempId=${id}&` : ``;
@@ -40,7 +52,13 @@ function ShowRankings({ id }) {
   };
 
   const loadMore = async () => {
-    let limit = `${rankCount},${loadSize}`;
+    let newLoadSize = loadSize;
+    if (rankCount + loadSize > fullCount) {
+      const overFlow = rankCount + loadSize - fullCount;
+      newLoadSize -= overFlow;
+    }
+
+    let limit = `${rankCount},${newLoadSize}`;
     let q = id > 0 ? `tempId=${id}&` : ``;
     q += `${filters}&limit=${limit}`;
     fetchAllRankingsFiltered(q)
@@ -50,7 +68,7 @@ function ShowRankings({ id }) {
         } else {
           setLoadedRankings((prevTemplates) => [...prevTemplates, ...data]);
         }
-        setRankCount(rankCount + loadSize);
+        setRankCount(rankCount + newLoadSize);
       })
       .catch((err) => console.log(err));
   };
@@ -115,9 +133,11 @@ function ShowRankings({ id }) {
         </div>
       ))}
 
-      <button type="button" onClick={loadMore}>
-        Load more
-      </button>
+      {rankCount < fullCount && (
+        <button type="button" onClick={loadMore}>
+          Load more
+        </button>
+      )}
     </div>
   );
 }
