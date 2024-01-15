@@ -103,6 +103,16 @@ export const deleteTemplate = (id) => {
     .catch((error) => console.error("Error:", error));
 };
 
+/**
+ * Fetches the count of templates from the database
+ * @returns data containing the count of templates
+ */
+export const fetchTemplateCount = () => {
+  return fetch(`${API_BASE_URL}/templates?count=true}`).then((response) =>
+    response.json()
+  );
+};
+
 // --- RANKINGS ---
 
 /**

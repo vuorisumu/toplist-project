@@ -1,20 +1,32 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchAllTemplatesFiltered, deleteTemplate } from "./api";
+import {
+  fetchAllTemplatesFiltered,
+  deleteTemplate,
+  fetchTemplateCount,
+} from "./api";
 import { checkAdminStatus } from "./util";
 import FilteredSearch from "./FilteredSearch";
 import ButtonPrompt from "./ButtonPrompt";
 
 function Main() {
   const [templates, setTemplates] = useState([]);
-  const [loadedTemplates, setLoadedTemplates] = useState(0);
+  const [loadCount, setLoadCount] = useState(0);
   const loadSize = 5;
   const [filters, setFilters] = useState("sortBy=id&sortOrder=desc");
   const [isDefaultSearch, setIsDefaultSearch] = useState(true);
+  const [fullCount, setFullCount] = useState(0);
 
   useEffect(() => {
+    getTemplateCount();
     fetchRecent();
   }, []);
+
+  const getTemplateCount = async () => {
+    fetchTemplateCount()
+      .then((data) => setFullCount(data[0].count))
+      .catch((err) => console.log(err));
+  };
 
   // fetch the newest templates
   async function fetchRecent() {
@@ -23,7 +35,7 @@ function Main() {
         setFilters("sortBy=id&sortOrder=desc");
         setIsDefaultSearch(true);
         setTemplates(data);
-        setLoadedTemplates(loadSize);
+        setLoadCount(loadSize);
       })
       .catch((err) => console.log(err));
   }
@@ -33,23 +45,29 @@ function Main() {
       .then((data) => {
         setIsDefaultSearch(false);
         setTemplates(data);
-        setLoadedTemplates(loadSize);
+        setLoadCount(loadSize);
       })
       .catch((err) => console.log(err));
   }
 
   // load more templates with current search filters
   async function loadMore() {
-    let limit = `${loadedTemplates},${loadSize}`;
+    let newLoadSize = loadSize;
+    if (loadCount + loadSize > fullCount) {
+      const overFlow = loadCount + loadSize - fullCount;
+      newLoadSize -= overFlow;
+    }
+
+    let limit = `${loadCount},${newLoadSize}`;
     console.log(limit);
     fetchAllTemplatesFiltered(`${filters}&limit=${limit}`)
       .then((data) => {
-        if (loadedTemplates === 0) {
+        if (loadCount === 0) {
           setTemplates(data);
         } else {
           setTemplates((prevTemplates) => [...prevTemplates, ...data]);
         }
-        setLoadedTemplates(loadedTemplates + loadSize);
+        setLoadCount(loadCount + newLoadSize);
       })
       .catch((err) => console.log(err));
   }
@@ -109,9 +127,11 @@ function Main() {
         </ul>
 
         {/* Load more button */}
-        <button type="button" onClick={loadMore}>
-          Load more
-        </button>
+        {loadCount < fullCount && (
+          <button type="button" onClick={loadMore}>
+            Load more
+          </button>
+        )}
       </div>
     </>
   );
