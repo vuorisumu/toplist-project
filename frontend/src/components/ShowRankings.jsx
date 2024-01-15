@@ -10,6 +10,13 @@ import {
 import FilteredSearch from "./FilteredSearch";
 import ButtonPrompt from "./ButtonPrompt";
 
+/**
+ * Reusable component that by default renders the most recent rankings, optionally
+ * those using a specified template. Specific rankings can be searched, and the search
+ * may be filtered
+ * @param {number} props.id - ID of the template used in the rankings to be shown.
+ * If ID is 0, will show all rankings regardless of the template used
+ */
 function ShowRankings({ id }) {
   const [loadedRankings, setLoadedRankings] = useState([]);
   const [rankCount, setRankCount] = useState(0);
@@ -23,12 +30,19 @@ function ShowRankings({ id }) {
     newSearch(defaultQuery);
   }, []);
 
+  /**
+   * Fetches the total count of the rankings with the specified template ID
+   */
   const getRankingCount = async () => {
-    fetchRankingCount()
+    fetchRankingCount(id)
       .then((data) => setFullCount(data[0].count))
       .catch((err) => console.log(err));
   };
 
+  /**
+   * Fetches the default set of rankings from the database and
+   * stores the count of the loaded rankings
+   */
   const loadDefaultRankings = async () => {
     let q = id > 0 ? `tempId=${id}&` : ``;
     q += `${defaultQuery}&limit=${loadSize}`;
@@ -40,6 +54,11 @@ function ShowRankings({ id }) {
       .catch((err) => console.log(err));
   };
 
+  /**
+   * Makes a fresh search and fetches a new set of rankings from
+   * the database, overwriting the previously loaded rankings
+   * @param {string} query - filtered query to be used in the fetch
+   */
   const newSearch = async (query) => {
     let q = id > 0 ? `tempId=${id}&` : ``;
     q += `${query}&limit=${loadSize}`;
@@ -51,6 +70,9 @@ function ShowRankings({ id }) {
       .catch((err) => console.log(err));
   };
 
+  /**
+   * Fetches more rankings with the previously chosen filters from the database
+   */
   const loadMore = async () => {
     let newLoadSize = loadSize;
     if (rankCount + loadSize > fullCount) {
@@ -73,11 +95,19 @@ function ShowRankings({ id }) {
       .catch((err) => console.log(err));
   };
 
+  /**
+   * Sets the filters and makes a new search
+   * @param {string} val - the filtered query to be used in the fetch
+   */
   const handleFilteredSearch = (val) => {
     setFilters(val);
     newSearch(val);
   };
 
+  /**
+   * Deletes a ranking with a specified ID from the database
+   * @param {number} id - ID of the ranking to be deleted
+   */
   const handleDelete = (id) => {
     deleteRanking(id)
       .then((res) => {

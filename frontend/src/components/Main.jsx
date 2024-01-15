@@ -9,6 +9,10 @@ import { checkAdminStatus } from "./util";
 import FilteredSearch from "./FilteredSearch";
 import ButtonPrompt from "./ButtonPrompt";
 
+/**
+ * Initial view of the application. By default, renders the most recent templates
+ * but allows the user to search for a specific template as well.
+ */
 function Main() {
   const [templates, setTemplates] = useState([]);
   const [loadCount, setLoadCount] = useState(0);
@@ -22,13 +26,19 @@ function Main() {
     fetchRecent();
   }, []);
 
+  /**
+   * Fetches the count of all templates stores in the database
+   */
   const getTemplateCount = async () => {
     fetchTemplateCount()
       .then((data) => setFullCount(data[0].count))
       .catch((err) => console.log(err));
   };
 
-  // fetch the newest templates
+  /**
+   * Fetches the most recent templates from the database and stores the
+   * amount of loaded templates
+   */
   async function fetchRecent() {
     fetchAllTemplatesFiltered(`sortBy=id&sortOrder=desc&limit=${loadSize}`)
       .then((data) => {
@@ -40,6 +50,11 @@ function Main() {
       .catch((err) => console.log(err));
   }
 
+  /**
+   * Makes a fresh fetch from the database, overwrites the previously fetched
+   * templates with the new data and stores the amount of loaded templates.
+   * @param {string} query
+   */
   async function newSearch(query) {
     fetchAllTemplatesFiltered(`${query}&limit=${loadSize}`)
       .then((data) => {
@@ -50,7 +65,11 @@ function Main() {
       .catch((err) => console.log(err));
   }
 
-  // load more templates with current search filters
+  /**
+   * Fetches more templates from the database with the previously used search query
+   * and adds the amount of newly loaded templates to the count keeping track of
+   * loaded templates.
+   */
   async function loadMore() {
     let newLoadSize = loadSize;
     if (loadCount + loadSize > fullCount) {
@@ -72,12 +91,19 @@ function Main() {
       .catch((err) => console.log(err));
   }
 
+  /**
+   * Sets the specified filters and calls for a new search
+   * @param {string} val - filtered query text
+   */
   const handleFilteredSearch = (val) => {
     setFilters(val);
     newSearch(val);
   };
 
-  // delete template
+  /**
+   * Deletes a template with a specified ID from the database
+   * @param {number} id - ID of the template to be deleted
+   */
   const handleDelete = (id) => {
     deleteTemplate(id)
       .then((res) => {

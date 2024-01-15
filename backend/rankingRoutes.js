@@ -16,10 +16,15 @@ rankRouter.get("/", async (req, res) => {
     let results;
     if (Object.keys(req.query).length !== 0) {
       if (req.query.count) {
-        results = await database.query(
-          `SELECT COUNT(ranking_id) AS count
-          FROM rankedlists`
-        );
+        let countQuery = `SELECT COUNT(ranking_id) AS count
+          FROM rankedlists`;
+
+        if (req.query.tempId && req.query.tempId !== 0) {
+          countQuery += ` WHERE template_id = ?`;
+          results = await database.query(countQuery, [req.query.tempId]);
+        } else {
+          results = await database.query(countQuery);
+        }
       } else {
         // query has filters
         const { filteredQuery, queryParams } =

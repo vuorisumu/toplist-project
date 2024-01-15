@@ -10,10 +10,17 @@ import { useState } from "react";
  */
 function ButtonPrompt({ buttonName, prompt, confirm }) {
   const [promptVisible, setPromptVisible] = useState(false);
+
+  /**
+   * Sets the prompt visible
+   */
   const showPrompt = () => {
     setPromptVisible(true);
   };
 
+  /**
+   * Hides the prompt
+   */
   const cancel = () => {
     setPromptVisible(false);
   };

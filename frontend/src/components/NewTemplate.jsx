@@ -4,6 +4,12 @@ import { addNewTemplate, fetchAllTags } from "./api";
 import SearchInput from "./SearchInput";
 import Login from "./Login";
 
+/**
+ * View where the user can create a new template and add it to the database.
+ * Renders a message asking the user to log in if the user hasn't logged in,
+ * and renders the template creation view only if the user has logged in as either
+ * admin or creator.
+ */
 function NewTemplate() {
   const [templateName, setTemplateName] = useState("");
   const [description, setDescription] = useState("");
@@ -29,60 +35,81 @@ function NewTemplate() {
     }
   }, [suggestions.length]);
 
-  const printTags = () => {
-    tags.map((t) => {
-      console.log(t);
-    });
-  };
-
-  // add new item
+  /**
+   * Adds new item to the template, only if the latest item is not blank
+   */
   const addItem = () => {
     if (items[items.length - 1].trim() !== "") {
       setItems([...items, ""]);
     }
   };
 
-  // add new tag
+  /**
+   * Adds a new tag to the template, only if the latest tag is not blank
+   */
   const addTag = () => {
     if (tags[tags.length - 1].trim() !== "") {
       setTags([...tags, ""]);
     }
   };
 
-  // edit an item
+  /**
+   * Renames an item of a specified index with a given value
+   * @param {number} index - index of the item to be edited
+   * @param {string} value - new name of the item
+   */
   const handleItemEdits = (index, value) => {
     const updatedItems = [...items];
     updatedItems[index] = value;
     setItems(updatedItems);
   };
 
-  // edit a tag
+  /**
+   * Renames a tag of a specified index with a given value
+   * @param {number} index - index of the tag to be edited
+   * @param {string} value - new name of the tag
+   */
   const handleTagEdits = (index, value) => {
     const updatedTags = [...tags];
     updatedTags[index] = value;
     setTags(updatedTags);
   };
 
-  // delete item from index
+  /**
+   * Deletes an item from a specified index
+   * @param {number} index - index of the item to be deleted
+   */
   const deleteItem = (index) => {
     const updatedItems = items.filter((_, i) => i !== index);
     setItems(updatedItems);
   };
 
-  // delete tag from index
+  /**
+   * Deletes a tag from a specified index
+   * @param {number} index - index of the tag to be deleted
+   */
   const deleteTag = (index) => {
     const updatedTags = tags.filter((_, i) => i !== index);
     setTags(updatedTags);
   };
 
-  // checks if template meets the minimum requirements
+  /**
+   * Checks if the created template meets the minimum requirements
+   * for saving to the database
+   * @returns true if requirements have been met, false if the name field
+   * is empty or if the template has less than five items
+   */
   const meetsRequirements = () => {
     const hasName = templateName.trim() !== "";
     const enoughItems = items.filter((i) => i.trim() !== "").length >= 5;
     return hasName && enoughItems;
   };
 
-  // creates template and adds it to database
+  /**
+   * Tries to add the template to the database. Does nothing if the minimum
+   * requirements haven't been met. Otherwise builds the template data and
+   * sends it to the database.
+   */
   const createTemplate = async () => {
     if (!meetsRequirements()) {
       return;
@@ -221,10 +248,6 @@ function NewTemplate() {
             </li>
           ))}
         </ul>
-
-        <button type="button" onClick={printTags}>
-          Test tags
-        </button>
       </div>
 
       <div>

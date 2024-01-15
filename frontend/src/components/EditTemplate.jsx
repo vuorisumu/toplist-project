@@ -11,6 +11,13 @@ import {
 } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
 
+/**
+ * Edit template view that asks for the user to either be logged in as admin or to input
+ * an edit key that is the optional password set for a template. When authorized, the user
+ * can then edit the template or delete it completely
+ * @returns the input field for edit key if not logged in, or the view where the template
+ * can be edited
+ */
 function EditTemplate() {
   const [editKey, setEditKey] = useState("");
   const [template, setTemplate] = useState(null);
@@ -24,7 +31,10 @@ function EditTemplate() {
     console.error("Invalid templateId: ", templateId);
   }
 
-  // authentication
+  /**
+   * Checks if the user has given the correct edit key for the template
+   * and grants access to template edit mode if given the correct key.
+   */
   const checkEditKey = async () => {
     await enterTemplateEditMode(templateId, editKey)
       .then((res) => {
@@ -44,6 +54,10 @@ function EditTemplate() {
     }
   }, []);
 
+  /**
+   * Fetches the template from the database according to the template id
+   * specified in the path name of this current view.
+   */
   const fetchTemplate = async () => {
     await fetchTemplateById(templateId)
       .then((data) => {
@@ -56,7 +70,10 @@ function EditTemplate() {
       });
   };
 
-  // set template data
+  /**
+   * Handles unpacking the template data
+   * @param {object} data - data object to be unpacked
+   */
   const handleSetTemplate = (data) => {
     const tempData = data;
     const tempItems = JSON.parse(data.items);
@@ -71,7 +88,11 @@ function EditTemplate() {
     setTemplate(tempData);
   };
 
-  // fetch and set all tag names
+  /**
+   * Fetches tag names from the database, using the tag ID numbers specified
+   * in the template data
+   * @param {object} tempData - template data containing tag IDs
+   */
   const fetchTagNames = async (tempData) => {
     const fetchedNames = [];
     await Promise.all(
@@ -88,7 +109,11 @@ function EditTemplate() {
     setTags(fetchedNames);
   };
 
-  // update tag names
+  /**
+   * Updates the name of a tag with the specified index
+   * @param {string} newName - new name for the tag
+   * @param {number} index - index of the tag in the tag container
+   */
   const updateTagName = (newName, index) => {
     setTags((prev) => {
       const tempTags = [...prev];
@@ -97,13 +122,19 @@ function EditTemplate() {
     });
   };
 
-  // delete tag from index
+  /**
+   * Deletes a tag from a specified index
+   * @param {number} index - index of the tag
+   */
   const deleteTag = (index) => {
     const newTags = tags.filter((_, i) => i !== index);
     setTags(newTags);
   };
 
-  // add new tag field
+  /**
+   * Adds a new tag field if the latest tag field is not empty
+   * Does nothing if the newest tag field is empty
+   */
   const addNewTagField = () => {
     const lastTag = tags[tags.length - 1];
     if (lastTag.trim() === "") {
@@ -116,7 +147,10 @@ function EditTemplate() {
     });
   };
 
-  // update template name
+  /**
+   * Updates the template name
+   * @param {string} newName - new name for the template
+   */
   const updateTemplateName = (newName) => {
     setTemplate((prev) => ({
       ...prev,
@@ -124,7 +158,10 @@ function EditTemplate() {
     }));
   };
 
-  // update template description
+  /**
+   * Updates the template description
+   * @param {string} newDesc - new description for the template
+   */
   const updateDescription = (newDesc) => {
     setTemplate((prev) => ({
       ...prev,
@@ -132,7 +169,10 @@ function EditTemplate() {
     }));
   };
 
-  // update creator name
+  /**
+   * Updates the template creator name
+   * @param {string} newCreator - new creator name
+   */
   const updateCreatorName = (newCreator) => {
     setTemplate((prev) => ({
       ...prev,
@@ -140,7 +180,11 @@ function EditTemplate() {
     }));
   };
 
-  // update item names
+  /**
+   * Updates the name of an item at a specified index
+   * @param {string} newName - new item name
+   * @param {number} index - index of the item to be renamed
+   */
   const updateItemName = (newName, index) => {
     const newItems = template.items;
     newItems[index].item_name = newName;
@@ -150,7 +194,10 @@ function EditTemplate() {
     }));
   };
 
-  // delete item from index
+  /**
+   * Deletes an item from a specified index
+   * @param {number} index - index of the item to be deleted
+   */
   const deleteItem = (index) => {
     const newItems = template.items.filter((_, i) => i !== index);
     setTemplate((prevTemp) => ({
@@ -159,7 +206,10 @@ function EditTemplate() {
     }));
   };
 
-  // add new input field for items
+  /**
+   * Adds a new input field for items if the latest item is not empty
+   * Does nothing if the last item is empty
+   */
   const addNewField = () => {
     const lastItem = template.items[template.items.length - 1];
     if (lastItem.item_name.trim() === "") {
@@ -171,7 +221,9 @@ function EditTemplate() {
     }));
   };
 
-  // save changes to template
+  /**
+   * Packs the data and saves the changes to database
+   */
   const saveChanges = async () => {
     // fetch tag numbers of non empty tags
     const nonEmptyTags = tags.filter((t) => t.trim() !== "");
@@ -204,6 +256,9 @@ function EditTemplate() {
     updateTemplate(templateId, updatedData);
   };
 
+  /**
+   * Deletes the template and refreshes the page
+   */
   const handleDeleteTemplate = () => {
     deleteTemplate(templateId)
       .then((res) => {

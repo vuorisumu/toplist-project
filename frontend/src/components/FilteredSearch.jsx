@@ -9,6 +9,20 @@ import {
   fetchAllTagsFiltered,
 } from "./api";
 
+/**
+ * Reusable filtered search component that renders a general search input field, and an option
+ * to open advanced search options. Advanced search options show two  search input fields, first
+ * searching for the name of a template or a ranking, and the second searching for a user. Optionally
+ * also shows checkboxes for tags.
+ * @param {function} props.search - callback function for confirming the search, contains
+ * the full search query depending on the chosen filters
+ * @param {function} props.clear -  callback function for clearing the filters
+ * @param {boolean} props.searchRankings - boolean to determine if the filters should be
+ * specific to rankings or templates. True if rankings, false if templates
+ * @param {number} props.id - ID of the template if search filters are to be used with template
+ * specific rankings.
+ * @returns
+ */
 function FilteredSearch({ search, clear, searchRankings, id }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -54,7 +68,12 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
     }
   }, []);
 
-  // get all names
+  /**
+   * Fetches all names to be used from the database.
+   * If an ID is specified, retrieves ranking and user names related
+   * to a specified template ID. Otherwise retrieves all ranking or template
+   * names and usernames depending on searchRankings status
+   */
   const fetchAllNames = async () => {
     if (id) {
       // get all names: id edition
@@ -107,7 +126,9 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
     }
   };
 
-  // get all ranking names
+  /**
+   * Fetches and sets the ranking names for search suggestions
+   */
   const fetchRankingNames = async () => {
     if (id) {
       // if id is specified
@@ -124,7 +145,9 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
     }
   };
 
-  // get all template names
+  /**
+   * Fetches and sets template names for search suggestions
+   */
   const fetchTemplateNames = async () => {
     const tempNames = await getAllTemplateNames();
     if (tempNames.length > 0) {
@@ -132,7 +155,9 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
     }
   };
 
-  // get all usernames
+  /**
+   * Fetches and sets user names for search suggestions
+   */
   const fetchUserNames = async () => {
     if (id) {
       // user names who have made rankings with specific id
@@ -152,7 +177,10 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
     }
   };
 
-  // get all tag names
+  /**
+   * Fetches tag names and count of the templates/rankings using said tag
+   * from the database
+   */
   const fetchTagNames = async () => {
     const tagCount = searchRankings ? "rcount=true" : "count=true";
     fetchAllTagsFiltered(tagCount)
@@ -171,11 +199,16 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
   const handleCreatorName = (val) => setSearchUser(val);
   const selectFromDropdown = (val) => setSortBy(val);
 
-  // open and close filters
+  /**
+   * Opens and closes the advances search menu
+   */
   const toggleFilterMenu = () => {
     setFiltersOpen(!filtersOpen);
   };
 
+  /**
+   * Handles clearing all selected search filters
+   */
   const handleClear = () => {
     const clearChecks = [...tags];
     setSortBy("");
@@ -184,7 +217,9 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
     clear();
   };
 
-  // filtered template search
+  /**
+   * Constructs the final search query and sends it to callback function
+   */
   const handleSearch = () => {
     let searchQuery = "";
     let searchConditions = [];
@@ -233,6 +268,10 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
     }
   };
 
+  /**
+   * Sets a tag from specified index to be selected
+   * @param {number} index - index of the selected tag
+   */
   const tagCheck = (index) => {
     const checkedTag = [...tags];
     checkedTag[index].check = !tags[index].check;

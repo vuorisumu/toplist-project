@@ -136,12 +136,15 @@ export const fetchAllRankingsFiltered = (filters) => {
 
 /**
  * Fetches the count of rankings from the database
+ * @param {number} id - id of the template used in the rankings
  * @returns data containing the count of ranking lists
  */
-export const fetchRankingCount = () => {
-  return fetch(`${API_BASE_URL}/rankings?count=true}`).then((response) =>
-    response.json()
-  );
+export const fetchRankingCount = (id) => {
+  let searchQuery = `${API_BASE_URL}/rankings?count=true}`;
+  if (id > 0) {
+    searchQuery += `&tempId=${id}`;
+  }
+  return fetch(searchQuery).then((response) => response.json());
 };
 
 /**

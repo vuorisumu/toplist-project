@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { formatDate } from "./util";
-import { fetchRankingById } from "./api";
+import { formatDate, checkAdminStatus } from "./util";
+import { fetchRankingById, deleteRanking } from "./api";
+import ButtonPrompt from "./ButtonPrompt";
 
+/**
+ * View of a single ranking rendering all information related to the ranking
+ * and a back button. Also renders a delete button if the user is logged in as
+ * admin
+ */
 function Ranking() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -12,12 +18,32 @@ function Ranking() {
   }
 
   const [list, setList] = useState(null);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     fetchRankingById(rankingId)
       .then((data) => setList(data[0]))
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setNotFound(true);
+        console.log(err);
+      });
   }, []);
+
+  /**
+   * Deletes a ranking from the database and refreshes the page
+   */
+  const handleDelete = () => {
+    deleteRanking(rankingId)
+      .then((res) => {
+        console.log(res);
+        window.location.reload(false);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  if (notFound) {
+    return <p>{`Ranking doesn't exist or it has been deleted`}</p>;
+  }
 
   if (!list) {
     return <p>Loading</p>;
@@ -46,6 +72,10 @@ function Ranking() {
           ))}
         </ol>
       </div>
+
+      {checkAdminStatus() && (
+        <ButtonPrompt buttonName="Delete ranking" confirm={handleDelete} />
+      )}
 
       <button onClick={() => navigate(-1)}>Back</button>
     </div>

@@ -24,7 +24,11 @@ function DnDContainer({
   const [selectedItems, setSelectedItems] = useState([]);
   const minSize = 5;
 
-  // update item note on a selected item
+  /**
+   * Updates the note on a specified item and re-sets the containers with updated data
+   * @param {string} note - the note to be added to the item
+   * @param {object} item - item to be updated
+   */
   const updateNote = (note, item) => {
     const updatedItems = containers[ITEMS_RANKED].items.map((curItem) => {
       if (curItem.item_name === item.item_name) {
@@ -43,7 +47,11 @@ function DnDContainer({
     }));
   };
 
-  // deletes the item note from a selected item
+  /**
+   * Deletes the note from a specified item and re-sets the containers with updated data.
+   * Deleted specified item from the array telling which items have notes.
+   * @param {object} itemWithNote - item where the note is to be deleted
+   */
   const deleteNote = (itemWithNote) => {
     const updatedItems = containers[ITEMS_RANKED].items.map((item) => {
       if (item.item_name === itemWithNote.item_name) {
@@ -69,7 +77,12 @@ function DnDContainer({
     );
   };
 
-  // delete added entry
+  /**
+   * Deletes an user added item that isn't a part of the original template from
+   * a specified index. Can only delete an item that is currently in the unused
+   * items container. Updates the item containers with the updated data
+   * @param {number} index - index of the item to be deleted
+   */
   const deleteItem = (index) => {
     setContainers((prevContainers) => ({
       ...prevContainers,
@@ -82,7 +95,12 @@ function DnDContainer({
     }));
   };
 
-  // handles the drag n drop
+  /**
+   * Handles the data from dragging and dropping an item, and updates the
+   * item containers with the updated placements of the items
+   * @param {Response} res - Response containing information of the drag and drop source and destination
+   * @param {object} containers - containers to be updated with the dnd result
+   */
   const onDragEnd = (res, containers) => {
     if (!res.destination) {
       return;
