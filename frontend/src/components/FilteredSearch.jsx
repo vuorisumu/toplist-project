@@ -275,6 +275,17 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
     setTags(checkedTag);
   };
 
+  /**
+   * Checks if enter key was pressed when an input field was active,
+   * and calls for search callback if enter key was pressed
+   * @param {KeyboardEvent} e - Keyboard event containing information of the pressed key
+   */
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return (
     <div className="searchContainer">
       <div className="searchInput general">
@@ -283,6 +294,7 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
           suggestionData={allNames}
           onChange={handleSearchInput}
           onSelected={handleSearchInput}
+          checkKey={handleKeyDown}
         />
         <button type="button" onClick={handleSearch} className="searchButton">
           Search
@@ -302,6 +314,7 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
                   suggestionData={rankingNames}
                   onChange={handleRankingName}
                   onSelected={handleRankingName}
+                  checkKey={handleKeyDown}
                 />
               </div>
             ) : (
@@ -312,6 +325,7 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
                   suggestionData={templateNames}
                   onChange={handleTemplateName}
                   onSelected={handleTemplateName}
+                  checkKey={handleKeyDown}
                 />
               </div>
             )}
@@ -323,6 +337,7 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
                 suggestionData={userNames}
                 onChange={handleCreatorName}
                 onSelected={handleCreatorName}
+                checkKey={handleKeyDown}
               />
             </div>
 

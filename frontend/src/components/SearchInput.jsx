@@ -16,6 +16,7 @@ function SearchInput({
   suggestionData,
   onSelected,
   onChange,
+  checkKey,
 }) {
   const [suggestions, setSugesstions] = useState([]);
   const [hideSuggestions, setHideSuggestions] = useState(false);
@@ -79,6 +80,7 @@ function SearchInput({
           value={selectedValue}
           onChange={handleChange}
           onKeyUp={filterSuggestions}
+          onKeyDown={checkKey}
         />
       </div>
 
@@ -104,6 +106,7 @@ SearchInput.propTypes = {
   suggestionData: PropTypes.array.isRequired,
   onSelected: PropTypes.func,
   onChange: PropTypes.func.isRequired,
+  checkKey: PropTypes.func,
 };
 
 export default SearchInput;
