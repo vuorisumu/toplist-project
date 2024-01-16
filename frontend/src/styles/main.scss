@@ -4,6 +4,13 @@
 @use "dnd";
 @use "search";
 
+@mixin titles() {
+  font-family: "Viga", sans-serif;
+  span {
+    color: theme.$accent;
+  }
+}
+
 :root {
   background-color: theme.$primary-color;
   color: theme.$text-primary;
@@ -24,6 +31,12 @@
 ul {
   list-style: none;
   padding: 0;
+}
+
+h1,
+h2,
+h3 {
+  @include titles();
 }
 
 // default link styles

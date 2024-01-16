@@ -326,6 +326,17 @@ ul {
   padding: 0;
 }
 
+h1,
+h2,
+h3 {
+  font-family: "Viga", sans-serif;
+}
+h1 span,
+h2 span,
+h3 span {
+  color: #6a9d23;
+}
+
 a {
   color: #6a9d23;
 }
