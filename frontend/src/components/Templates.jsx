@@ -17,9 +17,11 @@ function Templates() {
   const [templates, setTemplates] = useState([]);
   const [loadCount, setLoadCount] = useState(0);
   const loadSize = 5;
-  const [filters, setFilters] = useState("sortBy=id&sortOrder=desc");
+  const defaultQuery = "sortBy=id&sortOrder=desc";
+  const [filters, setFilters] = useState(defaultQuery);
   const [isDefaultSearch, setIsDefaultSearch] = useState(true);
   const [fullCount, setFullCount] = useState(0);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     getTemplateCount();
@@ -40,12 +42,18 @@ function Templates() {
    * amount of loaded templates
    */
   async function fetchRecent() {
-    fetchAllTemplatesFiltered(`sortBy=id&sortOrder=desc&limit=${loadSize}`)
+    fetchAllTemplatesFiltered(`${defaultQuery}&limit=${loadSize}`)
       .then((data) => {
-        setFilters("sortBy=id&sortOrder=desc");
+        if (data.length > 0) {
+          setNotFound(false);
+          setTemplates(data);
+          setLoadCount(loadSize);
+        } else {
+          setNotFound(true);
+          setLoadCount(0);
+        }
+        setFilters(defaultQuery);
         setIsDefaultSearch(true);
-        setTemplates(data);
-        setLoadCount(loadSize);
       })
       .catch((err) => console.log(err));
   }
@@ -58,9 +66,16 @@ function Templates() {
   async function newSearch(query) {
     fetchAllTemplatesFiltered(`${query}&limit=${loadSize}`)
       .then((data) => {
+        if (data.length > 0) {
+          setNotFound(false);
+          setTemplates(data);
+          setLoadCount(loadSize);
+        } else {
+          setNotFound(true);
+          setLoadCount(0);
+        }
         setIsDefaultSearch(false);
-        setTemplates(data);
-        setLoadCount(loadSize);
+        setFilters(query);
       })
       .catch((err) => console.log(err));
   }
@@ -96,8 +111,8 @@ function Templates() {
    * @param {string} val - filtered query text
    */
   const handleFilteredSearch = (val) => {
-    setFilters(val);
-    newSearch(val);
+    setFilters(val === "" ? defaultQuery : val);
+    newSearch(val === "" ? defaultQuery : val);
   };
 
   /**
@@ -125,44 +140,48 @@ function Templates() {
         {/* Title */}
         {isDefaultSearch ? <h2>Recent templates</h2> : <h2>Search results</h2>}
 
+        {notFound && <p>No templates found</p>}
         {/* Template list */}
         <ul>
-          {templates.map((t) => (
-            <li key={t.id} className="template">
-              {(t.editkey || checkAdminStatus()) && (
-                <Link to={`/edit-template/${t.id}`} className="editButton">
-                  <span
-                    className="material-symbols-outlined"
-                    aria-label="edit template"
-                  >
-                    edit_square
-                  </span>
+          {!notFound &&
+            templates.map((t) => (
+              <li key={t.id} className="template">
+                {(t.editkey || checkAdminStatus()) && (
+                  <Link to={`/edit-template/${t.id}`} className="editButton">
+                    <span
+                      className="material-symbols-outlined"
+                      aria-label="edit template"
+                    >
+                      edit_square
+                    </span>
+                  </Link>
+                )}
+                <Link to={`/createranking/${t.id}`}>
+                  <h2>{t.name}</h2>
                 </Link>
-              )}
-              <Link to={`/createranking/${t.id}`}>
-                <h2>{t.name}</h2>
-              </Link>
-              <p className="creator">
-                Creator: {t.user_name ? t.user_name : "Anonymous"}
-              </p>
-              {t.description && <p className="description">{t.description}</p>}
-              <ul>
-                {JSON.parse(t.items).map((item, index) => (
-                  <li key={index}>{item.item_name}</li>
-                ))}
-              </ul>
-              {checkAdminStatus() && (
-                <ButtonPrompt
-                  buttonName="Delete template"
-                  confirm={() => handleDelete(t.id)}
-                />
-              )}
-            </li>
-          ))}
+                <p className="creator">
+                  Creator: {t.user_name ? t.user_name : "Anonymous"}
+                </p>
+                {t.description && (
+                  <p className="description">{t.description}</p>
+                )}
+                <ul>
+                  {JSON.parse(t.items).map((item, index) => (
+                    <li key={index}>{item.item_name}</li>
+                  ))}
+                </ul>
+                {checkAdminStatus() && (
+                  <ButtonPrompt
+                    buttonName="Delete template"
+                    confirm={() => handleDelete(t.id)}
+                  />
+                )}
+              </li>
+            ))}
         </ul>
 
         {/* Load more button */}
-        {loadCount < fullCount && (
+        {!notFound && loadCount < fullCount && (
           <button type="button" onClick={loadMore} className="loadMoreButton">
             Load more
           </button>
