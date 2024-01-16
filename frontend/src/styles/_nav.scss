@@ -30,22 +30,37 @@ nav {
   ul {
     list-style: none;
     padding: 0;
-    padding-right: 55px;
-    padding-left: 20px;
     display: flex;
     justify-content: space-evenly;
-    align-items: center;
+    align-items: flex-start;
+    margin-right: 50px;
 
     li {
-      display: inline-block;
-      flex-grow: 1;
+      padding: 0 10px;
+
+      a {
+        .icon {
+          display: block;
+          font-size: 20pt;
+          margin-bottom: -5px;
+        }
+
+        .linkName {
+          font-weight: 400;
+          font-size: 8pt;
+        }
+      }
+
+      &:first-child {
+        flex-grow: 1;
+      }
     }
   }
 }
 
 .toggleLogin {
   position: absolute;
-  top: 15px;
+  top: 17px;
   right: 15px;
   cursor: pointer;
   z-index: 3;
@@ -79,6 +94,7 @@ nav {
   span {
     text-align: left;
     padding-left: 5px;
+    white-space: nowrap;
   }
 }
 

@@ -2,16 +2,25 @@
 
 @mixin defaultTemplate() {
   background-color: theme.$secondary-color;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid theme.$text-secondary;
+  margin-bottom: 25px;
 
   ul,
   ol {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid theme.$text-secondary;
   }
 
   h2,
   a h3 {
     padding-top: 15px;
+  }
+
+  a,
+  h2,
+  h3 {
+    display: block;
+    width: fit-content;
+    margin: auto;
   }
 
   .confirmButton {

@@ -8,20 +8,30 @@ nav {
 nav ul {
   list-style: none;
   padding: 0;
-  padding-right: 55px;
-  padding-left: 20px;
   display: flex;
   justify-content: space-evenly;
-  align-items: center;
+  align-items: flex-start;
+  margin-right: 50px;
 }
 nav ul li {
-  display: inline-block;
+  padding: 0 10px;
+}
+nav ul li a .icon {
+  display: block;
+  font-size: 20pt;
+  margin-bottom: -5px;
+}
+nav ul li a .linkName {
+  font-weight: 400;
+  font-size: 8pt;
+}
+nav ul li:first-child {
   flex-grow: 1;
 }
 
 .toggleLogin {
   position: absolute;
-  top: 15px;
+  top: 17px;
   right: 15px;
   cursor: pointer;
   z-index: 3;
@@ -68,6 +78,7 @@ nav ul li {
 #logoCont span {
   text-align: left;
   padding-left: 5px;
+  white-space: nowrap;
 }
 
 .nonFixedLogin div {
@@ -89,15 +100,24 @@ nav ul li {
 
 .template {
   background-color: #292e32;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #bfacb5;
+  margin-bottom: 25px;
 }
 .template ul,
 .template ol {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #bfacb5;
 }
 .template h2,
 .template a h3 {
   padding-top: 15px;
+}
+.template a,
+.template h2,
+.template h3 {
+  display: block;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: auto;
 }
 .template .confirmButton {
   margin-bottom: 15px;
@@ -122,15 +142,24 @@ nav ul li {
 
 .rank-container {
   background-color: #292e32;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #bfacb5;
+  margin-bottom: 25px;
 }
 .rank-container ul,
 .rank-container ol {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #bfacb5;
 }
 .rank-container h2,
 .rank-container a h3 {
   padding-top: 15px;
+}
+.rank-container a,
+.rank-container h2,
+.rank-container h3 {
+  display: block;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: auto;
 }
 .rank-container .confirmButton {
   margin-bottom: 15px;

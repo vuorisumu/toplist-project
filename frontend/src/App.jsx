@@ -45,14 +45,29 @@ class App extends React.Component {
               </Link>
             </li>
             <li>
-              <Link to="/templates">Templates</Link>
+              <Link to="/templates">
+                <span className="material-symbols-outlined icon">
+                  view_list
+                </span>
+                <span className="linkName">Templates</span>
+              </Link>
             </li>
             <li>
-              <Link to="/rankings">Top lists</Link>
+              <Link to="/rankings">
+                <span className="material-symbols-outlined icon">
+                  format_list_numbered
+                </span>
+                <span className="linkName">Top lists</span>
+              </Link>
             </li>
             {checkCreatorStatus() && (
               <li>
-                <Link to="/new-template">New template</Link>
+                <Link to="/new-template">
+                  <span className="material-symbols-outlined icon">
+                    list_alt_add
+                  </span>
+                  <span className="linkName">New template</span>
+                </Link>
               </li>
             )}
           </ul>

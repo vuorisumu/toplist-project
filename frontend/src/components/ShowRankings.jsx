@@ -147,7 +147,7 @@ function ShowRankings({ id }) {
       {loadedRankings.map((list) => (
         <div key={list.ranking_id} className="rank-container">
           <Link to={`/rankings/${list.ranking_id}`}>
-            <h3>{list.ranking_name}</h3>
+            {id ? <h3>{list.ranking_name}</h3> : <h2>{list.ranking_name}</h2>}
           </Link>
           <p>List creator: {list.user_name || "Anonymous"}</p>
           {id === 0 && (
