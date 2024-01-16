@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { login } from "./api";
 import { checkCreatorStatus } from "./util";
+import PropTypes from "prop-types";
 
 /**
  * Reusable login component that renders input fields for the
  * username and password, as well as a login button.
  */
-function Login() {
+function Login({ isFixed }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
@@ -86,10 +87,12 @@ function Login() {
 
   return (
     <>
-      <div className="toggleLogin" onClick={toggleLogin}>
-        <span className="material-symbols-outlined">lock</span>
-      </div>
-      <div id="loginCont">
+      {!isFixed && (
+        <div className="toggleLogin" onClick={toggleLogin}>
+          <span className="material-symbols-outlined">lock</span>
+        </div>
+      )}
+      <div id="loginCont" className={isFixed ? "fixedLogin" : "nonFixedLogin"}>
         <div>
           {!loggedIn ? (
             <>
@@ -132,5 +135,9 @@ function Login() {
     </>
   );
 }
+
+Login.propTypes = {
+  isFixed: PropTypes.bool.isRequired,
+};
 
 export default Login;

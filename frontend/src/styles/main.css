@@ -23,7 +23,7 @@ nav ul li {
   z-index: 3;
 }
 
-#loginCont {
+.fixedLogin {
   position: absolute;
   width: 100%;
   top: -150px;
@@ -32,7 +32,7 @@ nav ul li {
   background-color: #24272b;
   transition: 0.3s;
 }
-#loginCont div {
+.fixedLogin div {
   display: grid;
   grid-template-columns: auto auto;
   justify-content: center;
@@ -40,16 +40,33 @@ nav ul li {
   align-items: center;
   gap: 10px;
 }
-#loginCont div .buttonCont {
+.fixedLogin div .buttonCont {
   grid-column: 1/3;
   width: 100%;
 }
-#loginCont div .buttonCont button {
+.fixedLogin div .buttonCont button {
   width: 100%;
   margin: auto;
 }
-#loginCont.active {
+.fixedLogin.active {
   top: 0;
+}
+
+.nonFixedLogin div {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  justify-items: end;
+  align-items: center;
+  gap: 10px;
+}
+.nonFixedLogin div .buttonCont {
+  grid-column: 1/3;
+  width: 100%;
+}
+.nonFixedLogin div .buttonCont button {
+  width: 100%;
+  margin: auto;
 }
 
 .template {

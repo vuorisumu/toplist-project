@@ -40,16 +40,16 @@ class App extends React.Component {
               <Link to="/">Main</Link>
             </li>
             <li>
-              <Link to="/templates">Browse templates</Link>
+              <Link to="/templates">Templates</Link>
             </li>
             <li>
-              <Link to="/rankings">Browse rankings</Link>
+              <Link to="/rankings">Top lists</Link>
             </li>
             <li>
               <Link to="/new-template">New template</Link>
             </li>
           </ul>
-          <Login />
+          <Login isFixed={true} />
         </nav>
         <Routes>
           <Route path="/" element={<Main />} />

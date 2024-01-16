@@ -8,6 +8,9 @@ function Main() {
   return (
     <div className="container">
       <h1>Main</h1>
+      <div className="pageInfo">
+        <p>Page description etc here</p>
+      </div>
       <Templates />
     </div>
   );
