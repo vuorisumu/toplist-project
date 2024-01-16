@@ -280,13 +280,15 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
 
   return (
     <div className="searchContainer">
-      {/* Search from all */}
-      <label>Search: </label>
-      <SearchInput
-        suggestionData={allNames}
-        onChange={handleSearchInput}
-        onSelected={handleSearchInput}
-      />
+      <div className="searchInput general">
+        {/* Search from all */}
+        <label>Search: </label>
+        <SearchInput
+          suggestionData={allNames}
+          onChange={handleSearchInput}
+          onSelected={handleSearchInput}
+        />
+      </div>
 
       {/* Filter box */}
       {filtersOpen ? (

@@ -8,13 +8,75 @@
   color: theme.$text-primary;
 }
 
+// page container
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 30px 50px;
+}
+
+// remove list styles by default
 ul {
   list-style: none;
   padding: 0;
 }
 
-.container {
-  max-width: 600px;
-  margin: auto;
-  padding: 30px 50px;
+// default link styles
+a {
+  color: theme.$accent;
+
+  &:hover {
+    color: color-mix(in srgb, theme.$accent, white 25%);
+  }
+}
+
+// default button styles
+button {
+  border-radius: 5px;
+  border: none;
+  padding: 0.3em 0.9em;
+  margin: 5px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: color-mix(in srgb, theme.$accent, theme.$primary-color 10%);
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0px 2px black;
+  }
+}
+
+.searchInput {
+  display: grid;
+  grid-template-columns: minmax(0, 50%) minmax(0, 50%);
+  gap: 20px;
+  label {
+    text-align: right;
+  }
+
+  &.general {
+    display: flex;
+    justify-content: start;
+    label {
+      text-align: left;
+    }
+
+    div {
+      flex-grow: 1;
+    }
+  }
+}
+
+// suggestion box
+.suggestions {
+  display: none;
+
+  &.active {
+    display: block;
+  }
+}
+
+input[type="search"] {
+  width: 100%;
 }

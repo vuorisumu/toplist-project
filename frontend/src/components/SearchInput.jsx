@@ -82,7 +82,7 @@ function SearchInput({
         />
       </div>
 
-      <div style={{ display: hideSuggestions ? "none" : "block" }}>
+      <div className={`suggestions ${hideSuggestions ? "" : "active"}`}>
         {suggestions.map((item, idx) => (
           <div
             key={"" + item + idx}

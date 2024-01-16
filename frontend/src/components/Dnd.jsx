@@ -204,7 +204,9 @@ function DnDContainer({
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  className={snapshot.isDraggingOver ? "dragOver" : "no-drag"}
+                  className={`droppable ${
+                    snapshot.isDraggingOver ? "dragOver" : "no-drag"
+                  }`}
                 >
                   {container.items.map((item, index) => (
                     <Draggable

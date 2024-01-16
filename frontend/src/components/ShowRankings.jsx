@@ -139,7 +139,7 @@ function ShowRankings({ id }) {
           {id === 0 && (
             <p>
               Template:{" "}
-              <Link to={`/createlisting/${list.template_id}`}>{list.name}</Link>
+              <Link to={`/createranking/${list.template_id}`}>{list.name}</Link>
             </p>
           )}
           <p>Creation date: {formatDate(list.creation_time)}</p>

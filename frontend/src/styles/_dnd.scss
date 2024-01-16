@@ -1,4 +1,8 @@
 .dndCont {
+  .droppable {
+    min-height: 50px;
+  }
+
   .dragOver {
     background-color: lightgray;
   }
