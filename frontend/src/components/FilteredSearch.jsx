@@ -329,9 +329,13 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
             {!id && (
               <ul className="tagFilters">
                 {tags.map((tag, index) => (
-                  <li key={"tag" + index} onClick={() => tagCheck(index)}>
-                    <input type="checkbox" checked={tag.check} />
-                    <span>
+                  <li key={"tag" + index}>
+                    <input
+                      type="checkbox"
+                      checked={tag.check}
+                      onChange={() => tagCheck(index)}
+                    />
+                    <span onClick={() => tagCheck(index)}>
                       {tag.name} ({tag.count})
                     </span>
                   </li>
