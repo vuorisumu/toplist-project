@@ -100,90 +100,6 @@ nav ul li:first-child {
   margin: auto;
 }
 
-.template {
-  background-color: #292e32;
-  border-bottom: 1px solid #bfacb5;
-  margin-bottom: 25px;
-}
-.template ul,
-.template ol {
-  border-top: 1px solid #bfacb5;
-}
-.template h2,
-.template a h3 {
-  padding-top: 15px;
-}
-.template a,
-.template h2,
-.template h3 {
-  display: block;
-  width: -moz-fit-content;
-  width: fit-content;
-  margin: auto;
-}
-.template .confirmButton {
-  margin-bottom: 15px;
-}
-.template ul {
-  padding: 15px 0;
-}
-.template ul li {
-  display: inline-block;
-  padding: 5px 20px;
-}
-.template p.creator {
-  font-size: 12pt;
-}
-.template .editButton {
-  position: relative;
-  float: right;
-  padding-top: 20px;
-  width: 0;
-  right: 40px;
-}
-
-.rank-container {
-  background-color: #292e32;
-  border-bottom: 1px solid #bfacb5;
-  margin-bottom: 25px;
-}
-.rank-container ul,
-.rank-container ol {
-  border-top: 1px solid #bfacb5;
-}
-.rank-container h2,
-.rank-container a h3 {
-  padding-top: 15px;
-}
-.rank-container a,
-.rank-container h2,
-.rank-container h3 {
-  display: block;
-  width: -moz-fit-content;
-  width: fit-content;
-  margin: auto;
-}
-.rank-container .confirmButton {
-  margin-bottom: 15px;
-}
-
-.loadMoreButton {
-  margin-top: 15px;
-}
-
-.dndCont .droppable {
-  min-height: 50px;
-}
-.dndCont .dragOver {
-  background-color: lightgray;
-}
-.dndCont .no-drag {
-  background-color: darkgray;
-}
-.dndCont .dragging {
-  background-color: darkmagenta;
-}
-
 .searchContainer h3 {
   margin: 15px;
 }
@@ -333,6 +249,110 @@ nav ul li:first-child {
 .searchContainer .dropdownItems ul li:hover {
   cursor: pointer;
   background-color: color-mix(in srgb, #7f7b82, transparent 70%);
+}
+
+.template {
+  background-color: #292e32;
+  border-bottom: 1px solid #bfacb5;
+  margin-bottom: 25px;
+}
+.template ul,
+.template ol {
+  border-top: 1px solid #bfacb5;
+}
+.template h2,
+.template a h3 {
+  padding-top: 15px;
+}
+.template a,
+.template h2,
+.template h3 {
+  display: block;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: auto;
+}
+.template .confirmButton {
+  margin-bottom: 15px;
+}
+.template ul {
+  padding: 15px 0;
+}
+.template ul li {
+  display: inline-block;
+  padding: 5px 20px;
+}
+.template p.creator {
+  font-size: 12pt;
+}
+.template .editButton {
+  position: relative;
+  float: right;
+  padding-top: 10px;
+  width: 0;
+  right: 30px;
+}
+.template .editButton span {
+  font-size: 14pt;
+}
+
+.rank-container {
+  background-color: #292e32;
+  border-bottom: 1px solid #bfacb5;
+  margin-bottom: 25px;
+}
+.rank-container ul,
+.rank-container ol {
+  border-top: 1px solid #bfacb5;
+}
+.rank-container h2,
+.rank-container a h3 {
+  padding-top: 15px;
+}
+.rank-container a,
+.rank-container h2,
+.rank-container h3 {
+  display: block;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: auto;
+}
+.rank-container .confirmButton {
+  margin-bottom: 15px;
+}
+
+.loadMoreButton {
+  margin-top: 15px;
+}
+
+.cancelButton,
+.promptButton {
+  background-color: color-mix(in srgb, #7f7b82, #24272b 35%);
+  margin-bottom: 10px;
+}
+.cancelButton:hover,
+.promptButton:hover {
+  background-color: color-mix(in srgb, #7f7b82, #24272b 50%);
+}
+
+.confirmButton {
+  background-color: color-mix(in srgb, #5c0f0f, #24272b 35%);
+}
+.confirmButton:hover {
+  background-color: color-mix(in srgb, #5c0f0f, #24272b 50%);
+}
+
+.dndCont .droppable {
+  min-height: 50px;
+}
+.dndCont .dragOver {
+  background-color: lightgray;
+}
+.dndCont .no-drag {
+  background-color: darkgray;
+}
+.dndCont .dragging {
+  background-color: darkmagenta;
 }
 
 :root {

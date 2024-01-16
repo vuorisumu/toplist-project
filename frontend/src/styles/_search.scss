@@ -1,20 +1,11 @@
 @use "theme";
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0");
 
-@mixin altButton() {
-  background-color: color-mix(
-    in srgb,
-    theme.$mid-color,
-    theme.$primary-color 35%
-  );
-  font-size: 0.85em;
+@mixin altButton($color) {
+  background-color: color-mix(in srgb, $color, theme.$primary-color 35%);
 
   &:hover {
-    background-color: color-mix(
-      in srgb,
-      theme.$mid-color,
-      theme.$primary-color 50%
-    );
+    background-color: color-mix(in srgb, $color, theme.$primary-color 50%);
   }
 }
 
@@ -133,11 +124,13 @@
   // open advanced search button
   .closeButton,
   .clearButton {
-    @include altButton();
+    @include altButton(theme.$mid-color);
+    font-size: 0.85em;
   }
 
   .showAdvancedButton {
-    @include altButton();
+    @include altButton(theme.$mid-color);
+    font-size: 0.85em;
     margin-top: 10px;
   }
 

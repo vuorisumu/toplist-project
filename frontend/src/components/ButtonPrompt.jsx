@@ -38,7 +38,7 @@ function ButtonPrompt({ buttonName, prompt, confirm }) {
           </button>
         </>
       ) : (
-        <button type="button" onClick={showPrompt} className="confirmButton">
+        <button type="button" onClick={showPrompt} className="promptButton">
           {buttonName}
         </button>
       )}

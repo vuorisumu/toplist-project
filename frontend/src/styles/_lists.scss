@@ -1,4 +1,5 @@
 @use "theme";
+@use "search";
 
 @mixin defaultTemplate() {
   background-color: theme.$secondary-color;
@@ -47,9 +48,13 @@
   .editButton {
     position: relative;
     float: right;
-    padding-top: 20px;
+    padding-top: 10px;
     width: 0;
-    right: 40px;
+    right: 30px;
+
+    span {
+      font-size: 14pt;
+    }
   }
 }
 
@@ -59,4 +64,14 @@
 
 .loadMoreButton {
   margin-top: 15px;
+}
+
+.cancelButton,
+.promptButton {
+  @include search.altButton(theme.$mid-color);
+  margin-bottom: 10px;
+}
+
+.confirmButton {
+  @include search.altButton(theme.$warning);
 }
