@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0");
 nav {
   width: 100%;
   position: absolute;
@@ -131,7 +132,7 @@ nav ul li {
 .searchContainer .searchInput {
   display: grid;
   grid-template-columns: minmax(0, 50%) minmax(0, 50%);
-  gap: 20px;
+  gap: 10px;
 }
 .searchContainer .searchInput label {
   text-align: right;
@@ -193,22 +194,47 @@ nav ul li {
 .searchContainer .clearButton:hover {
   background-color: color-mix(in srgb, #7f7b82, #24272b 50%);
 }
+.searchContainer .dropdownElement {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
 .searchContainer .dropdownCont {
   position: relative;
+  flex-grow: 1;
   width: -moz-fit-content;
   width: fit-content;
-  margin: auto;
+}
+.searchContainer .dropdownCont button {
+  width: 100%;
+  text-align: left;
+  margin: 0;
+  background-color: transparent;
+  outline: 1px solid #000000;
+}
+.searchContainer .dropdownCont button::after {
+  content: "unfold_more";
+  font-family: "Material Symbols Outlined";
+  position: absolute;
+  right: 0;
+  top: 6px;
+}
+.searchContainer .dropdownCont button:hover {
+  box-shadow: none;
 }
 .searchContainer .dropdownItems {
   position: absolute;
   width: 100%;
   background-color: #292e32;
+  margin-top: 2px;
 }
 .searchContainer .dropdownItems ul {
   margin: 0;
 }
 .searchContainer .dropdownItems ul li {
-  padding: 2px 10px;
+  padding: 4px 15px;
+  text-align: left;
 }
 .searchContainer .dropdownItems ul li:hover {
   cursor: pointer;

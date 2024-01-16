@@ -288,6 +288,9 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
           onChange={handleSearchInput}
           onSelected={handleSearchInput}
         />
+        <button type="button" onClick={handleSearch} className="searchButton">
+          Search
+        </button>
       </div>
 
       {/* Filter box */}
@@ -372,10 +375,6 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
           </button>
         </div>
       )}
-
-      <button type="button" onClick={handleSearch} className="searchButton">
-        Search
-      </button>
     </div>
   );
 }
