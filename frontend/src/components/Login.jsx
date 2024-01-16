@@ -87,7 +87,7 @@ function Login({ isFixed }) {
 
   return (
     <>
-      {!isFixed && (
+      {isFixed && (
         <div className="toggleLogin" onClick={toggleLogin}>
           <span className="material-symbols-outlined">lock</span>
         </div>

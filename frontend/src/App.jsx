@@ -9,6 +9,7 @@ import EditTemplate from "./components/EditTemplate.jsx";
 import BrowseRankings from "./components/BrowseRankings.jsx";
 import Ranking from "./components/Ranking.jsx";
 import BrowseTemplates from "./components/BrowseTemplates.jsx";
+import { checkCreatorStatus } from "./components/util.js";
 
 class App extends React.Component {
   constructor(props) {
@@ -45,9 +46,11 @@ class App extends React.Component {
             <li>
               <Link to="/rankings">Top lists</Link>
             </li>
-            <li>
-              <Link to="/new-template">New template</Link>
-            </li>
+            {checkCreatorStatus() && (
+              <li>
+                <Link to="/new-template">New template</Link>
+              </li>
+            )}
           </ul>
           <Login isFixed={true} />
         </nav>

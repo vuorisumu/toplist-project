@@ -165,8 +165,10 @@ function NewTemplate() {
   if (!canCreate) {
     return (
       <div className="container">
-        <p>Please login to create new template</p>
-        <Login isFixed={false} />
+        <div className="center">
+          <p>Please login to create new template</p>
+          <Login isFixed={false} />
+        </div>
       </div>
     );
   }

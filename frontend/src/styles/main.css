@@ -293,6 +293,10 @@ nav ul li {
   color: #f7f3f1;
 }
 
+.center {
+  margin-top: 50%;
+}
+
 .container {
   max-width: 600px;
   margin: auto;
