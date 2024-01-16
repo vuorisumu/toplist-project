@@ -282,7 +282,6 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
     <div className="searchContainer">
       <div className="searchInput general">
         {/* Search from all */}
-        <label>Search: </label>
         <SearchInput
           suggestionData={allNames}
           onChange={handleSearchInput}

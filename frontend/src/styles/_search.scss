@@ -31,12 +31,31 @@
       display: flex;
       justify-content: start;
 
-      label {
-        text-align: left;
-      }
-
       div {
         flex-grow: 1;
+      }
+
+      .searchWrapper::before {
+        content: "search";
+        font-family: "Material Symbols Outlined";
+        position: absolute;
+        font-size: 16pt;
+        left: 5px;
+        pointer-events: none;
+      }
+
+      .searchButton {
+        margin: 0;
+      }
+
+      input[type="search"] {
+        height: 30px;
+        border-radius: 15px;
+        padding-left: 30px;
+      }
+
+      .suggestions div {
+        padding-left: 30px;
       }
     }
   }

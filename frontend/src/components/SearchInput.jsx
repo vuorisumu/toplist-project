@@ -72,7 +72,7 @@ function SearchInput({
 
   return (
     <div ref={suggRef} className="suggestionCont">
-      <div>
+      <div className="searchWrapper">
         <input
           type="search"
           placeholder={placeholder}

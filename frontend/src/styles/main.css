@@ -141,11 +141,27 @@ nav ul li {
   display: flex;
   justify-content: start;
 }
-.searchContainer .searchInput.general label {
-  text-align: left;
-}
 .searchContainer .searchInput.general div {
   flex-grow: 1;
+}
+.searchContainer .searchInput.general .searchWrapper::before {
+  content: "search";
+  font-family: "Material Symbols Outlined";
+  position: absolute;
+  font-size: 16pt;
+  left: 5px;
+  pointer-events: none;
+}
+.searchContainer .searchInput.general .searchButton {
+  margin: 0;
+}
+.searchContainer .searchInput.general input[type=search] {
+  height: 30px;
+  border-radius: 15px;
+  padding-left: 30px;
+}
+.searchContainer .searchInput.general .suggestions div {
+  padding-left: 30px;
 }
 .searchContainer .suggestionCont {
   position: relative;
