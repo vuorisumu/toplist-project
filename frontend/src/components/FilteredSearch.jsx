@@ -332,7 +332,9 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
                 {tags.map((tag, index) => (
                   <li key={"tag" + index} onClick={() => tagCheck(index)}>
                     <input type="checkbox" checked={tag.check} />
-                    {tag.name} ({tag.count})
+                    <span>
+                      {tag.name} ({tag.count})
+                    </span>
                   </li>
                 ))}
               </ul>
