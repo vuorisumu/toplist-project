@@ -8,6 +8,7 @@ import Login from "./components/Login.jsx";
 import EditTemplate from "./components/EditTemplate.jsx";
 import BrowseRankings from "./components/BrowseRankings.jsx";
 import Ranking from "./components/Ranking.jsx";
+import BrowseTemplates from "./components/BrowseTemplates.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -39,6 +40,9 @@ class App extends React.Component {
               <Link to="/">Main</Link>
             </li>
             <li>
+              <Link to="/templates">Browse templates</Link>
+            </li>
+            <li>
               <Link to="/rankings">Browse rankings</Link>
             </li>
             <li>
@@ -49,6 +53,7 @@ class App extends React.Component {
         </nav>
         <Routes>
           <Route path="/" element={<Main />} />
+          <Route path="/templates" element={<BrowseTemplates />} />
           <Route path="/createranking" element={<Main />} />
           <Route path="/rankings" element={<BrowseRankings />} />
           <Route path="/new-template" element={<NewTemplate />} />
