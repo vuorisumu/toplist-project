@@ -26,6 +26,7 @@ nav {
   width: 100%;
   position: absolute;
   top: 0;
+  z-index: 3;
 
   ul {
     list-style: none;
@@ -33,22 +34,25 @@ nav {
     display: flex;
     justify-content: space-evenly;
     align-items: flex-start;
-    margin-right: 50px;
+    padding: 15px 10px 5px 10px;
+    margin: 0;
+    position: relative;
+    z-index: 3;
+    background-color: theme.$primary-color;
 
     li {
       padding: 0 10px;
+      color: theme.$accent;
 
-      a {
-        .icon {
-          display: block;
-          font-size: 20pt;
-          margin-bottom: -5px;
-        }
+      .icon {
+        display: block;
+        font-size: 20pt;
+        margin-bottom: -5px;
+      }
 
-        .linkName {
-          font-weight: 400;
-          font-size: 8pt;
-        }
+      .linkName {
+        font-weight: 400;
+        font-size: 8pt;
       }
 
       &:first-child {
@@ -59,25 +63,21 @@ nav {
 }
 
 .toggleLogin {
-  position: absolute;
-  top: 17px;
-  right: 15px;
   cursor: pointer;
-  z-index: 3;
 }
 
 .fixedLogin {
   @include login();
   position: absolute;
   width: 100%;
-  top: -150px;
+  margin-top: -150px;
   padding-top: 15px;
   padding-bottom: 15px;
   background-color: theme.$primary-color;
   transition: 0.3s;
 
   &.active {
-    top: 0;
+    margin-top: 0;
   }
 }
 

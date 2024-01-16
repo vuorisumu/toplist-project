@@ -34,6 +34,10 @@ class App extends React.Component {
   }
 
   render() {
+    const toggleLogin = () => {
+      document.getElementById("loginCont").classList.toggle("active");
+    };
+
     return (
       <Router>
         <nav>
@@ -70,6 +74,16 @@ class App extends React.Component {
                 </Link>
               </li>
             )}
+            <li>
+              <div className="toggleLogin" onClick={toggleLogin}>
+                <span className="material-symbols-outlined icon">
+                  {checkCreatorStatus() ? "lock_open" : "lock"}
+                </span>
+                <span className="linkName">
+                  {checkCreatorStatus() ? "Logged in" : "Login"}
+                </span>
+              </div>
+            </li>
           </ul>
           <Login isFixed={true} />
         </nav>

@@ -81,17 +81,8 @@ function Login({ isFixed }) {
     window.location.reload(false);
   };
 
-  const toggleLogin = () => {
-    document.getElementById("loginCont").classList.toggle("active");
-  };
-
   return (
     <>
-      {isFixed && (
-        <div className="toggleLogin" onClick={toggleLogin}>
-          <span className="material-symbols-outlined">lock</span>
-        </div>
-      )}
       <div id="loginCont" className={isFixed ? "fixedLogin" : "nonFixedLogin"}>
         <div>
           {!loggedIn ? (
