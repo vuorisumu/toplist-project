@@ -54,7 +54,7 @@ function Dropdown({ label, placeholder, items, onSelect }) {
   };
 
   return (
-    <div className="dropdownCont">
+    <div className="dropdownCont" ref={ref}>
       <button type="button" onClick={handleOpen} className="dropdownButton">
         {label || "Selected"}: {selectedItem || placeholder}
       </button>
