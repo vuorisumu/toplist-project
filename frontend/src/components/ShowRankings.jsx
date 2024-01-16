@@ -24,6 +24,7 @@ function ShowRankings({ id }) {
   const defaultQuery = `sortBy=id&sortOrder=desc`;
   const [filters, setFilters] = useState(defaultQuery);
   const [fullCount, setFullCount] = useState(0);
+  const [rankingsFound, setRankingsFound] = useState(false);
 
   useEffect(() => {
     getRankingCount();
@@ -35,7 +36,12 @@ function ShowRankings({ id }) {
    */
   const getRankingCount = async () => {
     fetchRankingCount(id)
-      .then((data) => setFullCount(data[0].count))
+      .then((data) => {
+        if (data[0].count > 0) {
+          setRankingsFound(true);
+        }
+        setFullCount(data[0].count);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -116,6 +122,14 @@ function ShowRankings({ id }) {
       })
       .catch((err) => console.log(err));
   };
+
+  if (!rankingsFound) {
+    return (
+      <div className="rankingsCont">
+        <h2>No lists using this template found</h2>
+      </div>
+    );
+  }
 
   if (!loadedRankings) {
     return <p>Loading</p>;
