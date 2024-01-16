@@ -25,10 +25,12 @@ function ShowRankings({ id }) {
   const [filters, setFilters] = useState(defaultQuery);
   const [fullCount, setFullCount] = useState(0);
   const [rankingsFound, setRankingsFound] = useState(false);
+  const [isDefaultSearch, setIsDefaultSearch] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     getRankingCount();
-    newSearch(defaultQuery);
+    loadDefaultRankings();
   }, []);
 
   /**
@@ -54,8 +56,15 @@ function ShowRankings({ id }) {
     q += `${defaultQuery}&limit=${loadSize}`;
     fetchAllRankingsFiltered(q)
       .then((data) => {
-        setLoadedRankings(data);
-        setRankCount(loadSize);
+        if (data.length > 0) {
+          setNotFound(false);
+          setLoadedRankings(data);
+          setRankCount(loadSize);
+        } else {
+          setNotFound(true);
+          setRankCount(0);
+        }
+        setIsDefaultSearch(true);
       })
       .catch((err) => console.log(err));
   };
@@ -70,8 +79,15 @@ function ShowRankings({ id }) {
     q += `${query}&limit=${loadSize}`;
     fetchAllRankingsFiltered(q)
       .then((data) => {
-        setLoadedRankings(data);
-        setRankCount(loadSize);
+        if (data.length > 0) {
+          setNotFound(false);
+          setLoadedRankings(data);
+          setRankCount(loadSize);
+        } else {
+          setNotFound(true);
+          setRankCount(0);
+        }
+        setIsDefaultSearch(false);
       })
       .catch((err) => console.log(err));
   };
@@ -91,6 +107,9 @@ function ShowRankings({ id }) {
     q += `${filters}&limit=${limit}`;
     fetchAllRankingsFiltered(q)
       .then((data) => {
+        if (data[0].id === undefined) {
+          console.log("morjesta");
+        }
         if (rankCount === 0) {
           setLoadedRankings(data);
         } else {
@@ -144,38 +163,46 @@ function ShowRankings({ id }) {
         searchRankings={true}
         id={id}
       />
-      {loadedRankings.map((list) => (
-        <div key={list.ranking_id} className="rank-container">
-          <Link to={`/rankings/${list.ranking_id}`}>
-            {id ? <h3>{list.ranking_name}</h3> : <h2>{list.ranking_name}</h2>}
-          </Link>
-          <p>List creator: {list.user_name || "Anonymous"}</p>
-          {id === 0 && (
-            <p>
-              Template:{" "}
-              <Link to={`/createranking/${list.template_id}`}>{list.name}</Link>
-            </p>
-          )}
-          <p>Creation date: {formatDate(list.creation_time)}</p>
-          {list.ranking_desc && <p>{list.ranking_desc}</p>}
+      {id === 0 &&
+        (isDefaultSearch ? <h2>Recent rankings</h2> : <h2>Search results</h2>)}
 
-          <ol className="rank">
-            {JSON.parse(list.ranked_items).map((i) => (
-              <li key={list.ranking_id + " " + i.rank_number}>
-                <p>{i.item_name}</p>
-                {i.item_note && <p>{i.item_note}</p>}
-              </li>
-            ))}
-          </ol>
+      {notFound && <p>No top lists found</p>}
 
-          {checkAdminStatus() && (
-            <ButtonPrompt
-              buttonName="Delete ranking"
-              confirm={() => handleDelete(list.ranking_id)}
-            />
-          )}
-        </div>
-      ))}
+      {!notFound &&
+        loadedRankings.map((list) => (
+          <div key={list.ranking_id} className="rank-container">
+            <Link to={`/rankings/${list.ranking_id}`}>
+              {id ? <h3>{list.ranking_name}</h3> : <h2>{list.ranking_name}</h2>}
+            </Link>
+            <p>List creator: {list.user_name || "Anonymous"}</p>
+            {id === 0 && (
+              <p>
+                Template:{" "}
+                <Link to={`/createranking/${list.template_id}`}>
+                  {list.name}
+                </Link>
+              </p>
+            )}
+            <p>Creation date: {formatDate(list.creation_time)}</p>
+            {list.ranking_desc && <p>{list.ranking_desc}</p>}
+
+            <ol className="rank">
+              {JSON.parse(list.ranked_items).map((i) => (
+                <li key={list.ranking_id + " " + i.rank_number}>
+                  <p>{i.item_name}</p>
+                  {i.item_note && <p>{i.item_note}</p>}
+                </li>
+              ))}
+            </ol>
+
+            {checkAdminStatus() && (
+              <ButtonPrompt
+                buttonName="Delete ranking"
+                confirm={() => handleDelete(list.ranking_id)}
+              />
+            )}
+          </div>
+        ))}
 
       {rankCount < fullCount && (
         <button type="button" onClick={loadMore} className="loadMoreButton">
