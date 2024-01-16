@@ -5,6 +5,7 @@ import {
   fetchUserByName,
   fetchAllTemplatesFiltered,
   fetchAllRankingsFiltered,
+  fetchTagById,
 } from "./api";
 
 /**
@@ -78,6 +79,25 @@ export const getTagNumbers = async (tagNames) => {
       })
     );
     return tagNumbers;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getTagNames = async (tagNumbers) => {
+  const tagNames = [];
+  try {
+    await Promise.all(
+      tagNumbers.map(async (t) => {
+        const fetchedTag = await fetchTagById(parseInt(t));
+        let tagName;
+        if (fetchedTag.length > 0) {
+          tagName = fetchedTag[0].id;
+        }
+        tagNames.push(tagName);
+      })
+    );
+    return tagNames;
   } catch (err) {
     console.error(err);
   }

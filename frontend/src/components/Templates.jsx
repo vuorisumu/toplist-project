@@ -165,17 +165,21 @@ function Templates() {
                 {t.description && (
                   <p className="description">{t.description}</p>
                 )}
-                <ul>
-                  {JSON.parse(t.items).map((item, index) => (
-                    <li key={index}>{item.item_name}</li>
-                  ))}
-                </ul>
-                {checkAdminStatus() && (
-                  <ButtonPrompt
-                    buttonName="Delete template"
-                    confirm={() => handleDelete(t.id)}
-                  />
-                )}
+                <div>
+                  <h4>Items in the template:</h4>
+                  <ul>
+                    {JSON.parse(t.items).map((item, index) => (
+                      <li key={index}>{item.item_name}</li>
+                    ))}
+                  </ul>
+
+                  {checkAdminStatus() && (
+                    <ButtonPrompt
+                      buttonName="Delete template"
+                      confirm={() => handleDelete(t.id)}
+                    />
+                  )}
+                </div>
               </li>
             ))}
         </ul>

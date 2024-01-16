@@ -253,16 +253,34 @@ nav ul li:first-child {
 
 .template {
   background-color: #292e32;
-  border-bottom: 1px solid #bfacb5;
   margin-bottom: 25px;
+  padding-bottom: 15px;
 }
-.template ul,
 .template ol {
   border-top: 1px solid #bfacb5;
+}
+.template ul {
+  border: 1px solid #bfacb5;
+  margin: 0 20px;
 }
 .template h2,
 .template a h3 {
   padding-top: 15px;
+}
+.template h4 {
+  margin: auto;
+  margin-top: 25px;
+  margin-bottom: -9px;
+  padding: 0 7px;
+  width: -moz-fit-content;
+  width: fit-content;
+  color: #f7f3f1;
+  font-weight: 600;
+  background-color: #292e32;
+  -webkit-text-decoration: underline #6a9d23;
+          text-decoration: underline #6a9d23;
+  position: relative;
+  z-index: 3;
 }
 .template a,
 .template h2,
@@ -298,16 +316,34 @@ nav ul li:first-child {
 
 .rank-container {
   background-color: #292e32;
-  border-bottom: 1px solid #bfacb5;
   margin-bottom: 25px;
+  padding-bottom: 15px;
 }
-.rank-container ul,
 .rank-container ol {
   border-top: 1px solid #bfacb5;
+}
+.rank-container ul {
+  border: 1px solid #bfacb5;
+  margin: 0 20px;
 }
 .rank-container h2,
 .rank-container a h3 {
   padding-top: 15px;
+}
+.rank-container h4 {
+  margin: auto;
+  margin-top: 25px;
+  margin-bottom: -9px;
+  padding: 0 7px;
+  width: -moz-fit-content;
+  width: fit-content;
+  color: #f7f3f1;
+  font-weight: 600;
+  background-color: #292e32;
+  -webkit-text-decoration: underline #6a9d23;
+          text-decoration: underline #6a9d23;
+  position: relative;
+  z-index: 3;
 }
 .rank-container a,
 .rank-container h2,
