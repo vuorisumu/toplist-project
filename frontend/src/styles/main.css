@@ -118,6 +118,9 @@ nav ul li {
   background-color: darkmagenta;
 }
 
+.searchContainer h3 {
+  margin: 15px;
+}
 .searchContainer input[type=search] {
   width: 100%;
   height: 20px;
@@ -198,16 +201,23 @@ nav ul li {
   accent-color: #6a9d23;
   border: 1px solid black;
 }
-.searchContainer .showAdvancedButton,
 .searchContainer .closeButton,
 .searchContainer .clearButton {
   background-color: color-mix(in srgb, #7f7b82, #24272b 35%);
   font-size: 0.85em;
   font-weight: 400;
 }
-.searchContainer .showAdvancedButton:hover,
 .searchContainer .closeButton:hover,
 .searchContainer .clearButton:hover {
+  background-color: color-mix(in srgb, #7f7b82, #24272b 50%);
+}
+.searchContainer .showAdvancedButton {
+  background-color: color-mix(in srgb, #7f7b82, #24272b 35%);
+  font-size: 0.85em;
+  font-weight: 400;
+  margin-top: 10px;
+}
+.searchContainer .showAdvancedButton:hover {
   background-color: color-mix(in srgb, #7f7b82, #24272b 50%);
 }
 .searchContainer .dropdownElement {
@@ -235,6 +245,10 @@ nav ul li {
   position: absolute;
   right: 0;
   top: 6px;
+}
+.searchContainer .dropdownCont button:active, .searchContainer .dropdownCont button:focus {
+  outline: 1px solid #6a9d23;
+  box-shadow: 0px 0px 2px #6a9d23;
 }
 .searchContainer .dropdownCont button:hover {
   box-shadow: none;
@@ -290,7 +304,7 @@ button {
   font-family: inherit;
   background-color: color-mix(in srgb, #6a9d23, #24272b 10%);
   cursor: pointer;
-  transition: 0.1s;
+  transition: 0.2s;
 }
 button:hover {
   background-color: color-mix(in srgb, #6a9d23, white 5%);

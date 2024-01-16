@@ -1,7 +1,29 @@
 @use "theme";
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0");
 
+@mixin altButton() {
+  background-color: color-mix(
+    in srgb,
+    theme.$mid-color,
+    theme.$primary-color 35%
+  );
+  font-size: 0.85em;
+  font-weight: 400;
+
+  &:hover {
+    background-color: color-mix(
+      in srgb,
+      theme.$mid-color,
+      theme.$primary-color 50%
+    );
+  }
+}
+
 .searchContainer {
+  h3 {
+    margin: 15px;
+  }
+
   // search input element
   input[type="search"] {
     width: 100%;
@@ -35,6 +57,7 @@
         flex-grow: 1;
       }
 
+      // search icon for the main search field
       .searchWrapper::before {
         content: "search";
         font-family: "Material Symbols Outlined";
@@ -48,12 +71,14 @@
         margin: 0;
       }
 
+      // main search is bigger than the rest
       input[type="search"] {
         height: 30px;
         border-radius: 15px;
         padding-left: 30px;
       }
 
+      // more padding to make room for the icon
       .suggestions div {
         padding-left: 30px;
       }
@@ -107,24 +132,14 @@
   }
 
   // open advanced search button
-  .showAdvancedButton,
   .closeButton,
   .clearButton {
-    background-color: color-mix(
-      in srgb,
-      theme.$mid-color,
-      theme.$primary-color 35%
-    );
-    font-size: 0.85em;
-    font-weight: 400;
+    @include altButton();
+  }
 
-    &:hover {
-      background-color: color-mix(
-        in srgb,
-        theme.$mid-color,
-        theme.$primary-color 50%
-      );
-    }
+  .showAdvancedButton {
+    @include altButton();
+    margin-top: 10px;
   }
 
   .dropdownElement {
@@ -139,6 +154,7 @@
     flex-grow: 1;
     width: fit-content;
 
+    // dropdown button
     button {
       width: 100%;
       text-align: left;
@@ -146,6 +162,7 @@
       background-color: transparent;
       outline: 1px solid theme.$shadow;
 
+      // icon for dropdown
       &::after {
         content: "unfold_more";
         font-family: "Material Symbols Outlined";
@@ -154,12 +171,21 @@
         top: 6px;
       }
 
+      // change outline when active
+      &:active,
+      &:focus {
+        outline: 1px solid theme.$accent;
+        box-shadow: 0px 0px 2px theme.$accent;
+      }
+
+      // disable the shadow
       &:hover {
         box-shadow: none;
       }
     }
   }
 
+  // dropdown items container
   .dropdownItems {
     position: absolute;
     width: 100%;
@@ -169,6 +195,7 @@
     ul {
       margin: 0;
 
+      // items in the container
       li {
         padding: 4px 15px;
         text-align: left;

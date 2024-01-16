@@ -42,7 +42,7 @@ button {
   font-family: inherit;
   background-color: color-mix(in srgb, theme.$accent, theme.$primary-color 10%);
   cursor: pointer;
-  transition: 0.1s;
+  transition: 0.2s;
 
   &:hover {
     background-color: color-mix(in srgb, theme.$accent, white 5%);
