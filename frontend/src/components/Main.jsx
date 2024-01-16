@@ -7,7 +7,7 @@ import Templates from "./Templates";
 function Main() {
   return (
     <div className="container">
-      <h1>Main</h1>
+      <h1>Listmaker 9000</h1>
       <div className="pageInfo">
         <p>Page description etc here</p>
       </div>

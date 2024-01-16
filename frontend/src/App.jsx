@@ -10,6 +10,7 @@ import BrowseRankings from "./components/BrowseRankings.jsx";
 import Ranking from "./components/Ranking.jsx";
 import BrowseTemplates from "./components/BrowseTemplates.jsx";
 import { checkCreatorStatus } from "./components/util.js";
+import logo from "./assets/logo.svg";
 
 class App extends React.Component {
   constructor(props) {
@@ -38,7 +39,10 @@ class App extends React.Component {
         <nav>
           <ul>
             <li>
-              <Link to="/">Main</Link>
+              <Link to="/" id="logoCont">
+                <img src={logo} id="logo" />
+                <span>Listmaker 9000</span>
+              </Link>
             </li>
             <li>
               <Link to="/templates">Templates</Link>

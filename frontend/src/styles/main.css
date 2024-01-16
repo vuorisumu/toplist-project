@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Viga&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0");
 nav {
   width: 100%;
@@ -8,11 +9,14 @@ nav ul {
   list-style: none;
   padding: 0;
   padding-right: 55px;
+  padding-left: 20px;
   display: flex;
   justify-content: space-evenly;
+  align-items: center;
 }
 nav ul li {
   display: inline-block;
+  flex-grow: 1;
 }
 
 .toggleLogin {
@@ -50,6 +54,20 @@ nav ul li {
 }
 .fixedLogin.active {
   top: 0;
+}
+
+#logoCont {
+  font-family: "Viga", sans-serif;
+  text-transform: uppercase;
+  display: flex;
+  align-items: flex-end;
+}
+#logoCont #logo {
+  max-height: 30px;
+}
+#logoCont span {
+  text-align: left;
+  padding-left: 5px;
 }
 
 .nonFixedLogin div {
