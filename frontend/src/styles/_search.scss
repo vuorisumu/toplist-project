@@ -106,4 +106,33 @@
       );
     }
   }
+
+  .dropdownCont {
+    position: relative;
+    width: fit-content;
+    margin: auto;
+  }
+
+  .dropdownItems {
+    position: absolute;
+    width: 100%;
+    background-color: theme.$secondary-color;
+
+    ul {
+      margin: 0;
+
+      li {
+        padding: 2px 10px;
+
+        &:hover {
+          cursor: pointer;
+          background-color: color-mix(
+            in srgb,
+            theme.$mid-color,
+            transparent 70%
+          );
+        }
+      }
+    }
+  }
 }
