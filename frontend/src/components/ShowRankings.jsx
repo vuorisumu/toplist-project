@@ -125,8 +125,8 @@ function ShowRankings({ id }) {
    * @param {string} val - the filtered query to be used in the fetch
    */
   const handleFilteredSearch = (val) => {
-    setFilters(val);
-    newSearch(val);
+    setFilters(val === "" ? defaultQuery : val);
+    newSearch(val === "" ? defaultQuery : val);
   };
 
   /**

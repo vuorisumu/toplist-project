@@ -262,10 +262,7 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
     }
 
     // send final string forward
-    if (searchQuery !== "") {
-      console.log("Sending " + searchQuery);
-      search(searchQuery);
-    }
+    search(searchQuery);
   };
 
   /**
