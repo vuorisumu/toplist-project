@@ -239,6 +239,7 @@ function NewTemplate() {
             <li key={"tag" + index}>
               <SearchInput
                 initValue={i}
+                placeholder={"Tag name"}
                 suggestionData={suggestions}
                 onChange={(val) => handleTagEdits(index, val)}
                 onSelected={(val) => handleTagEdits(index, val)}
