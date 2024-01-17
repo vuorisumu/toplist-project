@@ -50,34 +50,38 @@ function Ranking() {
   }
 
   return (
-    <div className="rank-container">
-      <h2>{list.ranking_name}</h2>
-      <div className="info">
-        <p>
-          Template:{" "}
-          <Link to={`/createranking/${list.template_id}`}>{list.name}</Link>
-        </p>
-        <p>Creator: {list.user_name || "Anonymous"}</p>
-        <p>Creation date: {formatDate(list.creation_time)}</p>
-        {list.ranking_desc && <p>{list.ranking_desc}</p>}
+    <div className="container">
+      <div className="rank-container no-title">
+        <h2>{list.ranking_name}</h2>
+        <div className="rank-info">
+          <p>
+            Template:{" "}
+            <Link to={`/createranking/${list.template_id}`}>{list.name}</Link>
+          </p>
+          <p>Creator: {list.user_name || "Anonymous"}</p>
+          <p>Creation date: {formatDate(list.creation_time)}</p>
+          {list.ranking_desc && <p>{list.ranking_desc}</p>}
+        </div>
+
+        <div>
+          <ol className="rank">
+            {JSON.parse(list.ranked_items).map((item, index) => (
+              <li key={"item" + index}>
+                <p>{item.item_name}</p>
+                {item.item_note && <p>{item.item_note}</p>}
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        {checkAdminStatus() && (
+          <ButtonPrompt buttonName="Delete ranking" confirm={handleDelete} />
+        )}
+
+        <button onClick={() => navigate(-1)} className="backButton">
+          Back
+        </button>
       </div>
-
-      <div>
-        <ol className="rank">
-          {JSON.parse(list.ranked_items).map((item, index) => (
-            <li key={"item" + index}>
-              <p>{item.item_name}</p>
-              {item.item_note && <p>{item.item_note}</p>}
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      {checkAdminStatus() && (
-        <ButtonPrompt buttonName="Delete ranking" confirm={handleDelete} />
-      )}
-
-      <button onClick={() => navigate(-1)}>Back</button>
     </div>
   );
 }

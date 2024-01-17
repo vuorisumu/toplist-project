@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { checkAdminStatus, clearAll, getTagNumbers, getUserId } from "./util";
@@ -26,6 +26,7 @@ function EditTemplate() {
   const [tags, setTags] = useState([""]);
 
   const location = useLocation();
+  const navigate = useNavigate();
   const templateId = parseInt(location.pathname.replace("/edit-template/", ""));
   if (isNaN(templateId)) {
     console.error("Invalid templateId: ", templateId);
@@ -290,6 +291,10 @@ function EditTemplate() {
         <br />
         <button type="button" onClick={checkEditKey} className="loginButton">
           Enter
+        </button>
+        <br />
+        <button onClick={() => navigate(-1)} className="backButton">
+          Back
         </button>
       </div>
     );

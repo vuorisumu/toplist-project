@@ -288,6 +288,10 @@ function NewTemplate() {
           value={editKey}
           onChange={(e) => setEditKey(e.target.value)}
         />
+        <p className="smallPrint">
+          Edit key is used as a password for this template, so keep your edit
+          key safe if you wish to edit the template in the future
+        </p>
       </div>
 
       {errors.length > 0 && (
