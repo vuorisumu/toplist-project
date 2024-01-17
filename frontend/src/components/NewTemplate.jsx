@@ -185,14 +185,15 @@ function NewTemplate() {
           value={templateName}
           onChange={(e) => setTemplateName(e.target.value)}
         />
-        <br />
+
         <label>Template description: </label>
         <textarea
           placeholder="Description"
+          style={{ width: "", height: "" }}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <br />
+
         <label>Creator name: </label>
         <input
           type="text"
@@ -219,11 +220,11 @@ function NewTemplate() {
                   onClick={() => deleteItem(index)}
                   className="deleteButton"
                 >
-                  Delete
+                  <span className="material-symbols-outlined">delete</span>
                 </button>
               ) : (
                 <button type="button" onClick={addItem} className="addButton">
-                  Add
+                  <span className="material-symbols-outlined">add</span>
                 </button>
               )}
             </li>
@@ -248,11 +249,11 @@ function NewTemplate() {
                   onClick={() => deleteTag(index)}
                   className="deleteButton"
                 >
-                  Delete
+                  <span className="material-symbols-outlined">delete</span>
                 </button>
               ) : (
                 <button type="button" onClick={addTag} className="addButton">
-                  Add
+                  <span className="material-symbols-outlined">add</span>
                 </button>
               )}
             </li>
