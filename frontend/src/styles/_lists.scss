@@ -8,6 +8,7 @@
 
   ol {
     border-top: 1px solid theme.$text-secondary;
+    text-align: left;
   }
 
   ul {
@@ -78,6 +79,29 @@
 
 .rank-container {
   @include defaultTemplate();
+
+  ol li {
+    p {
+      margin: 0;
+      margin-left: -40px;
+      padding: 10px;
+      padding-left: 45px;
+      background-color: color-mix(in srgb, theme.$accent, transparent 60%);
+      min-height: 12px;
+    }
+
+    &:nth-child(1) p {
+      background-color: color-mix(in srgb, theme.$gold, transparent 60%);
+    }
+
+    &:nth-child(2) p {
+      background-color: color-mix(in srgb, theme.$silver, transparent 60%);
+    }
+
+    &:nth-child(3) p {
+      background-color: color-mix(in srgb, theme.$bronze, transparent 60%);
+    }
+  }
 }
 
 .loadMoreButton {

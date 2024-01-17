@@ -258,6 +258,7 @@ nav ul li:first-child {
 }
 .template ol {
   border-top: 1px solid #bfacb5;
+  text-align: left;
 }
 .template ul {
   border: 1px solid #bfacb5;
@@ -321,6 +322,7 @@ nav ul li:first-child {
 }
 .rank-container ol {
   border-top: 1px solid #bfacb5;
+  text-align: left;
 }
 .rank-container ul {
   border: 1px solid #bfacb5;
@@ -355,6 +357,23 @@ nav ul li:first-child {
 }
 .rank-container .confirmButton {
   margin-bottom: 15px;
+}
+.rank-container ol li p {
+  margin: 0;
+  margin-left: -40px;
+  padding: 10px;
+  padding-left: 45px;
+  background-color: color-mix(in srgb, #6a9d23, transparent 60%);
+  min-height: 12px;
+}
+.rank-container ol li:nth-child(1) p {
+  background-color: color-mix(in srgb, #d4af37, transparent 60%);
+}
+.rank-container ol li:nth-child(2) p {
+  background-color: color-mix(in srgb, #c0c0c0, transparent 60%);
+}
+.rank-container ol li:nth-child(3) p {
+  background-color: color-mix(in srgb, #9f7a34, transparent 60%);
 }
 
 .loadMoreButton {
