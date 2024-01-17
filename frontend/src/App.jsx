@@ -33,7 +33,11 @@ class App extends React.Component {
   }
 
   handleKeyPress(e) {
-    if (e.key === "Backspace" && document.activeElement.tagName !== "INPUT") {
+    if (
+      e.key === "Backspace" &&
+      document.activeElement.tagName !== "INPUT" &&
+      document.activeElement.tagName !== "TEXTAREA"
+    ) {
       window.history.back();
     }
   }
