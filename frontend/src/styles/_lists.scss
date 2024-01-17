@@ -1,6 +1,8 @@
 @use "theme";
 @use "search";
 
+@import url("https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap");
+
 @mixin defaultTemplate() {
   background-color: theme.$secondary-color;
   margin-bottom: 25px;
@@ -82,23 +84,13 @@
 
   ol li {
     padding: 10px;
-    list-style: none;
     position: relative;
 
-    &::before {
-      content: counter(list-item);
-      position: absolute;
-      left: -25px;
-      margin-top: -3px;
-      background: theme.$accent;
-      color: theme.$secondary-color;
-      font-family: "Viga", sans-serif;
-      font-size: 14pt;
-      border-radius: 50%;
-      min-width: 25px;
-      aspect-ratio: 1;
-      padding: 2px;
-      text-align: center;
+    &::marker {
+      color: theme.$accent;
+      font-size: 16pt;
+      font-family: "Alfa Slab One", serif;
+      padding-top: 2px;
     }
 
     p {
@@ -106,16 +98,16 @@
       min-height: 20px;
     }
 
-    &:nth-child(1)::before {
-      background: theme.$gold;
+    &:nth-child(1)::marker {
+      color: theme.$gold;
     }
 
-    &:nth-child(2)::before {
-      background: theme.$silver;
+    &:nth-child(2)::marker {
+      color: theme.$silver;
     }
 
-    &:nth-child(3)::before {
-      background: theme.$bronze;
+    &:nth-child(3)::marker {
+      color: theme.$bronze;
     }
   }
 }
