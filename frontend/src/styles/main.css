@@ -417,6 +417,7 @@ nav ul li:first-child {
   gap: 20px;
   flex-wrap: wrap;
   align-items: center;
+  margin: 10px 0;
 }
 .addCont ul li input,
 .addCont ul li div {

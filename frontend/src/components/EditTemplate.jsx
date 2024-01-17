@@ -302,13 +302,13 @@ function EditTemplate() {
           value={template.name}
           onChange={(e) => updateTemplateName(e.target.value)}
         />
-        <br />
+
         <label>Description: </label>
         <textarea
           value={template.description || ""}
           onChange={(e) => updateDescription(e.target.value)}
         />
-        <br />
+
         <label>Creator: </label>
         <input
           type="text"
@@ -332,13 +332,13 @@ function EditTemplate() {
                 onClick={() => deleteItem(index)}
                 className="deleteButton"
               >
-                x
+                <span className="material-symbols-outlined">delete</span>
               </button>
             </li>
           ))}
           <li>
             <button type="button" onClick={addNewField} className="addButton">
-              Add item
+              <span className="material-symbols-outlined">add</span>
             </button>
           </li>
         </ul>
@@ -359,7 +359,7 @@ function EditTemplate() {
                 onClick={() => deleteTag(index)}
                 className="deleteButton"
               >
-                x
+                <span className="material-symbols-outlined">delete</span>
               </button>
             </li>
           ))}
@@ -369,7 +369,7 @@ function EditTemplate() {
               onClick={addNewTagField}
               className="addButton"
             >
-              Add tag
+              <span className="material-symbols-outlined">add</span>
             </button>
           </li>
         </ul>
