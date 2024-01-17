@@ -3,7 +3,7 @@ import Templates from "./Templates";
 function BrowseTemplates() {
   return (
     <div className="container">
-      <h1>Browse templates</h1>
+      <h1>Templates</h1>
       <Templates />
     </div>
   );
