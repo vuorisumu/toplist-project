@@ -108,6 +108,28 @@ nav ul li:first-child {
   margin: auto;
 }
 
+.suggestions {
+  display: none;
+  text-align: left;
+  position: absolute;
+  margin-top: 2px;
+  background-color: #292e32;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 2;
+}
+.suggestions.active {
+  display: block;
+}
+.suggestions div {
+  padding: 2px 10px;
+}
+.suggestions div:hover {
+  cursor: pointer;
+  background-color: color-mix(in srgb, #7f7b82, transparent 70%);
+}
+
 .searchContainer h3 {
   margin: 15px;
 }
@@ -158,27 +180,6 @@ nav ul li:first-child {
 }
 .searchContainer .suggestionCont {
   position: relative;
-}
-.searchContainer .suggestions {
-  display: none;
-  text-align: left;
-  position: absolute;
-  margin-top: 2px;
-  background-color: #292e32;
-  width: 100%;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 2;
-}
-.searchContainer .suggestions.active {
-  display: block;
-}
-.searchContainer .suggestions div {
-  padding: 2px 10px;
-}
-.searchContainer .suggestions div:hover {
-  cursor: pointer;
-  background-color: color-mix(in srgb, #7f7b82, transparent 70%);
 }
 .searchContainer .tagFilters li {
   display: inline-block;
@@ -420,6 +421,12 @@ nav ul li:first-child {
 .addCont ul li input,
 .addCont ul li div {
   flex-grow: 1;
+}
+.addCont ul li .suggestionCont {
+  position: relative;
+}
+.addCont ul li .suggestionCont .suggestions {
+  max-height: 120px;
 }
 .addCont ul li input[type=search] {
   width: 100%;

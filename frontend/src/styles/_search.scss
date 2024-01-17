@@ -8,6 +8,31 @@
     background-color: color-mix(in srgb, $color, theme.$primary-color 50%);
   }
 }
+// suggestion box
+.suggestions {
+  display: none;
+  text-align: left;
+  position: absolute;
+  margin-top: 2px;
+  background-color: theme.$secondary-color;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 2;
+
+  &.active {
+    display: block;
+  }
+
+  // elements in the suggestion box
+  div {
+    padding: 2px 10px;
+    &:hover {
+      cursor: pointer;
+      background-color: color-mix(in srgb, theme.$mid-color, transparent 70%);
+    }
+  }
+}
 
 .searchContainer {
   h3 {
@@ -77,32 +102,6 @@
 
   .suggestionCont {
     position: relative;
-  }
-
-  // suggestion box
-  .suggestions {
-    display: none;
-    text-align: left;
-    position: absolute;
-    margin-top: 2px;
-    background-color: theme.$secondary-color;
-    width: 100%;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 2;
-
-    &.active {
-      display: block;
-    }
-
-    // elements in the suggestion box
-    div {
-      padding: 2px 10px;
-      &:hover {
-        cursor: pointer;
-        background-color: color-mix(in srgb, theme.$mid-color, transparent 70%);
-      }
-    }
   }
 
   // tag checkboxes
