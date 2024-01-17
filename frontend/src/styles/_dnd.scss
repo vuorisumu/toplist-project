@@ -1,17 +1,27 @@
+@use "theme";
+
 .dndCont {
   .droppable {
     min-height: 50px;
   }
 
   .dragOver {
-    background-color: lightgray;
+    background-color: color-mix(
+      in srgb,
+      theme.$accent,
+      theme.$secondary-color 70%
+    );
   }
 
   .no-drag {
-    background-color: darkgray;
+    background-color: theme.$secondary-color;
   }
 
   .dragging {
-    background-color: darkmagenta;
+    background-color: color-mix(
+      in srgb,
+      theme.$secondary-color,
+      theme.$mid-color 20%
+    );
   }
 }

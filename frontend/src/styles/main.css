@@ -481,13 +481,13 @@ nav ul li:first-child {
   min-height: 50px;
 }
 .dndCont .dragOver {
-  background-color: lightgray;
+  background-color: color-mix(in srgb, #6a9d23, #292e32 70%);
 }
 .dndCont .no-drag {
-  background-color: darkgray;
+  background-color: #292e32;
 }
 .dndCont .dragging {
-  background-color: darkmagenta;
+  background-color: color-mix(in srgb, #292e32, #7f7b82 20%);
 }
 
 :root {
