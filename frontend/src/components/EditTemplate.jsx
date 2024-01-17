@@ -272,6 +272,17 @@ function EditTemplate() {
       .catch((err) => console.log(err));
   };
 
+  /**
+   * Checks if enter key was pressed when an input field was active,
+   * and calls for login attempt if enter key was pressed
+   * @param {KeyboardEvent} e - Keyboard event containing information of the pressed key
+   */
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      checkEditKey();
+    }
+  };
+
   if (notFound) {
     return <p>{`Template doesn't exist or it has been deleted`}</p>;
   }
@@ -290,6 +301,7 @@ function EditTemplate() {
             type="password"
             placeholder="Edit key"
             value={editKey}
+            onKeyDown={handleKeyDown}
             onChange={(e) => setEditKey(e.target.value)}
           />
           <br />
