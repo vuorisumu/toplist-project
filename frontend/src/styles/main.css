@@ -526,6 +526,10 @@ nav ul li:first-child {
   background-color: color-mix(in srgb, #5c0f0f, #24272b 50%);
 }
 
+.error {
+  box-shadow: 0px 0px 5px 0px #ff0000;
+}
+
 .dndCont .droppable {
   min-height: 50px;
 }

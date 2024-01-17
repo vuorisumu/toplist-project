@@ -286,3 +286,7 @@
 .confirmButton {
   @include search.altButton(theme.$warning);
 }
+
+.error {
+  box-shadow: 0px 0px 5px 0px #ff0000;
+}

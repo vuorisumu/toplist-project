@@ -23,9 +23,6 @@ function CreateListing() {
   const location = useLocation();
   const navigate = useNavigate();
   const templateId = parseInt(location.pathname.replace("/createranking/", ""));
-  if (isNaN(templateId)) {
-    console.error("Invalid templateId: ", templateId);
-  }
 
   // drag n drop containers
   const ITEMS_RANKED = "ranked";
@@ -192,7 +189,7 @@ function CreateListing() {
   return (
     <div className="container">
       <div className="createRank">
-        <h1>Create a Ranking</h1>
+        <h1>Create a Top List</h1>
 
         {(template.editkey || checkAdminStatus()) && (
           <Link to={`/edit-template/${template.id}`} className="editButton">
@@ -213,19 +210,20 @@ function CreateListing() {
 
         {/* Ranking information */}
         <div className="rankInfo">
-          <label>Ranking title: </label>
+          <label>Title:</label>
           <input
             type="text"
+            id="addRankTitle"
             value={rankingName}
             onChange={(e) => setRankingName(e.target.value)}
-            placeholder="Ranking Title"
+            placeholder="For example: Top 5 movies"
           />
 
           <label>Description: </label>
           <textarea
             value={rankingDesc}
             onChange={(e) => setRankingDesc(e.target.value)}
-            placeholder="Ranking description"
+            placeholder="Write something about your top list"
           />
 
           <label>Creator name: </label>
@@ -233,7 +231,7 @@ function CreateListing() {
             type="text"
             value={creatorName}
             onChange={(e) => setCreatorName(e.target.value)}
-            placeholder="Creator Name"
+            placeholder="Creator name"
           />
         </div>
 

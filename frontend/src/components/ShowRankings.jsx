@@ -164,7 +164,7 @@ function ShowRankings({ id }) {
         id={id}
       />
       {id === 0 &&
-        (isDefaultSearch ? <h2>Recent rankings</h2> : <h2>Search results</h2>)}
+        (isDefaultSearch ? <h2>Recent top lists</h2> : <h2>Search results</h2>)}
 
       {notFound && <p>No top lists found</p>}
 
@@ -197,7 +197,7 @@ function ShowRankings({ id }) {
 
             {checkAdminStatus() && (
               <ButtonPrompt
-                buttonName="Delete ranking"
+                buttonName="Delete top list"
                 confirm={() => handleDelete(list.ranking_id)}
               />
             )}
