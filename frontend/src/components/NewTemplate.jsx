@@ -3,6 +3,7 @@ import { clearAll, getTagNumbers, getUserId, checkCreatorStatus } from "./util";
 import { addNewTemplate, fetchAllTags } from "./api";
 import SearchInput from "./SearchInput";
 import Login from "./Login";
+import { useNavigate } from "react-router-dom";
 
 /**
  * View where the user can create a new template and add it to the database.
@@ -11,6 +12,7 @@ import Login from "./Login";
  * admin or creator.
  */
 function NewTemplate() {
+  const navigate = useNavigate();
   const [templateName, setTemplateName] = useState("");
   const [description, setDescription] = useState("");
   const [creatorName, setCreatorName] = useState("");
@@ -28,7 +30,6 @@ function NewTemplate() {
         .then((data) => {
           const tagNames = data.map((tag) => tag.name);
           setSuggestions(tagNames);
-          console.log(suggestions.length + " tags added");
         })
         .catch((err) => console.log(err));
     } else {
@@ -172,8 +173,8 @@ function NewTemplate() {
 
     // add template to database
     try {
-      const addedTemplate = await addNewTemplate(templateData);
-      console.log("Added: ", addedTemplate);
+      const res = await addNewTemplate(templateData);
+      navigate(`/createranking/${res.id}`);
     } catch (err) {
       console.log(err);
     }

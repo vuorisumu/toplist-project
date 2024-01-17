@@ -508,6 +508,13 @@ nav ul li:first-child {
   padding: 5px;
 }
 
+.dndCont ~ .dndCont .rank-item {
+  min-height: 40px;
+}
+.dndCont ~ .dndCont .rank-item p {
+  margin: 4px;
+}
+
 .newItemsCont {
   display: flex;
   align-items: center;

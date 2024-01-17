@@ -66,7 +66,9 @@ function ShowRankings({ id }) {
         }
         setIsDefaultSearch(true);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   /**

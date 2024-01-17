@@ -230,9 +230,6 @@ function EditTemplate() {
     const nonEmptyTags = tags.filter((t) => t.trim() !== "");
     const tagNumbers = await getTagNumbers(nonEmptyTags);
 
-    // get the creator id
-    const userNumber = await getUserId(template.user_name);
-
     // only store non empty items
     const nonEmptyItems = template.items.filter(
       (t) => t.item_name.trim() !== ""
@@ -242,8 +239,13 @@ function EditTemplate() {
     const updatedData = {
       name: template.name,
       items: nonEmptyItems,
-      creator_id: userNumber,
     };
+
+    if (template.user_name) {
+      // get the creator id
+      const userNumber = await getUserId(template.user_name);
+      updatedData.creator_id = userNumber;
+    }
 
     if (tagNumbers.length > 0) {
       updatedData.tags = tagNumbers;
@@ -255,6 +257,7 @@ function EditTemplate() {
 
     // save changes to database
     updateTemplate(templateId, updatedData);
+    navigate(`/createranking/${templateId}`);
   };
 
   /**
