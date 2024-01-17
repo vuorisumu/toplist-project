@@ -43,7 +43,7 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
 
   // sort by options as srings
   const sortByOptions = {
-    LIST_NAME: searchRankings ? "Ranking name" : "Template name",
+    LIST_NAME: searchRankings ? "List name" : "Template name",
     OLDEST_FIRST: "Oldest first",
     NEWEST_FIRST: "Newest first",
     CREATOR_NAME: "Creator name",
