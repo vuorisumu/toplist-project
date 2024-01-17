@@ -190,7 +190,7 @@ function ShowRankings({ id }) {
               {JSON.parse(list.ranked_items).map((i) => (
                 <li key={list.ranking_id + " " + i.rank_number}>
                   <p>{i.item_name}</p>
-                  {i.item_note && <p>{i.item_note}</p>}
+                  {i.item_note && <p className="itemNote">{i.item_note}</p>}
                 </li>
               ))}
             </ol>

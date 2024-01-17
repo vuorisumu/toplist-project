@@ -18,6 +18,12 @@
   }
 }
 
+%smallText {
+  grid-column: 1/3;
+  font-size: 10pt;
+  color: theme.$text-secondary;
+}
+
 %smallButton {
   margin: 0;
   padding: 2px 4px;
@@ -299,7 +305,21 @@
 
 // small text
 .smallPrint {
-  grid-column: 1/3;
-  font-size: 10pt;
-  color: theme.$text-secondary;
+  @extend %smallText;
+}
+
+// item notes
+.itemNote {
+  @extend %smallText;
+  padding-left: 20px;
+  position: relative;
+
+  // icon before item note
+  &::before {
+    content: "notes";
+    font-family: "Material Symbols Outlined";
+    position: absolute;
+    left: 0;
+    top: 1px;
+  }
 }
