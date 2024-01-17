@@ -193,121 +193,123 @@ function NewTemplate() {
   return (
     <div className="container">
       <h1>New Template</h1>
-      <div className="info">
-        <h2>Template info</h2>
-        <label>Template name: </label>
-        <input
-          type="text"
-          id="tempName"
-          placeholder="New Template"
-          value={templateName}
-          onChange={(e) => setTemplateName(e.target.value)}
-        />
+      <div className="no-stretch">
+        <div className="info">
+          <h2>Template info</h2>
+          <label>Template name: </label>
+          <input
+            type="text"
+            id="tempName"
+            placeholder="New Template"
+            value={templateName}
+            onChange={(e) => setTemplateName(e.target.value)}
+          />
 
-        <label>Template description: </label>
-        <textarea
-          placeholder="Description"
-          style={{ width: "", height: "" }}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+          <label>Template description: </label>
+          <textarea
+            placeholder="Description"
+            style={{ width: "", height: "" }}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
 
-        <label>Creator name: </label>
-        <input
-          type="text"
-          placeholder="Creator"
-          value={creatorName}
-          onChange={(e) => setCreatorName(e.target.value)}
-        />
+          <label>Creator name: </label>
+          <input
+            type="text"
+            placeholder="Creator"
+            value={creatorName}
+            onChange={(e) => setCreatorName(e.target.value)}
+          />
+        </div>
+
+        <div className="addCont addItems">
+          <h2>Template items</h2>
+          <ul id="tempItems">
+            {items.map((i, index) => (
+              <li key={"item" + index}>
+                <input
+                  type="text"
+                  placeholder="List item"
+                  value={i}
+                  onChange={(e) => handleItemEdits(index, e.target.value)}
+                />
+                {index !== items.length - 1 ? (
+                  <button
+                    type="button"
+                    onClick={() => deleteItem(index)}
+                    className="deleteButton"
+                  >
+                    <span className="material-symbols-outlined">delete</span>
+                  </button>
+                ) : (
+                  <button type="button" onClick={addItem} className="addButton">
+                    <span className="material-symbols-outlined">add</span>
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="addCont addTags">
+          <h2>Tags</h2>
+          <ul>
+            {tags.map((i, index) => (
+              <li key={"tag" + index}>
+                <SearchInput
+                  initValue={i}
+                  placeholder={"Tag name"}
+                  suggestionData={suggestions}
+                  onChange={(val) => handleTagEdits(index, val)}
+                  onSelected={(val) => handleTagEdits(index, val)}
+                />
+                {index !== tags.length - 1 ? (
+                  <button
+                    type="button"
+                    onClick={() => deleteTag(index)}
+                    className="deleteButton"
+                  >
+                    <span className="material-symbols-outlined">delete</span>
+                  </button>
+                ) : (
+                  <button type="button" onClick={addTag} className="addButton">
+                    <span className="material-symbols-outlined">add</span>
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="inputField editkeyField">
+          <label>Edit key: </label>
+          <input
+            type="text"
+            placeholder="Edit key"
+            value={editKey}
+            onChange={(e) => setEditKey(e.target.value)}
+          />
+          <p className="smallPrint">
+            Edit key is used as a password for this template, so keep your edit
+            key safe if you wish to edit the template in the future
+          </p>
+        </div>
+
+        {errors.length > 0 && (
+          <ul>
+            {errors.map((err, index) => (
+              <li key={"error" + index}>{err}</li>
+            ))}
+          </ul>
+        )}
+
+        <button type="button" onClick={createTemplate} className="createButton">
+          Create
+        </button>
+        <button type="button" onClick={clearAll} className="resetButton">
+          Reset
+        </button>
       </div>
-
-      <div className="addCont addItems">
-        <h2>Template items</h2>
-        <ul id="tempItems">
-          {items.map((i, index) => (
-            <li key={"item" + index}>
-              <input
-                type="text"
-                placeholder="List item"
-                value={i}
-                onChange={(e) => handleItemEdits(index, e.target.value)}
-              />
-              {index !== items.length - 1 ? (
-                <button
-                  type="button"
-                  onClick={() => deleteItem(index)}
-                  className="deleteButton"
-                >
-                  <span className="material-symbols-outlined">delete</span>
-                </button>
-              ) : (
-                <button type="button" onClick={addItem} className="addButton">
-                  <span className="material-symbols-outlined">add</span>
-                </button>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="addCont addTags">
-        <h2>Tags</h2>
-        <ul>
-          {tags.map((i, index) => (
-            <li key={"tag" + index}>
-              <SearchInput
-                initValue={i}
-                placeholder={"Tag name"}
-                suggestionData={suggestions}
-                onChange={(val) => handleTagEdits(index, val)}
-                onSelected={(val) => handleTagEdits(index, val)}
-              />
-              {index !== tags.length - 1 ? (
-                <button
-                  type="button"
-                  onClick={() => deleteTag(index)}
-                  className="deleteButton"
-                >
-                  <span className="material-symbols-outlined">delete</span>
-                </button>
-              ) : (
-                <button type="button" onClick={addTag} className="addButton">
-                  <span className="material-symbols-outlined">add</span>
-                </button>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="inputField editkeyField">
-        <label>Edit key: </label>
-        <input
-          type="text"
-          placeholder="Edit key"
-          value={editKey}
-          onChange={(e) => setEditKey(e.target.value)}
-        />
-        <p className="smallPrint">
-          Edit key is used as a password for this template, so keep your edit
-          key safe if you wish to edit the template in the future
-        </p>
-      </div>
-
-      {errors.length > 0 && (
-        <ul>
-          {errors.map((err, index) => (
-            <li key={"error" + index}>{err}</li>
-          ))}
-        </ul>
-      )}
-
-      <button type="button" onClick={createTemplate} className="createButton">
-        Create
-      </button>
-      <button type="button" onClick={clearAll} className="resetButton">
-        Reset
-      </button>
     </div>
   );
 }

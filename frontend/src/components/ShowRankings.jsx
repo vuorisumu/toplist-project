@@ -168,42 +168,47 @@ function ShowRankings({ id }) {
 
       {notFound && <p>No top lists found</p>}
 
-      {!notFound &&
-        loadedRankings.map((list) => (
-          <div key={list.ranking_id} className="rank-container">
-            <Link to={`/rankings/${list.ranking_id}`}>
-              {id ? <h3>{list.ranking_name}</h3> : <h2>{list.ranking_name}</h2>}
-            </Link>
-            <p>List creator: {list.user_name || "Anonymous"}</p>
-            {id === 0 && (
-              <p>
-                Template:{" "}
-                <Link to={`/createranking/${list.template_id}`}>
-                  {list.name}
-                </Link>
-              </p>
-            )}
-            <p>Creation date: {formatDate(list.creation_time)}</p>
-            {list.ranking_desc && <p>{list.ranking_desc}</p>}
+      <div className="lists">
+        {!notFound &&
+          loadedRankings.map((list) => (
+            <div key={list.ranking_id} className="rank-container">
+              <Link to={`/rankings/${list.ranking_id}`}>
+                {id ? (
+                  <h3>{list.ranking_name}</h3>
+                ) : (
+                  <h2>{list.ranking_name}</h2>
+                )}
+              </Link>
+              <p>List creator: {list.user_name || "Anonymous"}</p>
+              {id === 0 && (
+                <p>
+                  Template:{" "}
+                  <Link to={`/createranking/${list.template_id}`}>
+                    {list.name}
+                  </Link>
+                </p>
+              )}
+              <p>Creation date: {formatDate(list.creation_time)}</p>
+              {list.ranking_desc && <p>{list.ranking_desc}</p>}
 
-            <ol className="rank">
-              {JSON.parse(list.ranked_items).map((i) => (
-                <li key={list.ranking_id + " " + i.rank_number}>
-                  <p>{i.item_name}</p>
-                  {i.item_note && <p className="itemNote">{i.item_note}</p>}
-                </li>
-              ))}
-            </ol>
+              <ol className="rank">
+                {JSON.parse(list.ranked_items).map((i) => (
+                  <li key={list.ranking_id + " " + i.rank_number}>
+                    <p>{i.item_name}</p>
+                    {i.item_note && <p className="itemNote">{i.item_note}</p>}
+                  </li>
+                ))}
+              </ol>
 
-            {checkAdminStatus() && (
-              <ButtonPrompt
-                buttonName="Delete top list"
-                confirm={() => handleDelete(list.ranking_id)}
-              />
-            )}
-          </div>
-        ))}
-
+              {checkAdminStatus() && (
+                <ButtonPrompt
+                  buttonName="Delete top list"
+                  confirm={() => handleDelete(list.ranking_id)}
+                />
+              )}
+            </div>
+          ))}
+      </div>
       {rankCount < fullCount && (
         <button type="button" onClick={loadMore} className="loadMoreButton">
           Load more

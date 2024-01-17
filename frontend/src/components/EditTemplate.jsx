@@ -277,25 +277,27 @@ function EditTemplate() {
     return (
       <div className="container">
         <h1>Edit template</h1>
-        <p>
-          To edit this template, please either login as admin or access the edit
-          mode with the edit key given by the creator
-        </p>
-        <label>Edit key: </label>
-        <input
-          type="password"
-          placeholder="Edit key"
-          value={editKey}
-          onChange={(e) => setEditKey(e.target.value)}
-        />
-        <br />
-        <button type="button" onClick={checkEditKey} className="loginButton">
-          Enter
-        </button>
-        <br />
-        <button onClick={() => navigate(-1)} className="backButton">
-          Back
-        </button>
+        <div className="no-stretch">
+          <p>
+            To edit this template, please either login as admin or access the
+            edit mode with the edit key given by the creator
+          </p>
+          <label>Edit key: </label>
+          <input
+            type="password"
+            placeholder="Edit key"
+            value={editKey}
+            onChange={(e) => setEditKey(e.target.value)}
+          />
+          <br />
+          <button type="button" onClick={checkEditKey} className="loginButton">
+            Enter
+          </button>
+          <br />
+          <button onClick={() => navigate(-1)} className="backButton">
+            Back
+          </button>
+        </div>
       </div>
     );
   }
@@ -303,99 +305,100 @@ function EditTemplate() {
   return (
     <div className="container">
       <h1>Edit template</h1>
+      <div className="no-stretch">
+        <div className="info">
+          <label>Template name: </label>
+          <input
+            type="text"
+            value={template.name}
+            onChange={(e) => updateTemplateName(e.target.value)}
+          />
 
-      <div className="info">
-        <label>Template name: </label>
-        <input
-          type="text"
-          value={template.name}
-          onChange={(e) => updateTemplateName(e.target.value)}
-        />
+          <label>Description: </label>
+          <textarea
+            value={template.description || ""}
+            onChange={(e) => updateDescription(e.target.value)}
+          />
 
-        <label>Description: </label>
-        <textarea
-          value={template.description || ""}
-          onChange={(e) => updateDescription(e.target.value)}
-        />
+          <label>Creator: </label>
+          <input
+            type="text"
+            value={template.user_name}
+            onChange={(e) => updateCreatorName(e.target.value)}
+          />
+        </div>
 
-        <label>Creator: </label>
-        <input
-          type="text"
-          value={template.user_name}
-          onChange={(e) => updateCreatorName(e.target.value)}
-        />
-      </div>
-
-      <div className="addCont addItems">
-        <h2>Items</h2>
-        <ul>
-          {template.items.map((i, index) => (
-            <li key={"item" + index}>
-              <input
-                type="text"
-                value={i.item_name}
-                onChange={(e) => updateItemName(e.target.value, index)}
-              />
-              <button
-                type="button"
-                onClick={() => deleteItem(index)}
-                className="deleteButton"
-              >
-                <span className="material-symbols-outlined">delete</span>
+        <div className="addCont addItems">
+          <h2>Items</h2>
+          <ul>
+            {template.items.map((i, index) => (
+              <li key={"item" + index}>
+                <input
+                  type="text"
+                  value={i.item_name}
+                  onChange={(e) => updateItemName(e.target.value, index)}
+                />
+                <button
+                  type="button"
+                  onClick={() => deleteItem(index)}
+                  className="deleteButton"
+                >
+                  <span className="material-symbols-outlined">delete</span>
+                </button>
+              </li>
+            ))}
+            <li>
+              <button type="button" onClick={addNewField} className="addButton">
+                <span className="material-symbols-outlined">add</span>
               </button>
             </li>
-          ))}
-          <li>
-            <button type="button" onClick={addNewField} className="addButton">
-              <span className="material-symbols-outlined">add</span>
-            </button>
-          </li>
-        </ul>
-      </div>
+          </ul>
+        </div>
 
-      <div className="addCont addTags">
-        <h2>Tags</h2>
-        <ul>
-          {tags.map((t, index) => (
-            <li key={"tag" + index}>
-              <input
-                type="text"
-                value={t}
-                onChange={(e) => updateTagName(e.target.value, index)}
-              />
+        <div className="addCont addTags">
+          <h2>Tags</h2>
+          <ul>
+            {tags.map((t, index) => (
+              <li key={"tag" + index}>
+                <input
+                  type="text"
+                  value={t}
+                  onChange={(e) => updateTagName(e.target.value, index)}
+                />
+                <button
+                  type="button"
+                  onClick={() => deleteTag(index)}
+                  className="deleteButton"
+                >
+                  <span className="material-symbols-outlined">delete</span>
+                </button>
+              </li>
+            ))}
+            <li>
               <button
                 type="button"
-                onClick={() => deleteTag(index)}
-                className="deleteButton"
+                onClick={addNewTagField}
+                className="addButton"
               >
-                <span className="material-symbols-outlined">delete</span>
+                <span className="material-symbols-outlined">add</span>
               </button>
             </li>
-          ))}
-          <li>
-            <button
-              type="button"
-              onClick={addNewTagField}
-              className="addButton"
-            >
-              <span className="material-symbols-outlined">add</span>
-            </button>
-          </li>
-        </ul>
+          </ul>
+        </div>
+
+        <button type="button" onClick={saveChanges}>
+          Save changes
+        </button>
+        <button type="button" onClick={clearAll}>
+          Reset
+        </button>
+
+        <ButtonPrompt
+          buttonName="Delete template"
+          prompt="Are you sure?"
+          confirm={handleDeleteTemplate}
+        />
       </div>
-
-      <button type="button" onClick={saveChanges}>
-        Save changes
-      </button>
-      <button type="button" onClick={clearAll}>
-        Reset
-      </button>
-
-      <ButtonPrompt
-        buttonName="Delete template"
-        prompt="Are you sure?"
-        confirm={handleDeleteTemplate}
-      />
     </div>
   );
 }

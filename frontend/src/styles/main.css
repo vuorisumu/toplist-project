@@ -596,7 +596,7 @@ nav ul li:first-child {
 }
 
 .container {
-  max-width: 600px;
+  max-width: 550px;
   margin: auto;
   padding: 50px;
 }
@@ -645,4 +645,27 @@ button {
 button:hover {
   background-color: color-mix(in srgb, #6a9d23, white 5%);
   box-shadow: 0px 2px var(--shadow);
+}
+
+@media only screen and (min-width: 600px) {
+  #logoCont span {
+    font-size: 16pt;
+  }
+}
+@media only screen and (min-width: 850px) {
+  .container {
+    max-width: 1000px;
+  }
+  .no-stretch,
+  .createRank,
+  .pageInfo,
+  .searchContainer {
+    max-width: 550px;
+    margin: auto;
+  }
+  .lists {
+    display: grid;
+    grid-template-columns: minmax(0, 50%) minmax(0, 50%);
+    gap: 50px;
+  }
 }/*# sourceMappingURL=main.css.map */

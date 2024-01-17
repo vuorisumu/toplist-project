@@ -142,7 +142,7 @@ function Templates() {
 
         {notFound && <p>No templates found</p>}
         {/* Template list */}
-        <ul>
+        <ul className="lists">
           {!notFound &&
             templates.map((t) => (
               <li key={t.id} className="template">
