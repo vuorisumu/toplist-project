@@ -365,22 +365,38 @@ nav ul li:first-child {
 .rank-container .confirmButton {
   margin-bottom: 15px;
 }
+.rank-container ol li {
+  padding: 10px;
+  list-style: none;
+  position: relative;
+}
+.rank-container ol li::before {
+  content: counter(list-item);
+  position: absolute;
+  left: -25px;
+  margin-top: -3px;
+  background: #6a9d23;
+  color: #292e32;
+  font-family: "Viga", sans-serif;
+  font-size: 14pt;
+  border-radius: 50%;
+  min-width: 25px;
+  aspect-ratio: 1;
+  padding: 2px;
+  text-align: center;
+}
 .rank-container ol li p {
   margin: 0;
-  margin-left: -40px;
-  padding: 10px;
-  padding-left: 45px;
-  background-color: color-mix(in srgb, #6a9d23, transparent 60%);
-  min-height: 12px;
+  min-height: 20px;
 }
-.rank-container ol li:nth-child(1) p {
-  background-color: color-mix(in srgb, #d4af37, transparent 60%);
+.rank-container ol li:nth-child(1)::before {
+  background: #d4af37;
 }
-.rank-container ol li:nth-child(2) p {
-  background-color: color-mix(in srgb, #c0c0c0, transparent 60%);
+.rank-container ol li:nth-child(2)::before {
+  background: #c0c0c0;
 }
-.rank-container ol li:nth-child(3) p {
-  background-color: color-mix(in srgb, #9f7a34, transparent 60%);
+.rank-container ol li:nth-child(3)::before {
+  background: #9f7a34;
 }
 
 .loadMoreButton {

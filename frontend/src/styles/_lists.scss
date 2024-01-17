@@ -81,25 +81,41 @@
   @include defaultTemplate();
 
   ol li {
+    padding: 10px;
+    list-style: none;
+    position: relative;
+
+    &::before {
+      content: counter(list-item);
+      position: absolute;
+      left: -25px;
+      margin-top: -3px;
+      background: theme.$accent;
+      color: theme.$secondary-color;
+      font-family: "Viga", sans-serif;
+      font-size: 14pt;
+      border-radius: 50%;
+      min-width: 25px;
+      aspect-ratio: 1;
+      padding: 2px;
+      text-align: center;
+    }
+
     p {
       margin: 0;
-      margin-left: -40px;
-      padding: 10px;
-      padding-left: 45px;
-      background-color: color-mix(in srgb, theme.$accent, transparent 60%);
-      min-height: 12px;
+      min-height: 20px;
     }
 
-    &:nth-child(1) p {
-      background-color: color-mix(in srgb, theme.$gold, transparent 60%);
+    &:nth-child(1)::before {
+      background: theme.$gold;
     }
 
-    &:nth-child(2) p {
-      background-color: color-mix(in srgb, theme.$silver, transparent 60%);
+    &:nth-child(2)::before {
+      background: theme.$silver;
     }
 
-    &:nth-child(3) p {
-      background-color: color-mix(in srgb, theme.$bronze, transparent 60%);
+    &:nth-child(3)::before {
+      background: theme.$bronze;
     }
   }
 }
