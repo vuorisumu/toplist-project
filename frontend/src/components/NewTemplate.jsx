@@ -261,7 +261,7 @@ function NewTemplate() {
         </ul>
       </div>
 
-      <div className="inputField">
+      <div className="inputField editkeyField">
         <label>Edit key: </label>
         <input
           type="text"
