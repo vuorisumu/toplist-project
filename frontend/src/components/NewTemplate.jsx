@@ -19,6 +19,7 @@ function NewTemplate() {
   const [suggestions, setSuggestions] = useState([""]);
   const [editKey, setEditKey] = useState("");
   const [canCreate, setCanCreate] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   useEffect(() => {
     if (checkCreatorStatus()) {
@@ -100,8 +101,24 @@ function NewTemplate() {
    * is empty or if the template has less than five items
    */
   const meetsRequirements = () => {
+    const tempErrors = [];
     const hasName = templateName.trim() !== "";
+    if (!hasName) {
+      tempErrors.push("Template must have a name");
+      document.getElementById("tempName").classList.add("error");
+    } else {
+      document.getElementById("tempName").classList.remove("error");
+    }
+
     const enoughItems = items.filter((i) => i.trim() !== "").length >= 5;
+    if (!enoughItems) {
+      tempErrors.push("Template must have at least 5 items");
+      document.getElementById("tempItems").classList.add("error");
+    } else {
+      document.getElementById("tempItems").classList.remove("error");
+    }
+
+    setErrors(tempErrors);
     return hasName && enoughItems;
   };
 
@@ -181,6 +198,7 @@ function NewTemplate() {
         <label>Template name: </label>
         <input
           type="text"
+          id="tempName"
           placeholder="New Template"
           value={templateName}
           onChange={(e) => setTemplateName(e.target.value)}
@@ -205,7 +223,7 @@ function NewTemplate() {
 
       <div className="addCont addItems">
         <h2>Template items</h2>
-        <ul>
+        <ul id="tempItems">
           {items.map((i, index) => (
             <li key={"item" + index}>
               <input
@@ -271,6 +289,14 @@ function NewTemplate() {
           onChange={(e) => setEditKey(e.target.value)}
         />
       </div>
+
+      {errors.length > 0 && (
+        <ul>
+          {errors.map((err, index) => (
+            <li key={"error" + index}>{err}</li>
+          ))}
+        </ul>
+      )}
 
       <button type="button" onClick={createTemplate} className="createButton">
         Create
