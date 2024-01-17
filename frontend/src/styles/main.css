@@ -20,7 +20,14 @@ nav ul {
 }
 nav ul li {
   padding: 0 10px;
+}
+nav ul li a,
+nav ul li div {
   color: #6a9d23;
+}
+nav ul li a.active,
+nav ul li div.active {
+  color: #d4af37;
 }
 nav ul li .icon {
   display: block;

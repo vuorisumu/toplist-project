@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  NavLink,
+} from "react-router-dom";
 import "./App.css";
 import Main from "./components/Main.jsx";
 import NewTemplate from "./components/NewTemplate.jsx";
@@ -36,6 +41,7 @@ class App extends React.Component {
   render() {
     const toggleLogin = () => {
       document.getElementById("loginCont").classList.toggle("active");
+      document.getElementById("navLogin").classList.toggle("active");
     };
 
     return (
@@ -43,39 +49,39 @@ class App extends React.Component {
         <nav>
           <ul>
             <li>
-              <Link to="/" id="logoCont">
+              <NavLink to="/" id="logoCont">
                 <img src={logo} id="logo" />
                 <span>Listmaker 9000</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/templates">
+              <NavLink to="/templates">
                 <span className="material-symbols-outlined icon">
                   view_list
                 </span>
                 <span className="linkName">Templates</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/rankings">
+              <NavLink to="/rankings">
                 <span className="material-symbols-outlined icon">
                   format_list_numbered
                 </span>
                 <span className="linkName">Top lists</span>
-              </Link>
+              </NavLink>
             </li>
             {checkCreatorStatus() && (
               <li>
-                <Link to="/new-template">
+                <NavLink to="/new-template">
                   <span className="material-symbols-outlined icon">
                     list_alt_add
                   </span>
                   <span className="linkName">New template</span>
-                </Link>
+                </NavLink>
               </li>
             )}
             <li>
-              <div className="toggleLogin" onClick={toggleLogin}>
+              <div className="toggleLogin" onClick={toggleLogin} id="navLogin">
                 <span className="material-symbols-outlined icon">
                   {checkCreatorStatus() ? "lock_open" : "lock"}
                 </span>

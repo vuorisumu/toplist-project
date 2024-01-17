@@ -42,7 +42,15 @@ nav {
 
     li {
       padding: 0 10px;
-      color: theme.$accent;
+
+      a,
+      div {
+        color: theme.$accent;
+
+        &.active {
+          color: theme.$gold;
+        }
+      }
 
       .icon {
         display: block;
