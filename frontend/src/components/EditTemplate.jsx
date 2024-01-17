@@ -275,7 +275,11 @@ function EditTemplate() {
   if (!canEdit && !template) {
     return (
       <div className="container">
-        <p>Not admin</p>
+        <h1>Edit template</h1>
+        <p>
+          To edit this template, please either login as admin or access the edit
+          mode with the edit key given by the creator
+        </p>
         <label>Edit key: </label>
         <input
           type="password"
