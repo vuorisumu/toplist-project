@@ -195,45 +195,46 @@ function CreateListing() {
         <h1>Create a Ranking</h1>
 
         {(template.editkey || checkAdminStatus()) && (
-          <Link to={`/edit-template/${template.id}`}>Edit template</Link>
+          <Link to={`/edit-template/${template.id}`} className="editButton">
+            <span
+              className="material-symbols-outlined"
+              aria-label="edit template"
+            >
+              edit_square
+            </span>
+          </Link>
         )}
 
         {/* Template information */}
-        <div className="templateInfo">
-          <p>Template name: {template.name}</p>
-          <p>Template creator: {template.user_name}</p>
-        </div>
+        <p className="templateInfo">
+          Template: <span className="alt">{template.name}</span> by{" "}
+          {template.user_name}
+        </p>
 
         {/* Ranking information */}
         <div className="rankInfo">
-          <div id="addRankTitle">
-            <label>Ranking title: </label>
-            <input
-              type="text"
-              value={rankingName}
-              onChange={(e) => setRankingName(e.target.value)}
-              placeholder="Ranking Title"
-            />
-          </div>
+          <label>Ranking title: </label>
+          <input
+            type="text"
+            value={rankingName}
+            onChange={(e) => setRankingName(e.target.value)}
+            placeholder="Ranking Title"
+          />
 
-          <div id="addRankDesc">
-            <label>Description: </label>
-            <textarea
-              value={rankingDesc}
-              onChange={(e) => setRankingDesc(e.target.value)}
-              placeholder="Ranking description"
-            />
-          </div>
+          <label>Description: </label>
+          <textarea
+            value={rankingDesc}
+            onChange={(e) => setRankingDesc(e.target.value)}
+            placeholder="Ranking description"
+          />
 
-          <div id="addRankCreator">
-            <label>Creator name: </label>
-            <input
-              type="text"
-              value={creatorName}
-              onChange={(e) => setCreatorName(e.target.value)}
-              placeholder="Creator Name"
-            />
-          </div>
+          <label>Creator name: </label>
+          <input
+            type="text"
+            value={creatorName}
+            onChange={(e) => setCreatorName(e.target.value)}
+            placeholder="Creator Name"
+          />
         </div>
 
         {/* Ranking builder */}
