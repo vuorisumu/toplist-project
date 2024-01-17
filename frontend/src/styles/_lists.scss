@@ -18,6 +18,11 @@
   }
 }
 
+%smallButton {
+  margin: 0;
+  padding: 2px 4px;
+}
+
 %editButton {
   position: relative;
   float: right;
@@ -173,9 +178,70 @@
     }
 
     button {
-      margin: 0;
-      padding: 2px 4px;
+      @extend %smallButton;
     }
+  }
+}
+
+.rank-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding-left: 10px;
+  min-height: 50px;
+  text-align: left;
+
+  &:nth-child(1) .rank-number {
+    color: theme.$gold;
+  }
+
+  &:nth-child(2) .rank-number {
+    color: theme.$silver;
+  }
+  &:nth-child(3) .rank-number {
+    color: theme.$bronze;
+  }
+
+  .rank-number {
+    color: theme.$accent;
+    font-size: 16pt;
+    font-family: "Alfa Slab One", serif;
+    font-weight: 800;
+    padding: 10px;
+  }
+
+  p {
+    flex: 1;
+    &:nth-child(1) {
+      padding-left: 30px;
+    }
+  }
+
+  .noteArea {
+    resize: vertical;
+    flex: 100%;
+  }
+
+  button {
+    @extend %smallButton;
+    margin: 10px;
+  }
+
+  p {
+    padding: 5px;
+  }
+}
+
+.newItemsCont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px;
+
+  button {
+    @extend %smallButton;
   }
 }
 

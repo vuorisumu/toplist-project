@@ -255,7 +255,7 @@ function CreateListing() {
             placeholder="New Item"
           />
           <button type="button" onClick={addEntry}>
-            Add
+            <span className="material-symbols-outlined">add</span>
           </button>
         </div>
 

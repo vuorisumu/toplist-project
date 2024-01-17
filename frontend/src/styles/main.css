@@ -273,6 +273,11 @@ nav ul li:first-child {
   resize: vertical;
 }
 
+.newItemsCont button, .rank-item button, .addCont ul li button {
+  margin: 0;
+  padding: 2px 4px;
+}
+
 .createRank .editButton, .template .editButton {
   position: relative;
   float: right;
@@ -432,11 +437,55 @@ nav ul li:first-child {
 .addCont ul li input[type=search] {
   width: 100%;
 }
-.addCont ul li button {
-  margin: 0;
-  padding: 2px 4px;
+.rank-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding-left: 10px;
+  min-height: 50px;
+  text-align: left;
+}
+.rank-item:nth-child(1) .rank-number {
+  color: #d4af37;
+}
+.rank-item:nth-child(2) .rank-number {
+  color: #c0c0c0;
+}
+.rank-item:nth-child(3) .rank-number {
+  color: #9f7a34;
+}
+.rank-item .rank-number {
+  color: #6a9d23;
+  font-size: 16pt;
+  font-family: "Alfa Slab One", serif;
+  font-weight: 800;
+  padding: 10px;
+}
+.rank-item p {
+  flex: 1;
+}
+.rank-item p:nth-child(1) {
+  padding-left: 30px;
+}
+.rank-item .noteArea {
+  resize: vertical;
+  flex: 100%;
+}
+.rank-item button {
+  margin: 10px;
+}
+.rank-item p {
+  padding: 5px;
 }
 
+.newItemsCont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px;
+}
 .editkeyField {
   padding: 10px 0;
 }

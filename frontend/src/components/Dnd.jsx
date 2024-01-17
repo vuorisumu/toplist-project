@@ -225,11 +225,11 @@ function DnDContainer({
                         >
                           {/* Rank number only on ranked container */}
                           {container.keyName === ITEMS_RANKED && (
-                            <div className="rank-number">{index + 1}</div>
+                            <div className="rank-number">{index + 1}.</div>
                           )}
 
                           {/* Item */}
-                          {item.item_name}
+                          <p>{item.item_name}</p>
 
                           {/* Note options only on ranked container */}
                           {container.keyName === ITEMS_RANKED && (
@@ -239,21 +239,24 @@ function DnDContainer({
                                   selectedItem.item_name === item.item_name
                               ) ? (
                                 <>
-                                  {/* Note field */}
-                                  <textarea
-                                    value={item.item_note}
-                                    onChange={(e) => {
-                                      updateNote(e.target.value, item);
-                                    }}
-                                  />
-
                                   {/* Delete note */}
                                   <button
                                     type="button"
                                     onClick={() => deleteNote(item)}
                                   >
-                                    Delete note
+                                    <span className="material-symbols-outlined">
+                                      delete_sweep
+                                    </span>
                                   </button>
+
+                                  {/* Note field */}
+                                  <textarea
+                                    value={item.item_note}
+                                    className="noteArea"
+                                    onChange={(e) => {
+                                      updateNote(e.target.value, item);
+                                    }}
+                                  />
                                 </>
                               ) : (
                                 <>
@@ -268,7 +271,9 @@ function DnDContainer({
                                         ])
                                       }
                                     >
-                                      Add note
+                                      <span className="material-symbols-outlined">
+                                        add_notes
+                                      </span>
                                     </button>
                                   )}
                                 </>
@@ -283,7 +288,9 @@ function DnDContainer({
                                 type="button"
                                 onClick={() => deleteItem(index)}
                               >
-                                X
+                                <span className="material-symbols-outlined">
+                                  delete
+                                </span>
                               </button>
                             )}
                         </div>
