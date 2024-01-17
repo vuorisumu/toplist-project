@@ -7,7 +7,7 @@ import ShowRankings from "./ShowRankings";
 function BrowseRankings() {
   return (
     <div className="container">
-      <h1>Browse rankings</h1>
+      <h1>Top lists</h1>
       <ShowRankings id={0} />
     </div>
   );
