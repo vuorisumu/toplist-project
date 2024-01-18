@@ -11,6 +11,7 @@ import Ranking from "./components/Ranking.jsx";
 import BrowseTemplates from "./components/BrowseTemplates.jsx";
 import { checkCreatorStatus } from "./components/util.js";
 import logo from "./assets/logo.svg";
+import ThemeButton from "./components/ThemeButton.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -38,12 +39,6 @@ class App extends React.Component {
   }
 
   render() {
-    // light theme
-    const lightPref = window.matchMedia("(prefers-color-scheme: light)");
-    if (lightPref.matches) {
-      document.documentElement.setAttribute("data-theme", "light");
-    }
-
     const toggleLogin = () => {
       document.getElementById("loginCont").classList.toggle("active");
       document.getElementById("navLogin").classList.toggle("active");
@@ -85,6 +80,9 @@ class App extends React.Component {
                 </NavLink>
               </li>
             )}
+            <li>
+              <ThemeButton />
+            </li>
             <li>
               <div className="toggleLogin" onClick={toggleLogin} id="navLogin">
                 <span className="material-symbols-outlined icon">
