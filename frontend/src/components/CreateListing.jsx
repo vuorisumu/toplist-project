@@ -207,6 +207,9 @@ function CreateListing() {
           Template: <span className="alt">{template.name}</span> by{" "}
           {template.user_name}
         </p>
+        <p className="templateInfo desc">
+          Template description: {template.description}
+        </p>
 
         {/* Ranking information */}
         <div className="rankInfo">
@@ -267,7 +270,7 @@ function CreateListing() {
             </ul>
           )}
           <button type="button" onClick={saveRanking}>
-            Save Ranking
+            Save List
           </button>
 
           <button type="button" onClick={clearAll}>
