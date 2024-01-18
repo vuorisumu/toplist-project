@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: backend/index.js</title>
+    <title>JSDoc: Source: frontend/src/components/ThemeButton.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: backend/index.js</h1>
+    <h1 class="page-title">Source: frontend/src/components/ThemeButton.jsx</h1>
 
     
 
@@ -26,71 +26,58 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const express = require("express");
-const rankRoutes = require("./rankingRoutes");
-const roleRoutes = require("./roleRoutes");
-const tagRoutes = require("./tagRoutes");
-const templateRoutes = require("./templateRoutes");
-const userRoutes = require("./userRoutes");
-const { pool } = require("./database");
-const cors = require("cors");
-const dotenv = require("dotenv");
-dotenv.config();
-
-const app = express();
-const port = process.env.PORT || 3000;
-app.use(cors());
-
-app.use((req, res, next) => {
-  if (req.url.endsWith(".js") || req.url.endsWith(".jsx")) {
-    res.type("application/javascript");
-  }
-
-  res.header("Access-Control-Allow-Origin", "*");
-  next();
-});
-
-app.use(express.json());
-app.use("/api/rankings", rankRoutes);
-app.use("/api/templates", templateRoutes);
-app.use("/api/login", roleRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/tags", tagRoutes);
-
-app.use(express.static("./frontend/dist"));
+            <pre class="prettyprint source linenums"><code>import { useEffect, useState } from "react";
 
 /**
- * Server instance listening on specified port
+ * Theme change button that can be used anywhere
+ * @returns the button that changes the theme
  */
-const server = app
-  .listen(port, () => {
-    console.log(`SERVER: listening on port ${port}`);
-    console.log(process.env);
-  })
-  .on("error", (err) => {
-    console.log(`SERVER: Error starting server: ${err}`);
-    process.exit(1);
-  });
+function ThemeButton() {
+  const [darkTheme, setDarkTheme] = useState(false);
 
-/**
- * Handles graceful shutdown of the connection
- */
-const gracefulShutdown = () => {
-  console.log("Starting graceful shutdown...");
-  server.close(() => {
-    console.log("Server closed");
+  useEffect(() => {
+    const prevTheme = localStorage.getItem("theme");
 
-    pool.end(() => {
-      console.log("MySQL server closed");
-      process.exit(0);
-    });
-  });
+    if (prevTheme) {
+      setTheme(prevTheme);
+    } else {
+      const lightPref = window.matchMedia("(prefers-color-scheme: light)");
+      setTheme(lightPref.matches ? "dark" : "light");
+    }
+  }, []);
 
-  console.log("Shutdown complete");
-};
+  /**
+   * Changes the theme and stores it in the localStorage
+   * @param {string} themeName - name of the theme
+   */
+  const setTheme = (themeName) => {
+    document.documentElement.setAttribute("data-theme", themeName);
+    localStorage.setItem("theme", themeName);
+    setDarkTheme(themeName === "dark");
+  };
 
-process.on("SIGTERM", gracefulShutdown); // Some other app requires shutdown.
-process.on("SIGINT", gracefulShutdown); // ctrl-c
+  /**
+   * Handles the button click and calls for a theme change
+   * based on the current theme
+   */
+  const handleThemeToggle = () => {
+    setTheme(darkTheme ? "light" : "dark");
+  };
+
+  return (
+    &lt;div
+      type="button"
+      id="themeButton"
+      onClick={handleThemeToggle}
+      style={{ cursor: "pointer" }}
+    >
+      &lt;span className="material-symbols-outlined icon">contrast&lt;/span>
+      &lt;span className="linkName">Change theme&lt;/span>
+    &lt;/div>
+  );
+}
+
+export default ThemeButton;
 </code></pre>
         </article>
     </section>
