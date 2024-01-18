@@ -24,7 +24,7 @@
 .container {
   max-width: 550px;
   margin: auto;
-  padding: 50px;
+  padding: 50px 20px;
 }
 
 // remove list styles by default
@@ -102,6 +102,10 @@ button {
 
 // very small screen
 @media only screen and (max-width: 540px) {
+  .container {
+    padding: 50px 10px;
+  }
+
   nav ul li {
     padding: 0 6px;
     line-height: 8px;
