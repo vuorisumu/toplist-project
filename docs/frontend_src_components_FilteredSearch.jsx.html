@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/components/FilteredSearch.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/components/FilteredSearch.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useState, useEffect } from "react";
+import Dropdown from "./Dropdown";
+import SearchInput from "./SearchInput";
+import PropTypes from "prop-types";
+import { getAllTemplateNames, getAllRankingNames } from "./util";
+import {
+  fetchAllUsersWithTemplates,
+  fetchAllUsersWithRankings,
+  fetchAllTagsFiltered,
+} from "./api";
+
+/**
+ * Reusable filtered search component that renders a general search input field, and an option
+ * to open advanced search options. Advanced search options show two  search input fields, first
+ * searching for the name of a template or a ranking, and the second searching for a user. Optionally
+ * also shows checkboxes for tags.
+ * @param {function} props.search - callback function for confirming the search, contains
+ * the full search query depending on the chosen filters
+ * @param {function} props.clear -  callback function for clearing the filters
+ * @param {boolean} props.searchRankings - boolean to determine if the filters should be
+ * specific to rankings or templates. True if rankings, false if templates
+ * @param {number} props.id - ID of the template if search filters are to be used with template
+ * specific rankings.
+ */
+function FilteredSearch({ search, clear, searchRankings, id }) {
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  // search suggestions
+  const [allNames, setAllNames] = useState([]);
+  const [rankingNames, setRankingNames] = useState([]);
+  const [templateNames, setTemplateNames] = useState([]);
+  const [userNames, setUserNames] = useState([]);
+
+  // search inputs
+  const [searchInput, setSearchInput] = useState("");
+  const [searchRanking, setSearchRanking] = useState("");
+  const [searchTemplate, setSearchTemplate] = useState("");
+  const [searchUser, setSearchUser] = useState("");
+
+  const [tags, setTags] = useState({});
+  const [sortBy, setSortBy] = useState("");
+
+  // sort by options as srings
+  const sortByOptions = {
+    LIST_NAME: searchRankings ? "List name" : "Template name",
+    OLDEST_FIRST: "Oldest first",
+    NEWEST_FIRST: "Newest first",
+    CREATOR_NAME: "Creator name",
+  };
+
+  const placeholder = sortByOptions.LIST_NAME;
+
+  useEffect(() => {
+    fetchAllNames();
+
+    // only fetch ranking names or template names
+    if (searchRankings) {
+      fetchRankingNames();
+    } else {
+      fetchTemplateNames();
+    }
+
+    fetchUserNames();
+
+    if (!id) {
+      fetchTagNames();
+    }
+  }, []);
+
+  /**
+   * Fetches all names to be used from the database.
+   * If an ID is specified, retrieves ranking and user names related
+   * to a specified template ID. Otherwise retrieves all ranking or template
+   * names and usernames depending on searchRankings status
+   */
+  const fetchAllNames = async () => {
+    if (id) {
+      // get all names: id edition
+      getAllRankingNames(id)
+        .then((rankNames) => {
+          const temp = [];
+          temp.push(...rankNames);
+          fetchAllUsersWithRankings(id).then((users) => {
+            const tempUsers = users.map((u) => u.user_name);
+            temp.push(...tempUsers);
+          });
+          return temp;
+        })
+        .then((t) => {
+          setAllNames(t);
+        })
+        .catch((err) => console.log(err));
+    } else if (searchRankings) {
+      // get all names: ranking edition
+      getAllRankingNames()
+        .then((rankNames) => {
+          const temp = [];
+          temp.push(...rankNames);
+          fetchAllUsersWithRankings().then((users) => {
+            const tempUsers = users.map((u) => u.user_name);
+            temp.push(...tempUsers);
+          });
+          return temp;
+        })
+        .then((t) => {
+          setAllNames(t);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      // get all names: template edition
+      getAllTemplateNames()
+        .then((tempNames) => {
+          const temp = [];
+          temp.push(...tempNames);
+          fetchAllUsersWithTemplates().then((users) => {
+            const tempUsers = users.map((u) => u.user_name);
+            temp.push(...tempUsers);
+          });
+          return temp;
+        })
+        .then((t) => {
+          setAllNames(t);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  /**
+   * Fetches and sets the ranking names for search suggestions
+   */
+  const fetchRankingNames = async () => {
+    if (id) {
+      // if id is specified
+      const rankNames = await getAllRankingNames(id);
+      if (rankNames.length > 0) {
+        setRankingNames(rankNames);
+      }
+    } else {
+      // if id is not specified
+      const rankNames = await getAllRankingNames();
+      if (rankNames.length > 0) {
+        setRankingNames(rankNames);
+      }
+    }
+  };
+
+  /**
+   * Fetches and sets template names for search suggestions
+   */
+  const fetchTemplateNames = async () => {
+    const tempNames = await getAllTemplateNames();
+    if (tempNames.length > 0) {
+      setTemplateNames(tempNames);
+    }
+  };
+
+  /**
+   * Fetches and sets user names for search suggestions
+   */
+  const fetchUserNames = async () => {
+    if (id) {
+      // user names who have made rankings with specific id
+      fetchAllUsersWithRankings(id)
+        .then((data) => setUserNames(data.map((u) => u.user_name)))
+        .catch((err) => console.log(err));
+    } else if (searchRankings) {
+      // user names who have made rankings
+      fetchAllUsersWithRankings()
+        .then((data) => setUserNames(data.map((u) => u.user_name)))
+        .catch((err) => console.log(err));
+    } else {
+      // user names who have made templates
+      fetchAllUsersWithTemplates()
+        .then((data) => setUserNames(data.map((u) => u.user_name)))
+        .catch((err) => console.log(err));
+    }
+  };
+
+  /**
+   * Fetches tag names and count of the templates/rankings using said tag
+   * from the database
+   */
+  const fetchTagNames = async () => {
+    const tagCount = searchRankings ? "rcount=true" : "count=true";
+    fetchAllTagsFiltered(tagCount)
+      .then((data) => {
+        const tagData = data;
+        tagData.map((t) => (t.check = false));
+        setTags(tagData);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // search input handlers
+  const handleSearchInput = (val) => setSearchInput(val);
+  const handleRankingName = (val) => setSearchRanking(val);
+  const handleTemplateName = (val) => setSearchTemplate(val);
+  const handleCreatorName = (val) => setSearchUser(val);
+  const selectFromDropdown = (val) => setSortBy(val);
+
+  /**
+   * Opens and closes the advances search menu
+   */
+  const toggleFilterMenu = () => {
+    setFiltersOpen(!filtersOpen);
+  };
+
+  /**
+   * Handles clearing all selected search filters
+   */
+  const handleClear = () => {
+    const clearChecks = [...tags];
+    setSortBy("");
+    clearChecks.forEach((t) => (t.check = false));
+    setTags(clearChecks);
+    clear();
+  };
+
+  /**
+   * Constructs the final search query and sends it to callback function
+   */
+  const handleSearch = () => {
+    let searchQuery = "";
+    let searchConditions = [];
+
+    if (!searchRankings) {
+      const checkedTags = tags.filter((t) => t.check).map((t) => t.id);
+      if (checkedTags.length > 0) {
+        const tagSearch = checkedTags.map((tag) => `tag=${tag}`).join("&amp;");
+        searchConditions.push(tagSearch);
+      }
+    }
+
+    if (searchInput.trim() !== "") {
+      searchConditions.push(`search=${searchInput.trim()}`);
+    }
+
+    if (searchRanking.trim() !== "") {
+      searchConditions.push(`rname=${searchRanking.trim()}`);
+    }
+
+    if (searchTemplate.trim() !== "") {
+      searchConditions.push(`tname=${searchTemplate.trim()}`);
+    }
+    if (searchUser.trim() !== "") {
+      searchConditions.push(`uname=${searchUser.trim()}`);
+    }
+    if (sortBy !== "") {
+      if (sortBy === sortByOptions.LIST_NAME) {
+        searchConditions.push(`sortBy=name`);
+      } else if (sortBy === sortByOptions.CREATOR_NAME) {
+        searchConditions.push(`sortBy=creatorname`);
+      } else if (sortBy === sortByOptions.NEWEST_FIRST) {
+        searchConditions.push(`sortBy=id&amp;sortOrder=desc`);
+      } else {
+        searchConditions.push(`sortBy=id&amp;sortOrder=asc`);
+      }
+    }
+    if (searchConditions.length > 0) {
+      searchQuery = searchConditions.join("&amp;");
+    }
+
+    // send final string forward
+    search(searchQuery);
+  };
+
+  /**
+   * Sets a tag from specified index to be selected
+   * @param {number} index - index of the selected tag
+   */
+  const tagCheck = (index) => {
+    const checkedTag = [...tags];
+    checkedTag[index].check = !tags[index].check;
+    setTags(checkedTag);
+  };
+
+  /**
+   * Checks if enter key was pressed when an input field was active,
+   * and calls for search callback if enter key was pressed
+   * @param {KeyboardEvent} e - Keyboard event containing information of the pressed key
+   */
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  return (
+    &lt;div className="searchContainer">
+      &lt;div className="searchInput general">
+        {/* Search from all */}
+        &lt;SearchInput
+          suggestionData={allNames}
+          onChange={handleSearchInput}
+          onSelected={handleSearchInput}
+          checkKey={handleKeyDown}
+        />
+        &lt;button type="button" onClick={handleSearch} className="searchButton">
+          Search
+        &lt;/button>
+      &lt;/div>
+
+      {/* Filter box */}
+      {filtersOpen ? (
+        &lt;div className="filtersContainer">
+          &lt;div>
+            &lt;h3>Advanced search:&lt;/h3>
+            {searchRankings ? (
+              &lt;div className="searchInput">
+                {/* Ranking name search */}
+                &lt;label>Search ranking by name: &lt;/label>
+                &lt;SearchInput
+                  suggestionData={rankingNames}
+                  onChange={handleRankingName}
+                  onSelected={handleRankingName}
+                  checkKey={handleKeyDown}
+                />
+              &lt;/div>
+            ) : (
+              &lt;div className="searchInput">
+                {/* Template name search */}
+                &lt;label>Search template by name: &lt;/label>
+                &lt;SearchInput
+                  suggestionData={templateNames}
+                  onChange={handleTemplateName}
+                  onSelected={handleTemplateName}
+                  checkKey={handleKeyDown}
+                />
+              &lt;/div>
+            )}
+
+            &lt;div className="searchInput">
+              {/* Username search */}
+              &lt;label>Search from creator: &lt;/label>
+              &lt;SearchInput
+                suggestionData={userNames}
+                onChange={handleCreatorName}
+                onSelected={handleCreatorName}
+                checkKey={handleKeyDown}
+              />
+            &lt;/div>
+
+            {!id &amp;&amp; (
+              &lt;>
+                &lt;h4>Tags:&lt;/h4>
+                &lt;ul className="tagFilters">
+                  {tags.map((tag, index) => (
+                    &lt;li key={"tag" + index}>
+                      &lt;input
+                        type="checkbox"
+                        checked={tag.check}
+                        onChange={() => tagCheck(index)}
+                      />
+                      &lt;span onClick={() => tagCheck(index)}>
+                        {tag.name} ({tag.count})
+                      &lt;/span>
+                    &lt;/li>
+                  ))}
+                &lt;/ul>
+              &lt;/>
+            )}
+
+            {/* Sort by options */}
+            &lt;Dropdown
+              label={"Sort by"}
+              placeholder={placeholder}
+              items={Object.values(sortByOptions)}
+              onSelect={selectFromDropdown}
+            />
+          &lt;/div>
+
+          &lt;button type="button" onClick={handleClear} className="clearButton">
+            Clear filters
+          &lt;/button>
+
+          &lt;button
+            type="button"
+            onClick={toggleFilterMenu}
+            className="closeButton"
+          >
+            Close filters
+          &lt;/button>
+        &lt;/div>
+      ) : (
+        &lt;div>
+          &lt;button
+            type="button"
+            onClick={toggleFilterMenu}
+            className="showAdvancedButton"
+          >
+            Advanced search
+          &lt;/button>
+        &lt;/div>
+      )}
+    &lt;/div>
+  );
+}
+
+FilteredSearch.propTypes = {
+  search: PropTypes.func,
+  clear: PropTypes.func,
+  searchRankings: PropTypes.bool.isRequired,
+  id: PropTypes.number,
+};
+
+export default FilteredSearch;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#BrowseRankings">BrowseRankings</a></li><li><a href="global.html#ButtonPrompt">ButtonPrompt</a></li><li><a href="global.html#CreateListing">CreateListing</a></li><li><a href="global.html#DnDContainer">DnDContainer</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#EditTemplate">EditTemplate</a></li><li><a href="global.html#FilteredSearch">FilteredSearch</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Main">Main</a></li><li><a href="global.html#NewTemplate">NewTemplate</a></li><li><a href="global.html#Ranking">Ranking</a></li><li><a href="global.html#Sc">Sc</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#ShowRankings">ShowRankings</a></li><li><a href="global.html#Templates">Templates</a></li><li><a href="global.html#Yt">Yt</a></li><li><a href="global.html#addNewRanking">addNewRanking</a></li><li><a href="global.html#addNewTag">addNewTag</a></li><li><a href="global.html#addNewTemplate">addNewTemplate</a></li><li><a href="global.html#addNewUser">addNewUser</a></li><li><a href="global.html#checkAdminStatus">checkAdminStatus</a></li><li><a href="global.html#checkCreatorStatus">checkCreatorStatus</a></li><li><a href="global.html#clearAll">clearAll</a></li><li><a href="global.html#deleteRanking">deleteRanking</a></li><li><a href="global.html#deleteTemplate">deleteTemplate</a></li><li><a href="global.html#enterTemplateEditMode">enterTemplateEditMode</a></li><li><a href="global.html#fetchAllRankings">fetchAllRankings</a></li><li><a href="global.html#fetchAllRankingsFiltered">fetchAllRankingsFiltered</a></li><li><a href="global.html#fetchAllTags">fetchAllTags</a></li><li><a href="global.html#fetchAllTagsFiltered">fetchAllTagsFiltered</a></li><li><a href="global.html#fetchAllTemplates">fetchAllTemplates</a></li><li><a href="global.html#fetchAllTemplatesFiltered">fetchAllTemplatesFiltered</a></li><li><a href="global.html#fetchAllUsers">fetchAllUsers</a></li><li><a href="global.html#fetchAllUsersWithRankings">fetchAllUsersWithRankings</a></li><li><a href="global.html#fetchAllUsersWithTemplates">fetchAllUsersWithTemplates</a></li><li><a href="global.html#fetchRankingById">fetchRankingById</a></li><li><a href="global.html#fetchRankingCount">fetchRankingCount</a></li><li><a href="global.html#fetchTagById">fetchTagById</a></li><li><a href="global.html#fetchTagByName">fetchTagByName</a></li><li><a href="global.html#fetchTemplateById">fetchTemplateById</a></li><li><a href="global.html#fetchTemplateCount">fetchTemplateCount</a></li><li><a href="global.html#fetchUserById">fetchUserById</a></li><li><a href="global.html#fetchUserByName">fetchUserByName</a></li><li><a href="global.html#filteredRankingQuery">filteredRankingQuery</a></li><li><a href="global.html#filteredTagQuery">filteredTagQuery</a></li><li><a href="global.html#filteredTemplatesQuery">filteredTemplatesQuery</a></li><li><a href="global.html#filteredUserQuery">filteredUserQuery</a></li><li><a href="global.html#formatDate">formatDate</a></li><li><a href="global.html#getAllRankingNames">getAllRankingNames</a></li><li><a href="global.html#getAllTemplateNames">getAllTemplateNames</a></li><li><a href="global.html#getLocalTime">getLocalTime</a></li><li><a href="global.html#getTagNumbers">getTagNumbers</a></li><li><a href="global.html#getUserId">getUserId</a></li><li><a href="global.html#gracefulShutdown">gracefulShutdown</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#query">query</a></li><li><a href="global.html#server">server</a></li><li><a href="global.html#ts">ts</a></li><li><a href="global.html#updateTemplate">updateTemplate</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jan 18 2024 11:08:20 GMT+0200 (Itä-Euroopan normaaliaika)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/components/CreateListing.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/components/CreateListing.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useState, useEffect } from "react";
+import { useLocation, Link, useNavigate } from "react-router-dom";
+import {
+  addNewRanking,
+  addNewUser,
+  fetchTemplateById,
+  fetchUserByName,
+} from "./api";
+import { DnDContainer } from "./Dnd";
+import { v4 as uuid } from "uuid";
+import { getLocalTime, clearAll, checkAdminStatus } from "./util";
+import ShowRankings from "./ShowRankings";
+
+/**
+ * View where the user can create a new list from a chosen template.
+ * The template ID is taken from the current pathname.
+ * Shows the template name and creator and asks for user input for the ranking name, description and creator.
+ * Uses DnD component for building the ranked list.
+ * Provides an option to add new items to be used in the ranking.
+ * Finally renders a ShowRankings component with current template ID
+ */
+function CreateListing() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const templateId = parseInt(location.pathname.replace("/createranking/", ""));
+
+  // drag n drop containers
+  const ITEMS_RANKED = "ranked";
+  const ITEMS_REMAINING = "unused";
+  const itemContainers = {
+    [ITEMS_RANKED]: {
+      name: "Ranked",
+      keyName: ITEMS_RANKED,
+      items: [],
+    },
+    [ITEMS_REMAINING]: {
+      name: "Unused items",
+      keyName: ITEMS_REMAINING,
+      items: [],
+    },
+  };
+
+  const [template, setTemplate] = useState(null);
+  const [containers, setContainers] = useState(itemContainers);
+  const [rankingName, setRankingName] = useState("");
+  const [rankingDesc, setRankingDesc] = useState("");
+  const [creatorName, setCreatorName] = useState("");
+  const [newEntry, setNewEntry] = useState("");
+
+  const [errorMessages, setErrorMessages] = useState([]);
+
+  /**
+   * On page load, fetch necessary template data from the database
+   * and buiild the necessary containers for the items to be used in the ranking
+   */
+  useEffect(() => {
+    fetchTemplateById(templateId)
+      .then((data) => {
+        setTemplate(data[0]);
+
+        const blankAmount = 5;
+        const blanks = [];
+        for (let i = 0; i &lt; blankAmount; i++) {
+          blanks.push({
+            item_name: " ",
+            blank: true,
+            id: uuid(),
+          });
+        }
+
+        // Add uuid() to each item in data[0].items
+        const setIds = JSON.parse(data[0].items).map((item) => ({
+          ...item,
+          id: uuid(),
+        }));
+
+        // set initial containers
+        setContainers((cont) => ({
+          [ITEMS_RANKED]: {
+            ...cont[ITEMS_RANKED],
+            items: blanks,
+          },
+          [ITEMS_REMAINING]: {
+            ...cont[ITEMS_REMAINING],
+            items: setIds || [],
+          },
+        }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [templateId]);
+
+  /**
+   * Adds a new item to be used in the ranking. Will not save the item to the actual template,
+   * and can be deleted during the ranking, unlike the items that belong to the original template.
+   * Only adds a new item if the name of the entry is not blank
+   */
+  const addEntry = () => {
+    // only adds new if entry isn't empty
+    if (newEntry.trim() !== "") {
+      setContainers((prevContainers) => ({
+        ...prevContainers,
+        [ITEMS_REMAINING]: {
+          ...prevContainers[ITEMS_REMAINING],
+          items: [
+            ...prevContainers[ITEMS_REMAINING].items,
+            { item_name: newEntry, deletable: true, id: uuid() },
+          ],
+        },
+      }));
+
+      // reset entry
+      setNewEntry("");
+    }
+  };
+
+  /**
+   * Saves the ranking data to database if the minimum requirements are met.
+   * Minimum requirements are: at least one item ranked and the list is given a name.
+   * Trims all input fields from possible extra spaces
+   */
+  const saveRanking = async () => {
+    const errors = [];
+    const nonEmptyRanked = containers[ITEMS_RANKED].items.filter(
+      (i) => i.item_name.trim() !== ""
+    );
+
+    if (nonEmptyRanked.length === 0) {
+      errors.push("Top list container must have at least one item");
+      document.getElementById("Ranked").classList.add("error");
+    } else {
+      document.getElementById("Ranked").classList.add("error");
+    }
+
+    if (!rankingName) {
+      errors.push("Top list must have a title");
+      document.getElementById("addRankTitle").classList.add("error");
+    } else {
+      document.getElementById("addRankTitle").classList.remove("error");
+    }
+
+    if (errors.length > 0) {
+      setErrorMessages(errors);
+      return;
+    }
+
+    try {
+      // store ranking data
+      let rankingData = {
+        ranking_name: rankingName,
+        template_id: templateId,
+        ranked_items: nonEmptyRanked,
+        creation_time: getLocalTime(),
+      };
+
+      // optional creator name
+      if (creatorName !== "") {
+        const fetchedUser = await fetchUserByName(creatorName.trim());
+        if (fetchedUser.length > 0) {
+          rankingData.creator_id = fetchedUser[0].user_id;
+        } else {
+          // add new user here
+          const newUser = {
+            user_name: creatorName,
+          };
+
+          const newUserResponse = await addNewUser(newUser);
+          console.log(newUserResponse);
+        }
+      }
+
+      // optional description
+      if (rankingDesc !== "") {
+        rankingData.ranking_desc = rankingDesc;
+      }
+
+      const res = await addNewRanking(rankingData);
+      navigate(`/rankings/${res.id}`);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  if (!template) {
+    return &lt;div>Loading...&lt;/div>;
+  }
+
+  return (
+    &lt;div className="container">
+      &lt;div className="createRank">
+        &lt;h1>Create a Top List&lt;/h1>
+
+        {(template.editkey || checkAdminStatus()) &amp;&amp; (
+          &lt;Link to={`/edit-template/${template.id}`} className="editButton">
+            &lt;span
+              className="material-symbols-outlined"
+              aria-label="edit template"
+            >
+              edit_square
+            &lt;/span>
+          &lt;/Link>
+        )}
+
+        {/* Template information */}
+        &lt;p className="templateInfo">
+          Template: &lt;span className="alt">{template.name}&lt;/span> by{" "}
+          {template.user_name}
+        &lt;/p>
+
+        {/* Ranking information */}
+        &lt;div className="rankInfo">
+          &lt;label>Title:&lt;/label>
+          &lt;input
+            type="text"
+            id="addRankTitle"
+            value={rankingName}
+            onChange={(e) => setRankingName(e.target.value)}
+            placeholder="For example: Top 5 movies"
+          />
+
+          &lt;label>Description: &lt;/label>
+          &lt;textarea
+            value={rankingDesc}
+            onChange={(e) => setRankingDesc(e.target.value)}
+            placeholder="Write something about your top list"
+          />
+
+          &lt;label>Creator name: &lt;/label>
+          &lt;input
+            type="text"
+            value={creatorName}
+            onChange={(e) => setCreatorName(e.target.value)}
+            placeholder="Creator name"
+          />
+        &lt;/div>
+
+        {/* Ranking builder */}
+        &lt;DnDContainer
+          containers={containers}
+          setContainers={setContainers}
+          ITEMS_RANKED={ITEMS_RANKED}
+          ITEMS_REMAINING={ITEMS_REMAINING}
+        />
+
+        {/* Add new items */}
+        &lt;div className="newItemsCont">
+          &lt;label>New item: &lt;/label>
+          &lt;input
+            type="text"
+            value={newEntry}
+            onChange={(e) => setNewEntry(e.target.value)}
+            placeholder="New Item"
+          />
+          &lt;button type="button" onClick={addEntry}>
+            &lt;span className="material-symbols-outlined">add&lt;/span>
+          &lt;/button>
+        &lt;/div>
+
+        {/* Save changes */}
+        &lt;div>
+          {errorMessages.length > 0 &amp;&amp; (
+            &lt;ul>
+              {errorMessages.map((err, index) => (
+                &lt;li key={"error" + index}>{err}&lt;/li>
+              ))}
+            &lt;/ul>
+          )}
+          &lt;button type="button" onClick={saveRanking}>
+            Save Ranking
+          &lt;/button>
+
+          &lt;button type="button" onClick={clearAll}>
+            Reset
+          &lt;/button>
+        &lt;/div>
+      &lt;/div>
+      &lt;ShowRankings id={templateId} />
+    &lt;/div>
+  );
+}
+
+export default CreateListing;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#BrowseRankings">BrowseRankings</a></li><li><a href="global.html#ButtonPrompt">ButtonPrompt</a></li><li><a href="global.html#CreateListing">CreateListing</a></li><li><a href="global.html#DnDContainer">DnDContainer</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#EditTemplate">EditTemplate</a></li><li><a href="global.html#FilteredSearch">FilteredSearch</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Main">Main</a></li><li><a href="global.html#NewTemplate">NewTemplate</a></li><li><a href="global.html#Ranking">Ranking</a></li><li><a href="global.html#Sc">Sc</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#ShowRankings">ShowRankings</a></li><li><a href="global.html#Templates">Templates</a></li><li><a href="global.html#Yt">Yt</a></li><li><a href="global.html#addNewRanking">addNewRanking</a></li><li><a href="global.html#addNewTag">addNewTag</a></li><li><a href="global.html#addNewTemplate">addNewTemplate</a></li><li><a href="global.html#addNewUser">addNewUser</a></li><li><a href="global.html#checkAdminStatus">checkAdminStatus</a></li><li><a href="global.html#checkCreatorStatus">checkCreatorStatus</a></li><li><a href="global.html#clearAll">clearAll</a></li><li><a href="global.html#deleteRanking">deleteRanking</a></li><li><a href="global.html#deleteTemplate">deleteTemplate</a></li><li><a href="global.html#enterTemplateEditMode">enterTemplateEditMode</a></li><li><a href="global.html#fetchAllRankings">fetchAllRankings</a></li><li><a href="global.html#fetchAllRankingsFiltered">fetchAllRankingsFiltered</a></li><li><a href="global.html#fetchAllTags">fetchAllTags</a></li><li><a href="global.html#fetchAllTagsFiltered">fetchAllTagsFiltered</a></li><li><a href="global.html#fetchAllTemplates">fetchAllTemplates</a></li><li><a href="global.html#fetchAllTemplatesFiltered">fetchAllTemplatesFiltered</a></li><li><a href="global.html#fetchAllUsers">fetchAllUsers</a></li><li><a href="global.html#fetchAllUsersWithRankings">fetchAllUsersWithRankings</a></li><li><a href="global.html#fetchAllUsersWithTemplates">fetchAllUsersWithTemplates</a></li><li><a href="global.html#fetchRankingById">fetchRankingById</a></li><li><a href="global.html#fetchRankingCount">fetchRankingCount</a></li><li><a href="global.html#fetchTagById">fetchTagById</a></li><li><a href="global.html#fetchTagByName">fetchTagByName</a></li><li><a href="global.html#fetchTemplateById">fetchTemplateById</a></li><li><a href="global.html#fetchTemplateCount">fetchTemplateCount</a></li><li><a href="global.html#fetchUserById">fetchUserById</a></li><li><a href="global.html#fetchUserByName">fetchUserByName</a></li><li><a href="global.html#filteredRankingQuery">filteredRankingQuery</a></li><li><a href="global.html#filteredTagQuery">filteredTagQuery</a></li><li><a href="global.html#filteredTemplatesQuery">filteredTemplatesQuery</a></li><li><a href="global.html#filteredUserQuery">filteredUserQuery</a></li><li><a href="global.html#formatDate">formatDate</a></li><li><a href="global.html#getAllRankingNames">getAllRankingNames</a></li><li><a href="global.html#getAllTemplateNames">getAllTemplateNames</a></li><li><a href="global.html#getLocalTime">getLocalTime</a></li><li><a href="global.html#getTagNumbers">getTagNumbers</a></li><li><a href="global.html#getUserId">getUserId</a></li><li><a href="global.html#gracefulShutdown">gracefulShutdown</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#query">query</a></li><li><a href="global.html#server">server</a></li><li><a href="global.html#ts">ts</a></li><li><a href="global.html#updateTemplate">updateTemplate</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jan 18 2024 11:08:20 GMT+0200 (Itä-Euroopan normaaliaika)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

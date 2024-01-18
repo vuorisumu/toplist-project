@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/components/api.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/components/api.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "https://toplistmaker.onrender.com/api";
+
+// --- TEMPLATES ---
+
+/**
+ * Fetches all templates from the database
+ * @returns data containing all templates
+ */
+export const fetchAllTemplates = () => {
+  return fetch(`${API_BASE_URL}/templates`).then((response) => response.json());
+};
+
+/**
+ * Fetches all templates from the database with specified filters
+ * @param {string} filters - query string of the desired filters
+ * @returns data containing all fetched templates
+ */
+export const fetchAllTemplatesFiltered = (filters) => {
+  return fetch(`${API_BASE_URL}/templates?${filters}`).then((response) =>
+    response.json()
+  );
+};
+
+/**
+ * Fetches a template with a specified ID
+ * @param {number} id - ID of the template to be fetched
+ * @returns data containing the fetched template
+ */
+export const fetchTemplateById = (id) => {
+  return fetch(`${API_BASE_URL}/templates/${id}`).then((response) =>
+    response.json()
+  );
+};
+
+/**
+ * Sends a request to access edit mode of a specified template
+ * @param {number} id - ID of the template
+ * @param {string} password - given password for the template edit mode
+ * @returns data of the requested template on successful query
+ */
+export const enterTemplateEditMode = (id, password) => {
+  return fetch(`${API_BASE_URL}/templates/${id}/edit/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      editkey: password,
+    }),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
+/**
+ * Adds a new template to database
+ * @param {object} template - template data
+ * @returns the ID of the newly added template on successful insert
+ */
+export const addNewTemplate = (template) => {
+  return fetch(`${API_BASE_URL}/templates/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(template),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
+/**
+ * Updates data of a template with given ID
+ * @param {number} id - ID of the template to be edited
+ * @param {object} templateData - template data
+ * @returns the ID of the edited template on successful edit
+ */
+export const updateTemplate = (id, templateData) => {
+  return fetch(`${API_BASE_URL}/templates/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(templateData),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
+/**
+ * Deleted a template from database with given ID
+ * @param {number} id - ID of the template to be deleted
+ * @returns a response containing information about whether the deletion was successful
+ */
+export const deleteTemplate = (id) => {
+  return fetch(`${API_BASE_URL}/templates/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
+/**
+ * Fetches the count of templates from the database
+ * @returns data containing the count of templates
+ */
+export const fetchTemplateCount = () => {
+  return fetch(`${API_BASE_URL}/templates?count=true}`).then((response) =>
+    response.json()
+  );
+};
+
+// --- RANKINGS ---
+
+/**
+ * Fetches all rankings from the database
+ * @returns data containing all rankings
+ */
+export const fetchAllRankings = () => {
+  return fetch(`${API_BASE_URL}/rankings`).then((response) => response.json());
+};
+
+/**
+ * Fetches all rankings that match the given filters
+ * @param {string} filters - query string specifying the filters
+ * @returns data containing all fetched rankings
+ */
+export const fetchAllRankingsFiltered = (filters) => {
+  return fetch(`${API_BASE_URL}/rankings?${filters}`).then((response) =>
+    response.json()
+  );
+};
+
+/**
+ * Fetches the count of rankings from the database
+ * @param {number} id - id of the template used in the rankings
+ * @returns data containing the count of ranking lists
+ */
+export const fetchRankingCount = (id) => {
+  let searchQuery = `${API_BASE_URL}/rankings?count=true}`;
+  if (id > 0) {
+    searchQuery += `&amp;tempId=${id}`;
+  }
+  return fetch(searchQuery).then((response) => response.json());
+};
+
+/**
+ * Fetch ranking with given ID from the database
+ * @param {number} id - ID of the ranking
+ * @returns data of the fetched ranking
+ */
+export const fetchRankingById = (id) => {
+  return fetch(`${API_BASE_URL}/rankings/${id}`).then((response) =>
+    response.json()
+  );
+};
+
+/**
+ * Adds a new ranking to database
+ * @param {object} ranking - ranking data to be added
+ * @returns a response with newly added ranking ID on successful insert
+ */
+export const addNewRanking = (ranking) => {
+  return fetch(`${API_BASE_URL}/rankings/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(ranking),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
+/**
+ * Deletes a ranking with specified ID
+ * @param {number} id - ID of the template to be deleted
+ * @returns a response containing information about the result of deletion request
+ */
+export const deleteRanking = (id) => {
+  return fetch(`${API_BASE_URL}/rankings/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
+// --- TAGS ---
+
+/**
+ * Fetches all tags from the database
+ * @returns data of all tags
+ */
+export const fetchAllTags = () => {
+  return fetch(`${API_BASE_URL}/tags`).then((response) => response.json());
+};
+
+/**
+ * Fetches all tags from the database with specified filters
+ * @param {string} filters - query string specifying the filters
+ * @returns data of all fetched tags
+ */
+export const fetchAllTagsFiltered = (filters) => {
+  return fetch(`${API_BASE_URL}/tags?${filters}`).then((response) =>
+    response.json()
+  );
+};
+
+/**
+ * Fetches a tag with given ID from the database
+ * @param {number} id - ID of the tag
+ * @returns data of the fetched tag
+ */
+export const fetchTagById = (id) => {
+  return fetch(`${API_BASE_URL}/tags/${id}`).then((response) =>
+    response.json()
+  );
+};
+
+/**
+ * Fetches a tag with a specified name from the database
+ * @param {string} name - name of the tag
+ * @returns data of the fetched tag
+ */
+export const fetchTagByName = (name) => {
+  return fetch(`${API_BASE_URL}/tags?name=${name}`).then((response) =>
+    response.json()
+  );
+};
+
+/**
+ * Adds a new tag to database
+ * @param {object} tagData - object containing tag data
+ * @returns a response containing the ID of newly added tag on successful insert
+ */
+export const addNewTag = (tagData) => {
+  return fetch(`${API_BASE_URL}/tags/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(tagData),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
+// --- USERS ---
+
+/**
+ * Fetches all user data from the database
+ * @returns data of all users
+ */
+export const fetchAllUsers = () => {
+  return fetch(`${API_BASE_URL}/users`).then((response) => response.json());
+};
+
+/**
+ * Fetches all users that have made templates, optionally with a specified template
+ * @param {number} id - ID of a template, or 0 when fetching users with any template
+ * @returns data containing all fetched users
+ */
+export const fetchAllUsersWithTemplates = (id) => {
+  let searchQuery = `${API_BASE_URL}/users?hasTemplates=true`;
+  if (id > 0) {
+    searchQuery += `&amp;tempId=${id}`;
+  }
+  return fetch(searchQuery).then((response) => response.json());
+};
+
+/**
+ * Fetches all users that have made rankings, optionally with rankings made from a specified template
+ * @param {number} id - ID of a template, or 0 when fetching users with rankings from any template
+ * @returns data containing all fetched users
+ */
+export const fetchAllUsersWithRankings = (id) => {
+  let searchQuery = `${API_BASE_URL}/users?hasRankings=true`;
+  if (id > 0) {
+    searchQuery += `&amp;tempId=${id}`;
+  }
+  return fetch(searchQuery).then((response) => response.json());
+};
+
+/**
+ * Fetches a user with given ID from the database
+ * @param {number} id - ID of the user
+ * @returns data of the fetched user
+ */
+export const fetchUserById = (id) => {
+  return fetch(`${API_BASE_URL}/users/${id}`).then((response) =>
+    response.json()
+  );
+};
+
+/**
+ * Fetches a user with a specified name from the database
+ * @param {string} name - name of the user
+ * @returns data of the fetched user
+ */
+export const fetchUserByName = (name) => {
+  return fetch(`${API_BASE_URL}/users?name=${name}`).then((response) =>
+    response.json()
+  );
+};
+
+/**
+ * Adds a new user to database
+ * @param {object} userData - data of the user to be added
+ * @returns a response containing newly added user ID on successful insert
+ */
+export const addNewUser = (userData) => {
+  return fetch(`${API_BASE_URL}/users/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
+// --- ROLES ---
+
+/**
+ * Sends a login request with specified role and password
+ * @param {object} loginData - object containing the username and password
+ * @returns a response with role data on successful login
+ */
+export const login = (loginData) => {
+  return fetch(`${API_BASE_URL}/login/${loginData.role}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(loginData),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error(error));
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#BrowseRankings">BrowseRankings</a></li><li><a href="global.html#ButtonPrompt">ButtonPrompt</a></li><li><a href="global.html#CreateListing">CreateListing</a></li><li><a href="global.html#DnDContainer">DnDContainer</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#EditTemplate">EditTemplate</a></li><li><a href="global.html#FilteredSearch">FilteredSearch</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Main">Main</a></li><li><a href="global.html#NewTemplate">NewTemplate</a></li><li><a href="global.html#Ranking">Ranking</a></li><li><a href="global.html#Sc">Sc</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#ShowRankings">ShowRankings</a></li><li><a href="global.html#Templates">Templates</a></li><li><a href="global.html#Yt">Yt</a></li><li><a href="global.html#addNewRanking">addNewRanking</a></li><li><a href="global.html#addNewTag">addNewTag</a></li><li><a href="global.html#addNewTemplate">addNewTemplate</a></li><li><a href="global.html#addNewUser">addNewUser</a></li><li><a href="global.html#checkAdminStatus">checkAdminStatus</a></li><li><a href="global.html#checkCreatorStatus">checkCreatorStatus</a></li><li><a href="global.html#clearAll">clearAll</a></li><li><a href="global.html#deleteRanking">deleteRanking</a></li><li><a href="global.html#deleteTemplate">deleteTemplate</a></li><li><a href="global.html#enterTemplateEditMode">enterTemplateEditMode</a></li><li><a href="global.html#fetchAllRankings">fetchAllRankings</a></li><li><a href="global.html#fetchAllRankingsFiltered">fetchAllRankingsFiltered</a></li><li><a href="global.html#fetchAllTags">fetchAllTags</a></li><li><a href="global.html#fetchAllTagsFiltered">fetchAllTagsFiltered</a></li><li><a href="global.html#fetchAllTemplates">fetchAllTemplates</a></li><li><a href="global.html#fetchAllTemplatesFiltered">fetchAllTemplatesFiltered</a></li><li><a href="global.html#fetchAllUsers">fetchAllUsers</a></li><li><a href="global.html#fetchAllUsersWithRankings">fetchAllUsersWithRankings</a></li><li><a href="global.html#fetchAllUsersWithTemplates">fetchAllUsersWithTemplates</a></li><li><a href="global.html#fetchRankingById">fetchRankingById</a></li><li><a href="global.html#fetchRankingCount">fetchRankingCount</a></li><li><a href="global.html#fetchTagById">fetchTagById</a></li><li><a href="global.html#fetchTagByName">fetchTagByName</a></li><li><a href="global.html#fetchTemplateById">fetchTemplateById</a></li><li><a href="global.html#fetchTemplateCount">fetchTemplateCount</a></li><li><a href="global.html#fetchUserById">fetchUserById</a></li><li><a href="global.html#fetchUserByName">fetchUserByName</a></li><li><a href="global.html#filteredRankingQuery">filteredRankingQuery</a></li><li><a href="global.html#filteredTagQuery">filteredTagQuery</a></li><li><a href="global.html#filteredTemplatesQuery">filteredTemplatesQuery</a></li><li><a href="global.html#filteredUserQuery">filteredUserQuery</a></li><li><a href="global.html#formatDate">formatDate</a></li><li><a href="global.html#getAllRankingNames">getAllRankingNames</a></li><li><a href="global.html#getAllTemplateNames">getAllTemplateNames</a></li><li><a href="global.html#getLocalTime">getLocalTime</a></li><li><a href="global.html#getTagNumbers">getTagNumbers</a></li><li><a href="global.html#getUserId">getUserId</a></li><li><a href="global.html#gracefulShutdown">gracefulShutdown</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#query">query</a></li><li><a href="global.html#server">server</a></li><li><a href="global.html#ts">ts</a></li><li><a href="global.html#updateTemplate">updateTemplate</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jan 18 2024 11:08:20 GMT+0200 (Itä-Euroopan normaaliaika)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
