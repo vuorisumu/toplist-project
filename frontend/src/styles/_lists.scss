@@ -24,6 +24,17 @@
   color: theme.$text-secondary;
 }
 
+%noteIcon {
+  // icon before item note
+  &::before {
+    content: "notes";
+    font-family: "Material Symbols Outlined";
+    position: absolute;
+    left: 0;
+    top: 1px;
+  }
+}
+
 %smallButton {
   margin: 0;
   padding: 2px 4px;
@@ -226,6 +237,16 @@
     &:nth-child(1) {
       padding-left: 30px;
     }
+
+    // note in ranking mode
+    &.rankedNote {
+      @extend %smallText;
+      @extend %noteIcon;
+      position: relative;
+      margin: -15px 0 0 45px;
+      padding: 0 0 0 20px;
+      flex: 100%;
+    }
   }
 
   .noteArea {
@@ -320,15 +341,7 @@
 // item notes
 .itemNote {
   @extend %smallText;
+  @extend %noteIcon;
   padding-left: 20px;
   position: relative;
-
-  // icon before item note
-  &::before {
-    content: "notes";
-    font-family: "Material Symbols Outlined";
-    position: absolute;
-    left: 0;
-    top: 1px;
-  }
 }

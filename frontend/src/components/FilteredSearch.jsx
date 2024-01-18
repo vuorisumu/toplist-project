@@ -21,7 +21,6 @@ import {
  * specific to rankings or templates. True if rankings, false if templates
  * @param {number} props.id - ID of the template if search filters are to be used with template
  * specific rankings.
- * @returns
  */
 function FilteredSearch({ search, clear, searchRankings, id }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -342,20 +341,23 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
             </div>
 
             {!id && (
-              <ul className="tagFilters">
-                {tags.map((tag, index) => (
-                  <li key={"tag" + index}>
-                    <input
-                      type="checkbox"
-                      checked={tag.check}
-                      onChange={() => tagCheck(index)}
-                    />
-                    <span onClick={() => tagCheck(index)}>
-                      {tag.name} ({tag.count})
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <>
+                <h4>Tags:</h4>
+                <ul className="tagFilters">
+                  {tags.map((tag, index) => (
+                    <li key={"tag" + index}>
+                      <input
+                        type="checkbox"
+                        checked={tag.check}
+                        onChange={() => tagCheck(index)}
+                      />
+                      <span onClick={() => tagCheck(index)}>
+                        {tag.name} ({tag.count})
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </>
             )}
 
             {/* Sort by options */}

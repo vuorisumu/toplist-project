@@ -14,7 +14,7 @@ import {
  */
 export const getLocalTime = () => {
   const timeNow = new Date();
-  const offset = timeNow.getTimezoneOffset() * 60000;
+  const offset = timeNow.getTimezoneOffset();
   const localISOTime = new Date(timeNow - offset)
     .toISOString()
     .slice(0, 19)

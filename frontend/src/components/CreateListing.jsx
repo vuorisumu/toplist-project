@@ -127,14 +127,14 @@ function CreateListing() {
     );
 
     if (nonEmptyRanked.length === 0) {
-      errors.push("Ranked container must have at least one item");
+      errors.push("Top list container must have at least one item");
       document.getElementById("Ranked").classList.add("error");
     } else {
       document.getElementById("Ranked").classList.add("error");
     }
 
     if (!rankingName) {
-      errors.push("Ranking must have a title");
+      errors.push("Top list must have a title");
       document.getElementById("addRankTitle").classList.add("error");
     } else {
       document.getElementById("addRankTitle").classList.remove("error");

@@ -66,6 +66,7 @@ button {
   background-color: color-mix(in srgb, theme.$accent, theme.$primary-color 10%);
   cursor: pointer;
   transition: 0.2s;
+  color: white;
 
   &:hover {
     background-color: color-mix(in srgb, theme.$accent, white 5%);

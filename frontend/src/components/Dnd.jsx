@@ -31,7 +31,7 @@ function DnDContainer({
    */
   const updateNote = (note, item) => {
     const updatedItems = containers[ITEMS_RANKED].items.map((curItem) => {
-      if (curItem.item_name === item.item_name) {
+      if (curItem.id === item.id) {
         return { ...curItem, item_note: note };
       }
       return curItem;
@@ -48,17 +48,22 @@ function DnDContainer({
   };
 
   /**
-   * Deletes the note from a specified item and re-sets the containers with updated data.
-   * Deleted specified item from the array telling which items have notes.
-   * @param {object} itemWithNote - item where the note is to be deleted
+   * Minimizes the note field, making the note uneditable. If the note is
+   * empty, deletes the note
+   * @param {object} itemWithNote - item that has the note
    */
-  const deleteNote = (itemWithNote) => {
-    const updatedItems = containers[ITEMS_RANKED].items.map((item) => {
-      if (item.item_name === itemWithNote.item_name) {
-        return { ...item, item_note: undefined };
-      }
-      return item;
-    });
+  const hideNote = (itemWithNote) => {
+    let updatedItems = [];
+    if (!itemWithNote.item_note) {
+      updatedItems = containers[ITEMS_RANKED].items.map((item) => {
+        if (item.id === itemWithNote.id) {
+          return { ...item, item_note: undefined };
+        }
+        return item;
+      });
+    } else {
+      updatedItems = containers[ITEMS_RANKED].items;
+    }
 
     // set containers again
     setContainers((prevContainers) => ({
@@ -235,14 +240,13 @@ function DnDContainer({
                           {container.keyName === ITEMS_RANKED && (
                             <>
                               {selectedItems.some(
-                                (selectedItem) =>
-                                  selectedItem.item_name === item.item_name
+                                (selectedItem) => selectedItem.id === item.id
                               ) ? (
                                 <>
                                   {/* Delete note */}
                                   <button
                                     type="button"
-                                    onClick={() => deleteNote(item)}
+                                    onClick={() => hideNote(item)}
                                   >
                                     <span className="material-symbols-outlined">
                                       delete_sweep
@@ -275,6 +279,12 @@ function DnDContainer({
                                         add_notes
                                       </span>
                                     </button>
+                                  )}
+
+                                  {item.item_note && (
+                                    <p className="rankedNote">
+                                      {item.item_note}
+                                    </p>
                                   )}
                                 </>
                               )}

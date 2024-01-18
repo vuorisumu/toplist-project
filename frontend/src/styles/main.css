@@ -292,10 +292,18 @@ nav ul li:first-child {
   resize: vertical;
 }
 
-.itemNote, .smallPrint {
+.itemNote, .smallPrint, .rank-item p.rankedNote {
   grid-column: 1/3;
   font-size: 10pt;
   color: var(--text-secondary);
+}
+
+.itemNote::before, .rank-item p.rankedNote::before {
+  content: "notes";
+  font-family: "Material Symbols Outlined";
+  position: absolute;
+  left: 0;
+  top: 1px;
 }
 
 .newItemsCont button, .rank-item button, .addCont ul li button {
@@ -497,6 +505,12 @@ nav ul li:first-child {
 .rank-item p:nth-child(1) {
   padding-left: 30px;
 }
+.rank-item p.rankedNote {
+  position: relative;
+  margin: -15px 0 0 45px;
+  padding: 0 0 0 20px;
+  flex: 100%;
+}
 .rank-item .noteArea {
   resize: vertical;
   flex: 100%;
@@ -572,13 +586,6 @@ nav ul li:first-child {
   padding-left: 20px;
   position: relative;
 }
-.itemNote::before {
-  content: "notes";
-  font-family: "Material Symbols Outlined";
-  position: absolute;
-  left: 0;
-  top: 1px;
-}
 
 .dndCont .droppable {
   min-height: 50px;
@@ -648,6 +655,7 @@ button {
   background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
   cursor: pointer;
   transition: 0.2s;
+  color: white;
 }
 button:hover {
   background-color: color-mix(in srgb, #6a9d23, white 5%);
