@@ -249,7 +249,7 @@ function DnDContainer({
                                     onClick={() => hideNote(item)}
                                   >
                                     <span className="material-symbols-outlined">
-                                      delete_sweep
+                                      minimize
                                     </span>
                                   </button>
 
