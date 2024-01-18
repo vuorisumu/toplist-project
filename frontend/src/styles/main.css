@@ -39,6 +39,7 @@ nav ul {
 }
 nav ul li {
   padding: 0 10px;
+  line-height: 12px;
 }
 nav ul li a,
 nav ul li div {
@@ -51,7 +52,6 @@ nav ul li div.active {
 nav ul li .icon {
   display: block;
   font-size: 20pt;
-  margin-bottom: -5px;
 }
 nav ul li .linkName {
   font-weight: 400;
@@ -693,5 +693,26 @@ button:hover {
     display: grid;
     grid-template-columns: minmax(0, 50%) minmax(0, 50%);
     gap: 50px;
+  }
+}
+@media only screen and (max-width: 540px) {
+  nav ul li {
+    padding: 0 6px;
+    line-height: 8px;
+  }
+  nav ul li .icon {
+    font-size: 18pt;
+  }
+  nav ul li .linkName {
+    font-size: 6pt;
+  }
+  nav ul li #logoCont span {
+    margin-bottom: 10px;
+    font-size: 10pt;
+  }
+}
+@media only screen and (max-width: 330px) {
+  #logoCont span {
+    display: none;
   }
 }/*# sourceMappingURL=main.css.map */

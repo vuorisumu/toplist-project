@@ -99,3 +99,30 @@ button {
     gap: 50px;
   }
 }
+
+// very small screen
+@media only screen and (max-width: 540px) {
+  nav ul li {
+    padding: 0 6px;
+    line-height: 8px;
+    .icon {
+      font-size: 18pt;
+    }
+
+    .linkName {
+      font-size: 6pt;
+    }
+
+    #logoCont span {
+      margin-bottom: 10px;
+      font-size: 10pt;
+    }
+  }
+}
+
+// too small screens
+@media only screen and (max-width: 330px) {
+  #logoCont span {
+    display: none;
+  }
+}
