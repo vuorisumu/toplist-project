@@ -1,7 +1,12 @@
 # LISTMAKER 9000
 
 For making top lists from existing templates and comparing list rankings with other users.
+
 [DEMO](https://toplistmaker.onrender.com/)
+Creator account:
+username: creator
+password: rankingenjoyer420
+
 [SCREENCAST](https://youtu.be/IN9492Vf_z4)
 
 ![Screenshot of the Listmaker 9000](./img/frontpage.png)
@@ -28,21 +33,27 @@ New template: Build your own template and save it to the database
 
 ![Tables in MySQL database](./img/database.png)
 Create necessary tables to your MySQL database and add .env file to backend folder with your MySQL credentials and base URL
+
+```
 MYSQL_HOST=
 MYSQL_USER=
 MYSQL_PASSWORD=
 MYSQL_DATABASE
-BASE_UR=http://localhost:3000
+BASE_URL=http://localhost:3000
+```
 
 Add admin and/or creator roles to your database
 
 ```
 INSERT INTO roles (role_name, password)
 VALUES ("admin", PASSWORD('yourpassword'));
+
+INSERT INTO roles (role_name, password)
+VALUES ("creator", PASSWORD('yourpassword'));
 ```
 
 Add .env.development to frontend folder and add your api base URL
-VITE_API_URL=http://localhost:3000/api
+`VITE_API_URL=http://localhost:3000/api`
 
 Go to root folder and run
 
