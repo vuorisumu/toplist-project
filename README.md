@@ -3,8 +3,11 @@
 For making top lists from existing templates and comparing list rankings with other users.
 
 [DEMO](https://toplistmaker.onrender.com/)
+
 Creator account:
+
 username: creator
+
 password: rankingenjoyer420
 
 [SCREENCAST](https://youtu.be/IN9492Vf_z4)
