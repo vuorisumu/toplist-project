@@ -2,6 +2,7 @@
 
 For making top lists from existing templates and comparing list rankings with other users.
 [DEMO](https://toplistmaker.onrender.com/)
+[SCREENCAST](https://youtu.be/IN9492Vf_z4)
 
 ![Screenshot of the Listmaker 9000](./img/frontpage.png)
 
