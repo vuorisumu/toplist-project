@@ -1,14 +1,9 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import {
-  addNewRanking,
-  addNewUser,
-  fetchTemplateById,
-  fetchUserByName,
-} from "./api";
+import { addNewRanking, fetchTemplateById } from "./api";
 import { DnDContainer } from "./Dnd";
 import { v4 as uuid } from "uuid";
-import { getLocalTime, clearAll, checkAdminStatus } from "./util";
+import { getLocalTime, clearAll, checkAdminStatus, getUserId } from "./util";
 import ShowRankings from "./ShowRankings";
 
 /**
@@ -156,18 +151,8 @@ function CreateListing() {
 
       // optional creator name
       if (creatorName !== "") {
-        const fetchedUser = await fetchUserByName(creatorName.trim());
-        if (fetchedUser.length > 0) {
-          rankingData.creator_id = fetchedUser[0].user_id;
-        } else {
-          // add new user here
-          const newUser = {
-            user_name: creatorName,
-          };
-
-          const newUserResponse = await addNewUser(newUser);
-          console.log(newUserResponse);
-        }
+        const fetchedUserId = await getUserId(creatorName.trim());
+        rankingData.creator_id = fetchedUserId;
       }
 
       // optional description

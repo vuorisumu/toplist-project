@@ -150,10 +150,10 @@ function DnDContainer({
           sourceItems.splice(sourceItems.length - 1, 0, newBlank);
         }
 
-        sourceItems.sort((a, b) => (!a?.blank && b?.blank ? -1 : 1));
+        sortBlanks(sourceItems);
       } else {
         // dragged to ranked
-        destItems.sort((a, b) => (!a?.blank && b?.blank ? -1 : 1));
+        sortBlanks(destItems);
         if (destItems.length > minSize) {
           // take the last item on ranked list
           const lastItem = destItems[destItems.length - 1];
@@ -187,7 +187,8 @@ function DnDContainer({
         item.rank_number = index + 1;
       });
 
-      contItems.sort((a, b) => (!a?.blank && b?.blank ? -1 : 1));
+      sortBlanks(contItems);
+
       setContainers({
         ...containers,
         [source.droppableId]: {
@@ -196,6 +197,24 @@ function DnDContainer({
         },
       });
     }
+  };
+
+  /**
+   * Sorts the items so that everything else stays unchanged,
+   * but puts all blank items to the end of the array
+   * @param {array} itemsToSort - array to be sorted
+   * @returns the same array sorted
+   */
+  const sortBlanks = (itemsToSort) => {
+    return itemsToSort.sort((a, b) => {
+      if (a.blank && !b.blank) {
+        return 1;
+      } else if (!a.blank && b.blank) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
   };
 
   return (
