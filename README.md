@@ -5,7 +5,9 @@ For making top lists from existing templates and comparing list rankings with ot
 [DEMO](https://toplistmaker.onrender.com/)
 
 Creator account:
+
 username: creator
+
 password: rankingenjoyer420
 
 ![Screenshot of the Listmaker 9000](./img/frontpage.png)
