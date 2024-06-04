@@ -1,29 +1,27 @@
-const database = require("./database");
-const schemas = require("./schemas");
+const database = require("../config/database");
+const { filteredTagQuery } = require("../filteredQueries");
+const { tagSchema } = require("../schemas");
 const express = require("express");
-const userRouter = express.Router();
+const tagRouter = express.Router();
 
 const databaseError = { msg: "Error retrieving data from database" };
 const notfoundError = { msg: "Data not found" };
-console.log("User router accessed");
+console.log("Tag router accessed");
 
 /**
- * Gets users from database
+ * Gets tags from database
  * If a query is found, construct an SQL query with given filters
  */
-userRouter.get("/", async (req, res) => {
+tagRouter.get("/", async (req, res) => {
   try {
     let results;
     if (Object.keys(req.query).length !== 0) {
       // query has filters
-      const { filteredQuery, queryParams } = await database.filteredUserQuery(
-        req.query
-      );
-
+      const { filteredQuery, queryParams } = await filteredTagQuery(req.query);
       results = await database.query(filteredQuery, queryParams);
     } else {
       // query does not have filters
-      const query = `SELECT * FROM users`;
+      const query = `SELECT * FROM tags`;
       results = await database.query(query);
     }
 
@@ -34,15 +32,12 @@ userRouter.get("/", async (req, res) => {
 });
 
 /**
- * Gets a user with given ID from the database
+ * Gets a tag from database with given ID
  */
-userRouter.get("/:id([0-9]+)", async (req, res) => {
+tagRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const result = await database.query(
-      `SELECT * FROM users WHERE user_id = ?`,
-      id
-    );
+    const result = await database.query(`SELECT * FROM tags WHERE id = ?`, id);
 
     // id not found
     if (result.length === 0) {
@@ -57,27 +52,28 @@ userRouter.get("/:id([0-9]+)", async (req, res) => {
 });
 
 /**
- * Validates data and adds a new user to database
- * Responds with a newly added user ID on successful insert
+ * Adds a new tag to database
+ * Responds with newly added tag ID on successful insert
  */
-userRouter.post("/", async (req, res) => {
+tagRouter.post("/", async (req, res) => {
   try {
+    console.log("Adding new tag");
     // validate data
-    const { error } = schemas.userSchema.validate(req.body);
+    const { error } = tagSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ msg: error.details[0].message });
     }
 
     const values = [];
-    values.push(req.body.user_name);
+    values.push(req.body.name);
 
-    const query = "INSERT INTO users (user_name) VALUES (?)";
+    const query = "INSERT INTO tags (name) VALUES (?)";
 
     const result = await database.query(query, values);
 
     // successful insert
     res.status(201).json({
-      msg: "Added new user",
+      msg: "Added new tag",
       id: result.insertId,
     });
   } catch (err) {
@@ -85,4 +81,4 @@ userRouter.post("/", async (req, res) => {
   }
 });
 
-module.exports = userRouter;
+module.exports = tagRouter;

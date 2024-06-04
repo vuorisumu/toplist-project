@@ -1,5 +1,6 @@
-const database = require("./database");
-const schemas = require("./schemas");
+const database = require("../config/database");
+const { filteredRankingQuery } = require("../filteredQueries");
+const { rankingSchema } = require("../schemas");
 const express = require("express");
 const rankRouter = express.Router();
 
@@ -27,8 +28,9 @@ rankRouter.get("/", async (req, res) => {
         }
       } else {
         // query has filters
-        const { filteredQuery, queryParams } =
-          await database.filteredRankingQuery(req.query);
+        const { filteredQuery, queryParams } = await filteredRankingQuery(
+          req.query
+        );
         results = await database.query(filteredQuery, queryParams);
       }
     } else {
@@ -80,7 +82,7 @@ rankRouter.get("/:id([0-9]+)", async (req, res) => {
 rankRouter.post("/", async (req, res) => {
   try {
     // validate data
-    const { error } = schemas.rankingSchema.validate(req.body);
+    const { error } = rankingSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ msg: error.details[0].message });
     }

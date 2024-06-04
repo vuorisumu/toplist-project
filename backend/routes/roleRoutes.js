@@ -1,5 +1,4 @@
-const database = require("./database");
-// const schemas = require("./schemas");
+const database = require("../config/database");
 const express = require("express");
 const roleRouter = express.Router();
 const bcrypt = require("bcrypt");
@@ -15,14 +14,14 @@ console.log("Role router accessed");
 roleRouter.post("/:role", async (req, res) => {
   try {
     const { role, password } = req.body;
-    
+
     const roleData = await database.query(
       `SELECT * FROM roles WHERE role_name = :1)`,
       [role]
     );
 
     if (roleData.length > 0) {
-      const storedPassword = roleData[0].password
+      const storedPassword = roleData[0].password;
       bcrypt.compare(password, storedPassword, (bcryptErr, bcryptRes) => {
         if (bcryptErr) {
           throw bcryptErr;
@@ -33,7 +32,7 @@ roleRouter.post("/:role", async (req, res) => {
         } else {
           res.status(401).json({ error: "Invalid password" });
         }
-      })
+      });
     }
   } catch (err) {
     res.status(500).send(databaseError);

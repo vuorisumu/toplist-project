@@ -1,71 +1,4 @@
-const mysql = require("mysql");
-const oracledb = require("oracledb");
-const dotenv = require("dotenv");
 const schemas = require("./schemas");
-
-dotenv.config();
-
-let oraclePool;
-async function initializePool() {
-  try {
-    if (!oraclePool) {
-      oraclePool = await oracledb.createPool({
-        user: process.env.ORACLE_USER,
-        password: process.env.ORACLE_PASSWORD,
-        connectString: process.env.ORACLE_CONNSTR,
-        poolMin: 2,
-        poolMax: 10,
-        poolTimeout: 60,
-      });
-      console.log("Pool created");
-    }
-  } catch (err) {
-    console.log("Error creating oracle pool: ", err);
-  }
-}
-initializePool();
-
-const pool = mysql.createPool({
-  connectionLimit: 10,
-  connectTimeout: 10000,
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
-});
-
-async function query(sql, args) {
-  const connection = await oraclePool.getConnection();
-
-  return new Promise((resolve, reject) => {
-    connection.execute(sql, args, (err, rows) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(rows);
-      connection.commit();
-      connection.close();
-    });
-  });
-}
-
-/**
- * Makes an SQL query
- * @param {string} sql - SQL query
- * @param {Array} args - parameters for the query
- * @returns a promise containing query response
- */
-/*
-async function query(sql, args) {
-  return new Promise((resolve, reject) => {
-    pool.query(sql, args, (err, rows) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(rows);
-    });
-  });
-}*/
 
 /**
  * Constructs an SQL query with filters and/or sorting for template related queries
@@ -319,21 +252,21 @@ async function filteredTagQuery(req) {
 
   if (value.count) {
     filteredQuery = `SELECT tags.id, tags.name, COUNT(t.id) AS count
-    FROM tags
-    LEFT JOIN templates t
-    ON JSON_CONTAINS(t.tags, CAST(tags.id AS CHAR), '$')
-    GROUP BY tags.id
-    HAVING count > 0`;
+      FROM tags
+      LEFT JOIN templates t
+      ON JSON_CONTAINS(t.tags, CAST(tags.id AS CHAR), '$')
+      GROUP BY tags.id
+      HAVING count > 0`;
     return { filteredQuery, queryParams };
   }
 
   if (value.rcount) {
     filteredQuery = `SELECT tags.id, tags.name, COUNT(r.ranking_id) AS count
-    FROM tags
-    LEFT JOIN templates t ON JSON_CONTAINS(t.tags, CAST(tags.id AS CHAR), '$')
-    LEFT JOIN rankedlists r ON t.id = r.template_id
-    GROUP BY tags.id
-    HAVING count > 0`;
+      FROM tags
+      LEFT JOIN templates t ON JSON_CONTAINS(t.tags, CAST(tags.id AS CHAR), '$')
+      LEFT JOIN rankedlists r ON t.id = r.template_id
+      GROUP BY tags.id
+      HAVING count > 0`;
     return { filteredQuery, queryParams };
   }
 
@@ -352,8 +285,6 @@ async function filteredTagQuery(req) {
 }
 
 module.exports = {
-  pool,
-  query,
   filteredTemplatesQuery,
   filteredRankingQuery,
   filteredUserQuery,

@@ -8,7 +8,8 @@ testRouter.post("/", async (req, res) => {
   try {
     const { first, second } = req.body;
     const data = await database.testQuery(
-      `INSERT INTO nodetab VALUES (:1, :2)`, [first, second]
+      `INSERT INTO nodetab VALUES (:1, :2)`,
+      [first, second]
     );
 
     res.status(200).json(data);

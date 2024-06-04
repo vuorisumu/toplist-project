@@ -1,5 +1,6 @@
-const database = require("./database");
-const schemas = require("./schemas");
+const database = require("../config/database");
+const { filteredTemplatesQuery } = require("../filteredQueries");
+const { templateSchema } = require("../schemas");
 const bcrypt = require("bcrypt");
 const express = require("express");
 const templateRouter = express.Router();
@@ -25,8 +26,9 @@ templateRouter.get("/", async (req, res) => {
         results = await database.query(`SELECT DISTINCT name FROM templates`);
       } else {
         // query has filters
-        const { filteredQuery, queryParams } =
-          await database.filteredTemplatesQuery(req.query);
+        const { filteredQuery, queryParams } = await filteredTemplatesQuery(
+          req.query
+        );
         results = await database.query(filteredQuery, queryParams);
       }
     } else {
@@ -104,7 +106,7 @@ templateRouter.post("/:id([0-9]+)/edit/", async (req, res) => {
 templateRouter.post("/", async (req, res) => {
   try {
     // validate data
-    const { error } = schemas.templateSchema.validate(req.body);
+    const { error } = templateSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ msg: error.details[0].message });
     }
@@ -176,7 +178,7 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     }
 
     // validate data
-    const { error } = schemas.templateSchema.validate(req.body);
+    const { error } = templateSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ msg: error.details[0].message });
     }
