@@ -34,7 +34,7 @@ const pool = mysql.createPool({
   database: process.env.MYSQL_DATABASE,
 });
 
-async function testQuery(sql, args) {
+async function query(sql, args) {
   const connection = await oraclePool.getConnection();
   
   return new Promise((resolve, reject) => {
@@ -49,12 +49,14 @@ async function testQuery(sql, args) {
   });
 }
 
+
 /**
  * Makes an SQL query
  * @param {string} sql - SQL query
  * @param {Array} args - parameters for the query
  * @returns a promise containing query response
  */
+/*
 async function query(sql, args) {
   return new Promise((resolve, reject) => {
     pool.query(sql, args, (err, rows) => {
@@ -64,7 +66,7 @@ async function query(sql, args) {
       resolve(rows);
     });
   });
-}
+}*/
 
 /**
  * Constructs an SQL query with filters and/or sorting for template related queries
@@ -353,7 +355,6 @@ async function filteredTagQuery(req) {
 module.exports = {
   pool,
   query,
-  testQuery,
   filteredTemplatesQuery,
   filteredRankingQuery,
   filteredUserQuery,

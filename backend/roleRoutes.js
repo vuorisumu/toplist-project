@@ -2,6 +2,7 @@ const database = require("./database");
 // const schemas = require("./schemas");
 const express = require("express");
 const roleRouter = express.Router();
+const bcrypt = require("bcrypt");
 
 const databaseError = { msg: "Error retrieving data from database" };
 const notfoundError = { msg: "Data not found" };
@@ -13,16 +14,27 @@ console.log("Role router accessed");
  */
 roleRouter.post("/:role", async (req, res) => {
   try {
-    const { password } = req.body;
+    const { role, password } = req.body;
+    
     const roleData = await database.query(
-      `SELECT * FROM roles WHERE role_name = '${req.params.role}' AND password = PASSWORD('${password}')`
+      `SELECT * FROM roles WHERE role_name = :1)`,
+      [role]
     );
 
-    if (roleData.length === 0) {
-      return res.status(401).json({ error: "Invalid password" });
-    }
+    if (roleData.length > 0) {
+      const storedPassword = roleData[0].password
+      bcrypt.compare(password, storedPassword, (bcryptErr, bcryptRes) => {
+        if (bcryptErr) {
+          throw bcryptErr;
+        }
 
-    res.status(200).json(roleData);
+        if (bcryptRes) {
+          res.status(200).json(roleData);
+        } else {
+          res.status(401).json({ error: "Invalid password" });
+        }
+      })
+    }
   } catch (err) {
     res.status(500).send(databaseError);
   }
