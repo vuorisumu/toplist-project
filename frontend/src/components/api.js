@@ -1,6 +1,21 @@
 const API_BASE_URL =
   import.meta.env.VITE_API_URL || "https://toplistmaker.onrender.com/api";
 
+  export const testOracle = (first, second) => {
+    return fetch(`${API_BASE_URL}/test`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        first,
+        second
+      }),
+    })
+      .then((response) => response.json())
+      .catch((error) => console.error("Error:", error));
+  };
+
 // --- TEMPLATES ---
 
 /**

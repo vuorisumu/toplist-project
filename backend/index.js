@@ -4,9 +4,10 @@ const roleRoutes = require("./roleRoutes");
 const tagRoutes = require("./tagRoutes");
 const templateRoutes = require("./templateRoutes");
 const userRoutes = require("./userRoutes");
-const { pool } = require("./database");
+const { pool, oraclePool } = require("./database");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const testRoutes = require("./dbTest");
 dotenv.config();
 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/api/templates", templateRoutes);
 app.use("/api/login", roleRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/tags", tagRoutes);
+app.use("/api/test", testRoutes);
 
 app.use(express.static("./frontend/dist"));
 
@@ -49,6 +51,7 @@ const server = app
  */
 const gracefulShutdown = () => {
   console.log("Starting graceful shutdown...");
+  oraclePool.close()
   server.close(() => {
     console.log("Server closed");
 
