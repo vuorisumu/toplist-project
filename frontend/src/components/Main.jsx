@@ -7,20 +7,10 @@ import { testOracle } from "./api";
  * the application and then the default view of template browsing view
  */
 function Main() {
-
-  const testButton = () => {
-    testOracle(1, "test").then(data => console.log(data))
-  }
-
   return (
     <div className="container">
       <h1>Listmaker 9000</h1>
       <div className="pageInfo">
-        <div style={{background: "#ffffff"}} onClick={() => {
-              testButton();
-            }}>
-          <p>Mo</p>
-        </div>
         <p>
           Make your own top list using the templates provided by our passionate
           top list template creators, explain your choices when you feel like

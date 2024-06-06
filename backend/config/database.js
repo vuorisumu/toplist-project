@@ -4,6 +4,9 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 let pool;
+/**
+ * Initializes the connection pool with credentials found in .env file.
+ */
 async function init() {
   try {
     if (!pool) {
@@ -22,10 +25,15 @@ async function init() {
   }
 }
 
+/**
+ * Makes an SQL query.
+ * @param {string} sql - SQL query
+ * @param {Array} args - parameters for the query
+ * @returns a promise containing query response
+ */
 async function query(sql, args) {
-  const connection = await pool.getConnection();
+  const connection = await oracledb.getConnection();
 
-  console.log("starting query");
   return new Promise((resolve, reject) => {
     connection.execute(sql, args, (err, rows) => {
       if (err) {
@@ -38,6 +46,9 @@ async function query(sql, args) {
   });
 }
 
+/**
+ * Closes the connection pool.
+ */
 async function close() {
   console.log("Closing connection");
   try {

@@ -50,8 +50,8 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const result = await database.query(
-      `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id WHERE id = ?`,
-      id
+      `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id WHERE id = :id`,
+      { id: id }
     );
 
     // id not found
@@ -73,9 +73,10 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
 templateRouter.post("/:id([0-9]+)/edit/", async (req, res) => {
   try {
     const { editkey } = req.body;
+    const id = parseInt(req.params.id);
     const templateData = await database.query(
-      `SELECT * FROM templates WHERE id = ?`,
-      [req.params.id]
+      `SELECT * FROM templates WHERE id = :id`,
+      { id: id }
     );
 
     if (templateData.length > 0) {
@@ -145,12 +146,15 @@ templateRouter.post("/", async (req, res) => {
       values.push(`${encryptedKey}`);
     }
 
-    const placeholdersString = values.map(() => "?").join(", ");
+    const placeholdersString = values
+      .map((_, index) => `:${index + 1}`)
+      .join(", ");
     const query = `INSERT INTO templates (${fields.join(
       ", "
     )}) VALUES (${placeholdersString})`;
 
     console.log(query);
+    console.log(values);
     const result = await database.query(query, values);
 
     // successful insert
@@ -159,6 +163,7 @@ templateRouter.post("/", async (req, res) => {
       id: result.insertId,
     });
   } catch (err) {
+    console.log(err.message);
     res.status(500).send(databaseError);
   }
 });
@@ -169,9 +174,10 @@ templateRouter.post("/", async (req, res) => {
 templateRouter.patch("/:id([0-9]+)", async (req, res) => {
   try {
     // check if template exists
+    const id = parseInt(req.params.id);
     const exists = await database.query(
-      "SELECT * FROM templates WHERE id = ?",
-      [req.params.id]
+      "SELECT * FROM templates WHERE id = :id",
+      { id: id }
     );
     if (exists.length === 0) {
       return res.status(404).json({ msg: "Template not found" });
@@ -185,32 +191,32 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
 
     console.log(req.body);
 
-    const values = [];
+    const values = {};
     const fields = [];
 
     if (req.body.name) {
-      fields.push("name = ?");
-      values.push(req.body.name);
+      fields.push("name = :name");
+      values["name"] = req.body.name;
     }
 
     if (req.body.items) {
-      fields.push("items = ?");
-      values.push(JSON.stringify(req.body.items));
+      fields.push("items = :items");
+      values["items"] = JSON.stringify(req.body.items);
     }
 
     if (req.body.creator_id) {
-      fields.push("creator_id = ?");
-      values.push(req.body.creator_id);
+      fields.push("creator_id = :creatorid");
+      values["creatorid"] = req.body.creator_id;
     }
 
     if (req.body.description) {
-      fields.push("description = ?");
-      values.push(req.body.description);
+      fields.push("description = :description");
+      values["description"] = req.body.description;
     }
 
     if (req.body.tags) {
-      fields.push("tags = ?");
-      values.push(JSON.stringify(req.body.tags));
+      fields.push("tags = :tags");
+      values["tags"] = JSON.stringify(req.body.tags);
     }
 
     if (req.body.editkey) {
@@ -220,10 +226,11 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     }
 
     const updateString = fields.join(", ");
-    const query = `UPDATE templates SET ${updateString} WHERE id = ?`;
+    const query = `UPDATE templates SET ${updateString} WHERE id = :id`;
+    values["id"] = req.params.id;
 
     console.log(query);
-    const result = await database.query(query, [...values, req.params.id]);
+    const result = await database.query(query, values);
 
     if (result.affectedRows === 0) {
       return res.status(500).json({ msg: "Failed to update template" });
@@ -246,8 +253,8 @@ templateRouter.delete("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const result = await database.query(
-      "DELETE FROM templates WHERE id = ?",
-      id
+      "DELETE FROM templates WHERE id = :id",
+      { id: id }
     );
 
     if (result.affectedRows === 0) {

@@ -13,32 +13,32 @@ async function filteredTemplatesQuery(req) {
 
   let filteredQuery = `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
   const conditions = [];
-  const queryParams = [];
+  const queryParams = {};
 
   // add conditions
   if (value.search) {
-    conditions.push("(t.name LIKE ? OR u.user_name LIKE ?)");
+    conditions.push("(t.name LIKE :search OR u.user_name LIKE :search)");
     for (let i = 0; i < 2; i++) {
-      queryParams.push(`%${value.search}%`);
+      queryParams["search"] = `%${value.search}%`;
     }
   }
 
   if (value.tname) {
-    conditions.push("t.name LIKE ?");
-    queryParams.push(`${value.tname}%`);
+    conditions.push("t.name LIKE :tname");
+    queryParams["tname"] = `${value.tname}%`;
   }
 
   if (value.uname) {
-    conditions.push("u.user_name LIKE ?");
-    queryParams.push(`${value.uname}%`);
+    conditions.push("u.user_name LIKE :uname");
+    queryParams["uname"] = `${value.uname}%`;
   }
 
   if (value.tag) {
     const tags = Array.isArray(value.tag) ? value.tag : [value.tag];
     const tagConditions = [];
     for (let i = 0; i < tags.length; i++) {
-      tagConditions.push(`JSON_CONTAINS(tags, '?', '$')`);
-      queryParams.push(tags[i]);
+      tagConditions.push(`JSON_EXISTS(tags, '$[*]?(@ == :tag${i})')`);
+      queryParams[`tag${i}`] = tags[i];
     }
     const tagQuery = "(" + tagConditions.join(" OR ") + ")";
     conditions.push(tagQuery);
@@ -101,41 +101,43 @@ async function filteredRankingQuery(req) {
   }
   filteredQuery += ` FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id LEFT JOIN templates t ON r.template_id = t.id`;
   const conditions = [];
-  const queryParams = [];
+  const queryParams = {};
 
   // add conditions
   if (value.search) {
-    conditions.push("(r.ranking_name LIKE ? OR u.user_name LIKE ?)");
+    conditions.push(
+      "(r.ranking_name LIKE :search OR u.user_name LIKE :search)"
+    );
     for (let i = 0; i < 2; i++) {
-      queryParams.push(`%${value.search}%`);
+      queryParams["search"] = `%${value.search}%`;
     }
   }
 
   if (value.tempId) {
-    conditions.push("t.id = ?");
-    queryParams.push(value.tempId);
+    conditions.push("t.id = :tempid");
+    queryParams["tempid"] = value.tempId;
   }
 
   if (value.tname) {
-    conditions.push("t.name LIKE ?");
-    queryParams.push(`${value.tname}%`);
+    conditions.push("t.name LIKE :tname");
+    queryParams["tname"] = `${value.tname}%`;
   }
   if (value.rname) {
-    conditions.push("r.ranking_name LIKE ?");
-    queryParams.push(`${value.rname}%`);
+    conditions.push("r.ranking_name LIKE :rname");
+    queryParams["rname"] = `${value.rname}%`;
   }
 
   if (value.uname) {
-    conditions.push("u.user_name LIKE ?");
-    queryParams.push(`${value.uname}%`);
+    conditions.push("u.user_name LIKE :uname");
+    queryParams["uname"] = `${value.uname}%`;
   }
 
   if (value.tag) {
     const tags = Array.isArray(value.tag) ? value.tag : [value.tag];
     const tagConditions = [];
     for (let i = 0; i < tags.length; i++) {
-      tagConditions.push(`JSON_CONTAINS(tags, '?', '$')`);
-      queryParams.push(tags[i]);
+      tagConditions.push(`JSON_EXISTS(tags, '$[*]?(@ == :tag${i})')`);
+      queryParams[`tag${i}`] = tags[i];
     }
     const tagQuery = "(" + tagConditions.join(" OR ") + ")";
     conditions.push(tagQuery);
@@ -201,13 +203,13 @@ async function filteredUserQuery(req) {
 
   let filteredQuery = "";
   const conditions = [];
-  const queryParams = [];
+  const queryParams = {};
 
   if (value.hasRankings) {
     filteredQuery = `SELECT DISTINCT u.user_name FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id WHERE u.user_name IS NOT NULL`;
     if (value.tempId) {
-      filteredQuery += ` AND r.template_id = ?`;
-      queryParams.push(value.tempId);
+      filteredQuery += ` AND r.template_id = :rankedtemplateid`;
+      queryParams["rankedtemplateid"] = value.tempId;
     }
     return { filteredQuery, queryParams };
   }
@@ -215,8 +217,8 @@ async function filteredUserQuery(req) {
   if (value.hasTemplates) {
     filteredQuery = `SELECT DISTINCT u.user_name FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id WHERE u.user_name IS NOT NULL`;
     if (value.tempId) {
-      filteredQuery += ` AND t.id = ?`;
-      queryParams.push(value.tempId);
+      filteredQuery += ` AND t.id = :tempid`;
+      queryParams["tempid"] = value.tempId;
     }
 
     return { filteredQuery, queryParams };
@@ -225,8 +227,8 @@ async function filteredUserQuery(req) {
   filteredQuery = `SELECT * FROM users`;
 
   if (value.name) {
-    conditions.push(`user_name = ?`);
-    queryParams.push(value.name);
+    conditions.push(`user_name = :name`);
+    queryParams["name"] = value.name;
   }
 
   if (conditions.length > 0) {
