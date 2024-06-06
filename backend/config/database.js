@@ -31,7 +31,7 @@ async function init() {
  * @param {Array} args - parameters for the query
  * @returns a promise containing query response
  */
-async function query(sql, args) {
+async function query(sql, args = {}) {
   const connection = await oracledb.getConnection();
 
   return new Promise((resolve, reject) => {
@@ -39,6 +39,7 @@ async function query(sql, args) {
       if (err) {
         return reject(err);
       }
+
       resolve(rows);
       connection.commit();
       connection.close();

@@ -30,6 +30,7 @@ templateRouter.get("/", async (req, res) => {
           req.query
         );
         results = await database.query(filteredQuery, queryParams);
+        console.log(filteredQuery);
       }
     } else {
       // query does not have filters
@@ -39,6 +40,7 @@ templateRouter.get("/", async (req, res) => {
 
     res.status(200).json(results);
   } catch (err) {
+    console.log(err.message);
     res.status(500).send(databaseError);
   }
 });

@@ -76,7 +76,7 @@ async function filteredTemplatesQuery(req) {
   }
 
   if (value.limit) {
-    filteredQuery += ` LIMIT ${value.limit}`;
+    filteredQuery += ` FETCH FIRST 5 ROWS ONLY`;
   }
 
   return { filteredQuery, queryParams };
@@ -108,14 +108,12 @@ async function filteredRankingQuery(req) {
     conditions.push(
       "(r.ranking_name LIKE :search OR u.user_name LIKE :search)"
     );
-    for (let i = 0; i < 2; i++) {
-      queryParams["search"] = `%${value.search}%`;
-    }
+    queryParams["search"] = `%${value.search}%`;
   }
 
   if (value.tempId) {
     conditions.push("t.id = :tempid");
-    queryParams["tempid"] = value.tempId;
+    queryParams["tempid"] = `${value.tempId}`;
   }
 
   if (value.tname) {
