@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchAllTemplatesFiltered, fetchTemplateCount } from "./api";
 import { formatData, getCountFromData } from "../util/dataHandler";
+import Template from "./Template";
 
 function TemplateContainer() {
   const [templates, setTemplates] = useState([]);
@@ -27,7 +28,7 @@ function TemplateContainer() {
         setTemplates(formatData(data));
         const test = formatData(data);
         test.map((testTemplate) => {
-          console.log(testTemplate.name);
+          console.log(testTemplate);
         });
         setLoading(false);
       })
@@ -42,13 +43,10 @@ function TemplateContainer() {
         {loading ? (
           <p>Loading</p>
         ) : (
-          <ul>
-            <li key={"count"}>
-              <p>Template count: {templateCount}</p>
-            </li>
+          <ul className="lists">
             {templates.map((template) => (
-              <li key={template.id}>
-                <p>{template.name}</p>
+              <li key={template.id} className="template">
+                <Template data={template} />
               </li>
             ))}
           </ul>
