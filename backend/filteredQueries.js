@@ -95,18 +95,18 @@ async function filteredRankingQuery(req) {
 
   let filteredQuery = "SELECT";
   if (value.distinct) {
-    filteredQuery += " DISTINCT r.ranking_name";
+    filteredQuery += " DISTINCT top.toplist_name";
   } else {
     filteredQuery += " *";
   }
-  filteredQuery += ` FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id LEFT JOIN templates t ON r.template_id = t.id`;
+  filteredQuery += ` FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id LEFT JOIN templates t ON top.template_id = t.id`;
   const conditions = [];
   const queryParams = {};
 
   // add conditions
   if (value.search) {
     conditions.push(
-      "(r.ranking_name LIKE :search OR u.user_name LIKE :search)"
+      "(top.toplist_name LIKE :search OR u.user_name LIKE :search)"
     );
     queryParams["search"] = `%${value.search}%`;
   }
@@ -121,7 +121,7 @@ async function filteredRankingQuery(req) {
     queryParams["tname"] = `${value.tname}%`;
   }
   if (value.rname) {
-    conditions.push("r.ranking_name LIKE :rname");
+    conditions.push("top.toplist_name LIKE :rname");
     queryParams["rname"] = `${value.rname}%`;
   }
 
@@ -150,11 +150,11 @@ async function filteredRankingQuery(req) {
     value.sortBy &&
     ["id", "name", "creatorname", "templatename"].includes(value.sortBy)
   ) {
-    let sortBy = "r.ranking_name";
+    let sortBy = "top.toplist_name";
 
     // if sorting by id
     if (value.sortBy === "id") {
-      sortBy = "r.ranking_id";
+      sortBy = "top.toplist_id";
     }
 
     // if sorting by creator name
@@ -182,7 +182,7 @@ async function filteredRankingQuery(req) {
   }
 
   if (value.limit) {
-    filteredQuery += ` LIMIT ${value.limit}`;
+    filteredQuery += ` FETCH FIRST 5 ROWS ONLY`;
   }
 
   return { filteredQuery, queryParams };

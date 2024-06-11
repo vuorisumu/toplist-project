@@ -1,3 +1,4 @@
+const oracledb = require("oracledb");
 const database = require("../config/database");
 const { filteredRankingQuery } = require("../filteredQueries");
 const { rankingSchema } = require("../schemas");
@@ -6,7 +7,7 @@ const rankRouter = express.Router();
 
 const databaseError = { msg: "Error retrieving data from database" };
 const notfoundError = { msg: "Data not found" };
-console.log("Ranking router accessed");
+console.log("Toplist router accessed");
 
 /**
  * Gets rankings from database
@@ -17,12 +18,14 @@ rankRouter.get("/", async (req, res) => {
     let results;
     if (Object.keys(req.query).length !== 0) {
       if (req.query.count) {
-        let countQuery = `SELECT COUNT(ranking_id) AS count
-          FROM rankedlists`;
+        let countQuery = `SELECT COUNT(toplist_id) AS count
+          FROM toplists`;
 
         if (req.query.tempId && req.query.tempId !== 0) {
-          countQuery += ` WHERE template_id = ?`;
-          results = await database.query(countQuery, [req.query.tempId]);
+          countQuery += ` WHERE template_id = :tempId`;
+          results = await database.query(countQuery, {
+            tempId: req.query.tempId,
+          });
         } else {
           results = await database.query(countQuery);
         }
@@ -35,7 +38,7 @@ rankRouter.get("/", async (req, res) => {
       }
     } else {
       // query does not have filters
-      const query = `SELECT * FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id LEFT JOIN templates t ON r.template_id = t.id`;
+      const query = `SELECT * FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id LEFT JOIN templates t ON top.template_id = t.id`;
       results = await database.query(query);
     }
 
@@ -56,11 +59,11 @@ rankRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const result = await database.query(
-      `SELECT * FROM rankedlists r
-      LEFT JOIN users u ON r.creator_id = u.user_id
-      LEFT JOIN templates t ON r.template_id = t.id
-      WHERE r.ranking_id = ?`,
-      id
+      `SELECT * FROM toplists top
+      LEFT JOIN users u ON top.creator_id = u.user_id
+      LEFT JOIN templates t ON top.template_id = t.id
+      WHERE top.toplist_id = :id`,
+      { id: id }
     );
 
     // id not found
@@ -89,47 +92,45 @@ rankRouter.post("/", async (req, res) => {
 
     console.log(req.body);
 
-    const values = [];
-    const fields = [];
-
-    // mandatory values
-    fields.push("ranking_name", "template_id", "ranked_items");
-    values.push(
-      req.body.ranking_name,
-      req.body.template_id,
-      JSON.stringify(req.body.ranked_items)
-    );
+    const placeholders = [];
+    placeholders.push("toplist_name", "template_id", "ranked_items");
+    const values = {
+      toplist_name: req.body.toplist_name,
+      template_id: req.body.template_id,
+      ranked_items: JSON.stringify(req.body.ranked_items),
+      toplist_id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+    };
 
     // optional creator info
     if (req.body.creator_id) {
-      fields.push("creator_id");
-      values.push(req.body.creator_id);
+      placeholders.push("creator_id");
+      values["creator_id"] = req.body.creator_id;
     }
 
     // optional description
-    if (req.body.ranking_desc) {
-      fields.push("ranking_desc");
-      values.push(req.body.ranking_desc);
+    if (req.body.toplist_desc) {
+      placeholders.push("toplist_desc");
+      values["toplist_desc"] = req.body.toplist_desc;
     }
 
     // optional creation time
     if (req.body.creation_time) {
-      fields.push("creation_time");
-      values.push(req.body.creation_time);
+      placeholders.push("creation_time");
+      values["creation_time"] = req.body.creation_time;
     }
 
-    const placeholdersString = values.map(() => "?").join(", ");
-    const query = `INSERT INTO rankedlists (${fields.join(
+    const placeholdersString = placeholders.map((t) => `:${t}`).join(", ");
+    const query = `INSERT INTO toplists (${placeholders.join(
       ", "
-    )}) VALUES (${placeholdersString})`;
+    )}) VALUES (${placeholdersString}) RETURNING toplist_id INTO :id`;
 
     console.log(query);
     const result = await database.query(query, values);
 
     // successful insert
     res.status(201).json({
-      msg: "Added new ranking",
-      id: result.insertId,
+      msg: "Added new toplist",
+      id: result.outBinds.id[0],
     });
   } catch (err) {
     res.status(500).send(databaseError);
@@ -143,15 +144,15 @@ rankRouter.delete("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const result = await database.query(
-      "DELETE FROM rankedlists WHERE ranking_id = ?",
-      id
+      "DELETE FROM toplists WHERE toplist_id = :id",
+      { id: id }
     );
 
     if (result.affectedRows === 0) {
       return res.status(404).send(notfoundError);
     }
 
-    res.status(200).json({ msg: `Deleted ranking ${id} successfully` });
+    res.status(200).json({ msg: `Deleted toplist ${id} successfully` });
   } catch (err) {
     res.status(500).send(databaseError);
   }

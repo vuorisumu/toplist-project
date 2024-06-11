@@ -38,8 +38,8 @@ function NewList() {
 
   const [template, setTemplate] = useState(null);
   const [containers, setContainers] = useState(itemContainers);
-  const [rankingName, setRankingName] = useState("");
-  const [rankingDesc, setRankingDesc] = useState("");
+  const [toplistName, setToplistName] = useState("");
+  const [toplistDesc, setToplistDesc] = useState("");
   const [creatorName, setCreatorName] = useState("");
   const [newEntry, setNewEntry] = useState("");
 
@@ -117,7 +117,7 @@ function NewList() {
    * Minimum requirements are: at least one item ranked and the list is given a name.
    * Trims all input fields from possible extra spaces
    */
-  const saveRanking = async () => {
+  const saveToplist = async () => {
     const errors = [];
     const nonEmptyRanked = containers[ITEMS_RANKED].items.filter(
       (i) => i.item_name.trim() !== ""
@@ -130,7 +130,7 @@ function NewList() {
       document.getElementById("Ranked").classList.add("error");
     }
 
-    if (!rankingName) {
+    if (!toplistName) {
       errors.push("Top list must have a title");
       document.getElementById("addRankTitle").classList.add("error");
     } else {
@@ -144,8 +144,8 @@ function NewList() {
 
     try {
       // store ranking data
-      let rankingData = {
-        ranking_name: rankingName,
+      let toplistData = {
+        toplist_name: toplistName,
         template_id: templateId,
         ranked_items: nonEmptyRanked,
         creation_time: getLocalTime(),
@@ -154,16 +154,16 @@ function NewList() {
       // optional creator name
       if (creatorName !== "") {
         const fetchedUserId = await getUserId(creatorName.trim());
-        rankingData.creator_id = fetchedUserId;
+        toplistData.creator_id = fetchedUserId;
       }
 
       // optional description
-      if (rankingDesc !== "") {
-        rankingData.ranking_desc = rankingDesc;
+      if (toplistDesc !== "") {
+        toplistData.toplist_desc = toplistDesc;
       }
 
-      const res = await addNewRanking(rankingData);
-      navigate(`/rankings/${res.id}`);
+      const res = await addNewRanking(toplistData);
+      navigate(`/toplists/${res.id}`);
     } catch (err) {
       console.error(err);
     }
@@ -204,15 +204,15 @@ function NewList() {
           <input
             type="text"
             id="addRankTitle"
-            value={rankingName}
-            onChange={(e) => setRankingName(e.target.value)}
+            value={toplistName}
+            onChange={(e) => setToplistName(e.target.value)}
             placeholder="For example: Top 5 movies"
           />
 
           <label>Description: </label>
           <textarea
-            value={rankingDesc}
-            onChange={(e) => setRankingDesc(e.target.value)}
+            value={toplistDesc}
+            onChange={(e) => setToplistDesc(e.target.value)}
             placeholder="Write something about your top list"
           />
 
@@ -256,7 +256,7 @@ function NewList() {
               ))}
             </ul>
           )}
-          <button type="button" onClick={saveRanking}>
+          <button type="button" onClick={saveToplist}>
             Save List
           </button>
 
