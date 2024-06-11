@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import Templates from "./Templates";
-import { testOracle } from "./api";
+import TestField from "./TestField";
 
 /**
  * Initial view of the application. Renders general information about
@@ -11,6 +11,7 @@ function Main() {
     <div className="container">
       <h1>Listmaker 9000</h1>
       <div className="pageInfo">
+        <TestField />
         <p>
           Make your own top list using the templates provided by our passionate
           top list template creators, explain your choices when you feel like
