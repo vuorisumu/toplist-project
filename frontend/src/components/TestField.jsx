@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchAllTemplates } from "./api";
+import { formatData } from "../util/dataHandler";
 
 function TestField() {
   const [templates, setTemplates] = useState([]);
@@ -8,18 +9,7 @@ function TestField() {
     console.log("template fetching started");
     fetchAllTemplates()
       .then((result) => {
-        console.log("got result");
-        if (result.length == 0) {
-          console.log("haloo");
-        }
-        const data = [];
-        result.rows.forEach((row) => {
-          const dataRow = {};
-          result.metaData.forEach((column, index) => {
-            dataRow[column.name] = row[index];
-          });
-          data.push(dataRow);
-        });
+        const data = formatData(result);
         setTemplates(data);
       })
       .catch((err) => {
