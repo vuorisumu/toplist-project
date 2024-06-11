@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import TemplateContainer from "./TemplateContainer";
 import Templates from "./Templates";
+import TestField from "./TestField";
 
 /**
  * Initial view of the application. Renders general information about
@@ -10,6 +11,7 @@ function Main() {
   return (
     <div className="container">
       <h1>Listmaker 9000</h1>
+      <TestField />
       <div className="pageInfo">
         <p>
           Make your own top list using the templates provided by our passionate

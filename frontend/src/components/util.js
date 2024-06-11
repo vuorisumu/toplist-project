@@ -1,3 +1,4 @@
+import { formatData } from "../util/dataHandler";
 import {
   fetchTagByName,
   addNewTag,
@@ -111,9 +112,10 @@ export const getTagNames = async (tagNumbers) => {
  */
 export const getUserId = async (username) => {
   const fetchedUser = await fetchUserByName(username.trim());
-  if (fetchedUser.length > 0) {
+  const userData = formatData(fetchedUser);
+  if (userData.length > 0) {
     // use the id of user that already exists
-    return fetchedUser[0].user_id;
+    return userData[0].user_id;
   } else {
     // add new user that's not already in database
     const newUser = {
@@ -121,7 +123,7 @@ export const getUserId = async (username) => {
     };
 
     const newUserResponse = await addNewUser(newUser);
-    return newUserResponse.id;
+    return newUserResponse.userId;
   }
 };
 

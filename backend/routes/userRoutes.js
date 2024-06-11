@@ -1,3 +1,4 @@
+const oracledb = require("oracledb");
 const database = require("../config/database");
 const { filteredUserQuery } = require("../filteredQueries");
 const { userSchema } = require("../schemas");
@@ -67,20 +68,23 @@ userRouter.post("/", async (req, res) => {
       return res.status(400).json({ msg: error.details[0].message });
     }
 
-    const values = [];
-    values.push(req.body.user_name);
+    const values = {
+      user_name: req.body.user_name,
+      user_id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+    };
 
-    const query = "INSERT INTO users (user_name) VALUES (?)";
+    const query =
+      "INSERT INTO users (user_name) VALUES (:user_name) RETURNING user_id INTO :user_id";
 
     const result = await database.query(query, values);
 
     // successful insert
     res.status(201).json({
       msg: "Added new user",
-      id: result.insertId,
+      userId: result.outBinds.user_id[0],
     });
   } catch (err) {
-    res.status(500).send(databaseError);
+    res.status(500).send(err.message);
   }
 });
 

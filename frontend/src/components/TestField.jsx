@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
-import { fetchAllTemplates, fetchTemplateCount } from "./api";
+import {
+  addNewUser,
+  fetchAllTemplates,
+  fetchTemplateCount,
+  fetchUserByName,
+} from "./api";
 import { formatData } from "../util/dataHandler";
 import TemplateContainer from "./TemplateContainer";
+import { getUserId } from "./util";
 
 function TestField() {
   const [templates, setTemplates] = useState([]);
@@ -28,22 +34,30 @@ function TestField() {
     });
   };
 
+  const testUserFetch = async () => {
+    getUserId("admin")
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const testUserAdd = async () => {
+    const newUser = {
+      user_name: "test",
+    };
+    addNewUser(newUser)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <>
-      <button type="button" onClick={getTemplates} className="loadMoreButton">
-        Get Templates
+      <button type="button" onClick={testUserFetch} className="loadMoreButton">
+        Test
       </button>
-      <button type="button" onClick={showTemplates} className="loadMoreButton">
-        Show Templates
-      </button>
-      <button
-        type="button"
-        onClick={getTemplateCount}
-        className="loadMoreButton"
-      >
-        Get template count
-      </button>
-      <TemplateContainer />
     </>
   );
 }
