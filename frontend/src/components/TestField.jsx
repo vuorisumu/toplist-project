@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import {
   addNewUser,
   fetchAllTemplates,
+  fetchTemplateById,
   fetchTemplateCount,
   fetchUserByName,
 } from "./api";
@@ -24,38 +25,17 @@ function TestField() {
       });
   };
 
-  const showTemplates = () => {
-    console.log(templates);
-  };
-
-  const getTemplateCount = async () => {
-    fetchTemplateCount().then((result) => {
-      console.log(formatData(result));
-    });
-  };
-
-  const testUserFetch = async () => {
-    getUserId("admin")
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const testUserAdd = async () => {
-    const newUser = {
-      user_name: "test",
-    };
-    addNewUser(newUser)
-      .then((result) => {
-        console.log(result);
+  const test = async () => {
+    fetchTemplateById(24)
+      .then((res) => {
+        console.log(formatData(res));
       })
       .catch((err) => console.log(err));
   };
 
   return (
     <>
-      <button type="button" onClick={testUserFetch} className="loadMoreButton">
+      <button type="button" onClick={test} className="loadMoreButton">
         Test
       </button>
     </>

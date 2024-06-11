@@ -1,3 +1,4 @@
+const oracledb = require("oracledb");
 const database = require("../config/database");
 const { filteredTemplatesQuery } = require("../filteredQueries");
 const { templateSchema } = require("../schemas");
@@ -37,6 +38,7 @@ templateRouter.get("/", async (req, res) => {
       const query = `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
       results = await database.query(query);
     }
+    console.log(results);
 
     res.status(200).json(results);
   } catch (err) {
@@ -116,44 +118,36 @@ templateRouter.post("/", async (req, res) => {
 
     console.log(req.body);
 
-    const values = [];
-    const fields = [];
-
-    // mandatory values
-    fields.push("name", "items");
-    values.push(req.body.name, JSON.stringify(req.body.items));
+    const placeholders = [];
+    placeholders.push("name", "items");
+    const values = {
+      name: req.body.name,
+      items: JSON.stringify(req.body.items),
+      id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+    };
 
     // optional creator info
     if (req.body.creator_id) {
-      fields.push("creator_id");
-      values.push(req.body.creator_id);
+      placeholders.push("creator_id");
+      values["creator_id"] = req.body.creator_id;
     }
 
     // optional description
     if (req.body.description) {
-      fields.push("description");
-      values.push(req.body.description);
+      placeholders.push("description");
+      values["description"] = req.body.description;
     }
 
     // optional tags
     if (req.body.tags) {
-      fields.push("tags");
-      values.push(JSON.stringify(req.body.tags));
+      placeholders.push("tags");
+      values["tags"] = JSON.stringify(req.body.tags);
     }
 
-    // optional creation time
-    if (req.body.editkey) {
-      fields.push("editkey");
-      const encryptedKey = await bcrypt.hash(req.body.editkey, 10);
-      values.push(`${encryptedKey}`);
-    }
-
-    const placeholdersString = values
-      .map((_, index) => `:${index + 1}`)
-      .join(", ");
-    const query = `INSERT INTO templates (${fields.join(
+    const placeholdersString = placeholders.map((t) => `:${t}`).join(", ");
+    const query = `INSERT INTO templates (${placeholders.join(
       ", "
-    )}) VALUES (${placeholdersString})`;
+    )}) VALUES (${placeholdersString}) RETURNING id INTO :id`;
 
     console.log(query);
     console.log(values);
@@ -162,7 +156,7 @@ templateRouter.post("/", async (req, res) => {
     // successful insert
     res.status(201).json({
       msg: "Added new template",
-      id: result.insertId,
+      id: result.outBinds.id[0],
     });
   } catch (err) {
     console.log(err.message);

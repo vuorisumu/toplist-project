@@ -179,7 +179,7 @@ function NewTemplate() {
     // add template to database
     try {
       const res = await addNewTemplate(templateData);
-      navigate(`/createranking/${res.id}`);
+      navigate(`/createlist/${res.id}`);
     } catch (err) {
       console.log(err);
     }

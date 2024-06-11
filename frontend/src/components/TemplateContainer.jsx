@@ -26,10 +26,6 @@ function TemplateContainer() {
     fetchAllTemplatesFiltered(`${defaultQuery}`)
       .then((data) => {
         setTemplates(formatData(data));
-        const test = formatData(data);
-        test.map((testTemplate) => {
-          console.log(testTemplate);
-        });
         setLoading(false);
       })
       .catch((err) => console.log(err));

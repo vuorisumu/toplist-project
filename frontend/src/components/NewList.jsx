@@ -5,6 +5,7 @@ import { DnDContainer } from "./Dnd";
 import { v4 as uuid } from "uuid";
 import { getLocalTime, clearAll, checkAdminStatus, getUserId } from "./util";
 import ShowRankings from "./ShowRankings";
+import { formatData } from "../util/dataHandler";
 
 /**
  * View where the user can create a new list from a chosen template.
@@ -14,10 +15,10 @@ import ShowRankings from "./ShowRankings";
  * Provides an option to add new items to be used in the ranking.
  * Finally renders a ShowRankings component with current template ID
  */
-function CreateListing() {
+function NewList() {
   const location = useLocation();
   const navigate = useNavigate();
-  const templateId = parseInt(location.pathname.replace("/createranking/", ""));
+  const templateId = parseInt(location.pathname.replace("/createlist/", ""));
 
   // drag n drop containers
   const ITEMS_RANKED = "ranked";
@@ -51,7 +52,8 @@ function CreateListing() {
   useEffect(() => {
     fetchTemplateById(templateId)
       .then((data) => {
-        setTemplate(data[0]);
+        const formattedData = formatData(data)[0];
+        setTemplate(formattedData);
 
         const blankAmount = 5;
         const blanks = [];
@@ -63,8 +65,8 @@ function CreateListing() {
           });
         }
 
-        // Add uuid() to each item in data[0].items
-        const setIds = JSON.parse(data[0].items).map((item) => ({
+        // Add uuid() to each item
+        const setIds = formattedData.items.map((item) => ({
           ...item,
           id: uuid(),
         }));
@@ -268,4 +270,4 @@ function CreateListing() {
   );
 }
 
-export default CreateListing;
+export default NewList;

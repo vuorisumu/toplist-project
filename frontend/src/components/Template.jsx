@@ -1,9 +1,13 @@
+import { Link } from "react-router-dom";
+
 function Template(props) {
   const data = props.data;
 
   return (
     <>
-      <h2>{data.name}</h2>
+      <Link to={`/createlist/${data.id}`}>
+        <h2>{data.name}</h2>{" "}
+      </Link>
       <p className="creator">
         Creator:
         {data.user_name ? data.user_name : "Anonymous"}
