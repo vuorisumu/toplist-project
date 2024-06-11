@@ -6,12 +6,13 @@ import NewTemplate from "./components/NewTemplate.jsx";
 import Login from "./components/Login.jsx";
 import EditTemplate from "./components/EditTemplate.jsx";
 import BrowseToplists from "./components/BrowseToplists.jsx";
-import Ranking from "./components/Ranking.jsx";
+import Ranking from "./components/SingleList.jsx";
 import BrowseTemplates from "./components/BrowseTemplates.jsx";
 import { checkCreatorStatus } from "./components/util.js";
 import logo from "./assets/logo.svg";
 import ThemeButton from "./components/ThemeButton.jsx";
 import NewList from "./components/NewList.jsx";
+import SingleList from "./components/SingleList.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -107,7 +108,7 @@ class App extends React.Component {
             path="/edit-template/:templateid"
             element={<EditTemplate admin={true} />}
           />
-          <Route path="/toplists/:rankId" element={<Ranking />} />
+          <Route path="/toplists/:listId" element={<SingleList />} />
         </Routes>
       </Router>
     );

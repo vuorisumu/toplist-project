@@ -9,8 +9,7 @@ function Template(props) {
         <h2>{data.name}</h2>{" "}
       </Link>
       <p className="creator">
-        Creator:
-        {data.user_name ? data.user_name : "Anonymous"}
+        Creator: {data.user_name ? data.user_name : "Anonymous"}
       </p>
 
       {data.description && <p className="description">{data.description}</p>}

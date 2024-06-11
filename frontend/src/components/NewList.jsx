@@ -43,7 +43,7 @@ function NewList() {
   const [toplistDesc, setToplistDesc] = useState("");
   const [creatorName, setCreatorName] = useState("");
   const [newEntry, setNewEntry] = useState("");
-
+  const [userName, setUserName] = useState("");
   const [errorMessages, setErrorMessages] = useState([]);
 
   /**
@@ -51,6 +51,7 @@ function NewList() {
    * and buiild the necessary containers for the items to be used in the ranking
    */
   useEffect(() => {
+    setUserName(localStorage.getItem("role"));
     fetchTemplateById(templateId)
       .then((data) => {
         const formattedData = formatData(data)[0];
@@ -157,6 +158,9 @@ function NewList() {
       if (creatorName !== "") {
         const fetchedUserId = await getUserId(creatorName.trim());
         toplistData.creator_id = fetchedUserId;
+      } else if (userName !== "") {
+        const fetchedUserId = await getUserId(userName.trim());
+        toplistData.creator_id = fetchedUserId;
       }
 
       // optional description
@@ -219,12 +223,16 @@ function NewList() {
           />
 
           <label>Creator name: </label>
-          <input
-            type="text"
-            value={creatorName}
-            onChange={(e) => setCreatorName(e.target.value)}
-            placeholder="Creator name"
-          />
+          {userName.trim() === "" ? (
+            <input
+              type="text"
+              value={creatorName}
+              onChange={(e) => setCreatorName(e.target.value)}
+              placeholder="Creator name"
+            />
+          ) : (
+            <label>{userName}</label>
+          )}
         </div>
 
         {/* Ranking builder */}
