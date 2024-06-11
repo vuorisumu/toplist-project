@@ -115,22 +115,22 @@ rankRouter.post("/", async (req, res) => {
 
     // optional creation time
     if (req.body.creation_time) {
+      const creationTime = new Date(req.body.creation_time);
       placeholders.push("creation_time");
-      values["creation_time"] = req.body.creation_time;
+      values["creation_time"] = creationTime;
     }
 
     const placeholdersString = placeholders.map((t) => `:${t}`).join(", ");
     const query = `INSERT INTO toplists (${placeholders.join(
       ", "
-    )}) VALUES (${placeholdersString}) RETURNING toplist_id INTO :id`;
+    )}) VALUES (${placeholdersString}) RETURNING toplist_id INTO :toplist_id`;
 
-    console.log(query);
     const result = await database.query(query, values);
 
     // successful insert
     res.status(201).json({
       msg: "Added new toplist",
-      id: result.outBinds.id[0],
+      toplist_id: result.outBinds.toplist_id[0],
     });
   } catch (err) {
     res.status(500).send(databaseError);

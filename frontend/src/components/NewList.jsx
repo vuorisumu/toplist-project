@@ -6,6 +6,7 @@ import { v4 as uuid } from "uuid";
 import { getLocalTime, clearAll, checkAdminStatus, getUserId } from "./util";
 import ShowRankings from "./ShowRankings";
 import { formatData } from "../util/dataHandler";
+import ToplistContainer from "./ToplistContainer";
 
 /**
  * View where the user can create a new list from a chosen template.
@@ -144,11 +145,12 @@ function NewList() {
 
     try {
       // store ranking data
-      let toplistData = {
+      const toplistData = {
         toplist_name: toplistName,
         template_id: templateId,
         ranked_items: nonEmptyRanked,
-        creation_time: getLocalTime(),
+        creation_time: new Date(),
+        //creation_time: getLocalTime(),
       };
 
       // optional creator name
@@ -163,7 +165,7 @@ function NewList() {
       }
 
       const res = await addNewRanking(toplistData);
-      navigate(`/toplists/${res.id}`);
+      navigate(`/toplists/${res.toplist_id}`);
     } catch (err) {
       console.error(err);
     }
@@ -265,7 +267,8 @@ function NewList() {
           </button>
         </div>
       </div>
-      <ShowRankings id={templateId} />
+      <ToplistContainer id={templateId} />
+      {/*<ShowRankings id={templateId} />*/}
     </div>
   );
 }

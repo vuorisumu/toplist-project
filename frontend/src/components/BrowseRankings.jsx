@@ -1,4 +1,4 @@
-import ShowRankings from "./ShowRankings";
+import ToplistContainer from "./ToplistContainer";
 
 /**
  * View where the user can browse through all rankings
@@ -8,7 +8,7 @@ function BrowseRankings() {
   return (
     <div className="container">
       <h1>Top lists</h1>
-      <ShowRankings id={0} />
+      <ToplistContainer id={0} />
     </div>
   );
 }

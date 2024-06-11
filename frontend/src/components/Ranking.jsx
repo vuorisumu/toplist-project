@@ -12,7 +12,7 @@ import ButtonPrompt from "./ButtonPrompt";
 function Ranking() {
   const location = useLocation();
   const navigate = useNavigate();
-  const rankingId = parseInt(location.pathname.replace("/rankings/", ""));
+  const rankingId = parseInt(location.pathname.replace("/toplists/", ""));
   if (isNaN(rankingId)) {
     console.error("Invalid ranking id: ", rankingId);
   }

@@ -35,7 +35,7 @@ function TemplateContainer() {
     <>
       <div>
         <h2>Recent templates</h2>
-        {templates.length < 1 && <p>No templates found</p>}
+        {!loading && templates.length < 1 && <p>No templates found</p>}
         {loading ? (
           <p>Loading</p>
         ) : (

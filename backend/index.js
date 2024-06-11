@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 
 database.init().then(() => {
   app.use(express.json());
-  app.use("/api/rankings", rankRoutes);
+  app.use("/api/toplists", rankRoutes);
   app.use("/api/templates", templateRoutes);
   app.use("/api/login", roleRoutes);
   app.use("/api/users", userRoutes);

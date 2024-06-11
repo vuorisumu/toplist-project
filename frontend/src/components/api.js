@@ -136,7 +136,7 @@ export const fetchTemplateCount = () => {
  * @returns data containing all rankings
  */
 export const fetchAllRankings = () => {
-  return fetch(`${API_BASE_URL}/rankings`).then((response) => response.json());
+  return fetch(`${API_BASE_URL}/toplists`).then((response) => response.json());
 };
 
 /**
@@ -145,7 +145,7 @@ export const fetchAllRankings = () => {
  * @returns data containing all fetched rankings
  */
 export const fetchAllRankingsFiltered = (filters) => {
-  return fetch(`${API_BASE_URL}/rankings?${filters}`).then((response) =>
+  return fetch(`${API_BASE_URL}/toplists?${filters}`).then((response) =>
     response.json()
   );
 };
@@ -156,7 +156,7 @@ export const fetchAllRankingsFiltered = (filters) => {
  * @returns data containing the count of ranking lists
  */
 export const fetchRankingCount = (id) => {
-  let searchQuery = `${API_BASE_URL}/rankings?count=true}`;
+  let searchQuery = `${API_BASE_URL}/toplists?count=true}`;
   if (id > 0) {
     searchQuery += `&tempId=${id}`;
   }
@@ -169,7 +169,7 @@ export const fetchRankingCount = (id) => {
  * @returns data of the fetched ranking
  */
 export const fetchRankingById = (id) => {
-  return fetch(`${API_BASE_URL}/rankings/${id}`).then((response) =>
+  return fetch(`${API_BASE_URL}/toplists/${id}`).then((response) =>
     response.json()
   );
 };
@@ -180,7 +180,7 @@ export const fetchRankingById = (id) => {
  * @returns a response with newly added ranking ID on successful insert
  */
 export const addNewRanking = (ranking) => {
-  return fetch(`${API_BASE_URL}/rankings/`, {
+  return fetch(`${API_BASE_URL}/toplists/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -197,7 +197,7 @@ export const addNewRanking = (ranking) => {
  * @returns a response containing information about the result of deletion request
  */
 export const deleteRanking = (id) => {
-  return fetch(`${API_BASE_URL}/rankings/${id}`, {
+  return fetch(`${API_BASE_URL}/toplists/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
