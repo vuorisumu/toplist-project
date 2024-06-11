@@ -5,7 +5,8 @@ export const formatData = (data) => {
     data.rows.forEach((row) => {
       const formattedDataRow = {};
       data.metaData.forEach((column, index) => {
-        formattedDataRow[column.name] = row[index];
+        const columnName = column.name.toLowerCase();
+        formattedDataRow[columnName] = row[index];
       });
       formattedData.push(formattedDataRow);
     });

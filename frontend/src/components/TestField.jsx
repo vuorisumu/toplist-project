@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { fetchAllTemplates } from "./api";
+import { fetchAllTemplates, fetchTemplateCount } from "./api";
 import { formatData } from "../util/dataHandler";
+import TemplateContainer from "./TemplateContainer";
 
 function TestField() {
   const [templates, setTemplates] = useState([]);
@@ -21,6 +22,12 @@ function TestField() {
     console.log(templates);
   };
 
+  const getTemplateCount = async () => {
+    fetchTemplateCount().then((result) => {
+      console.log(formatData(result));
+    });
+  };
+
   return (
     <>
       <button type="button" onClick={getTemplates} className="loadMoreButton">
@@ -29,6 +36,14 @@ function TestField() {
       <button type="button" onClick={showTemplates} className="loadMoreButton">
         Show Templates
       </button>
+      <button
+        type="button"
+        onClick={getTemplateCount}
+        className="loadMoreButton"
+      >
+        Get template count
+      </button>
+      <TemplateContainer />
     </>
   );
 }

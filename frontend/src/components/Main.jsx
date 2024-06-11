@@ -23,7 +23,7 @@ function Main() {
           is missing an item, you can always add your own items too!
         </p>
       </div>
-      <Templates />
+      {/*<Templates />*/}
     </div>
   );
 }
