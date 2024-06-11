@@ -23,7 +23,14 @@ function SingleList() {
 
   useEffect(() => {
     fetchRankingById(rankingId)
-      .then((data) => setList(formatData(data)[0]))
+      .then((data) => {
+        const formattedData = formatData(data);
+        if (formattedData.length > 0) {
+          setList(formatData(data)[0]);
+        } else {
+          setNotFound(true);
+        }
+      })
       .catch((err) => {
         setNotFound(true);
         console.log(err);
@@ -43,11 +50,19 @@ function SingleList() {
   };
 
   if (notFound) {
-    return <p>{`Ranking doesn't exist or it has been deleted`}</p>;
+    return (
+      <div className="container">
+        <p>{`Ranking doesn't exist or it has been deleted`}</p>
+      </div>
+    );
   }
 
   if (!list) {
-    return <p>Loading</p>;
+    return (
+      <div className="container">
+        <p>Loading</p>
+      </div>
+    );
   }
 
   return (
