@@ -1,16 +1,15 @@
 export const formatData = (data) => {
-  if (data != null) {
+  if (data && data.rows && data.metaData) {
     console.log("formatting data");
-    const formattedData = [];
-    data.rows.forEach((row) => {
+    const formattedData = data.rows.map((row) => {
       const formattedDataRow = {};
       data.metaData.forEach((column, index) => {
         const columnName = column.name.toLowerCase();
         formattedDataRow[columnName] = row[index];
       });
-      formattedData.push(formattedDataRow);
+      return formattedDataRow;
     });
     return formattedData;
   }
-  return null;
+  return [];
 };
