@@ -1,10 +1,10 @@
 import ToplistContainer from "./ToplistContainer";
 
 /**
- * View where the user can browse through all rankings
+ * View where the user can browse through all top lists
  * @returns the title and content of the view
  */
-function BrowseRankings() {
+function BrowseToplists() {
   return (
     <div className="container">
       <h1>Top lists</h1>
@@ -13,4 +13,4 @@ function BrowseRankings() {
   );
 }
 
-export default BrowseRankings;
+export default BrowseToplists;

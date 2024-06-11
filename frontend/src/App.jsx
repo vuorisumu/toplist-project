@@ -5,7 +5,7 @@ import Main from "./components/Main.jsx";
 import NewTemplate from "./components/NewTemplate.jsx";
 import Login from "./components/Login.jsx";
 import EditTemplate from "./components/EditTemplate.jsx";
-import BrowseRankings from "./components/BrowseRankings.jsx";
+import BrowseToplists from "./components/BrowseToplists.jsx";
 import Ranking from "./components/Ranking.jsx";
 import BrowseTemplates from "./components/BrowseTemplates.jsx";
 import { checkCreatorStatus } from "./components/util.js";
@@ -100,7 +100,7 @@ class App extends React.Component {
           <Route path="/" element={<Main />} />
           <Route path="/templates" element={<BrowseTemplates />} />
           <Route path="/createlist" element={<Main />} />
-          <Route path="/toplists" element={<BrowseRankings />} />
+          <Route path="/toplists" element={<BrowseToplists />} />
           <Route path="/new-template" element={<NewTemplate />} />
           <Route path="/createlist/:templateId" element={<NewList />} />
           <Route
