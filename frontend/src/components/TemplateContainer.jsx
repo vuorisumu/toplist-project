@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchAllTemplatesFiltered, fetchTemplateCount } from "./api";
-import { formatData } from "../util/dataHandler";
+import { formatData, getCountFromData } from "../util/dataHandler";
 
 function TemplateContainer() {
   const [templates, setTemplates] = useState([]);
@@ -15,7 +15,9 @@ function TemplateContainer() {
 
   const getTemplateCount = async () => {
     fetchTemplateCount()
-      .then((data) => console.log(formatData(data)))
+      .then((data) => {
+        setTemplateCount(getCountFromData(data));
+      })
       .catch((err) => console.log(err));
   };
 
@@ -41,6 +43,9 @@ function TemplateContainer() {
           <p>Loading</p>
         ) : (
           <ul>
+            <li key={"count"}>
+              <p>Template count: {templateCount}</p>
+            </li>
             {templates.map((template) => (
               <li key={template.id}>
                 <p>{template.name}</p>

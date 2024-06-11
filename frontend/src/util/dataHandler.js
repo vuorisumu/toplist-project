@@ -13,3 +13,11 @@ export const formatData = (data) => {
   }
   return [];
 };
+
+export const getCountFromData = (data) => {
+  const formattedData = formatData(data);
+  if (formattedData.length > 0 && formattedData[0].hasOwnProperty("count")) {
+    return parseInt(formattedData[0].count);
+  }
+  return 0;
+};
