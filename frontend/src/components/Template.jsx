@@ -17,6 +17,17 @@ function Template(props) {
 
   return (
     <>
+      {checkAdminStatus() && (
+        <Link to={`/edit-template/${data.id}`} className="editButton">
+          <span
+            className="material-symbols-outlined"
+            aria-label="edit template"
+          >
+            edit_square
+          </span>
+        </Link>
+      )}
+
       <Link to={`/createlist/${data.id}`}>
         <h2>{data.name}</h2>{" "}
       </Link>
