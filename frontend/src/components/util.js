@@ -91,9 +91,10 @@ export const getTagNames = async (tagNumbers) => {
     await Promise.all(
       tagNumbers.map(async (t) => {
         const fetchedTag = await fetchTagById(parseInt(t));
+        const formattedTags = formatData(fetchedTag);
         let tagName;
-        if (fetchedTag.length > 0) {
-          tagName = fetchedTag[0].id;
+        if (formattedTags.length > 0) {
+          tagName = formattedTags[0].id;
         }
         tagNames.push(tagName);
       })

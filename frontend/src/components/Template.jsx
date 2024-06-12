@@ -5,6 +5,7 @@ import ButtonPrompt from "./ButtonPrompt";
 
 function Template(props) {
   const data = props.data;
+  console.log(data.tags);
 
   const handleDelete = () => {
     deleteTemplate(data.id)
@@ -44,6 +45,14 @@ function Template(props) {
             <li key={index}>{item.item_name}</li>
           ))}
         </ul>
+
+        {data.tags && (
+          <ul>
+            {data.tags.map((tag, index) => (
+              <li key={index}>{tag}</li>
+            ))}
+          </ul>
+        )}
 
         {checkAdminStatus() && (
           <>

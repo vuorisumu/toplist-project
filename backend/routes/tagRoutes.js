@@ -1,3 +1,4 @@
+const OracleDB = require("oracledb");
 const database = require("../config/database");
 const { filteredTagQuery } = require("../filteredQueries");
 const { tagSchema } = require("../schemas");
@@ -37,7 +38,9 @@ tagRouter.get("/", async (req, res) => {
 tagRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const result = await database.query(`SELECT * FROM tags WHERE id = ?`, id);
+    const result = await database.query(`SELECT * FROM tags WHERE id = :id`, {
+      id: id,
+    });
 
     // id not found
     if (result.length === 0) {
@@ -64,17 +67,20 @@ tagRouter.post("/", async (req, res) => {
       return res.status(400).json({ msg: error.details[0].message });
     }
 
-    const values = [];
-    values.push(req.body.name);
+    const values = {
+      name: req.body.name,
+      id: { type: OracleDB.NUMBER, dir: OracleDB.BIND_OUT },
+    };
 
-    const query = "INSERT INTO tags (name) VALUES (?)";
+    const query =
+      "INSERT INTO tags (name) VALUES (:name) RETURNING id into :id";
 
     const result = await database.query(query, values);
 
     // successful insert
     res.status(201).json({
       msg: "Added new tag",
-      id: result.insertId,
+      id: result.outBinds.id[0],
     });
   } catch (err) {
     res.status(500).send(databaseError);

@@ -204,10 +204,10 @@ async function filteredUserQuery(req) {
   const queryParams = {};
 
   if (value.hasRankings) {
-    filteredQuery = `SELECT DISTINCT u.user_name FROM rankedlists r LEFT JOIN users u ON r.creator_id = u.user_id WHERE u.user_name IS NOT NULL`;
+    filteredQuery = `SELECT DISTINCT u.user_name FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id WHERE u.user_name IS NOT NULL`;
     if (value.tempId) {
-      filteredQuery += ` AND r.template_id = :rankedtemplateid`;
-      queryParams["rankedtemplateid"] = value.tempId;
+      filteredQuery += ` AND top.template_id = :tempId`;
+      queryParams["tempId"] = value.tempId;
     }
     return { filteredQuery, queryParams };
   }
@@ -248,23 +248,23 @@ async function filteredTagQuery(req) {
 
   let filteredQuery = "";
   const conditions = [];
-  const queryParams = [];
+  const queryParams = {};
 
   if (value.count) {
     filteredQuery = `SELECT tags.id, tags.name, COUNT(t.id) AS count
       FROM tags
       LEFT JOIN templates t
-      ON JSON_CONTAINS(t.tags, CAST(tags.id AS CHAR), '$')
+      ON JSON_EXISTS(t.tags, '$[*]?(@ == "${tags.id}")')
       GROUP BY tags.id
       HAVING count > 0`;
     return { filteredQuery, queryParams };
   }
 
   if (value.rcount) {
-    filteredQuery = `SELECT tags.id, tags.name, COUNT(r.ranking_id) AS count
+    filteredQuery = `SELECT tags.id, tags.name, COUNT(top.toplist_id) AS count
       FROM tags
-      LEFT JOIN templates t ON JSON_CONTAINS(t.tags, CAST(tags.id AS CHAR), '$')
-      LEFT JOIN rankedlists r ON t.id = r.template_id
+      LEFT JOIN templates t ON JSON_EXISTS(t.tags, '$[*]?(@ == "${tags.id}")')
+      LEFT JOIN toplists top ON t.id = top.template_id
       GROUP BY tags.id
       HAVING count > 0`;
     return { filteredQuery, queryParams };
@@ -273,8 +273,8 @@ async function filteredTagQuery(req) {
   filteredQuery = `SELECT * FROM tags t`;
 
   if (value.name) {
-    conditions.push(`t.name = ?`);
-    queryParams.push(value.name);
+    conditions.push(`t.name = :name`);
+    queryParams.name = value.name;
   }
 
   if (conditions.length > 0) {
