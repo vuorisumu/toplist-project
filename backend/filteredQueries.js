@@ -180,8 +180,8 @@ async function filteredRankingQuery(req) {
     }
   }
 
-  if (value.limit) {
-    filteredQuery += ` FETCH FIRST 5 ROWS ONLY`;
+  if (value.amount) {
+    filteredQuery += ` OFFSET ${value.from} ROWS FETCH NEXT ${value.amount} ROWS ONLY`;
   }
 
   return { filteredQuery, queryParams };

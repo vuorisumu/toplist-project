@@ -82,7 +82,7 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
           const temp = [];
           temp.push(...rankNames);
           fetchAllUsersWithRankings(id).then((users) => {
-            const tempUsers = users.map((u) => u.user_name);
+            const tempUsers = formatData(users).map((u) => u.user_name);
             temp.push(...tempUsers);
           });
           return temp;
@@ -98,7 +98,7 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
           const temp = [];
           temp.push(...rankNames);
           fetchAllUsersWithRankings().then((users) => {
-            const tempUsers = users.map((u) => u.user_name);
+            const tempUsers = formatData(users).map((u) => u.user_name);
             temp.push(...tempUsers);
           });
           return temp;

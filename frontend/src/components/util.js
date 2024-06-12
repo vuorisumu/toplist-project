@@ -156,7 +156,7 @@ export const getAllRankingNames = async (id) => {
       filter += `&tempId=${id}`;
     }
     const lists = await fetchAllRankingsFiltered(filter);
-    return lists.map((list) => list.ranking_name);
+    return formatData(lists).map((list) => list.ranking_name);
   } catch (err) {
     console.error(err);
   }
