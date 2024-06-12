@@ -5,7 +5,6 @@ import ButtonPrompt from "./ButtonPrompt";
 
 function Template(props) {
   const data = props.data;
-  console.log(data.tags);
 
   const handleDelete = () => {
     deleteTemplate(data.id)

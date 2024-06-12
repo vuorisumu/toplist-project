@@ -31,14 +31,12 @@ templateRouter.get("/", async (req, res) => {
           req.query
         );
         results = await database.query(filteredQuery, queryParams);
-        console.log(filteredQuery);
       }
     } else {
       // query does not have filters
       const query = `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
       results = await database.query(query);
     }
-    console.log(results);
 
     res.status(200).json(results);
   } catch (err) {
@@ -116,8 +114,6 @@ templateRouter.post("/", async (req, res) => {
       return res.status(400).json({ msg: error.details[0].message });
     }
 
-    console.log(req.body);
-
     const placeholders = [];
     placeholders.push("name", "items");
     const values = {
@@ -149,8 +145,6 @@ templateRouter.post("/", async (req, res) => {
       ", "
     )}) VALUES (${placeholdersString}) RETURNING id INTO :id`;
 
-    console.log(query);
-    console.log(values);
     const result = await database.query(query, values);
 
     // successful insert

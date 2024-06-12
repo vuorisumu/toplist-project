@@ -10,7 +10,6 @@ async function filteredTemplatesQuery(req) {
   if (error) {
     throw error;
   }
-
   let filteredQuery = `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
   const conditions = [];
   const queryParams = {};
@@ -75,8 +74,8 @@ async function filteredTemplatesQuery(req) {
     }
   }
 
-  if (value.limit) {
-    filteredQuery += ` FETCH FIRST 5 ROWS ONLY`;
+  if (value.amount) {
+    filteredQuery += ` OFFSET ${value.from} ROWS FETCH NEXT ${value.amount} ROWS ONLY`;
   }
 
   return { filteredQuery, queryParams };
