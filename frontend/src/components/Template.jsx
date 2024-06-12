@@ -1,7 +1,19 @@
 import { Link } from "react-router-dom";
+import { deleteTemplate } from "./api";
+import { checkAdminStatus } from "./util";
+import ButtonPrompt from "./ButtonPrompt";
 
 function Template(props) {
   const data = props.data;
+
+  const handleDelete = () => {
+    deleteTemplate(data.id)
+      .then((res) => {
+        console.log(res);
+        window.location.reload(false);
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <>
@@ -21,6 +33,16 @@ function Template(props) {
             <li key={index}>{item.item_name}</li>
           ))}
         </ul>
+
+        {checkAdminStatus() && (
+          <>
+            <br />
+            <ButtonPrompt
+              buttonName="Delete template"
+              confirm={() => handleDelete(data.id)}
+            />
+          </>
+        )}
       </div>
     </>
   );
