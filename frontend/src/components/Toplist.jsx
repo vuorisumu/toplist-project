@@ -1,9 +1,23 @@
 import { Link } from "react-router-dom";
-import { formatDate } from "./util";
+import { checkAdminStatus, formatDate } from "./util";
+import ButtonPrompt from "./ButtonPrompt";
+import { deleteRanking } from "./api";
 
 function Toplist(props) {
   const data = props.data;
   const general = props.general;
+
+  /**
+   * Deletes the top list from the database.
+   */
+  const handleDelete = () => {
+    deleteRanking(data.toplist_id)
+      .then((res) => {
+        console.log(res);
+        window.location.reload(false);
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <>
@@ -29,6 +43,13 @@ function Toplist(props) {
           </li>
         ))}
       </ol>
+
+      {checkAdminStatus() && (
+        <ButtonPrompt
+          buttonName="Delete top list"
+          confirm={() => handleDelete(data.toplist_id)}
+        />
+      )}
     </>
   );
 }
