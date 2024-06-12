@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { fetchAllTemplatesFiltered, fetchTemplateCount } from "./api";
 import { formatData, getCountFromData } from "../util/dataHandler";
 import Template from "./Template";
+import FilteredSearch from "./FilteredSearch";
 
 function TemplateContainer() {
   const [templates, setTemplates] = useState([]);
@@ -20,7 +21,7 @@ function TemplateContainer() {
     if (templateCount > 0) {
       loadTemplates();
     }
-  }, [templateCount]);
+  }, [templateCount, filters]);
 
   /**
    * Fetches the full count of templates in the database and sets it to state.
@@ -43,36 +44,50 @@ function TemplateContainer() {
    * same filters.
    */
   const loadTemplates = async (loadMore = false) => {
-    if (!loadMore) {
-      setLoadedCount(0);
-    }
+    const loaded = loadMore ? loadedCount : 0;
 
     // Don't fetch more than the database has
     let newLoadSize = loadMoreAmount;
-    if (loadedCount + loadMoreAmount > templateCount) {
-      console.log(`${loadedCount} + ${loadMoreAmount} > ${templateCount}`);
-      const overFlow = loadedCount + loadMoreAmount - templateCount;
+    if (loaded + loadMoreAmount > templateCount) {
+      const overFlow = loaded + loadMoreAmount - templateCount;
       newLoadSize -= overFlow;
     }
 
-    fetchAllTemplatesFiltered(
-      `${filters}&from=${loadedCount}&amount=${newLoadSize}`
-    )
+    fetchAllTemplatesFiltered(`${filters}&from=${loaded}&amount=${newLoadSize}`)
       .then((data) => {
+        console.log(`${filters}&from=${loaded}&amount=${newLoadSize}`);
         const formattedData = formatData(data);
-        if (loadedCount === 0) {
+        if (!loadMore) {
           setTemplates(formattedData);
           setLoading(false);
         } else {
           setTemplates((prevTemplates) => [...prevTemplates, ...formattedData]);
         }
-        setLoadedCount(loadedCount + newLoadSize);
+        setLoadedCount(loaded + newLoadSize);
       })
       .catch((err) => console.log(err));
   };
 
+  /**
+   * Sets the specified filters and calls for a new search
+   * @param {string} val - filtered query text
+   */
+  const handleFilteredSearch = (val) => {
+    setFilters(val === "" ? defaultQuery : val);
+  };
+
+  const handleClear = () => {
+    setFilters(defaultQuery);
+  };
+
   return (
     <>
+      <FilteredSearch
+        search={handleFilteredSearch}
+        clear={handleClear}
+        searchRankings={false}
+      />
+
       <div>
         <h2>Recent templates</h2>
         {!loading && templates.length < 1 && <p>No templates found</p>}

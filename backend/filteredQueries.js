@@ -245,6 +245,8 @@ async function filteredTagQuery(req) {
     throw error;
   }
 
+  console.log(value);
+
   let filteredQuery = "";
   const conditions = [];
   const queryParams = {};
@@ -253,19 +255,21 @@ async function filteredTagQuery(req) {
     filteredQuery = `SELECT tags.id, tags.name, COUNT(t.id) AS count
       FROM tags
       LEFT JOIN templates t
-      ON JSON_EXISTS(t.tags, '$[*]?(@ == "${tags.id}")')
-      GROUP BY tags.id
-      HAVING count > 0`;
+      ON JSON_EXISTS(tags, '$[*]?(@ == "tags.id")')
+      GROUP BY tags.id, tags.name
+      HAVING count(t.id) > 0`;
     return { filteredQuery, queryParams };
+
+    //JSON_EXISTS(tags, '$[*]?(@ == :tag${i})')
   }
 
   if (value.rcount) {
     filteredQuery = `SELECT tags.id, tags.name, COUNT(top.toplist_id) AS count
       FROM tags
-      LEFT JOIN templates t ON JSON_EXISTS(t.tags, '$[*]?(@ == "${tags.id}")')
+      LEFT JOIN templates t ON JSON_EXISTS(tags, '$[*]?(@ == "tags.id")')
       LEFT JOIN toplists top ON t.id = top.template_id
-      GROUP BY tags.id
-      HAVING count > 0`;
+      GROUP BY tags.id, tags.name
+      HAVING count(t.id) > 0`;
     return { filteredQuery, queryParams };
   }
 

@@ -11,7 +11,6 @@ function Main() {
   return (
     <div className="container">
       <h1>Listmaker 9000</h1>
-      <TestField />
       <div className="pageInfo">
         <p>
           Make your own top list using the templates provided by our passionate

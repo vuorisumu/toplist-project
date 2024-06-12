@@ -135,7 +135,8 @@ export const getUserId = async (username) => {
 export const getAllTemplateNames = async () => {
   try {
     const templates = await fetchAllTemplatesFiltered("distinct=true");
-    return templates.map((template) => template.name);
+    const formattedData = formatData(templates);
+    return formattedData.map((template) => template.name);
   } catch (err) {
     console.error(err);
   }

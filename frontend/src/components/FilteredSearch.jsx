@@ -8,6 +8,7 @@ import {
   fetchAllUsersWithRankings,
   fetchAllTagsFiltered,
 } from "./api";
+import { formatData } from "../util/dataHandler";
 
 /**
  * Reusable filtered search component that renders a general search input field, and an option
@@ -113,7 +114,7 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
           const temp = [];
           temp.push(...tempNames);
           fetchAllUsersWithTemplates().then((users) => {
-            const tempUsers = users.map((u) => u.user_name);
+            const tempUsers = formatData(users).map((u) => u.user_name);
             temp.push(...tempUsers);
           });
           return temp;
@@ -161,17 +162,26 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
     if (id) {
       // user names who have made rankings with specific id
       fetchAllUsersWithRankings(id)
-        .then((data) => setUserNames(data.map((u) => u.user_name)))
+        .then((data) => {
+          const formattedData = formatData(data);
+          setUserNames(formattedData.map((u) => u.user_name));
+        })
         .catch((err) => console.log(err));
     } else if (searchRankings) {
       // user names who have made rankings
       fetchAllUsersWithRankings()
-        .then((data) => setUserNames(data.map((u) => u.user_name)))
+        .then((data) => {
+          const formattedData = formatData(data);
+          setUserNames(formattedData.map((u) => u.user_name));
+        })
         .catch((err) => console.log(err));
     } else {
       // user names who have made templates
       fetchAllUsersWithTemplates()
-        .then((data) => setUserNames(data.map((u) => u.user_name)))
+        .then((data) => {
+          const formattedData = formatData(data);
+          setUserNames(formattedData.map((u) => u.user_name));
+        })
         .catch((err) => console.log(err));
     }
   };
@@ -184,7 +194,7 @@ function FilteredSearch({ search, clear, searchRankings, id }) {
     const tagCount = searchRankings ? "rcount=true" : "count=true";
     fetchAllTagsFiltered(tagCount)
       .then((data) => {
-        const tagData = data;
+        const tagData = formatData(data);
         tagData.map((t) => (t.check = false));
         setTags(tagData);
       })
