@@ -10,6 +10,7 @@ import {
   deleteTemplate,
 } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
+import { formatData } from "../util/dataHandler";
 
 /**
  * Edit template view that asks for the user to either be logged in as admin or to input
@@ -19,7 +20,6 @@ import ButtonPrompt from "./ButtonPrompt";
  * can be edited
  */
 function EditTemplate() {
-  const [editKey, setEditKey] = useState("");
   const [template, setTemplate] = useState(null);
   const [canEdit, setCanEdit] = useState(false);
   const [notFound, setNotFound] = useState(false);
@@ -32,25 +32,8 @@ function EditTemplate() {
     console.error("Invalid templateId: ", templateId);
   }
 
-  /**
-   * Checks if the user has given the correct edit key for the template
-   * and grants access to template edit mode if given the correct key.
-   */
-  const checkEditKey = async () => {
-    await enterTemplateEditMode(templateId, editKey)
-      .then((res) => {
-        if (res.data) {
-          localStorage.setItem("edit" + templateId, true);
-          handleSetTemplate(res.data[0]);
-        } else {
-          setEditKey("");
-        }
-      })
-      .catch((err) => console.log(err));
-  };
-
   useEffect(() => {
-    if (checkAdminStatus() || localStorage.getItem("edit" + templateId)) {
+    if (checkAdminStatus()) {
       fetchTemplate();
     }
   }, []);
@@ -62,7 +45,7 @@ function EditTemplate() {
   const fetchTemplate = async () => {
     await fetchTemplateById(templateId)
       .then((data) => {
-        handleSetTemplate(data[0]);
+        handleSetTemplate(formatData(data)[0]);
         setCanEdit(true);
       })
       .catch((err) => {
@@ -77,11 +60,11 @@ function EditTemplate() {
    */
   const handleSetTemplate = (data) => {
     const tempData = data;
-    const tempItems = JSON.parse(data.items);
+    const tempItems = data.items;
     tempData.items = tempItems;
 
     if (data.tags) {
-      const tempTags = JSON.parse(data.tags);
+      const tempTags = data.tags;
       tempData.tags = tempTags;
       fetchTagNames(tempData);
     }
@@ -257,7 +240,7 @@ function EditTemplate() {
 
     // save changes to database
     updateTemplate(templateId, updatedData);
-    navigate(`/createranking/${templateId}`);
+    navigate(`/createlist/${templateId}`);
   };
 
   /**
@@ -272,17 +255,6 @@ function EditTemplate() {
       .catch((err) => console.log(err));
   };
 
-  /**
-   * Checks if enter key was pressed when an input field was active,
-   * and calls for login attempt if enter key was pressed
-   * @param {KeyboardEvent} e - Keyboard event containing information of the pressed key
-   */
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      checkEditKey();
-    }
-  };
-
   if (notFound) {
     return <p>{`Template doesn't exist or it has been deleted`}</p>;
   }
@@ -292,22 +264,7 @@ function EditTemplate() {
       <div className="container">
         <h1>Edit template</h1>
         <div className="no-stretch">
-          <p>
-            To edit this template, please either login as admin or access the
-            edit mode with the edit key given by the creator
-          </p>
-          <label>Edit key: </label>
-          <input
-            type="password"
-            placeholder="Edit key"
-            value={editKey}
-            onKeyDown={handleKeyDown}
-            onChange={(e) => setEditKey(e.target.value)}
-          />
-          <br />
-          <button type="button" onClick={checkEditKey} className="loginButton">
-            Enter
-          </button>
+          <p>To edit this template, please login as admin</p>
           <br />
           <button onClick={() => navigate(-1)} className="backButton">
             Back

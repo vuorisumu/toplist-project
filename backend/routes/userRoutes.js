@@ -1,5 +1,7 @@
-const database = require("./database");
-const schemas = require("./schemas");
+const oracledb = require("oracledb");
+const database = require("../config/database");
+const { filteredUserQuery } = require("../filteredQueries");
+const { userSchema } = require("../schemas");
 const express = require("express");
 const userRouter = express.Router();
 
@@ -16,9 +18,7 @@ userRouter.get("/", async (req, res) => {
     let results;
     if (Object.keys(req.query).length !== 0) {
       // query has filters
-      const { filteredQuery, queryParams } = await database.filteredUserQuery(
-        req.query
-      );
+      const { filteredQuery, queryParams } = await filteredUserQuery(req.query);
 
       results = await database.query(filteredQuery, queryParams);
     } else {
@@ -63,25 +63,28 @@ userRouter.get("/:id([0-9]+)", async (req, res) => {
 userRouter.post("/", async (req, res) => {
   try {
     // validate data
-    const { error } = schemas.userSchema.validate(req.body);
+    const { error } = userSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ msg: error.details[0].message });
     }
 
-    const values = [];
-    values.push(req.body.user_name);
+    const values = {
+      user_name: req.body.user_name,
+      user_id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+    };
 
-    const query = "INSERT INTO users (user_name) VALUES (?)";
+    const query =
+      "INSERT INTO users (user_name) VALUES (:user_name) RETURNING user_id INTO :user_id";
 
     const result = await database.query(query, values);
 
     // successful insert
     res.status(201).json({
       msg: "Added new user",
-      id: result.insertId,
+      userId: result.outBinds.user_id[0],
     });
   } catch (err) {
-    res.status(500).send(databaseError);
+    res.status(500).send(err.message);
   }
 });
 

@@ -5,6 +5,8 @@ import { DnDContainer } from "./Dnd";
 import { v4 as uuid } from "uuid";
 import { getLocalTime, clearAll, checkAdminStatus, getUserId } from "./util";
 import ShowRankings from "./ShowRankings";
+import { formatData } from "../util/dataHandler";
+import ToplistContainer from "./ToplistContainer";
 
 /**
  * View where the user can create a new list from a chosen template.
@@ -14,10 +16,10 @@ import ShowRankings from "./ShowRankings";
  * Provides an option to add new items to be used in the ranking.
  * Finally renders a ShowRankings component with current template ID
  */
-function CreateListing() {
+function NewList() {
   const location = useLocation();
   const navigate = useNavigate();
-  const templateId = parseInt(location.pathname.replace("/createranking/", ""));
+  const templateId = parseInt(location.pathname.replace("/createlist/", ""));
 
   // drag n drop containers
   const ITEMS_RANKED = "ranked";
@@ -37,11 +39,11 @@ function CreateListing() {
 
   const [template, setTemplate] = useState(null);
   const [containers, setContainers] = useState(itemContainers);
-  const [rankingName, setRankingName] = useState("");
-  const [rankingDesc, setRankingDesc] = useState("");
+  const [toplistName, setToplistName] = useState("");
+  const [toplistDesc, setToplistDesc] = useState("");
   const [creatorName, setCreatorName] = useState("");
   const [newEntry, setNewEntry] = useState("");
-
+  const [userName, setUserName] = useState("");
   const [errorMessages, setErrorMessages] = useState([]);
 
   /**
@@ -49,9 +51,11 @@ function CreateListing() {
    * and buiild the necessary containers for the items to be used in the ranking
    */
   useEffect(() => {
+    setUserName(localStorage.getItem("role"));
     fetchTemplateById(templateId)
       .then((data) => {
-        setTemplate(data[0]);
+        const formattedData = formatData(data)[0];
+        setTemplate(formattedData);
 
         const blankAmount = 5;
         const blanks = [];
@@ -63,8 +67,8 @@ function CreateListing() {
           });
         }
 
-        // Add uuid() to each item in data[0].items
-        const setIds = JSON.parse(data[0].items).map((item) => ({
+        // Add uuid() to each item
+        const setIds = formattedData.items.map((item) => ({
           ...item,
           id: uuid(),
         }));
@@ -115,7 +119,7 @@ function CreateListing() {
    * Minimum requirements are: at least one item ranked and the list is given a name.
    * Trims all input fields from possible extra spaces
    */
-  const saveRanking = async () => {
+  const saveToplist = async () => {
     const errors = [];
     const nonEmptyRanked = containers[ITEMS_RANKED].items.filter(
       (i) => i.item_name.trim() !== ""
@@ -128,7 +132,7 @@ function CreateListing() {
       document.getElementById("Ranked").classList.add("error");
     }
 
-    if (!rankingName) {
+    if (!toplistName) {
       errors.push("Top list must have a title");
       document.getElementById("addRankTitle").classList.add("error");
     } else {
@@ -142,26 +146,30 @@ function CreateListing() {
 
     try {
       // store ranking data
-      let rankingData = {
-        ranking_name: rankingName,
+      const toplistData = {
+        toplist_name: toplistName,
         template_id: templateId,
         ranked_items: nonEmptyRanked,
-        creation_time: getLocalTime(),
+        creation_time: new Date(),
+        //creation_time: getLocalTime(),
       };
 
       // optional creator name
       if (creatorName !== "") {
         const fetchedUserId = await getUserId(creatorName.trim());
-        rankingData.creator_id = fetchedUserId;
+        toplistData.creator_id = fetchedUserId;
+      } else if (userName !== "") {
+        const fetchedUserId = await getUserId(userName.trim());
+        toplistData.creator_id = fetchedUserId;
       }
 
       // optional description
-      if (rankingDesc !== "") {
-        rankingData.ranking_desc = rankingDesc;
+      if (toplistDesc !== "") {
+        toplistData.toplist_desc = toplistDesc;
       }
 
-      const res = await addNewRanking(rankingData);
-      navigate(`/rankings/${res.id}`);
+      const res = await addNewRanking(toplistData);
+      navigate(`/toplists/${res.toplist_id}`);
     } catch (err) {
       console.error(err);
     }
@@ -202,25 +210,29 @@ function CreateListing() {
           <input
             type="text"
             id="addRankTitle"
-            value={rankingName}
-            onChange={(e) => setRankingName(e.target.value)}
+            value={toplistName}
+            onChange={(e) => setToplistName(e.target.value)}
             placeholder="For example: Top 5 movies"
           />
 
           <label>Description: </label>
           <textarea
-            value={rankingDesc}
-            onChange={(e) => setRankingDesc(e.target.value)}
+            value={toplistDesc}
+            onChange={(e) => setToplistDesc(e.target.value)}
             placeholder="Write something about your top list"
           />
 
           <label>Creator name: </label>
-          <input
-            type="text"
-            value={creatorName}
-            onChange={(e) => setCreatorName(e.target.value)}
-            placeholder="Creator name"
-          />
+          {userName.trim() === "" ? (
+            <input
+              type="text"
+              value={creatorName}
+              onChange={(e) => setCreatorName(e.target.value)}
+              placeholder="Creator name"
+            />
+          ) : (
+            <label>{userName}</label>
+          )}
         </div>
 
         {/* Ranking builder */}
@@ -254,7 +266,7 @@ function CreateListing() {
               ))}
             </ul>
           )}
-          <button type="button" onClick={saveRanking}>
+          <button type="button" onClick={saveToplist}>
             Save List
           </button>
 
@@ -263,9 +275,10 @@ function CreateListing() {
           </button>
         </div>
       </div>
-      <ShowRankings id={templateId} />
+      <ToplistContainer id={templateId} />
+      {/*<ShowRankings id={templateId} />*/}
     </div>
   );
 }
 
-export default CreateListing;
+export default NewList;

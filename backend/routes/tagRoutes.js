@@ -1,5 +1,7 @@
-const database = require("./database");
-const schemas = require("./schemas");
+const OracleDB = require("oracledb");
+const database = require("../config/database");
+const { filteredTagQuery } = require("../filteredQueries");
+const { tagSchema } = require("../schemas");
 const express = require("express");
 const tagRouter = express.Router();
 
@@ -16,9 +18,7 @@ tagRouter.get("/", async (req, res) => {
     let results;
     if (Object.keys(req.query).length !== 0) {
       // query has filters
-      const { filteredQuery, queryParams } = await database.filteredTagQuery(
-        req.query
-      );
+      const { filteredQuery, queryParams } = await filteredTagQuery(req.query);
       results = await database.query(filteredQuery, queryParams);
     } else {
       // query does not have filters
@@ -38,7 +38,9 @@ tagRouter.get("/", async (req, res) => {
 tagRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const result = await database.query(`SELECT * FROM tags WHERE id = ?`, id);
+    const result = await database.query(`SELECT * FROM tags WHERE id = :id`, {
+      id: id,
+    });
 
     // id not found
     if (result.length === 0) {
@@ -60,22 +62,25 @@ tagRouter.post("/", async (req, res) => {
   try {
     console.log("Adding new tag");
     // validate data
-    const { error } = schemas.tagSchema.validate(req.body);
+    const { error } = tagSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ msg: error.details[0].message });
     }
 
-    const values = [];
-    values.push(req.body.name);
+    const values = {
+      name: req.body.name,
+      id: { type: OracleDB.NUMBER, dir: OracleDB.BIND_OUT },
+    };
 
-    const query = "INSERT INTO tags (name) VALUES (?)";
+    const query =
+      "INSERT INTO tags (name) VALUES (:name) RETURNING id into :id";
 
     const result = await database.query(query, values);
 
     // successful insert
     res.status(201).json({
       msg: "Added new tag",
-      id: result.insertId,
+      id: result.outBinds.id[0],
     });
   } catch (err) {
     res.status(500).send(databaseError);

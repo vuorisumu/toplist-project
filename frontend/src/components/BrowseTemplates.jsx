@@ -1,10 +1,10 @@
-import Templates from "./Templates";
+import TemplateContainer from "./TemplateContainer";
 
 function BrowseTemplates() {
   return (
     <div className="container">
       <h1>Templates</h1>
-      <Templates />
+      <TemplateContainer />
     </div>
   );
 }

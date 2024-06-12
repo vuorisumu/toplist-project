@@ -9,6 +9,7 @@ import {
 } from "./api";
 import FilteredSearch from "./FilteredSearch";
 import ButtonPrompt from "./ButtonPrompt";
+import { formatData, getCountFromData } from "../util/dataHandler";
 
 /**
  * Reusable component that by default renders the most recent rankings, optionally
@@ -39,10 +40,12 @@ function ShowRankings({ id }) {
   const getRankingCount = async () => {
     fetchRankingCount(id)
       .then((data) => {
-        if (data[0].count > 0) {
+        const count = getCountFromData(data);
+        if (count > 0) {
           setRankingsFound(true);
         }
-        setFullCount(data[0].count);
+        setFullCount(count);
+        console.log("full count", count);
       })
       .catch((err) => console.log(err));
   };

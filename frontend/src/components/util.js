@@ -1,3 +1,4 @@
+import { formatData } from "../util/dataHandler";
 import {
   fetchTagByName,
   addNewTag,
@@ -90,9 +91,10 @@ export const getTagNames = async (tagNumbers) => {
     await Promise.all(
       tagNumbers.map(async (t) => {
         const fetchedTag = await fetchTagById(parseInt(t));
+        const formattedTags = formatData(fetchedTag);
         let tagName;
-        if (fetchedTag.length > 0) {
-          tagName = fetchedTag[0].id;
+        if (formattedTags.length > 0) {
+          tagName = formattedTags[0].id;
         }
         tagNames.push(tagName);
       })
@@ -111,9 +113,10 @@ export const getTagNames = async (tagNumbers) => {
  */
 export const getUserId = async (username) => {
   const fetchedUser = await fetchUserByName(username.trim());
-  if (fetchedUser.length > 0) {
+  const userData = formatData(fetchedUser);
+  if (userData.length > 0) {
     // use the id of user that already exists
-    return fetchedUser[0].user_id;
+    return userData[0].user_id;
   } else {
     // add new user that's not already in database
     const newUser = {
@@ -121,7 +124,7 @@ export const getUserId = async (username) => {
     };
 
     const newUserResponse = await addNewUser(newUser);
-    return newUserResponse.id;
+    return newUserResponse.userId;
   }
 };
 
@@ -132,7 +135,8 @@ export const getUserId = async (username) => {
 export const getAllTemplateNames = async () => {
   try {
     const templates = await fetchAllTemplatesFiltered("distinct=true");
-    return templates.map((template) => template.name);
+    const formattedData = formatData(templates);
+    return formattedData.map((template) => template.name);
   } catch (err) {
     console.error(err);
   }
@@ -152,7 +156,7 @@ export const getAllRankingNames = async (id) => {
       filter += `&tempId=${id}`;
     }
     const lists = await fetchAllRankingsFiltered(filter);
-    return lists.map((list) => list.ranking_name);
+    return formatData(lists).map((list) => list.ranking_name);
   } catch (err) {
     console.error(err);
   }

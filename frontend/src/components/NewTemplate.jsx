@@ -156,10 +156,15 @@ function NewTemplate() {
       templateData.tags = tagNumbers;
     }
 
+    /*
     // optional creator info
     if (creatorName !== "") {
       templateData.creator_id = await getUserId(creatorName);
-    }
+    }*/
+
+    // USERNAME
+    const userName = localStorage.getItem("role");
+    templateData.creator_id = await getUserId(userName);
 
     // optional description
     if (description.trim() !== "") {
@@ -174,7 +179,7 @@ function NewTemplate() {
     // add template to database
     try {
       const res = await addNewTemplate(templateData);
-      navigate(`/createranking/${res.id}`);
+      navigate(`/createlist/${res.id}`);
     } catch (err) {
       console.log(err);
     }
@@ -212,14 +217,6 @@ function NewTemplate() {
             style={{ width: "", height: "" }}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-          />
-
-          <label>Creator name: </label>
-          <input
-            type="text"
-            placeholder="Creator"
-            value={creatorName}
-            onChange={(e) => setCreatorName(e.target.value)}
           />
         </div>
 
@@ -280,20 +277,6 @@ function NewTemplate() {
               </li>
             ))}
           </ul>
-        </div>
-
-        <div className="inputField editkeyField">
-          <label>Edit key: </label>
-          <input
-            type="text"
-            placeholder="Edit key"
-            value={editKey}
-            onChange={(e) => setEditKey(e.target.value)}
-          />
-          <p className="smallPrint">
-            Edit key is used as a password for this template, so keep your edit
-            key safe if you wish to edit the template in the future
-          </p>
         </div>
 
         {errors.length > 0 && (

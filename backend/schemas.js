@@ -11,12 +11,8 @@ const querySchema = Joi.object({
   ),
   sortBy: Joi.string().valid("id", "name", "creatorname").optional(),
   sortOrder: Joi.string().valid("asc", "desc").default("asc").optional(),
-  limit: Joi.alternatives(
-    Joi.number().integer().optional(),
-    Joi.string()
-      .regex(/^\d+,\d+$/)
-      .optional()
-  ),
+  from: Joi.number().integer().optional(),
+  amount: Joi.number().integer().optional(),
 });
 
 const rankingQuerySchema = Joi.object({
@@ -35,12 +31,8 @@ const rankingQuerySchema = Joi.object({
     .valid("id", "name", "creatorname", "templatename")
     .optional(),
   sortOrder: Joi.string().valid("asc", "desc").default("asc").optional(),
-  limit: Joi.alternatives(
-    Joi.number().integer().optional(),
-    Joi.string()
-      .regex(/^\d+,\d+$/)
-      .optional()
-  ),
+  from: Joi.number().integer().optional(),
+  amount: Joi.number().integer().optional(),
 });
 
 const userQuerySchema = Joi.object({
@@ -72,10 +64,10 @@ const templateSchema = Joi.object({
 });
 
 const rankingSchema = Joi.object({
-  ranking_name: Joi.string().required(),
+  toplist_name: Joi.string().required(),
   template_id: Joi.number().required(),
   creator_id: Joi.number().optional(),
-  ranking_desc: Joi.string().optional(),
+  toplist_desc: Joi.string().optional(),
   ranked_items: Joi.array()
     .items(
       Joi.object().keys({
@@ -88,7 +80,7 @@ const rankingSchema = Joi.object({
       })
     )
     .required(),
-  creation_time: Joi.date().format("YYYY-MM-DD HH:mm:ss"),
+  creation_time: Joi.date().optional() /*.format("YYYY-MM-DD HH:mm:ss"),*/,
 });
 
 const userSchema = Joi.object({

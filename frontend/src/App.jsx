@@ -3,15 +3,16 @@ import { HashRouter as Router, Routes, Route, NavLink } from "react-router-dom";
 import "./App.css";
 import Main from "./components/Main.jsx";
 import NewTemplate from "./components/NewTemplate.jsx";
-import CreateListing from "./components/CreateListing.jsx";
 import Login from "./components/Login.jsx";
 import EditTemplate from "./components/EditTemplate.jsx";
-import BrowseRankings from "./components/BrowseRankings.jsx";
-import Ranking from "./components/Ranking.jsx";
+import BrowseToplists from "./components/BrowseToplists.jsx";
+import Ranking from "./components/SingleList.jsx";
 import BrowseTemplates from "./components/BrowseTemplates.jsx";
 import { checkCreatorStatus } from "./components/util.js";
 import logo from "./assets/logo.svg";
 import ThemeButton from "./components/ThemeButton.jsx";
+import NewList from "./components/NewList.jsx";
+import SingleList from "./components/SingleList.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -63,7 +64,7 @@ class App extends React.Component {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/rankings">
+              <NavLink to="/toplists">
                 <span className="material-symbols-outlined icon">
                   format_list_numbered
                 </span>
@@ -99,18 +100,15 @@ class App extends React.Component {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/templates" element={<BrowseTemplates />} />
-          <Route path="/createranking" element={<Main />} />
-          <Route path="/rankings" element={<BrowseRankings />} />
+          <Route path="/createlist" element={<Main />} />
+          <Route path="/toplists" element={<BrowseToplists />} />
           <Route path="/new-template" element={<NewTemplate />} />
-          <Route
-            path="/createranking/:templateId"
-            element={<CreateListing />}
-          />
+          <Route path="/createlist/:templateId" element={<NewList />} />
           <Route
             path="/edit-template/:templateid"
             element={<EditTemplate admin={true} />}
           />
-          <Route path="/rankings/:rankId" element={<Ranking />} />
+          <Route path="/toplists/:listId" element={<SingleList />} />
         </Routes>
       </Router>
     );

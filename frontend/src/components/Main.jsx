@@ -1,5 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
+import TemplateContainer from "./TemplateContainer";
 import Templates from "./Templates";
+import TestField from "./TestField";
 
 /**
  * Initial view of the application. Renders general information about
@@ -21,7 +23,7 @@ function Main() {
           is missing an item, you can always add your own items too!
         </p>
       </div>
-      <Templates />
+      <TemplateContainer />
     </div>
   );
 }
