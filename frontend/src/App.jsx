@@ -13,6 +13,7 @@ import logo from "./assets/logo.svg";
 import ThemeButton from "./components/ThemeButton.jsx";
 import NewList from "./components/NewList.jsx";
 import SingleList from "./components/SingleList.jsx";
+import Register from "./components/Register.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -109,6 +110,7 @@ class App extends React.Component {
             element={<EditTemplate admin={true} />}
           />
           <Route path="/toplists/:listId" element={<SingleList />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </Router>
     );

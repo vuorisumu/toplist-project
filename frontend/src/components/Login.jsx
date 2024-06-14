@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { login } from "./api";
 import { checkCreatorStatus } from "./util";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 /**
  * Reusable login component that renders input fields for the
@@ -111,6 +112,22 @@ function Login({ isFixed }) {
                 >
                   Login
                 </button>
+                <Link to="/register">
+                  <button
+                    type="button"
+                    className="loginButton"
+                    onClick={() => {
+                      document
+                        .getElementById("loginCont")
+                        .classList.toggle("active");
+                      document
+                        .getElementById("navLogin")
+                        .classList.toggle("active");
+                    }}
+                  >
+                    Register
+                  </button>
+                </Link>
               </div>
             </>
           ) : (
