@@ -64,9 +64,9 @@ userRouter.get("/:id([0-9]+)", async (req, res) => {
 userRouter.post("/", async (req, res) => {
   try {
     // validate data
-    const { error } = userSchema.validate(req.body);
+    const { error } = userSchema.validate(req.body, { abortEarly: false });
     if (error) {
-      return res.status(400).json({ msg: error.details[0].message });
+      return res.status(400).json({ message: error.details });
     }
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
