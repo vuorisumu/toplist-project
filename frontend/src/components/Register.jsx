@@ -3,6 +3,9 @@ import { addNewUser, fetchUserByNameOrEmail } from "./api";
 import { formatData } from "../util/dataHandler";
 import Joi from "joi";
 
+/**
+ * View for new user registration. Renders a form for account creation.
+ */
 function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -10,6 +13,11 @@ function Register() {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [errors, setErrors] = useState([]);
 
+  /**
+   * Validation schema for new account creation.
+   * All fields are required, email must be a valid email and password
+   * must be more than 6 characters long. Password must also be repeated.
+   */
   const userSchema = Joi.object({
     user_name: Joi.string()
       .required()
@@ -44,6 +52,11 @@ function Register() {
       }),
   });
 
+  /**
+   * Passes given information to validation schema and sets error messages
+   * if needed. If no errors were found, adds the user to database.
+   * @param {Event} event - The form submission event object.
+   */
   const onSubmit = async (event) => {
     const userData = {
       user_name: username,
@@ -74,6 +87,11 @@ function Register() {
     event.preventDefault();
   };
 
+  /**
+   * Searches the database for possible duplicates so every email and username
+   * are unique.
+   * @returns false if a user was found by given username or email, true if not.
+   */
   const canCreate = async () => {
     console.log("fetching");
     try {
