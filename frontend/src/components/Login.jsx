@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { login } from "./api";
+import { login, userLogin } from "./api";
 import { checkCreatorStatus } from "./util";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -32,6 +32,20 @@ function Login({ isFixed }) {
 
     try {
       const loginData = {
+        user: username,
+        password: password,
+      };
+
+      const res = await userLogin(loginData);
+      if (!res.error) {
+        // successfully log in
+        onLogin(username);
+      } else {
+        // clear password
+        setPassword("");
+      }
+      /*
+      const loginData = {
         role: username,
         password: password,
       };
@@ -43,7 +57,7 @@ function Login({ isFixed }) {
       } else {
         // clear password
         setPassword("");
-      }
+      }*/
     } catch (err) {
       console.error("Error during login: " + err);
     }

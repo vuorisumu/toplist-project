@@ -93,4 +93,36 @@ userRouter.post("/", async (req, res) => {
   }
 });
 
+userRouter.post("/login/:user", async (req, res) => {
+  try {
+    const { user, password } = req.body;
+
+    const userData = await database.query(
+      `SELECT * FROM users WHERE user_name = :1 OR email = :1)`,
+      [user]
+    );
+
+    if (userData.length > 0) {
+      const storedPassword = userData[0].password;
+      bcrypt.compare(password, storedPassword, (bcryptErr, bcryptRes) => {
+        if (bcryptErr) {
+          throw bcryptErr;
+        }
+
+        if (bcryptRes) {
+          res.status(200).json({
+            user_id: userData[0].user_id,
+            user_name: userData[0].user_name,
+            email: userData[0].email,
+          });
+        } else {
+          res.status(401).json({ error: "Invalid password" });
+        }
+      });
+    }
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
 module.exports = userRouter;

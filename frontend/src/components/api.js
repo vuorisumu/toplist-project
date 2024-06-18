@@ -353,6 +353,18 @@ export const addNewUser = (userData) => {
     .catch((error) => console.error("Error:", error));
 };
 
+export const userLogin = (loginData) => {
+  return fetch(`${API_BASE_URL}/users/login/${loginData.user}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(loginData),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error(error));
+};
+
 // --- ROLES ---
 
 /**
