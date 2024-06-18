@@ -354,7 +354,7 @@ export const addNewUser = (userData) => {
 };
 
 export const userLogin = (loginData) => {
-  return fetch(`${API_BASE_URL}/users/login/${loginData.user}`, {
+  return fetch(`${API_BASE_URL}/users/login/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -363,6 +363,18 @@ export const userLogin = (loginData) => {
   })
     .then((response) => response.json())
     .catch((error) => console.error(error));
+};
+
+export const auth = () => {
+  const token = sessionStorage.getItem("token");
+  return fetch(`${API_BASE_URL}/users/auth/`, {
+    headers: {
+      Authorization: `${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .catch((error) => console.log(error));
 };
 
 // --- ROLES ---

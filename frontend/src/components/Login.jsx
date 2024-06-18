@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { login, userLogin } from "./api";
+import { auth, login, userLogin } from "./api";
 import { checkCreatorStatus } from "./util";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -15,13 +15,16 @@ function Login({ isFixed }) {
   const [role, setRole] = useState("");
 
   useEffect(() => {
-    if (checkCreatorStatus()) {
+    if (sessionStorage.getItem("login")) {
       setLoggedIn(true);
-      setRole(localStorage.getItem("role"));
-    } else {
-      setLoggedIn(false);
     }
   }, []);
+
+  useEffect(() => {
+    if (loggedIn) {
+      setRole(sessionStorage.getItem("user"));
+    }
+  }, [loggedIn]);
 
   /**
    * Handles login attempt, clears the password field on unsuccessful
@@ -39,25 +42,13 @@ function Login({ isFixed }) {
       const res = await userLogin(loginData);
       if (!res.error) {
         // successfully log in
-        onLogin(username);
+        sessionStorage.setItem("token", res.token);
+        const credentials = await auth();
+        onLogin(credentials, res.user_name, res.email);
       } else {
         // clear password
         setPassword("");
       }
-      /*
-      const loginData = {
-        role: username,
-        password: password,
-      };
-
-      const res = await login(loginData);
-      if (!res.error) {
-        // successfully log in
-        onLogin(username);
-      } else {
-        // clear password
-        setPassword("");
-      }*/
     } catch (err) {
       console.error("Error during login: " + err);
     }
@@ -78,10 +69,13 @@ function Login({ isFixed }) {
    * Logs in to a specific role and sets the login information to localStorage
    * @param {string} role - the role that was logged in to
    */
-  const onLogin = async (role) => {
-    localStorage.setItem("admin", role === "admin" ? "true" : "false");
-    localStorage.setItem("login", "true");
-    localStorage.setItem("role", role);
+  const onLogin = async (credentials, username, email) => {
+    sessionStorage.setItem("admin", credentials.admin);
+    sessionStorage.setItem("userId", credentials.id);
+    sessionStorage.setItem("login", "true");
+    sessionStorage.setItem("user", username);
+    sessionStorage.setItem("email", email);
+    setLoggedIn(true);
     window.location.reload(false);
   };
 
@@ -90,9 +84,8 @@ function Login({ isFixed }) {
    */
   const onLogout = () => {
     // store logout
-    localStorage.setItem("admin", "false");
-    localStorage.setItem("login", "false");
-    localStorage.setItem("role", "");
+    sessionStorage.clear();
+    setLoggedIn(false);
     window.location.reload(false);
   };
 

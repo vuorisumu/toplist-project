@@ -151,7 +151,6 @@ function NewList() {
         template_id: templateId,
         ranked_items: nonEmptyRanked,
         creation_time: new Date(),
-        //creation_time: getLocalTime(),
       };
 
       // optional creator name

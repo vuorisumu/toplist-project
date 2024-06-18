@@ -72,7 +72,7 @@ class App extends React.Component {
                 <span className="linkName">Top lists</span>
               </NavLink>
             </li>
-            {checkCreatorStatus() && (
+            {sessionStorage.getItem("login") && (
               <li>
                 <NavLink to="/new-template">
                   <span className="material-symbols-outlined icon">
@@ -88,10 +88,10 @@ class App extends React.Component {
             <li>
               <div className="toggleLogin" onClick={toggleLogin} id="navLogin">
                 <span className="material-symbols-outlined icon">
-                  {checkCreatorStatus() ? "lock_open" : "lock"}
+                  {sessionStorage.getItem("login") ? "lock_open" : "lock"}
                 </span>
                 <span className="linkName">
-                  {checkCreatorStatus() ? "Logged in" : "Login"}
+                  {sessionStorage.getItem("login") ? "Logged in" : "Login"}
                 </span>
               </div>
             </li>
