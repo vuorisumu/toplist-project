@@ -66,8 +66,10 @@ function Login({ isFixed }) {
   };
 
   /**
-   * Logs in to a specific role and sets the login information to localStorage
-   * @param {string} role - the role that was logged in to
+   * Logs in to a specific account and sets the login information to sessionStorage.
+   * @param {JSON} credentials - Authorization credentials
+   * @param {string} username - Username of the account
+   * @param {string} email - Email of the account
    */
   const onLogin = async (credentials, username, email) => {
     sessionStorage.setItem("admin", credentials.admin);
@@ -80,7 +82,7 @@ function Login({ isFixed }) {
   };
 
   /**
-   * Logs the user out, sets the information to localStorage
+   * Logs the user out, clears sessionStorage and refreshes the page.
    */
   const onLogout = () => {
     // store logout
