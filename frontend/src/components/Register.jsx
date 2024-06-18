@@ -4,6 +4,7 @@ function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
 
   const onSubmit = () => {
     console.log(username, email, password);
@@ -39,6 +40,14 @@ function Register() {
             placeholder="********"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+          />
+          <label>Repeat password:</label>
+          <input
+            type="password"
+            id="repeat password"
+            placeholder="********"
+            value={repeatPassword}
+            onChange={(e) => setRepeatPassword(e.target.value)}
           />
 
           <button type="submit" value="Submit">
