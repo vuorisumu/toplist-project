@@ -26,7 +26,7 @@ userRouter.get("/", async (req, res) => {
       results = await database.query(filteredQuery, queryParams);
     } else {
       // query does not have filters
-      const query = `SELECT * FROM users`;
+      const query = `SELECT user_name FROM users`;
       results = await database.query(query);
     }
 
@@ -43,7 +43,7 @@ userRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const result = await database.query(
-      `SELECT * FROM users WHERE user_id = :id`,
+      `SELECT user_name, user_id FROM users WHERE user_id = :id`,
       { id: id }
     );
 
