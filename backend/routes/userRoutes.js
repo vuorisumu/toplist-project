@@ -2,6 +2,7 @@ const oracledb = require("oracledb");
 const database = require("../config/database");
 const { filteredUserQuery } = require("../filteredQueries");
 const { userSchema } = require("../schemas");
+const bcrypt = require("bcrypt");
 const express = require("express");
 const userRouter = express.Router();
 
@@ -40,8 +41,8 @@ userRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const result = await database.query(
-      `SELECT * FROM users WHERE user_id = ?`,
-      id
+      `SELECT * FROM users WHERE user_id = :id`,
+      { id: id }
     );
 
     // id not found
@@ -68,13 +69,17 @@ userRouter.post("/", async (req, res) => {
       return res.status(400).json({ msg: error.details[0].message });
     }
 
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
     const values = {
       user_name: req.body.user_name,
+      email: req.body.email,
+      password: hashedPassword,
       user_id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
     };
 
     const query =
-      "INSERT INTO users (user_name) VALUES (:user_name) RETURNING user_id INTO :user_id";
+      "INSERT INTO users (user_name, email, password) VALUES (:user_name, :email, :password) RETURNING user_id INTO :user_id";
 
     const result = await database.query(query, values);
 

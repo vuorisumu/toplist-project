@@ -39,6 +39,7 @@ const userQuerySchema = Joi.object({
   hasRankings: Joi.boolean().optional(),
   hasTemplates: Joi.boolean().optional(),
   name: Joi.string().optional(),
+  email: Joi.string().optional(),
   tempId: Joi.number().optional(),
 });
 
@@ -85,6 +86,8 @@ const rankingSchema = Joi.object({
 
 const userSchema = Joi.object({
   user_name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
 });
 
 const tagSchema = Joi.object({

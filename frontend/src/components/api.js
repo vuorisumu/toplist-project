@@ -326,6 +326,17 @@ export const fetchUserByName = (name) => {
 };
 
 /**
+ * Fetches a user with a specified name from the database
+ * @param {string} name - name of the user
+ * @returns data of the fetched user
+ */
+export const fetchUserByNameOrEmail = (name, email) => {
+  return fetch(`${API_BASE_URL}/users?name=${name}&email=${email}`).then(
+    (response) => response.json()
+  );
+};
+
+/**
  * Adds a new user to database
  * @param {object} userData - data of the user to be added
  * @returns a response containing newly added user ID on successful insert
