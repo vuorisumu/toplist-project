@@ -41,9 +41,7 @@ function NewList() {
   const [containers, setContainers] = useState(itemContainers);
   const [toplistName, setToplistName] = useState("");
   const [toplistDesc, setToplistDesc] = useState("");
-  const [creatorName, setCreatorName] = useState("");
   const [newEntry, setNewEntry] = useState("");
-  const [userName, setUserName] = useState("");
   const [errorMessages, setErrorMessages] = useState([]);
 
   /**
@@ -51,7 +49,6 @@ function NewList() {
    * and buiild the necessary containers for the items to be used in the ranking
    */
   useEffect(() => {
-    setUserName(localStorage.getItem("role"));
     fetchTemplateById(templateId)
       .then((data) => {
         const formattedData = formatData(data)[0];
@@ -145,22 +142,17 @@ function NewList() {
     }
 
     try {
-      // store ranking data
+      // store toplist data
       const toplistData = {
         toplist_name: toplistName,
         template_id: templateId,
         ranked_items: nonEmptyRanked,
         creation_time: new Date(),
-        //creation_time: getLocalTime(),
       };
 
-      // optional creator name
-      if (creatorName !== "") {
-        const fetchedUserId = await getUserId(creatorName.trim());
-        toplistData.creator_id = fetchedUserId;
-      } else if (userName !== "") {
-        const fetchedUserId = await getUserId(userName.trim());
-        toplistData.creator_id = fetchedUserId;
+      // user id if logged in
+      if (sessionStorage.getItem("userId")) {
+        toplistData.creator_id = sessionStorage.getItem("userId");
       }
 
       // optional description
@@ -198,7 +190,7 @@ function NewList() {
         {/* Template information */}
         <p className="templateInfo">
           Template: <span className="alt">{template.name}</span> by{" "}
-          {template.user_name}
+          {template.user_name ? template.user_name : "Unknown"}
         </p>
         <p className="templateInfo desc">
           Template description: {template.description}
@@ -221,18 +213,6 @@ function NewList() {
             onChange={(e) => setToplistDesc(e.target.value)}
             placeholder="Write something about your top list"
           />
-
-          <label>Creator name: </label>
-          {userName.trim() === "" ? (
-            <input
-              type="text"
-              value={creatorName}
-              onChange={(e) => setCreatorName(e.target.value)}
-              placeholder="Creator name"
-            />
-          ) : (
-            <label>{userName}</label>
-          )}
         </div>
 
         {/* Ranking builder */}
@@ -276,7 +256,6 @@ function NewList() {
         </div>
       </div>
       <ToplistContainer id={templateId} />
-      {/*<ShowRankings id={templateId} />*/}
     </div>
   );
 }

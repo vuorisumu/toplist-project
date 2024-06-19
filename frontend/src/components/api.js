@@ -326,6 +326,17 @@ export const fetchUserByName = (name) => {
 };
 
 /**
+ * Fetches a user with a specified name from the database
+ * @param {string} name - name of the user
+ * @returns data of the fetched user
+ */
+export const fetchUserByNameOrEmail = (name, email) => {
+  return fetch(`${API_BASE_URL}/users?name=${name}&email=${email}`).then(
+    (response) => response.json()
+  );
+};
+
+/**
  * Adds a new user to database
  * @param {object} userData - data of the user to be added
  * @returns a response containing newly added user ID on successful insert
@@ -340,6 +351,30 @@ export const addNewUser = (userData) => {
   })
     .then((response) => response.json())
     .catch((error) => console.error("Error:", error));
+};
+
+export const userLogin = (loginData) => {
+  return fetch(`${API_BASE_URL}/users/login/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(loginData),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error(error));
+};
+
+export const auth = () => {
+  const token = sessionStorage.getItem("token");
+  return fetch(`${API_BASE_URL}/users/auth/`, {
+    headers: {
+      Authorization: `${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .catch((error) => console.log(error));
 };
 
 // --- ROLES ---

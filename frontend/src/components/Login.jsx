@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { login } from "./api";
+import { auth, login, userLogin } from "./api";
 import { checkCreatorStatus } from "./util";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 /**
  * Reusable login component that renders input fields for the
@@ -14,13 +15,16 @@ function Login({ isFixed }) {
   const [role, setRole] = useState("");
 
   useEffect(() => {
-    if (checkCreatorStatus()) {
+    if (sessionStorage.getItem("login")) {
       setLoggedIn(true);
-      setRole(localStorage.getItem("role"));
-    } else {
-      setLoggedIn(false);
     }
   }, []);
+
+  useEffect(() => {
+    if (loggedIn) {
+      setRole(sessionStorage.getItem("user"));
+    }
+  }, [loggedIn]);
 
   /**
    * Handles login attempt, clears the password field on unsuccessful
@@ -31,14 +35,17 @@ function Login({ isFixed }) {
 
     try {
       const loginData = {
-        role: username,
+        user: username,
         password: password,
       };
 
-      const res = await login(loginData);
+      const res = await userLogin(loginData);
+      console.log(res);
       if (!res.error) {
         // successfully log in
-        onLogin(username);
+        sessionStorage.setItem("token", res.token);
+        const credentials = await auth();
+        onLogin(credentials, res.user_name, res.email);
       } else {
         // clear password
         setPassword("");
@@ -60,24 +67,28 @@ function Login({ isFixed }) {
   };
 
   /**
-   * Logs in to a specific role and sets the login information to localStorage
-   * @param {string} role - the role that was logged in to
+   * Logs in to a specific account and sets the login information to sessionStorage.
+   * @param {JSON} credentials - Authorization credentials
+   * @param {string} username - Username of the account
+   * @param {string} email - Email of the account
    */
-  const onLogin = async (role) => {
-    localStorage.setItem("admin", role === "admin" ? "true" : "false");
-    localStorage.setItem("login", "true");
-    localStorage.setItem("role", role);
+  const onLogin = async (credentials, username, email) => {
+    sessionStorage.setItem("admin", credentials.admin);
+    sessionStorage.setItem("userId", credentials.id);
+    sessionStorage.setItem("login", "true");
+    sessionStorage.setItem("user", username);
+    sessionStorage.setItem("email", email);
+    setLoggedIn(true);
     window.location.reload(false);
   };
 
   /**
-   * Logs the user out, sets the information to localStorage
+   * Logs the user out, clears sessionStorage and refreshes the page.
    */
   const onLogout = () => {
     // store logout
-    localStorage.setItem("admin", "false");
-    localStorage.setItem("login", "false");
-    localStorage.setItem("role", "");
+    sessionStorage.clear();
+    setLoggedIn(false);
     window.location.reload(false);
   };
 
@@ -111,6 +122,22 @@ function Login({ isFixed }) {
                 >
                   Login
                 </button>
+                <Link to="/register">
+                  <button
+                    type="button"
+                    className="loginButton"
+                    onClick={() => {
+                      document
+                        .getElementById("loginCont")
+                        .classList.toggle("active");
+                      document
+                        .getElementById("navLogin")
+                        .classList.toggle("active");
+                    }}
+                  >
+                    Register
+                  </button>
+                </Link>
               </div>
             </>
           ) : (

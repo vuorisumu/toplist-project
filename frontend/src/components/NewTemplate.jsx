@@ -15,17 +15,17 @@ function NewTemplate() {
   const navigate = useNavigate();
   const [templateName, setTemplateName] = useState("");
   const [description, setDescription] = useState("");
-  const [creatorName, setCreatorName] = useState("");
+  // const [creatorName, setCreatorName] = useState("");
   const [items, setItems] = useState([""]);
   const [tags, setTags] = useState([""]);
   const [suggestions, setSuggestions] = useState([""]);
-  const [editKey, setEditKey] = useState("");
   const [canCreate, setCanCreate] = useState(false);
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
-    if (checkCreatorStatus()) {
+    if (sessionStorage.getItem("login")) {
       setCanCreate(true);
+      // setCreatorName(sessionStorage.getItem("user"));
       fetchAllTags()
         .then((data) => {
           const tagNames = data.map((tag) => tag.name);
@@ -146,6 +146,7 @@ function NewTemplate() {
     const templateData = {
       name: templateName,
       items: itemObjects,
+      creator_id: sessionStorage.getItem("userId"),
     };
 
     // optional tags
@@ -156,24 +157,9 @@ function NewTemplate() {
       templateData.tags = tagNumbers;
     }
 
-    /*
-    // optional creator info
-    if (creatorName !== "") {
-      templateData.creator_id = await getUserId(creatorName);
-    }*/
-
-    // USERNAME
-    const userName = localStorage.getItem("role");
-    templateData.creator_id = await getUserId(userName);
-
     // optional description
     if (description.trim() !== "") {
       templateData.description = description;
-    }
-
-    // optional editkey
-    if (editKey.trim() !== "") {
-      templateData.editkey = editKey;
     }
 
     // add template to database

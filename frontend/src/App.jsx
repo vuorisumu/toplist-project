@@ -13,6 +13,7 @@ import logo from "./assets/logo.svg";
 import ThemeButton from "./components/ThemeButton.jsx";
 import NewList from "./components/NewList.jsx";
 import SingleList from "./components/SingleList.jsx";
+import Register from "./components/Register.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -71,7 +72,7 @@ class App extends React.Component {
                 <span className="linkName">Top lists</span>
               </NavLink>
             </li>
-            {checkCreatorStatus() && (
+            {sessionStorage.getItem("login") && (
               <li>
                 <NavLink to="/new-template">
                   <span className="material-symbols-outlined icon">
@@ -87,10 +88,10 @@ class App extends React.Component {
             <li>
               <div className="toggleLogin" onClick={toggleLogin} id="navLogin">
                 <span className="material-symbols-outlined icon">
-                  {checkCreatorStatus() ? "lock_open" : "lock"}
+                  {sessionStorage.getItem("login") ? "lock_open" : "lock"}
                 </span>
                 <span className="linkName">
-                  {checkCreatorStatus() ? "Logged in" : "Login"}
+                  {sessionStorage.getItem("login") ? "Logged in" : "Login"}
                 </span>
               </div>
             </li>
@@ -109,6 +110,7 @@ class App extends React.Component {
             element={<EditTemplate admin={true} />}
           />
           <Route path="/toplists/:listId" element={<SingleList />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </Router>
     );

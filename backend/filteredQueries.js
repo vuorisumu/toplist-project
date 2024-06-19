@@ -221,15 +221,20 @@ async function filteredUserQuery(req) {
     return { filteredQuery, queryParams };
   }
 
-  filteredQuery = `SELECT * FROM users`;
+  filteredQuery = `SELECT user_id, user_name FROM users`;
 
   if (value.name) {
     conditions.push(`user_name = :name`);
     queryParams["name"] = value.name;
   }
 
+  if (value.email) {
+    conditions.push(`email = :email`);
+    queryParams["email"] = value.email;
+  }
+
   if (conditions.length > 0) {
-    filteredQuery += " WHERE " + conditions.join(" AND ");
+    filteredQuery += " WHERE " + conditions.join(" OR ");
   }
   return { filteredQuery, queryParams };
 }
