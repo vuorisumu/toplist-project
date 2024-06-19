@@ -40,6 +40,7 @@ function Login({ isFixed }) {
       };
 
       const res = await userLogin(loginData);
+      console.log(res);
       if (!res.error) {
         // successfully log in
         sessionStorage.setItem("token", res.token);

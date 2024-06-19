@@ -72,14 +72,13 @@ function Register() {
 
       const canCreateRes = await canCreate();
       if (canCreateRes) {
-        console.log("Can create");
         const newUserData = {
           user_name: username,
           email: email,
           password: password,
         };
         const newUserRes = await addNewUser(newUserData);
-        console.log(newUserRes);
+        navigate(`/`);
       } else {
         setErrors([{ message: "User already exists" }]);
       }

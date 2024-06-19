@@ -137,6 +137,8 @@ userRouter.post("/login/", async (req, res) => {
           res.status(401).json({ error: "Invalid password" });
         }
       });
+    } else {
+      res.status(404).json({ error: "User not found" });
     }
   } catch (err) {
     res.status(500).send(databaseError);
