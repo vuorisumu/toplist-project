@@ -147,11 +147,14 @@ function NewList() {
       // store toplist data
       const toplistData = {
         toplist_name: toplistName,
-        creator_id: sessionStorage.getItem("userId"),
         template_id: templateId,
         ranked_items: nonEmptyRanked,
         creation_time: new Date(),
       };
+
+      if (sessionStorage.getItem("userId")) {
+        toplistData.creator_id = sessionStorage.getItem("userId");
+      }
       /*
       // optional creator name
       if (creatorName !== "") {
