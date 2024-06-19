@@ -41,9 +41,7 @@ function NewList() {
   const [containers, setContainers] = useState(itemContainers);
   const [toplistName, setToplistName] = useState("");
   const [toplistDesc, setToplistDesc] = useState("");
-  // const [creatorName, setCreatorName] = useState("");
   const [newEntry, setNewEntry] = useState("");
-  // const [userName, setUserName] = useState("");
   const [errorMessages, setErrorMessages] = useState([]);
 
   /**
@@ -152,19 +150,11 @@ function NewList() {
         creation_time: new Date(),
       };
 
+      // user id if logged in
       if (sessionStorage.getItem("userId")) {
         toplistData.creator_id = sessionStorage.getItem("userId");
       }
-      /*
-      // optional creator name
-      if (creatorName !== "") {
-        const fetchedUserId = await getUserId(creatorName.trim());
-        toplistData.creator_id = fetchedUserId;
-      } else if (userName !== "") {
-        const fetchedUserId = await getUserId(userName.trim());
-        toplistData.creator_id = fetchedUserId;
-      }
-*/
+
       // optional description
       if (toplistDesc !== "") {
         toplistData.toplist_desc = toplistDesc;
@@ -266,7 +256,6 @@ function NewList() {
         </div>
       </div>
       <ToplistContainer id={templateId} />
-      {/*<ShowRankings id={templateId} />*/}
     </div>
   );
 }
