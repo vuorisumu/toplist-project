@@ -113,7 +113,7 @@ async function filteredRankingQuery(req) {
   // add conditions
   if (value.search) {
     conditions.push(
-      "(top.toplist_name LIKE :search OR u.user_name LIKE :search)"
+      "(lower(top.toplist_name) LIKE lower(:search) OR lower(u.user_name) LIKE lower(:search))"
     );
     queryParams["search"] = `%${value.search}%`;
   }
@@ -124,16 +124,16 @@ async function filteredRankingQuery(req) {
   }
 
   if (value.tname) {
-    conditions.push("t.name LIKE :tname");
+    conditions.push("lower(t.name) LIKE lower(:tname)");
     queryParams["tname"] = `${value.tname}%`;
   }
   if (value.rname) {
-    conditions.push("top.toplist_name LIKE :rname");
+    conditions.push("lower(top.toplist_name) LIKE lower(:rname)");
     queryParams["rname"] = `${value.rname}%`;
   }
 
   if (value.uname) {
-    conditions.push("u.user_name LIKE :uname");
+    conditions.push("lower(u.user_name) LIKE lower(:uname)");
     queryParams["uname"] = `${value.uname}%`;
   }
 
@@ -229,7 +229,14 @@ async function filteredUserQuery(req) {
     return { filteredQuery, queryParams };
   }
 
-  filteredQuery = `SELECT user_id, user_name FROM users`;
+  filteredQuery = value.search
+    ? `SELECT user_name FROM users`
+    : `SELECT user_id, user_name FROM users`;
+
+  if (value.search) {
+    conditions.push(`lower(user_name) LIKE lower(:search)`);
+    queryParams["search"] = value.search;
+  }
 
   if (value.name) {
     conditions.push(`user_name = :name`);
@@ -244,6 +251,11 @@ async function filteredUserQuery(req) {
   if (conditions.length > 0) {
     filteredQuery += " WHERE " + conditions.join(" OR ");
   }
+
+  if (value.amount) {
+    filteredQuery += ` OFFSET ${value.from} ROWS FETCH NEXT ${value.amount} ROWS ONLY`;
+  }
+
   return { filteredQuery, queryParams };
 }
 

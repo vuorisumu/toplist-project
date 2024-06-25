@@ -162,6 +162,17 @@ export const fetchAllRankingsFiltered = (filters) => {
 };
 
 /**
+ * Fetches top list names by given input.
+ * @param {string} input - input string for searching top lists by name
+ * @returns data containing all fetched top list names
+ */
+export const fetchRankingNamesByInput = (input) => {
+  return fetch(
+    `${API_BASE_URL}/toplists?distinct=true&rname=${input}&from=0&amount=10`
+  ).then((response) => response.json());
+};
+
+/**
  * Fetches the count of rankings from the database
  * @param {number} id - id of the template used in the rankings
  * @returns data containing the count of ranking lists
@@ -286,6 +297,17 @@ export const addNewTag = (tagData) => {
  */
 export const fetchAllUsers = () => {
   return fetch(`${API_BASE_URL}/users`).then((response) => response.json());
+};
+
+/**
+ * Fetches usernames by given input.
+ * @param {string} input - input string for searching users by name
+ * @returns data containing all fetched usernames
+ */
+export const fetchUserNamesByInput = (input) => {
+  return fetch(`${API_BASE_URL}/users?name=${input}&from=0&amount=10`).then(
+    (response) => response.json()
+  );
 };
 
 /**

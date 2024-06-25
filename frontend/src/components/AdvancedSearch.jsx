@@ -1,7 +1,11 @@
 import { useState } from "react";
 import Search from "./Search";
 import Dropdown from "./Dropdown";
-import { fetchTemplateNamesByInput } from "./api";
+import {
+  fetchRankingNamesByInput,
+  fetchTemplateNamesByInput,
+  fetchUserNamesByInput,
+} from "./api";
 import { formatData, getTemplateNamesFromData } from "../util/dataHandler";
 
 function AdvancedSearch({ searchLists }) {
@@ -55,7 +59,10 @@ function AdvancedSearch({ searchLists }) {
               <div className="searchInput">
                 {/* Top list name search */}
                 <label>Search top list by name: </label>
-                <Search valueUpdated={defaultSearchUpdated} />
+                <Search
+                  valueUpdated={defaultSearchUpdated}
+                  fetchFunction={fetchRankingNamesByInput}
+                />
               </div>
             ) : (
               <div className="searchInput">
@@ -71,7 +78,10 @@ function AdvancedSearch({ searchLists }) {
             <div className="searchInput">
               {/* Username search */}
               <label>Search from creator: </label>
-              <Search valueUpdated={defaultSearchUpdated} />
+              <Search
+                valueUpdated={defaultSearchUpdated}
+                fetchFunction={fetchUserNamesByInput}
+              />
             </div>
 
             {/* Sort by options */}
