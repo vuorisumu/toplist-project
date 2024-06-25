@@ -2,9 +2,20 @@ import { Link } from "react-router-dom";
 import { deleteTemplate } from "./api";
 import { checkAdminStatus } from "./util";
 import ButtonPrompt from "./ButtonPrompt";
+import { useEffect, useState } from "react";
+import { tagNamesByIds } from "../util/dataHandler";
 
 function Template(props) {
   const data = props.data;
+  const [tagNames, setTagNames] = useState([]);
+
+  useEffect(() => {
+    if (data.tags) {
+      tagNamesByIds(data.tags)
+        .then((tags) => setTagNames(tags))
+        .catch((err) => console.log(err));
+    }
+  }, []);
 
   const handleDelete = () => {
     deleteTemplate(data.id)
@@ -38,19 +49,15 @@ function Template(props) {
       {data.description && <p className="description">{data.description}</p>}
 
       <div>
-        <h4>Items in the template:</h4>
-        <ul>
-          {data.items.map((item, index) => (
-            <li key={index}>{item.item_name}</li>
-          ))}
-        </ul>
-
-        {data.tags && (
-          <ul>
-            {data.tags.map((tag, index) => (
-              <li key={index}>{tag}</li>
-            ))}
-          </ul>
+        {tagNames.length > 0 && (
+          <>
+            <h4>Tags:</h4>
+            <ul>
+              {tagNames.map((tag, index) => (
+                <li key={index}>{tag}</li>
+              ))}
+            </ul>
+          </>
         )}
 
         {checkAdminStatus() && (
