@@ -48,28 +48,15 @@ function Template(props) {
 
       {data.description && <p className="description">{data.description}</p>}
 
-      <div>
-        {tagNames.length > 0 && (
-          <>
-            <h4>Tags:</h4>
-            <ul>
-              {tagNames.map((tag, index) => (
-                <li key={index}>{tag}</li>
-              ))}
-            </ul>
-          </>
-        )}
-
-        {checkAdminStatus() && (
-          <>
-            <br />
-            <ButtonPrompt
-              buttonName="Delete template"
-              confirm={() => handleDelete(data.id)}
-            />
-          </>
-        )}
-      </div>
+      {checkAdminStatus() && (
+        <div>
+          <br />
+          <ButtonPrompt
+            buttonName="Delete template"
+            confirm={() => handleDelete(data.id)}
+          />
+        </div>
+      )}
     </>
   );
 }
