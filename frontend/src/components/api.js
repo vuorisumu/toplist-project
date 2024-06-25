@@ -168,7 +168,7 @@ export const fetchAllRankingsFiltered = (filters) => {
  */
 export const fetchRankingNamesByInput = (input) => {
   return fetch(
-    `${API_BASE_URL}/toplists?distinct=true&rname=${input}&from=0&amount=10`
+    `${API_BASE_URL}/toplists?namesOnly=true&rname=${input}&from=0&amount=10`
   ).then((response) => response.json());
 };
 

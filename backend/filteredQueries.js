@@ -100,12 +100,16 @@ async function filteredRankingQuery(req) {
     throw error;
   }
 
-  let filteredQuery = "SELECT";
-  if (value.distinct) {
-    filteredQuery += " DISTINCT top.toplist_name FROM toplists top";
+  let filteredQuery = value.distinct ? "SELECT DISTINCT" : "SELECT";
+  if (value.namesOnly) {
+    if (!value.distinct) {
+      filteredQuery += " DISTINCT";
+    }
+
+    filteredQuery += " top.toplist_name FROM toplists top";
   } else {
     filteredQuery +=
-      " * FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id LEFT JOIN templates t ON top.template_id = t.id";
+      " top.toplist_id, top.toplist_name, top.ranked_items, top.toplist_desc, top.creation_time, u.user_name FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id LEFT JOIN templates t ON top.template_id = t.id";
   }
 
   const conditions = [];
@@ -193,6 +197,7 @@ async function filteredRankingQuery(req) {
     filteredQuery += ` OFFSET ${value.from} ROWS FETCH NEXT ${value.amount} ROWS ONLY`;
   }
 
+  console.log(filteredQuery);
   return { filteredQuery, queryParams };
 }
 
