@@ -2,12 +2,23 @@ import { useState, useEffect, useRef } from "react";
 import { fetchTemplateNamesByInput } from "./api";
 import { getTemplateNamesFromData } from "../util/dataHandler";
 
-function Search({ valueUpdated, fetchFunction, combinedSearch = false }) {
+function Search({
+  valueUpdated,
+  fetchFunction,
+  combinedSearch = false,
+  onClear,
+}) {
   const placeholder = "placeholder";
   const [value, setValue] = useState("");
   const [hideSuggestions, setHideSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const suggRef = useRef(null);
+
+  useEffect(() => {
+    if (onClear) {
+      setValue("");
+    }
+  }, [onClear]);
 
   // Only send the value to callback after the user has stopped typing
   useEffect(() => {
@@ -47,11 +58,12 @@ function Search({ valueUpdated, fetchFunction, combinedSearch = false }) {
   };
 
   const handleChange = (e) => {
+    setHideSuggestions(false);
     setValue(e.target.value);
   };
 
   const keyUp = () => {
-    console.log("key up");
+    // console.log("key up");
   };
 
   const checkKey = (e) => {

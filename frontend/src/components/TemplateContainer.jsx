@@ -85,12 +85,6 @@ function TemplateContainer() {
     <>
       <AdvancedSearch searchLists={false} />
 
-      <FilteredSearch
-        search={handleFilteredSearch}
-        clear={handleClear}
-        searchRankings={false}
-      />
-
       <div>
         <h2>Recent templates</h2>
         {!loading && templates.length < 1 && <p>No templates found</p>}
