@@ -52,7 +52,7 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const result = await database.query(
-      `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id WHERE id = :id`,
+      `SELECT t.id, t.name, t.description, t.items, t.tags, u.user_name FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id WHERE id = :id`,
       { id: id }
     );
 
