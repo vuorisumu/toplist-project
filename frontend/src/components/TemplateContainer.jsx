@@ -83,7 +83,11 @@ function TemplateContainer() {
 
   return (
     <>
-      <AdvancedSearch searchLists={false} />
+      <AdvancedSearch
+        searchLists={false}
+        onSearch={handleFilteredSearch}
+        onClear={handleClear}
+      />
 
       <div>
         <h2>Recent templates</h2>

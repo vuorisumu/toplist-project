@@ -8,7 +8,7 @@ import {
 } from "./api";
 import { fetchAllNamesByInput } from "../util/dataHandler";
 
-function AdvancedSearch({ searchLists }) {
+function AdvancedSearch({ searchLists, onSearch, onClear }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [defaultSearch, setDefaultSearch] = useState("");
   const [nameSearch, setNameSearch] = useState("");
@@ -56,7 +56,8 @@ function AdvancedSearch({ searchLists }) {
     if (searchConditions.length > 0) {
       searchQuery = searchConditions.join("&");
     }
-    console.log(searchQuery);
+
+    onSearch(searchQuery);
   };
 
   const selectFromDropdown = (val) => setSortBy(val);
@@ -64,6 +65,7 @@ function AdvancedSearch({ searchLists }) {
   const handleClear = () => {
     setClearInput(true);
     setTimeout(() => setClearInput(false), 100);
+    onClear();
   };
 
   const toggleFilterMenu = () => {
