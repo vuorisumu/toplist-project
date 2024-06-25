@@ -2,9 +2,12 @@ import { useState, useEffect } from "react";
 import { fetchAllTemplatesFiltered, fetchTemplateCount } from "./api";
 import { formatData, getCountFromData } from "../util/dataHandler";
 import Template from "./Template";
-import FilteredSearch from "./FilteredSearch";
 import AdvancedSearch from "./AdvancedSearch";
 
+/**
+ * Container for displaying templates and the search bar.
+ * Handles the displaying and loading of the templates.
+ */
 function TemplateContainer() {
   const [templates, setTemplates] = useState([]);
   const defaultQuery = "sortBy=id&sortOrder=desc";
@@ -77,12 +80,16 @@ function TemplateContainer() {
     setFilters(val === "" ? defaultQuery : val);
   };
 
+  /**
+   * Sets the filters bacn to default.
+   */
   const handleClear = () => {
     setFilters(defaultQuery);
   };
 
   return (
     <>
+      {/* Search container */}
       <AdvancedSearch
         searchLists={false}
         onSearch={handleFilteredSearch}
@@ -91,7 +98,9 @@ function TemplateContainer() {
 
       <div>
         <h2>Recent templates</h2>
+
         {!loading && templates.length < 1 && <p>No templates found</p>}
+
         {loading ? (
           <p>Loading</p>
         ) : (
