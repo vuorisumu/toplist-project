@@ -42,3 +42,11 @@ export const tagNamesByIds = async (tagNumbers) => {
     console.error(err);
   }
 };
+
+export const getTemplateNamesFromData = (data) => {
+  const formattedData = formatData(data);
+  if (formattedData.length > 0 && formattedData[0].hasOwnProperty("name")) {
+    return formattedData.map((template) => template.name);
+  }
+  return [];
+};

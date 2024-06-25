@@ -1,15 +1,20 @@
 import { useState, useEffect, useRef } from "react";
+import { fetchTemplateNamesByInput } from "./api";
+import { getTemplateNamesFromData } from "../util/dataHandler";
 
-function Search({ valueUpdated, suggestions }) {
+function Search({ valueUpdated }) {
   const placeholder = "placeholder";
   const [value, setValue] = useState("");
   const [hideSuggestions, setHideSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
   const suggRef = useRef(null);
 
   // Only send the value to callback after the user has stopped typing
   useEffect(() => {
     const delayedUpdate = setTimeout(() => {
       valueUpdated(value);
+      setHideSuggestions(false);
+      updateSuggestions();
     }, 600);
 
     return () => clearTimeout(delayedUpdate);
@@ -29,6 +34,17 @@ function Search({ valueUpdated, suggestions }) {
       document.removeEventListener("click", clickOutside);
     };
   }, [suggRef]);
+
+  const updateSuggestions = async () => {
+    if (value.trim() !== "") {
+      fetchTemplateNamesByInput(value)
+        .then((data) => {
+          const names = getTemplateNamesFromData(data);
+          setSuggestions(names);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -57,7 +73,19 @@ function Search({ valueUpdated, suggestions }) {
         />
       </div>
 
-      <div className={`suggestions ${hideSuggestions ? "" : "active"}`}></div>
+      <div className={`suggestions ${hideSuggestions ? "" : "active"}`}>
+        {suggestions.length > 0 &&
+          suggestions.map((item, index) => (
+            <div
+              key={"" + item + index}
+              onClick={() => {
+                console.log(item);
+              }}
+            >
+              {item}
+            </div>
+          ))}
+      </div>
     </div>
   );
 }

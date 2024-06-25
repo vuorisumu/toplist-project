@@ -2,10 +2,10 @@ import { useState } from "react";
 import Search from "./Search";
 import Dropdown from "./Dropdown";
 import { fetchTemplateNamesByInput } from "./api";
+import { formatData, getTemplateNamesFromData } from "../util/dataHandler";
 
 function AdvancedSearch({ searchLists }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [generalSuggestions, setGeneralSuggestions] = useState([]);
 
   // sort by options as srings
   const sortByOptions = {
@@ -18,9 +18,15 @@ function AdvancedSearch({ searchLists }) {
 
   const defaultSearchUpdated = async (value) => {
     console.log(value);
-    fetchTemplateNamesByInput(value)
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err));
+    /*
+    if (value.trim() !== "") {
+      fetchTemplateNamesByInput(value)
+        .then((data) => {
+          const templateNames = getTemplateNamesFromData(data);
+          setGeneralSuggestions(templateNames);
+        })
+        .catch((err) => console.log(err));
+    }*/
   };
 
   const handleSearch = () => {
