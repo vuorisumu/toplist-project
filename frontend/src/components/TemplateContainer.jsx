@@ -3,7 +3,7 @@ import { fetchAllTemplatesFiltered, fetchTemplateCount } from "./api";
 import { formatData, getCountFromData } from "../util/dataHandler";
 import Template from "./Template";
 import FilteredSearch from "./FilteredSearch";
-import Search from "./Search";
+import AdvancedSearch from "./AdvancedSearch";
 
 function TemplateContainer() {
   const [templates, setTemplates] = useState([]);
@@ -83,7 +83,8 @@ function TemplateContainer() {
 
   return (
     <>
-      <Search valueUpdated={(v) => console.log(v)} />
+      <AdvancedSearch searchLists={false} />
+
       <FilteredSearch
         search={handleFilteredSearch}
         clear={handleClear}

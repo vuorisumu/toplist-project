@@ -1,7 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
 import TemplateContainer from "./TemplateContainer";
-import Templates from "./Templates";
-import TestField from "./TestField";
 
 /**
  * Initial view of the application. Renders general information about

@@ -10,25 +10,33 @@ async function filteredTemplatesQuery(req) {
   if (error) {
     throw error;
   }
-  let filteredQuery = `SELECT t.id, t.name, t.description, u.user_name FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
+  let filteredQuery = value.namesOnly
+    ? "SELECT DISTINCT t.name "
+    : "SELECT t.id, t.name, t.description, u.user_name ";
+
+  filteredQuery +=
+    "FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id";
+
   const conditions = [];
   const queryParams = {};
 
   // add conditions
   if (value.search) {
-    conditions.push("(t.name LIKE :search OR u.user_name LIKE :search)");
+    conditions.push(
+      "(lower(t.name) LIKE lower(:search) OR lower(u.user_name) LIKE lower(:search))"
+    );
     for (let i = 0; i < 2; i++) {
       queryParams["search"] = `%${value.search}%`;
     }
   }
 
   if (value.tname) {
-    conditions.push("t.name LIKE :tname");
+    conditions.push("lower(t.name) LIKE lower(:tname)");
     queryParams["tname"] = `${value.tname}%`;
   }
 
   if (value.uname) {
-    conditions.push("u.user_name LIKE :uname");
+    conditions.push("lower(u.user_name) LIKE lower(:uname)");
     queryParams["uname"] = `${value.uname}%`;
   }
 
