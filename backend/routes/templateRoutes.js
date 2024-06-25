@@ -34,7 +34,7 @@ templateRouter.get("/", async (req, res) => {
       }
     } else {
       // query does not have filters
-      const query = `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
+      const query = `SELECT t.id, t.name, t.description, u.user_name FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
       results = await database.query(query);
     }
 

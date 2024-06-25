@@ -10,7 +10,7 @@ async function filteredTemplatesQuery(req) {
   if (error) {
     throw error;
   }
-  let filteredQuery = `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
+  let filteredQuery = `SELECT t.id, t.name, t.description, u.user_name FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
   const conditions = [];
   const queryParams = {};
 
