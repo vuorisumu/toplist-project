@@ -235,7 +235,7 @@ async function filteredUserQuery(req) {
 
   if (value.search) {
     conditions.push(`lower(user_name) LIKE lower(:search)`);
-    queryParams["search"] = value.search;
+    queryParams["search"] = `${value.search}%`;
   }
 
   if (value.name) {
@@ -256,6 +256,7 @@ async function filteredUserQuery(req) {
     filteredQuery += ` OFFSET ${value.from} ROWS FETCH NEXT ${value.amount} ROWS ONLY`;
   }
 
+  console.log(filteredQuery);
   return { filteredQuery, queryParams };
 }
 

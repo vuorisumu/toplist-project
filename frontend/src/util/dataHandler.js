@@ -1,4 +1,9 @@
-import { fetchTagById } from "../components/api";
+import {
+  fetchRankingNamesByInput,
+  fetchTagById,
+  fetchTemplateNamesByInput,
+  fetchUserNamesByInput,
+} from "../components/api";
 
 export const formatData = (data) => {
   if (data && data.rows && data.metaData) {
@@ -45,8 +50,26 @@ export const tagNamesByIds = async (tagNumbers) => {
 
 export const getTemplateNamesFromData = (data) => {
   const formattedData = formatData(data);
-  if (formattedData.length > 0 && formattedData[0].hasOwnProperty("name")) {
-    return formattedData.map((template) => template.name);
+  if (formattedData.length > 0) {
+    if (formattedData[0].hasOwnProperty("name"))
+      return formattedData.map((template) => template.name);
+    else if (formattedData[0].hasOwnProperty("user_name"))
+      return formattedData.map((user) => user.user_name);
+    else if (formattedData[0].hasOwnProperty("toplist_name"))
+      return formattedData.map((list) => list.toplist_name);
   }
   return [];
+};
+
+export const fetchAllNamesByInput = async (input) => {
+  try {
+    const templateNameData = await fetchTemplateNamesByInput(input);
+    const templateNames = getTemplateNamesFromData(templateNameData);
+
+    const userNameData = await fetchUserNamesByInput(input);
+    const userNames = getTemplateNamesFromData(userNameData);
+    return [...templateNames, ...userNames];
+  } catch (err) {
+    console.log(err);
+  }
 };

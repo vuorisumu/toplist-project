@@ -305,7 +305,7 @@ export const fetchAllUsers = () => {
  * @returns data containing all fetched usernames
  */
 export const fetchUserNamesByInput = (input) => {
-  return fetch(`${API_BASE_URL}/users?name=${input}&from=0&amount=10`).then(
+  return fetch(`${API_BASE_URL}/users?search=${input}&from=0&amount=10`).then(
     (response) => response.json()
   );
 };

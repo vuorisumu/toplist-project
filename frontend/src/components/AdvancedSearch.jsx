@@ -6,7 +6,11 @@ import {
   fetchTemplateNamesByInput,
   fetchUserNamesByInput,
 } from "./api";
-import { formatData, getTemplateNamesFromData } from "../util/dataHandler";
+import {
+  fetchAllNamesByInput,
+  formatData,
+  getTemplateNamesFromData,
+} from "../util/dataHandler";
 
 function AdvancedSearch({ searchLists }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -43,7 +47,8 @@ function AdvancedSearch({ searchLists }) {
       <div className="searchInput general">
         <Search
           valueUpdated={defaultSearchUpdated}
-          fetchFunction={fetchTemplateNamesByInput}
+          fetchFunction={fetchAllNamesByInput}
+          combinedSearch={true}
         />
 
         <button type="button" onClick={handleSearch} className="searchButton">
