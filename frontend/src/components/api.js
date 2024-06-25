@@ -37,6 +37,11 @@ export const fetchAllTemplatesFiltered = (filters) => {
   );
 };
 
+/**
+ * Fetches template names by given input.
+ * @param {string} input - input string for searching templates by name
+ * @returns data containing all fetched template names
+ */
 export const fetchTemplateNamesByInput = (input) => {
   return fetch(
     `${API_BASE_URL}/templates?namesOnly=true&tname=${input}&from=0&amount=10`

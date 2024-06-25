@@ -18,15 +18,6 @@ function AdvancedSearch({ searchLists }) {
 
   const defaultSearchUpdated = async (value) => {
     console.log(value);
-    /*
-    if (value.trim() !== "") {
-      fetchTemplateNamesByInput(value)
-        .then((data) => {
-          const templateNames = getTemplateNamesFromData(data);
-          setGeneralSuggestions(templateNames);
-        })
-        .catch((err) => console.log(err));
-    }*/
   };
 
   const handleSearch = () => {
@@ -46,7 +37,10 @@ function AdvancedSearch({ searchLists }) {
   return (
     <div className="searchContainer">
       <div className="searchInput general">
-        <Search valueUpdated={defaultSearchUpdated} />
+        <Search
+          valueUpdated={defaultSearchUpdated}
+          fetchFunction={fetchTemplateNamesByInput}
+        />
 
         <button type="button" onClick={handleSearch} className="searchButton">
           Search
@@ -67,7 +61,10 @@ function AdvancedSearch({ searchLists }) {
               <div className="searchInput">
                 {/* Template name search */}
                 <label>Search template by name: </label>
-                <Search valueUpdated={defaultSearchUpdated} />
+                <Search
+                  valueUpdated={defaultSearchUpdated}
+                  fetchFunction={fetchTemplateNamesByInput}
+                />
               </div>
             )}
 

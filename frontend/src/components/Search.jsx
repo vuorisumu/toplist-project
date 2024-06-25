@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { fetchTemplateNamesByInput } from "./api";
 import { getTemplateNamesFromData } from "../util/dataHandler";
 
-function Search({ valueUpdated }) {
+function Search({ valueUpdated, fetchFunction }) {
   const placeholder = "placeholder";
   const [value, setValue] = useState("");
   const [hideSuggestions, setHideSuggestions] = useState(false);
@@ -37,7 +37,7 @@ function Search({ valueUpdated }) {
 
   const updateSuggestions = async () => {
     if (value.trim() !== "") {
-      fetchTemplateNamesByInput(value)
+      fetchFunction(value)
         .then((data) => {
           const names = getTemplateNamesFromData(data);
           setSuggestions(names);
