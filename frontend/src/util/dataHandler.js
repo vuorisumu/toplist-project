@@ -63,11 +63,14 @@ export const getTemplateNamesFromData = (data) => {
 
 export const fetchAllNamesByInput = async (input) => {
   try {
-    const templateNameData = await fetchTemplateNamesByInput(input);
-    const templateNames = getTemplateNamesFromData(templateNameData);
+    const [templateNameData, userNameData] = await Promise.all([
+      fetchTemplateNamesByInput(input),
+      fetchUserNamesByInput(input),
+    ]);
 
-    const userNameData = await fetchUserNamesByInput(input);
+    const templateNames = getTemplateNamesFromData(templateNameData);
     const userNames = getTemplateNamesFromData(userNameData);
+
     return [...templateNames, ...userNames];
   } catch (err) {
     console.log(err);

@@ -102,11 +102,12 @@ async function filteredRankingQuery(req) {
 
   let filteredQuery = "SELECT";
   if (value.distinct) {
-    filteredQuery += " DISTINCT top.toplist_name";
+    filteredQuery += " DISTINCT top.toplist_name FROM toplists top";
   } else {
-    filteredQuery += " *";
+    filteredQuery +=
+      " * FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id LEFT JOIN templates t ON top.template_id = t.id";
   }
-  filteredQuery += ` FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id LEFT JOIN templates t ON top.template_id = t.id`;
+
   const conditions = [];
   const queryParams = {};
 
