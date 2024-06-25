@@ -14,7 +14,7 @@ function TemplateContainer() {
   const [filters, setFilters] = useState(defaultQuery);
   const [templateCount, setTemplateCount] = useState(0);
   const [loadedCount, setLoadedCount] = useState(0);
-  const loadMoreAmount = 1;
+  const loadMoreAmount = 5;
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -50,16 +50,10 @@ function TemplateContainer() {
   const loadTemplates = async (loadMore = false) => {
     const loaded = loadMore ? loadedCount : 0;
 
-    // Don't fetch more than the database has
-    let newLoadSize = loadMoreAmount;
-    if (loaded + loadMoreAmount > templateCount) {
-      const overFlow = loaded + loadMoreAmount - templateCount;
-      newLoadSize -= overFlow;
-    }
-
-    fetchAllTemplatesFiltered(`${filters}&from=${loaded}&amount=${newLoadSize}`)
+    fetchAllTemplatesFiltered(
+      `${filters}&from=${loaded}&amount=${loadMoreAmount}`
+    )
       .then((data) => {
-        console.log(`${filters}&from=${loaded}&amount=${newLoadSize}`);
         const formattedData = formatData(data);
         if (!loadMore) {
           setTemplates(formattedData);
@@ -67,7 +61,7 @@ function TemplateContainer() {
         } else {
           setTemplates((prevTemplates) => [...prevTemplates, ...formattedData]);
         }
-        setLoadedCount(loaded + newLoadSize);
+        setLoadedCount(loaded + loadMoreAmount);
       })
       .catch((err) => console.log(err));
   };

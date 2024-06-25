@@ -10,7 +10,7 @@ function ToplistContainer(props) {
   const [toplists, setToplists] = useState([]);
   const [listCount, setListCount] = useState(0);
   const [loadedCount, setLoadedCount] = useState(0);
-  const loadMoreAmount = 1;
+  const loadMoreAmount = 5;
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(defaultQuery);
 
@@ -19,7 +19,9 @@ function ToplistContainer(props) {
   }, []);
 
   useEffect(() => {
-    loadLists();
+    if (listCount > 0) {
+      loadLists();
+    }
   }, [listCount]);
 
   const getListCount = async () => {
@@ -34,20 +36,18 @@ function ToplistContainer(props) {
   const loadLists = async (loadMore = false) => {
     const loaded = loadMore ? loadedCount : 0;
 
-    // Don't fetch more than the database has
-    let newLoadSize = loadMoreAmount;
-    if (loaded + loadMoreAmount > listCount) {
-      const overFlow = loaded + loadMoreAmount - listCount;
-      newLoadSize -= overFlow;
-    }
-
     let q = templateId > 0 ? `tempId=${templateId}&` : ``;
     q += `${filters}`;
-    fetchAllRankingsFiltered(`${q}&from=${loaded}&amount=${newLoadSize}`)
+    fetchAllRankingsFiltered(`${q}&from=${loaded}&amount=${loadMoreAmount}`)
       .then((data) => {
         const formattedData = formatData(data);
-        setToplists(formattedData);
-        setLoading(false);
+        if (!loadMore) {
+          setToplists(formattedData);
+          setLoading(false);
+        } else {
+          setToplists((prev) => [...prev, ...formattedData]);
+        }
+        setLoadedCount(loaded + loadMoreAmount);
       })
       .catch((err) => console.log(err));
   };
@@ -78,13 +78,26 @@ function ToplistContainer(props) {
       {loading ? (
         <p>Loading</p>
       ) : (
-        <div className="lists">
-          {toplists.map((list) => (
-            <div key={list.toplist_id} className="rank-container">
-              <Toplist data={list} general={templateId < 1} />
-            </div>
-          ))}
-        </div>
+        <>
+          <div className="lists">
+            {toplists.map((list) => (
+              <div key={list.toplist_id} className="rank-container">
+                <Toplist data={list} general={templateId < 1} />
+              </div>
+            ))}
+          </div>
+
+          {/* Load more button */}
+          {toplists.length > 0 && loadedCount < listCount && (
+            <button
+              type="button"
+              onClick={() => loadLists(true)}
+              className="loadMoreButton"
+            >
+              Load more
+            </button>
+          )}
+        </>
       )}
     </div>
   );
