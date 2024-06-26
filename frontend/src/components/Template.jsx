@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { deleteTemplate } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
 import { isAdmin, isCreatorOfTemplate } from "../util/permissions";
+import { useEffect, useState } from "react";
 
 /**
  * Reusable component displaying a preview of a template
@@ -10,6 +11,28 @@ import { isAdmin, isCreatorOfTemplate } from "../util/permissions";
  * @returns {JSX.Element} Template preview component
  */
 function Template({ data }) {
+  const [canEdit, setCanEdit] = useState(false);
+
+  useEffect(() => {
+    checkPermission();
+  }, []);
+
+  /**
+   * Checks if the user is logged in as admin or is the creator of the
+   * currently chosen template.
+   */
+  const checkPermission = async () => {
+    try {
+      const isCreator = await isCreatorOfTemplate(data.id);
+      setCanEdit(isCreator);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  /**
+   * Deletes the chosen template from the database and refreshes
+   */
   const handleDelete = () => {
     deleteTemplate(data.id)
       .then((res) => {
@@ -21,7 +44,7 @@ function Template({ data }) {
 
   return (
     <>
-      {(isAdmin() || isCreatorOfTemplate(data.creator_id)) && (
+      {canEdit && (
         <Link to={`/edit-template/${data.id}`} className="editButton">
           <span
             className="material-symbols-outlined"
