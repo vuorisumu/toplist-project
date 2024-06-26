@@ -7,6 +7,7 @@ const templateRoutes = require("./routes/templateRoutes");
 const userRoutes = require("./routes/userRoutes");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const categoryRoutes = require("./routes/categoryRoutes");
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ database.init().then(() => {
   app.use("/api/login", roleRoutes);
   app.use("/api/users", userRoutes);
   app.use("/api/tags", tagRoutes);
+  app.use("/api/categories", categoryRoutes);
   app.use(express.static("./frontend/dist"));
 
   app

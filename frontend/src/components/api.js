@@ -461,3 +461,17 @@ export const login = (loginData) => {
     .then((response) => response.json())
     .catch((error) => console.error(error));
 };
+
+// --- CATEGORIES ---
+
+export const fetchAllCategories = () => {
+  return fetch(`${API_BASE_URL}/categories`).then((response) =>
+    response.json()
+  );
+};
+
+export const fetchCategoryById = (id) => {
+  return fetch(`${API_BASE_URL}/categories/${id}`).then((response) =>
+    response.json()
+  );
+};

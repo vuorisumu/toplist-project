@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { clearAll, getTagNumbers, getUserId, checkCreatorStatus } from "./util";
-import { addNewTemplate, fetchAllTags } from "./api";
+import { addNewTemplate, fetchAllCategories, fetchAllTags } from "./api";
 import SearchInput from "./SearchInput";
 import Login from "./Login";
 import { useNavigate } from "react-router-dom";
 import { isLoggedIn } from "../util/permissions";
+import { formatData } from "../util/dataHandler";
 
 /**
  * View where the user can create a new template and add it to the database.
@@ -18,27 +19,39 @@ function NewTemplate() {
   const navigate = useNavigate();
   const [templateName, setTemplateName] = useState("");
   const [description, setDescription] = useState("");
-  // const [creatorName, setCreatorName] = useState("");
   const [items, setItems] = useState([""]);
   const [tags, setTags] = useState([""]);
   const [suggestions, setSuggestions] = useState([""]);
   const [canCreate, setCanCreate] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [categories, setCategories] = useState(null);
 
   useEffect(() => {
     if (isLoggedIn()) {
       setCanCreate(true);
-      // setCreatorName(sessionStorage.getItem("user"));
-      fetchAllTags()
-        .then((data) => {
-          const tagNames = data.map((tag) => tag.name);
-          setSuggestions(tagNames);
-        })
-        .catch((err) => console.log(err));
+      if (sessionStorage.getItem("categories") !== null) {
+        console.log("session storage found");
+        setCategories(JSON.parse(sessionStorage.getItem("categories")));
+      } else {
+        console.log("no session storage, adding..");
+        fetchAllCategories()
+          .then((data) => {
+            const formattedData = formatData(data);
+            setCategories(formattedData);
+          })
+          .catch((err) => console.log(err));
+      }
     } else {
       setCanCreate(false);
     }
-  }, [suggestions.length]);
+  }, []);
+
+  useEffect(() => {
+    if (categories !== null) {
+      console.log("adding to session storage");
+      sessionStorage.setItem("categories", JSON.stringify(categories));
+    }
+  }, [categories]);
 
   /**
    * Adds new item to the template, only if the latest item is not blank
@@ -209,6 +222,10 @@ function NewTemplate() {
           />
         </div>
 
+        <div>
+          <p>Categories:</p>
+        </div>
+
         <div className="addCont addItems">
           <h2>Template items</h2>
           <ul id="tempItems">
@@ -230,36 +247,6 @@ function NewTemplate() {
                   </button>
                 ) : (
                   <button type="button" onClick={addItem} className="addButton">
-                    <span className="material-symbols-outlined">add</span>
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="addCont addTags">
-          <h2>Tags</h2>
-          <ul>
-            {tags.map((i, index) => (
-              <li key={"tag" + index}>
-                <SearchInput
-                  initValue={i}
-                  placeholder={"Tag name"}
-                  suggestionData={suggestions}
-                  onChange={(val) => handleTagEdits(index, val)}
-                  onSelected={(val) => handleTagEdits(index, val)}
-                />
-                {index !== tags.length - 1 ? (
-                  <button
-                    type="button"
-                    onClick={() => deleteTag(index)}
-                    className="deleteButton"
-                  >
-                    <span className="material-symbols-outlined">delete</span>
-                  </button>
-                ) : (
-                  <button type="button" onClick={addTag} className="addButton">
                     <span className="material-symbols-outlined">add</span>
                   </button>
                 )}
