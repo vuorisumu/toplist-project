@@ -23,6 +23,7 @@ function Search({
   combinedSearch = false,
   onClear,
   templateId,
+  onEnterKey,
 }) {
   const placeholder = "placeholder";
   const [value, setValue] = useState("");
@@ -105,7 +106,7 @@ function Search({
    */
   const checkKey = (e) => {
     if (e.key === "Enter") {
-      console.log("enter was pressed");
+      onEnterKey(value);
     }
   };
 

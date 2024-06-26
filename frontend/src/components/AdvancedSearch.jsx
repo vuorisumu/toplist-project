@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Search from "./Search";
 import Dropdown from "./Dropdown";
 import {
@@ -15,11 +15,11 @@ import {
 
 function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [defaultSearch, setDefaultSearch] = useState("");
-  const [nameSearch, setNameSearch] = useState("");
-  const [userSearch, setUserSearch] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [clearInput, setClearInput] = useState(false);
+  const searchInput = useRef("");
+  const nameSearchInput = useRef("");
+  const userSearchInput = useRef("");
 
   // sort by options as srings
   const sortByOptions = {
@@ -34,17 +34,17 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
     let searchQuery = "";
     let searchConditions = [];
 
-    if (defaultSearch.trim() !== "") {
-      searchConditions.push(`search=${defaultSearch.trim()}`);
+    if (searchInput.current.trim() !== "") {
+      searchConditions.push(`search=${searchInput.current.trim()}`);
     }
 
-    if (nameSearch.trim() !== "") {
+    if (nameSearchInput.current.trim() !== "") {
       const searching = searchLists ? "rname" : "tname";
-      searchConditions.push(`${searching}=${nameSearch.trim()}`);
+      searchConditions.push(`${searching}=${nameSearchInput.current.trim()}`);
     }
 
-    if (userSearch.trim() !== "") {
-      searchConditions.push(`uname=${userSearch.trim()}`);
+    if (userSearchInput.current.trim() !== "") {
+      searchConditions.push(`uname=${userSearchInput.current.trim()}`);
     }
 
     if (sortBy !== "") {
@@ -62,6 +62,7 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
       searchQuery = searchConditions.join("&");
     }
 
+    console.log(searchQuery);
     onSearch(searchQuery);
   };
 
@@ -77,11 +78,30 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
     setFiltersOpen(!filtersOpen);
   };
 
+  const setSearch = (val) => (searchInput.current = val);
+  const setNameInput = (val) => (nameSearchInput.current = val);
+  const setUserInput = (val) => (userSearchInput.current = val);
+
+  const onEnterDefault = (val) => {
+    setSearch(val);
+    handleSearch();
+  };
+
+  const onEnterName = (val) => {
+    setNameInput(val);
+    handleSearch();
+  };
+
+  const onEnterUser = (val) => {
+    setUserInput(val);
+    handleSearch();
+  };
+
   return (
     <div className="searchContainer">
       <div className="searchInput general">
         <Search
-          valueUpdated={setDefaultSearch}
+          valueUpdated={setSearch}
           fetchFunction={
             searchLists
               ? fetchCombinedToplistNamesByInput
@@ -90,6 +110,7 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
           combinedSearch={true}
           onClear={clearInput}
           templateId={templateId}
+          onEnterKey={onEnterDefault}
         />
 
         <button type="button" onClick={handleSearch} className="searchButton">
@@ -106,10 +127,11 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
                 {/* Top list name search */}
                 <label>Search top list by name: </label>
                 <Search
-                  valueUpdated={setNameSearch}
+                  valueUpdated={setNameInput}
                   fetchFunction={fetchRankingNamesByInput}
                   onClear={clearInput}
                   templateId={templateId}
+                  onEnterKey={onEnterName}
                 />
               </div>
             ) : (
@@ -117,9 +139,10 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
                 {/* Template name search */}
                 <label>Search template by name: </label>
                 <Search
-                  valueUpdated={setNameSearch}
+                  valueUpdated={setNameInput}
                   fetchFunction={fetchTemplateNamesByInput}
                   onClear={clearInput}
+                  onEnterKey={onEnterName}
                 />
               </div>
             )}
@@ -128,7 +151,7 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
               {/* Username search */}
               <label>Search from creator: </label>
               <Search
-                valueUpdated={setUserSearch}
+                valueUpdated={setUserInput}
                 fetchFunction={
                   searchLists
                     ? fetchUserNamesWithTopListsByInput
@@ -136,6 +159,7 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
                 }
                 onClear={clearInput}
                 templateId={templateId}
+                onEnterKey={onEnterUser}
               />
             </div>
 
