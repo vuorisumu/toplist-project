@@ -148,6 +148,12 @@ templateRouter.post("/", async (req, res) => {
       values["description"] = req.body.description;
     }
 
+    // optional category
+    if (req.body.category) {
+      placeholders.push("category");
+      values["category"] = req.body.category;
+    }
+
     // optional tags
     if (req.body.tags) {
       placeholders.push("tags");
@@ -216,6 +222,11 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     if (req.body.description) {
       fields.push("description = :description");
       values["description"] = req.body.description;
+    }
+
+    if (req.body.category) {
+      placeholders.push("category = :category");
+      values["category"] = req.body.category;
     }
 
     if (req.body.tags) {

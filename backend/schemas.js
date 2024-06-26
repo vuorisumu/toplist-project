@@ -59,6 +59,7 @@ const templateSchema = Joi.object({
   name: Joi.string().required(),
   creator_id: Joi.number().optional(),
   description: Joi.string().optional(),
+  category: Joi.number().optional(),
   items: Joi.array()
     .items(
       Joi.object().keys({

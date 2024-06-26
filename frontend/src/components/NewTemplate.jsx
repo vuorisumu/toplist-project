@@ -21,11 +21,10 @@ function NewTemplate() {
   const [templateName, setTemplateName] = useState("");
   const [description, setDescription] = useState("");
   const [items, setItems] = useState([""]);
-  const [tags, setTags] = useState([""]);
-  const [suggestions, setSuggestions] = useState([""]);
   const [canCreate, setCanCreate] = useState(false);
   const [errors, setErrors] = useState([]);
   const [categories, setCategories] = useState(null);
+  const [chosenCategory, setChosenCategory] = useState("");
 
   useEffect(() => {
     if (isLoggedIn()) {
@@ -64,16 +63,8 @@ function NewTemplate() {
   };
 
   /**
-   * Adds a new tag to the template, only if the latest tag is not blank
-   */
-  const addTag = () => {
-    if (tags[tags.length - 1].trim() !== "") {
-      setTags([...tags, ""]);
-    }
-  };
-
-  /**
    * Renames an item of a specified index with a given value
+   *
    * @param {number} index - index of the item to be edited
    * @param {string} value - new name of the item
    */
@@ -84,18 +75,8 @@ function NewTemplate() {
   };
 
   /**
-   * Renames a tag of a specified index with a given value
-   * @param {number} index - index of the tag to be edited
-   * @param {string} value - new name of the tag
-   */
-  const handleTagEdits = (index, value) => {
-    const updatedTags = [...tags];
-    updatedTags[index] = value;
-    setTags(updatedTags);
-  };
-
-  /**
    * Deletes an item from a specified index
+   *
    * @param {number} index - index of the item to be deleted
    */
   const deleteItem = (index) => {
@@ -104,17 +85,9 @@ function NewTemplate() {
   };
 
   /**
-   * Deletes a tag from a specified index
-   * @param {number} index - index of the tag to be deleted
-   */
-  const deleteTag = (index) => {
-    const updatedTags = tags.filter((_, i) => i !== index);
-    setTags(updatedTags);
-  };
-
-  /**
    * Checks if the created template meets the minimum requirements
    * for saving to the database
+   *
    * @returns true if requirements have been met, false if the name field
    * is empty or if the template has less than five items
    */
@@ -166,17 +139,19 @@ function NewTemplate() {
       creator_id: sessionStorage.getItem("userId"),
     };
 
-    // optional tags
-    const nonEmptyTags = tags.filter((t) => t.trim() !== "");
-    if (nonEmptyTags.length > 0) {
-      // convert text tags to numbers
-      const tagNumbers = await getTagNumbers(nonEmptyTags);
-      templateData.tags = tagNumbers;
-    }
-
     // optional description
     if (description.trim() !== "") {
       templateData.description = description;
+    }
+
+    // category
+    if (chosenCategory !== "") {
+      const categoryId = categories
+        .filter((category) => category.name === chosenCategory)
+        .map((category) => {
+          return category.id;
+        });
+      templateData.category = categoryId[0];
     }
 
     // add template to database
@@ -224,21 +199,13 @@ function NewTemplate() {
         </div>
 
         <div>
-          <p>Categories:</p>
-          <Dropdown
-            label={"Categories"}
-            placeholder={"Choose category"}
-            items={categories.map((c) => c.name)}
-            onSelect={(val) => console.log(val)}
-          />
           {categories && (
-            <ul>
-              {categories.map((category, index) => (
-                <li key={"category" + index}>
-                  <p>{category.name}</p>
-                </li>
-              ))}
-            </ul>
+            <Dropdown
+              label={"Category"}
+              placeholder={"Choose category"}
+              items={categories.map((c) => c.name)}
+              onSelect={setChosenCategory}
+            />
           )}
         </div>
 
