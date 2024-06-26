@@ -69,6 +69,7 @@ function NewList() {
 
     fetchTemplateById(templateId)
       .then((data) => {
+        console.log(data);
         const formattedData = formatData(data)[0];
         setTemplate(formattedData);
 
@@ -210,8 +211,12 @@ function NewList() {
           Template: <span className="alt">{template.name}</span> by{" "}
           {template.user_name ? template.user_name : "Unknown"}
         </p>
+
         <p className="templateInfo desc">
-          Template description: {template.description}
+          {template.description
+            ? "Template description"
+            : `Create your own top list using this template`}
+          {template.description}
         </p>
 
         {/* Ranking information */}

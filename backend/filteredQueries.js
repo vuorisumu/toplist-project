@@ -12,7 +12,7 @@ async function filteredTemplatesQuery(req) {
   }
   let filteredQuery = value.namesOnly
     ? "SELECT DISTINCT t.name "
-    : "SELECT t.id, t.name, t.description, u.user_name, t.creator_id ";
+    : "SELECT t.id, t.name, t.description, u.user_name, t.creator_id, t.category ";
 
   filteredQuery +=
     "FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id";
