@@ -14,6 +14,7 @@ function Search({
   const [hideSuggestions, setHideSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const suggRef = useRef(null);
+  const userInputRef = useRef(true);
 
   useEffect(() => {
     if (onClear) {
@@ -24,9 +25,17 @@ function Search({
   // Only send the value to callback after the user has stopped typing
   useEffect(() => {
     const delayedUpdate = setTimeout(() => {
-      valueUpdated(value);
-      setHideSuggestions(false);
-      updateSuggestions();
+      if (userInputRef.current) {
+        valueUpdated(value);
+        updateSuggestions();
+
+        // Don't show suggestions if the input is blank
+        if (value.trim() === "") {
+          setHideSuggestions(true);
+        } else {
+          setHideSuggestions(false);
+        }
+      }
     }, 600);
 
     return () => clearTimeout(delayedUpdate);
@@ -61,12 +70,8 @@ function Search({
   };
 
   const handleChange = (e) => {
-    setHideSuggestions(false);
+    userInputRef.current = true;
     setValue(e.target.value);
-  };
-
-  const keyUp = () => {
-    // console.log("key up");
   };
 
   const checkKey = (e) => {
@@ -83,7 +88,6 @@ function Search({
           placeholder={placeholder}
           value={value}
           onChange={handleChange}
-          onKeyUp={keyUp}
           onKeyDown={checkKey}
         />
       </div>
@@ -94,7 +98,9 @@ function Search({
             <div
               key={"" + item + index}
               onClick={() => {
-                console.log(item);
+                userInputRef.current = false;
+                setValue(item);
+                setHideSuggestions(true);
               }}
             >
               {item}
