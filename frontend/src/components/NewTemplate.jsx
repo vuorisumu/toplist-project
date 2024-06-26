@@ -6,6 +6,7 @@ import Login from "./Login";
 import { useNavigate } from "react-router-dom";
 import { isLoggedIn } from "../util/permissions";
 import { formatData } from "../util/dataHandler";
+import Dropdown from "./Dropdown";
 
 /**
  * View where the user can create a new template and add it to the database.
@@ -224,6 +225,21 @@ function NewTemplate() {
 
         <div>
           <p>Categories:</p>
+          <Dropdown
+            label={"Categories"}
+            placeholder={"Choose category"}
+            items={categories.map((c) => c.name)}
+            onSelect={(val) => console.log(val)}
+          />
+          {categories && (
+            <ul>
+              {categories.map((category, index) => (
+                <li key={"category" + index}>
+                  <p>{category.name}</p>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <div className="addCont addItems">
