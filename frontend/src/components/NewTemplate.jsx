@@ -4,6 +4,7 @@ import { addNewTemplate, fetchAllTags } from "./api";
 import SearchInput from "./SearchInput";
 import Login from "./Login";
 import { useNavigate } from "react-router-dom";
+import { isLoggedIn } from "../util/permissions";
 
 /**
  * View where the user can create a new template and add it to the database.
@@ -23,7 +24,7 @@ function NewTemplate() {
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
-    if (sessionStorage.getItem("login")) {
+    if (isLoggedIn()) {
       setCanCreate(true);
       // setCreatorName(sessionStorage.getItem("user"));
       fetchAllTags()

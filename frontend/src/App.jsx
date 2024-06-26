@@ -14,6 +14,7 @@ import ThemeButton from "./components/ThemeButton.jsx";
 import NewList from "./components/NewList.jsx";
 import SingleList from "./components/SingleList.jsx";
 import Register from "./components/Register.jsx";
+import { isLoggedIn } from "./util/permissions.js";
 
 class App extends React.Component {
   constructor(props) {
@@ -72,7 +73,7 @@ class App extends React.Component {
                 <span className="linkName">Top lists</span>
               </NavLink>
             </li>
-            {sessionStorage.getItem("login") && (
+            {isLoggedIn() && (
               <li>
                 <NavLink to="/new-template">
                   <span className="material-symbols-outlined icon">
@@ -88,10 +89,10 @@ class App extends React.Component {
             <li>
               <div className="toggleLogin" onClick={toggleLogin} id="navLogin">
                 <span className="material-symbols-outlined icon">
-                  {sessionStorage.getItem("login") ? "lock_open" : "lock"}
+                  {isLoggedIn() ? "lock_open" : "lock"}
                 </span>
                 <span className="linkName">
-                  {sessionStorage.getItem("login") ? "Logged in" : "Login"}
+                  {isLoggedIn() ? "Logged in" : "Login"}
                 </span>
               </div>
             </li>

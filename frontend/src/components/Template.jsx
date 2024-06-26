@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { deleteTemplate } from "./api";
 import { checkAdminStatus } from "./util";
 import ButtonPrompt from "./ButtonPrompt";
+import { isAdmin } from "../util/permissions";
 
 function Template(props) {
   const data = props.data;
@@ -17,7 +18,7 @@ function Template(props) {
 
   return (
     <>
-      {checkAdminStatus() && (
+      {isAdmin() && (
         <Link to={`/edit-template/${data.id}`} className="editButton">
           <span
             className="material-symbols-outlined"
@@ -37,7 +38,7 @@ function Template(props) {
 
       {data.description && <p className="description">{data.description}</p>}
 
-      {checkAdminStatus() && (
+      {isAdmin() && (
         <div>
           <br />
           <ButtonPrompt

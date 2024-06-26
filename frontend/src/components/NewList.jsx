@@ -7,6 +7,7 @@ import { getLocalTime, clearAll, checkAdminStatus, getUserId } from "./util";
 import ShowRankings from "./ShowRankings";
 import { formatData } from "../util/dataHandler";
 import ToplistContainer from "./ToplistContainer";
+import { isAdmin } from "../util/permissions";
 
 /**
  * View where the user can create a new list from a chosen template.
@@ -176,7 +177,7 @@ function NewList() {
       <div className="createRank">
         <h1>Create a Top List</h1>
 
-        {(template.editkey || checkAdminStatus()) && (
+        {(template.editkey || isAdmin()) && (
           <Link to={`/edit-template/${template.id}`} className="editButton">
             <span
               className="material-symbols-outlined"

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { checkAdminStatus, formatDate } from "./util";
 import ButtonPrompt from "./ButtonPrompt";
 import { deleteRanking } from "./api";
+import { isAdmin } from "../util/permissions";
 
 function Toplist(props) {
   const data = props.data;
@@ -44,7 +45,7 @@ function Toplist(props) {
         ))}
       </ol>
 
-      {checkAdminStatus() && (
+      {isAdmin() && (
         <ButtonPrompt
           buttonName="Delete top list"
           confirm={() => handleDelete(data.toplist_id)}

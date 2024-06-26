@@ -10,6 +10,7 @@ import {
 import FilteredSearch from "./FilteredSearch";
 import ButtonPrompt from "./ButtonPrompt";
 import { formatData, getCountFromData } from "../util/dataHandler";
+import { isAdmin } from "../util/permissions";
 
 /**
  * Reusable component that by default renders the most recent rankings, optionally
@@ -205,7 +206,7 @@ function ShowRankings({ id }) {
                 ))}
               </ol>
 
-              {checkAdminStatus() && (
+              {isAdmin() && (
                 <ButtonPrompt
                   buttonName="Delete top list"
                   confirm={() => handleDelete(list.ranking_id)}

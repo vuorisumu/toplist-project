@@ -4,6 +4,7 @@ import { formatDate, checkAdminStatus } from "./util";
 import { fetchRankingById, deleteRanking } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
 import { formatData } from "../util/dataHandler";
+import { isAdmin } from "../util/permissions";
 
 /**
  * View of a single ranking rendering all information related to the ranking
@@ -90,7 +91,7 @@ function SingleList() {
           </ol>
         </div>
 
-        {checkAdminStatus() && (
+        {isAdmin() && (
           <ButtonPrompt buttonName="Delete ranking" confirm={handleDelete} />
         )}
 

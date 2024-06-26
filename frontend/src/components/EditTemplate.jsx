@@ -11,6 +11,7 @@ import {
 } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
 import { formatData } from "../util/dataHandler";
+import { isAdmin } from "../util/permissions";
 
 /**
  * Edit template view that asks for the user to either be logged in as admin or to input
@@ -33,7 +34,7 @@ function EditTemplate() {
   }
 
   useEffect(() => {
-    if (checkAdminStatus()) {
+    if (isAdmin()) {
       fetchTemplate();
     }
   }, []);
