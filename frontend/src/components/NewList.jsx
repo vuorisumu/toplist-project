@@ -3,10 +3,10 @@ import { useLocation, Link, useNavigate } from "react-router-dom";
 import { addNewRanking, fetchTemplateById } from "./api";
 import { DnDContainer } from "./Dnd";
 import { v4 as uuid } from "uuid";
-import { getLocalTime, clearAll } from "./util";
+import { clearAll } from "./util";
 import { formatData } from "../util/dataHandler";
 import ToplistContainer from "./ToplistContainer";
-import { isAdmin, isCreatorOfTemplate } from "../util/permissions";
+import { isCreatorOfTemplate } from "../util/permissions";
 import { getCategoryById } from "../util/storage";
 
 /**
@@ -111,7 +111,6 @@ function NewList() {
   useEffect(() => {
     if (template) {
       getCategoryById(template.category).then((data) => {
-        console.log(data);
         setCategory(data);
       });
     }

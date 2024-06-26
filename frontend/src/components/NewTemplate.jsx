@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { clearAll, getTagNumbers, getUserId, checkCreatorStatus } from "./util";
-import { addNewTemplate, fetchAllCategories, fetchAllTags } from "./api";
-import SearchInput from "./SearchInput";
+import { clearAll } from "./util";
+import { addNewTemplate } from "./api";
 import Login from "./Login";
 import { useNavigate } from "react-router-dom";
 import { isLoggedIn } from "../util/permissions";
-import { formatData } from "../util/dataHandler";
 import Dropdown from "./Dropdown";
 import { getCategories } from "../util/storage";
 

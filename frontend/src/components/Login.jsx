@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { auth, login, userLogin } from "./api";
-import { checkCreatorStatus } from "./util";
+import { auth, userLogin } from "./api";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
