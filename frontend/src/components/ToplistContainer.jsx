@@ -2,11 +2,16 @@ import { useEffect, useState } from "react";
 import { fetchAllRankingsFiltered, fetchRankingCount } from "./api";
 import { formatData, getCountFromData } from "../util/dataHandler";
 import Toplist from "./Toplist";
-import FilteredSearch from "./FilteredSearch";
 import AdvancedSearch from "./AdvancedSearch";
 
-function ToplistContainer(props) {
-  const templateId = props.id ? props.id : 0;
+/**
+ * Container for displaying the top lists and the search bar.
+ * Displays the search bar with filters and top lists fetched from the
+ * database. If the id is given, displays top lists only using that template id.
+ * @param {number} props.templateId - The ID of the template to be used when
+ * fetching from the database. Defaults to 0, meaning no template was chosen.
+ */
+function ToplistContainer({ templateId = 0 }) {
   const defaultQuery = `sortBy=id&sortOrder=desc`;
   const [toplists, setToplists] = useState([]);
   const [listCount, setListCount] = useState(0);
@@ -25,6 +30,10 @@ function ToplistContainer(props) {
     }
   }, [listCount]);
 
+  /**
+   * Fetches the full list count and sets the count value to state.
+   * If the count is 0, set loading to false.
+   */
   const getListCount = async () => {
     fetchRankingCount(templateId)
       .then((data) => {
@@ -35,6 +44,13 @@ function ToplistContainer(props) {
       .catch((err) => console.log(err));
   };
 
+  /**
+   * Loads lists from the database. Overwrites the loaded lists on fresh
+   * search, and adds to previously loaded if the user chose to load more.
+   * @param {boolean} loadMore - False by default. If set to true, loads
+   * more lists starting from the last loaded row and adds them to state
+   * instead of overwriting.
+   */
   const loadLists = async (loadMore = false) => {
     const loaded = loadMore ? loadedCount : 0;
 

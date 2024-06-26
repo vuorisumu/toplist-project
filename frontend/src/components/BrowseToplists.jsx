@@ -8,7 +8,7 @@ function BrowseToplists() {
   return (
     <div className="container">
       <h1>Top lists</h1>
-      <ToplistContainer id={0} />
+      <ToplistContainer templateId={0} />
     </div>
   );
 }
