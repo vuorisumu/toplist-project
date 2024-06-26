@@ -1,7 +1,22 @@
 import { useState, useEffect, useRef } from "react";
-import { fetchTemplateNamesByInput } from "./api";
 import { getTemplateNamesFromData } from "../util/dataHandler";
 
+/**
+ * Reusable custom search bar that displays suggestions based on user
+ * input. Fetches the suggestions after a small delay to avoid unnecessary
+ * queries.
+ *
+ * @param {function(string)} props.valueUpdated -  Callback function that
+ * is called after a small delay when the search value is updated.
+ * @param {function(string)} props.fetchFunction - Function that is used for
+ * fetching data with the given input
+ * @param {boolean} props.combinedSearch - Whether to search from multiple sources
+ * at once or not. Defaults to false.
+ * @param {boolean} props.onClear - Flag to clear the search input
+ * @param {number} props.templateId - Optional template ID to be used in search
+ * queries
+ * @returns {JSX.Element} The Search component.
+ */
 function Search({
   valueUpdated,
   fetchFunction,
@@ -56,6 +71,10 @@ function Search({
     };
   }, [suggRef]);
 
+  /**
+   * Uses the given fetchFunction with the input value and sets the
+   * retrieved data to state.
+   */
   const updateSuggestions = async () => {
     if (value.trim() !== "") {
       const inputValue =
@@ -69,11 +88,21 @@ function Search({
     }
   };
 
+  /**
+   * Handles user input
+   *
+   * @param {ChangeEvent} e - event containing information about the current input value
+   */
   const handleChange = (e) => {
     userInputRef.current = true;
     setValue(e.target.value);
   };
 
+  /**
+   * Checks which key was pressed.
+   *
+   * @param {ChangeEvent} e - event containing information about the current input value
+   */
   const checkKey = (e) => {
     if (e.key === "Enter") {
       console.log("enter was pressed");
