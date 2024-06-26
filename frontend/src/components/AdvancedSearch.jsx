@@ -4,7 +4,6 @@ import Dropdown from "./Dropdown";
 import {
   fetchRankingNamesByInput,
   fetchTemplateNamesByInput,
-  fetchUserNamesByInput,
   fetchUserNamesWithTemplatesByInput,
   fetchUserNamesWithTopListsByInput,
 } from "./api";
@@ -13,6 +12,20 @@ import {
   fetchCombinedToplistNamesByInput,
 } from "../util/dataHandler";
 
+/**
+ * Reusable Advanced Search component that has one general search field and
+ * two additional search fields for more specific searching. Also has sort by
+ * options in a dropdown menu.
+ *
+ * @param {boolean} props.searchLists - Whether to search for top lists or templates.
+ * True when searching for lists, false for templates.
+ * @param {function(string)} props.onSearch - Callback function for when the search
+ * button or enter key was pressed.
+ * @param {function} props.onClear - Callback function for clearing the filters.
+ * @param {number} props.templateId - Optional template ID to be passed on the Search
+ * component.
+ * @returns {JSX.Element} The Advanced Search component
+ */
 function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [sortBy, setSortBy] = useState("");
@@ -30,6 +43,15 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
   };
   const placeholder = sortByOptions.LIST_NAME;
 
+  // Setters for filters
+  const selectFromDropdown = (val) => setSortBy(val);
+  const setSearch = (val) => (searchInput.current = val);
+  const setNameInput = (val) => (nameSearchInput.current = val);
+  const setUserInput = (val) => (userSearchInput.current = val);
+
+  /**
+   * Builds the search query and passes it to callback function.
+   */
   const handleSearch = () => {
     let searchQuery = "";
     let searchConditions = [];
@@ -66,32 +88,47 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
     onSearch(searchQuery);
   };
 
-  const selectFromDropdown = (val) => setSortBy(val);
-
+  /**
+   * Handles clearing the filters and calls the callback function.
+   */
   const handleClear = () => {
     setClearInput(true);
     setTimeout(() => setClearInput(false), 100);
     onClear();
   };
 
+  /**
+   * Opens and closes the filter menu
+   */
   const toggleFilterMenu = () => {
     setFiltersOpen(!filtersOpen);
   };
 
-  const setSearch = (val) => (searchInput.current = val);
-  const setNameInput = (val) => (nameSearchInput.current = val);
-  const setUserInput = (val) => (userSearchInput.current = val);
-
+  /**
+   * Pressing the enter key on default search field.
+   *
+   * @param {string} val - the current value of the input field
+   */
   const onEnterDefault = (val) => {
     setSearch(val);
     handleSearch();
   };
 
+  /**
+   * Pressing the enter key on name search field.
+   *
+   * @param {string} val - the current value of the input field
+   */
   const onEnterName = (val) => {
     setNameInput(val);
     handleSearch();
   };
 
+  /**
+   * Pressing the enter key on user search field.
+   *
+   * @param {string} val - the current value of the input field
+   */
   const onEnterUser = (val) => {
     setUserInput(val);
     handleSearch();
