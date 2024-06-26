@@ -16,6 +16,8 @@ import { isAdmin } from "../util/permissions";
  * Uses DnD component for building the ranked list.
  * Provides an option to add new items to be used in the ranking.
  * Finally renders a ShowRankings component with current template ID
+ *
+ * @returns {JSX.Element} New list creation component
  */
 function NewList() {
   const location = useLocation();

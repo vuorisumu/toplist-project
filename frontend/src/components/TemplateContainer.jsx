@@ -7,6 +7,9 @@ import AdvancedSearch from "./AdvancedSearch";
 /**
  * Container for displaying templates and the search bar.
  * Handles the displaying and loading of the templates.
+ *
+ * @returns {JSX.Element} Template container component with a
+ * search component attached
  */
 function TemplateContainer() {
   const [templates, setTemplates] = useState([]);

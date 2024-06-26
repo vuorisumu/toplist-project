@@ -17,7 +17,8 @@ import { isAdmin } from "../util/permissions";
  * Edit template view that asks for the user to either be logged in as admin or to input
  * an edit key that is the optional password set for a template. When authorized, the user
  * can then edit the template or delete it completely
- * @returns the input field for edit key if not logged in, or the view where the template
+ *
+ * @returns {JSX.Element} the input field for edit key if not logged in, or the view where the template
  * can be edited
  */
 function EditTemplate() {

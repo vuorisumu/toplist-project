@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
 import { deleteTemplate } from "./api";
-import { checkAdminStatus } from "./util";
 import ButtonPrompt from "./ButtonPrompt";
 import { isAdmin } from "../util/permissions";
 
-function Template(props) {
-  const data = props.data;
-
+/**
+ * Reusable component displaying a preview of a template
+ *
+ * @param {object} props.data - The data of the template
+ * @returns {JSX.Element} Template preview component
+ */
+function Template({ data }) {
   const handleDelete = () => {
     deleteTemplate(data.id)
       .then((res) => {

@@ -3,10 +3,11 @@ import { useState } from "react";
 
 /**
  * Reusable button component that prompts for user confirmation
+ *
  * @param {string} props.buttonName - text displayed on the main button
  * @param {string} props.prompt - optional prompt text, defaults to "Are you sure?" if not specified
  * @param {function} props.confirm - callback function to be executed when the user confirms the action
- * @returns JSX element rendering a button with confirmation prompt
+ * @returns {JSX.Element} rendering a button with confirmation prompt
  */
 function ButtonPrompt({ buttonName, prompt, confirm }) {
   const [promptVisible, setPromptVisible] = useState(false);

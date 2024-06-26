@@ -4,6 +4,8 @@ import TemplateContainer from "./TemplateContainer";
 /**
  * Initial view of the application. Renders general information about
  * the application and then the default view of template browsing view
+ *
+ * @returns {JSX.Element} The main view component
  */
 function Main() {
   return (

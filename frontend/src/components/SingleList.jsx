@@ -10,6 +10,8 @@ import { isAdmin } from "../util/permissions";
  * View of a single ranking rendering all information related to the ranking
  * and a back button. Also renders a delete button if the user is logged in as
  * admin
+ *
+ * @returns {JSX.Element} Component displaying a single top list
  */
 function SingleList() {
   const location = useLocation();

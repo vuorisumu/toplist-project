@@ -5,6 +5,8 @@ import Joi from "joi";
 
 /**
  * View for new user registration. Renders a form for account creation.
+ *
+ * @returns {JSX.Element} Registration component
  */
 function Register() {
   const [username, setUsername] = useState("");

@@ -11,6 +11,8 @@ import { isLoggedIn } from "../util/permissions";
  * Renders a message asking the user to log in if the user hasn't logged in,
  * and renders the template creation view only if the user has logged in as either
  * admin or creator.
+ *
+ * @returns {JSX.Element} New template creation component
  */
 function NewTemplate() {
   const navigate = useNavigate();

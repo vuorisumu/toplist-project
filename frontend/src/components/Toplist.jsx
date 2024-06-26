@@ -4,10 +4,15 @@ import ButtonPrompt from "./ButtonPrompt";
 import { deleteRanking } from "./api";
 import { isAdmin } from "../util/permissions";
 
-function Toplist(props) {
-  const data = props.data;
-  const general = props.general;
-
+/**
+ * Reusable component displaying top list data.
+ *
+ * @param {object} props.data - Top list data to be displayed
+ * @param {boolean} props.general - whether the top list should display
+ * information about the template or no.
+ * @returns {JSX.Element} Top list preview component
+ */
+function Toplist({ data, general }) {
   /**
    * Deletes the top list from the database.
    */

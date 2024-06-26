@@ -5,11 +5,12 @@ import { useState, useEffect, useRef } from "react";
 /**
  * Reusable dropdown component that displays selectable items by clicking the dropdown button and closes the
  * dropdown menu by selecting an item from the menu, or clicking outside the dropdown container.
+ *
  * @param {string} props.label - text labeling the dropdown menu, defaults to "Selected" if not specified
  * @param {string} props.placeholder - placeholder text for the default option when no item is selected
  * @param {array} props.items - string array containing the items that can be selected from the dropdown menu
  * @param {function} props.onSelect - callback function to be called when an item is selected
- * @returns JXS element that displays the dropdown button and selecatble options
+ * @returns {JSX.Element} that displays the dropdown button and selecatble options
  */
 function Dropdown({ label, placeholder, items, onSelect }) {
   const [selectedItem, setSelectedItem] = useState(null);

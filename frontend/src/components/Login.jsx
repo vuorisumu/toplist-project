@@ -7,6 +7,10 @@ import { Link } from "react-router-dom";
 /**
  * Reusable login component that renders input fields for the
  * username and password, as well as a login button.
+ *
+ * @param {boolean} props.isFixed - Whether the position of the
+ * component is fixed.
+ * @returns {JSX.Element} Login component
  */
 function Login({ isFixed }) {
   const [username, setUsername] = useState("");

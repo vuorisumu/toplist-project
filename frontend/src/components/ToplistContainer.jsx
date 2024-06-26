@@ -8,8 +8,10 @@ import AdvancedSearch from "./AdvancedSearch";
  * Container for displaying the top lists and the search bar.
  * Displays the search bar with filters and top lists fetched from the
  * database. If the id is given, displays top lists only using that template id.
+ *
  * @param {number} props.templateId - The ID of the template to be used when
  * fetching from the database. Defaults to 0, meaning no template was chosen.
+ * @returns {JSX.Element} Top list container component
  */
 function ToplistContainer({ templateId = 0 }) {
   const defaultQuery = `sortBy=id&sortOrder=desc`;

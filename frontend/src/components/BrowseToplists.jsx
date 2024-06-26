@@ -2,7 +2,8 @@ import ToplistContainer from "./ToplistContainer";
 
 /**
  * View where the user can browse through all top lists
- * @returns the title and content of the view
+ *
+ * @returns {JSX.Element} the title and content of the view
  */
 function BrowseToplists() {
   return (
