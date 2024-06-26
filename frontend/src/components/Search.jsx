@@ -15,6 +15,8 @@ import { getTemplateNamesFromData } from "../util/dataHandler";
  * @param {boolean} props.onClear - Flag to clear the search input
  * @param {number} props.templateId - Optional template ID to be used in search
  * queries
+ * @param {function(string)} props.onEnterKey - Callback function when the user
+ * presses the enter key on input field
  * @returns {JSX.Element} The Search component.
  */
 function Search({
@@ -32,6 +34,7 @@ function Search({
   const suggRef = useRef(null);
   const userInputRef = useRef(true);
 
+  // Clears the input field
   useEffect(() => {
     if (onClear) {
       setValue("");
@@ -100,7 +103,8 @@ function Search({
   };
 
   /**
-   * Checks which key was pressed.
+   * Checks which key was pressed and passes the current value to callback
+   * on Enter key.
    *
    * @param {ChangeEvent} e - event containing information about the current input value
    */
