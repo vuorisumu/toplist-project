@@ -22,6 +22,8 @@ export const isLoggedIn = () => {
 };
 
 export const isCreatorOfTemplate = async (id) => {
+  if (isAdmin() === true) return true;
+
   const token = sessionStorage.getItem("token");
   if (!token) return false;
 

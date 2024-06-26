@@ -9,7 +9,7 @@ import {
 } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
 import { formatData } from "../util/dataHandler";
-import { isAdmin, isCreatorOfTemplate } from "../util/permissions";
+import { isCreatorOfTemplate } from "../util/permissions";
 
 /**
  * Edit template view that asks for the user to either be logged in as admin or to input
@@ -48,15 +48,11 @@ function EditTemplate() {
    * currently chosen template.
    */
   const checkPermission = async () => {
-    if (isAdmin()) {
-      setCanEdit(true);
-    } else {
-      try {
-        const isCreator = await isCreatorOfTemplate(templateId);
-        setCanEdit(isCreator);
-      } catch (err) {
-        console.log(err);
-      }
+    try {
+      const isCreator = await isCreatorOfTemplate(templateId);
+      setCanEdit(isCreator);
+    } catch (err) {
+      console.log(err);
     }
   };
 
