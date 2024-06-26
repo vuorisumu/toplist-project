@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Search from "./Search";
 import Dropdown from "./Dropdown";
 import {
@@ -11,6 +11,7 @@ import {
   fetchAllNamesByInput,
   fetchCombinedToplistNamesByInput,
 } from "../util/dataHandler";
+import { getCategories } from "../util/storage";
 
 /**
  * Reusable Advanced Search component that has one general search field and
@@ -33,6 +34,7 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
   const searchInput = useRef("");
   const nameSearchInput = useRef("");
   const userSearchInput = useRef("");
+  const [categories, setCategories] = useState({});
 
   // sort by options as srings
   const sortByOptions = {
@@ -48,6 +50,17 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
   const setSearch = (val) => (searchInput.current = val);
   const setNameInput = (val) => (nameSearchInput.current = val);
   const setUserInput = (val) => (userSearchInput.current = val);
+
+  useEffect(() => {
+    if (!templateId) {
+      getCategories()
+        .then((data) => {
+          data.map((c) => (c.check = false));
+          setCategories(data);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
 
   /**
    * Builds the search query and passes it to callback function.
@@ -69,6 +82,18 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
       searchConditions.push(`uname=${userSearchInput.current.trim()}`);
     }
 
+    if (!templateId) {
+      const checkedCategories = categories
+        .filter((c) => c.check)
+        .map((c) => c.id);
+      if (checkedCategories.length > 0) {
+        const categorySearch = checkedCategories
+          .map((id) => `category=${id}`)
+          .join("&");
+        searchConditions.push(categorySearch);
+      }
+    }
+
     if (sortBy !== "") {
       if (sortBy === sortByOptions.LIST_NAME) {
         searchConditions.push(`sortBy=name`);
@@ -84,7 +109,6 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
       searchQuery = searchConditions.join("&");
     }
 
-    console.log(searchQuery);
     onSearch(searchQuery);
   };
 
@@ -93,6 +117,10 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
    */
   const handleClear = () => {
     setClearInput(true);
+    setSortBy("");
+    const clearChecks = [...categories];
+    clearChecks.forEach((c) => (c.check = false));
+    setCategories(clearChecks);
     setTimeout(() => setClearInput(false), 100);
     onClear();
   };
@@ -132,6 +160,16 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
   const onEnterUser = (val) => {
     setUserInput(val);
     handleSearch();
+  };
+
+  /**
+   * Sets a category from specified index to be selected
+   * @param {number} index - index of the selected category
+   */
+  const categoryCheck = (index) => {
+    const checkedCategory = [...categories];
+    checkedCategory[index].check = !categories[index].check;
+    setCategories(checkedCategory);
   };
 
   return (
@@ -199,6 +237,26 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
                 onEnterKey={onEnterUser}
               />
             </div>
+
+            {!templateId && (
+              <>
+                <h4>Categories:</h4>
+                <ul className="tagFilters">
+                  {categories.map((category, index) => (
+                    <li key={"category" + index}>
+                      <input
+                        type="checkbox"
+                        checked={category.check}
+                        onChange={() => categoryCheck(index)}
+                      />
+                      <span onClick={() => categoryCheck(index)}>
+                        {category.name}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
 
             {/* Sort by options */}
             <Dropdown
