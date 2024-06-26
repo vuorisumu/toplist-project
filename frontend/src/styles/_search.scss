@@ -139,73 +139,69 @@
     font-size: 0.85em;
     margin-top: 10px;
   }
+}
+.dropdownElement {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
 
-  .dropdownElement {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-  }
+.dropdownCont {
+  position: relative;
+  flex-grow: 1;
+  width: fit-content;
 
-  .dropdownCont {
-    position: relative;
-    flex-grow: 1;
-    width: fit-content;
+  // dropdown button
+  button {
+    width: 100%;
+    text-align: left;
+    margin: 0;
+    background-color: transparent;
+    outline: 1px solid theme.$shadow;
 
-    // dropdown button
-    button {
-      width: 100%;
-      text-align: left;
-      margin: 0;
+    // icon for dropdown
+    &::after {
+      content: "unfold_more";
+      font-family: "Material Symbols Outlined";
+      position: absolute;
+      right: 0;
+      top: 6px;
+    }
+
+    // change outline when active
+    &:active,
+    &:focus {
+      outline: 1px solid theme.$accent;
+      box-shadow: 0px 0px 2px theme.$accent;
+    }
+
+    // disable the shadow
+    &:hover {
+      box-shadow: none;
       background-color: transparent;
-      outline: 1px solid theme.$shadow;
-
-      // icon for dropdown
-      &::after {
-        content: "unfold_more";
-        font-family: "Material Symbols Outlined";
-        position: absolute;
-        right: 0;
-        top: 6px;
-      }
-
-      // change outline when active
-      &:active,
-      &:focus {
-        outline: 1px solid theme.$accent;
-        box-shadow: 0px 0px 2px theme.$accent;
-      }
-
-      // disable the shadow
-      &:hover {
-        box-shadow: none;
-      }
     }
   }
+}
 
-  // dropdown items container
-  .dropdownItems {
-    position: absolute;
-    width: 100%;
-    background-color: theme.$secondary-color;
-    margin-top: 2px;
+// dropdown items container
+.dropdownItems {
+  position: absolute;
+  width: 100%;
+  background-color: theme.$secondary-color;
+  margin-top: 2px;
 
-    ul {
-      margin: 0;
+  ul {
+    margin: 0;
 
-      // items in the container
-      li {
-        padding: 4px 15px;
-        text-align: left;
+    // items in the container
+    li {
+      padding: 4px 15px;
+      text-align: left;
 
-        &:hover {
-          cursor: pointer;
-          background-color: color-mix(
-            in srgb,
-            theme.$mid-color,
-            transparent 70%
-          );
-        }
+      &:hover {
+        cursor: pointer;
+        background-color: color-mix(in srgb, theme.$mid-color, transparent 70%);
       }
     }
   }
