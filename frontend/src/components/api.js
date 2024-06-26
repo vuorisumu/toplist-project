@@ -178,7 +178,7 @@ export const fetchRankingNamesByInput = (input) => {
  * @returns data containing the count of ranking lists
  */
 export const fetchRankingCount = (id) => {
-  let searchQuery = `${API_BASE_URL}/toplists?count=true}`;
+  let searchQuery = `${API_BASE_URL}/toplists?count=true`;
   if (id > 0) {
     searchQuery += `&tempId=${id}`;
   }
