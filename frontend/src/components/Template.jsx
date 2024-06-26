@@ -3,6 +3,7 @@ import { deleteTemplate } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
 import { isAdmin, isCreatorOfTemplate } from "../util/permissions";
 import { useEffect, useState } from "react";
+import { getCategoryById } from "../util/storage";
 
 /**
  * Reusable component displaying a preview of a template
@@ -12,9 +13,13 @@ import { useEffect, useState } from "react";
  */
 function Template({ data }) {
   const [canEdit, setCanEdit] = useState(false);
+  const [category, setCategory] = useState("");
 
   useEffect(() => {
     checkPermission();
+    getCategoryById(data.category)
+      .then((c) => setCategory(c))
+      .catch((err) => console.log(err));
   }, []);
 
   /**
@@ -58,6 +63,7 @@ function Template({ data }) {
       <Link to={`/createlist/${data.id}`}>
         <h2>{data.name}</h2>{" "}
       </Link>
+      <p>Category: {category}</p>
       <p className="creator">
         Creator: {data.user_name ? data.user_name : "Anonymous"}
       </p>
