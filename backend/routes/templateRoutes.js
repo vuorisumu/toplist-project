@@ -1,7 +1,7 @@
 const oracledb = require("oracledb");
 const database = require("../config/database");
 const { filteredTemplatesQuery } = require("../filteredQueries");
-const { templateSchema } = require("../schemas");
+const { templateSchema, querySchema } = require("../schemas");
 const bcrypt = require("bcrypt");
 const express = require("express");
 const templateRouter = express.Router();
@@ -51,11 +51,25 @@ templateRouter.get("/", async (req, res) => {
 templateRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const result = await database.query(
-      `SELECT t.id, t.name, t.description, t.items, t.tags, u.user_name FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id WHERE id = :id`,
-      { id: id }
-    );
+    let result;
+    if (Object.keys(req.query).length !== 0) {
+      const { error, value } = querySchema.validate(req.query);
+      if (error) {
+        throw error;
+      }
 
+      if (value.creatorId) {
+        result = await database.query(
+          `SELECT creator_id FROM templates WHERE id = :id`,
+          { id: id }
+        );
+      }
+    } else {
+      result = await database.query(
+        `SELECT t.id, t.name, t.description, t.items, t.tags, u.user_name, t.creator_id FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id WHERE id = :id`,
+        { id: id }
+      );
+    }
     // id not found
     if (result.length === 0) {
       return res.status(404).send(notfoundError);

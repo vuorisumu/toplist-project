@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { deleteTemplate } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
-import { isAdmin } from "../util/permissions";
+import { isAdmin, isCreatorOfTemplate } from "../util/permissions";
 
 /**
  * Reusable component displaying a preview of a template
@@ -21,7 +21,7 @@ function Template({ data }) {
 
   return (
     <>
-      {isAdmin() && (
+      {(isAdmin() || isCreatorOfTemplate(data.creator_id)) && (
         <Link to={`/edit-template/${data.id}`} className="editButton">
           <span
             className="material-symbols-outlined"

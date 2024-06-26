@@ -1,17 +1,16 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
-import { checkAdminStatus, clearAll, getTagNumbers, getUserId } from "./util";
+import { useState, useEffect, useRef } from "react";
+import { clearAll, getTagNumbers } from "./util";
 import {
-  enterTemplateEditMode,
   fetchTemplateById,
   fetchTagById,
   updateTemplate,
   deleteTemplate,
+  fetchTemplateCreatorId,
 } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
-import { formatData } from "../util/dataHandler";
-import { isAdmin } from "../util/permissions";
+import { formatData, getTemplateCreatorIdFromData } from "../util/dataHandler";
+import { isAdmin, isCreatorOfTemplate } from "../util/permissions";
 
 /**
  * Edit template view that asks for the user to either be logged in as admin or to input
@@ -26,6 +25,7 @@ function EditTemplate() {
   const [canEdit, setCanEdit] = useState(false);
   const [notFound, setNotFound] = useState(false);
   const [tags, setTags] = useState([""]);
+  const creatorId = useRef(0);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -35,10 +35,20 @@ function EditTemplate() {
   }
 
   useEffect(() => {
+    checkPermission();
     if (isAdmin()) {
       fetchTemplate();
     }
   }, []);
+
+  const checkPermission = async () => {
+    try {
+      const isCreator = await isCreatorOfTemplate(templateId);
+      console.log("creator:", isCreator);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   /**
    * Fetches the template from the database according to the template id
@@ -156,17 +166,6 @@ function EditTemplate() {
   };
 
   /**
-   * Updates the template creator name
-   * @param {string} newCreator - new creator name
-   */
-  const updateCreatorName = (newCreator) => {
-    setTemplate((prev) => ({
-      ...prev,
-      user_name: newCreator,
-    }));
-  };
-
-  /**
    * Updates the name of an item at a specified index
    * @param {string} newName - new item name
    * @param {number} index - index of the item to be renamed
@@ -225,12 +224,6 @@ function EditTemplate() {
       name: template.name,
       items: nonEmptyItems,
     };
-
-    if (template.user_name) {
-      // get the creator id
-      const userNumber = await getUserId(template.user_name);
-      updatedData.creator_id = userNumber;
-    }
 
     if (tagNumbers.length > 0) {
       updatedData.tags = tagNumbers;
@@ -292,13 +285,6 @@ function EditTemplate() {
           <textarea
             value={template.description || ""}
             onChange={(e) => updateDescription(e.target.value)}
-          />
-
-          <label>Creator: </label>
-          <input
-            type="text"
-            value={template.user_name}
-            onChange={(e) => updateCreatorName(e.target.value)}
           />
         </div>
 
@@ -376,9 +362,5 @@ function EditTemplate() {
     </div>
   );
 }
-
-EditTemplate.propTypes = {
-  admin: PropTypes.bool.isRequired,
-};
 
 export default EditTemplate;

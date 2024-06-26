@@ -59,6 +59,12 @@ export const fetchTemplateById = (id) => {
   );
 };
 
+export const fetchTemplateCreatorId = (templateId) => {
+  return fetch(`${API_BASE_URL}/templates/${templateId}?creatorId=true`).then(
+    (response) => response.json()
+  );
+};
+
 /**
  * Sends a request to access edit mode of a specified template
  * @param {number} id - ID of the template

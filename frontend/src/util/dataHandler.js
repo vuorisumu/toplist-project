@@ -28,6 +28,17 @@ export const getCountFromData = (data) => {
   return 0;
 };
 
+export const getTemplateCreatorIdFromData = (data) => {
+  const formattedData = formatData(data);
+  if (
+    formattedData.length > 0 &&
+    formattedData[0].hasOwnProperty("creator_id")
+  ) {
+    return parseInt(formattedData[0].creator_id);
+  }
+  return 0;
+};
+
 export const tagNamesByIds = async (tagNumbers) => {
   const tagNames = [];
   try {

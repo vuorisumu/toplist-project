@@ -106,10 +106,7 @@ class App extends React.Component {
           <Route path="/toplists" element={<BrowseToplists />} />
           <Route path="/new-template" element={<NewTemplate />} />
           <Route path="/createlist/:templateId" element={<NewList />} />
-          <Route
-            path="/edit-template/:templateid"
-            element={<EditTemplate admin={true} />}
-          />
+          <Route path="/edit-template/:templateid" element={<EditTemplate />} />
           <Route path="/toplists/:listId" element={<SingleList />} />
           <Route path="/register" element={<Register />} />
         </Routes>

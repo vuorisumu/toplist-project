@@ -14,6 +14,7 @@ const querySchema = Joi.object({
   sortOrder: Joi.string().valid("asc", "desc").default("asc").optional(),
   from: Joi.number().integer().optional(),
   amount: Joi.number().integer().optional(),
+  creatorId: Joi.boolean().optional(),
 });
 
 const rankingQuerySchema = Joi.object({
