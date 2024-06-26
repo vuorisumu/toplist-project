@@ -1,6 +1,5 @@
 import {
   fetchRankingNamesByInput,
-  fetchTagById,
   fetchTemplateNamesByInput,
   fetchUserNamesByInput,
 } from "../components/api";
@@ -37,26 +36,6 @@ export const getTemplateCreatorIdFromData = (data) => {
     return parseInt(formattedData[0].creator_id);
   }
   return 0;
-};
-
-export const tagNamesByIds = async (tagNumbers) => {
-  const tagNames = [];
-  try {
-    await Promise.all(
-      tagNumbers.map(async (t) => {
-        const fetchedTag = await fetchTagById(parseInt(t));
-        const formattedTags = formatData(fetchedTag);
-        let tagName;
-        if (formattedTags.length > 0) {
-          tagName = formattedTags[0].name;
-        }
-        tagNames.push(tagName);
-      })
-    );
-    return tagNames;
-  } catch (err) {
-    console.error(err);
-  }
 };
 
 export const getTemplateNamesFromData = (data) => {
