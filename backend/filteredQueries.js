@@ -107,6 +107,9 @@ async function filteredRankingQuery(req) {
     }
 
     filteredQuery += " top.toplist_name FROM toplists top";
+    if (value.tempId) {
+      filteredQuery += ` LEFT JOIN templates t ON top.template_id = t.id`;
+    }
   } else {
     filteredQuery +=
       " top.toplist_id, top.toplist_name, top.ranked_items, top.toplist_desc, top.creation_time, u.user_name, t.name, top.template_id FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id LEFT JOIN templates t ON top.template_id = t.id";

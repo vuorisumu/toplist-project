@@ -76,3 +76,19 @@ export const fetchAllNamesByInput = async (input) => {
     console.log(err);
   }
 };
+
+export const fetchCombinedToplistNamesByInput = async (input) => {
+  try {
+    const [topListNameData, userNameData] = await Promise.all([
+      fetchRankingNamesByInput(input),
+      fetchUserNamesByInput(input),
+    ]);
+
+    const topListNames = getTemplateNamesFromData(topListNameData);
+    const userNames = getTemplateNamesFromData(userNameData);
+
+    return [...topListNames, ...userNames];
+  } catch (err) {
+    console.log(err);
+  }
+};

@@ -6,9 +6,12 @@ import {
   fetchTemplateNamesByInput,
   fetchUserNamesByInput,
 } from "./api";
-import { fetchAllNamesByInput } from "../util/dataHandler";
+import {
+  fetchAllNamesByInput,
+  fetchCombinedToplistNamesByInput,
+} from "../util/dataHandler";
 
-function AdvancedSearch({ searchLists, onSearch, onClear }) {
+function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [defaultSearch, setDefaultSearch] = useState("");
   const [nameSearch, setNameSearch] = useState("");
@@ -77,9 +80,14 @@ function AdvancedSearch({ searchLists, onSearch, onClear }) {
       <div className="searchInput general">
         <Search
           valueUpdated={setDefaultSearch}
-          fetchFunction={fetchAllNamesByInput}
+          fetchFunction={
+            searchLists
+              ? fetchCombinedToplistNamesByInput
+              : fetchAllNamesByInput
+          }
           combinedSearch={true}
           onClear={clearInput}
+          templateId={templateId}
         />
 
         <button type="button" onClick={handleSearch} className="searchButton">
@@ -99,6 +107,7 @@ function AdvancedSearch({ searchLists, onSearch, onClear }) {
                   valueUpdated={setNameSearch}
                   fetchFunction={fetchRankingNamesByInput}
                   onClear={clearInput}
+                  templateId={templateId}
                 />
               </div>
             ) : (

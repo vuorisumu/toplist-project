@@ -3,6 +3,7 @@ import { fetchAllRankingsFiltered, fetchRankingCount } from "./api";
 import { formatData, getCountFromData } from "../util/dataHandler";
 import Toplist from "./Toplist";
 import FilteredSearch from "./FilteredSearch";
+import AdvancedSearch from "./AdvancedSearch";
 
 function ToplistContainer(props) {
   const templateId = props.id ? props.id : 0;
@@ -29,6 +30,7 @@ function ToplistContainer(props) {
       .then((data) => {
         const count = getCountFromData(data);
         setListCount(count);
+        if (count <= 0) setLoading(false);
       })
       .catch((err) => console.log(err));
   };
@@ -60,6 +62,9 @@ function ToplistContainer(props) {
     setFilters(val === "" ? defaultQuery : val);
   };
 
+  /**
+   * Sets the filters bacn to default.
+   */
   const handleClear = () => {
     setFilters(defaultQuery);
   };
@@ -67,11 +72,13 @@ function ToplistContainer(props) {
   return (
     <div className="rankingsCont">
       {templateId > 0 && <h2>Lists using this template</h2>}
-      <FilteredSearch
-        search={handleFilteredSearch}
-        clear={handleClear}
-        searchRankings={true}
-        id={templateId}
+
+      {/* Search container */}
+      <AdvancedSearch
+        searchLists={true}
+        onSearch={handleFilteredSearch}
+        onClear={handleClear}
+        templateId={templateId}
       />
 
       {!loading && listCount < 1 && <p>No templates found</p>}

@@ -7,6 +7,7 @@ function Search({
   fetchFunction,
   combinedSearch = false,
   onClear,
+  templateId,
 }) {
   const placeholder = "placeholder";
   const [value, setValue] = useState("");
@@ -48,7 +49,9 @@ function Search({
 
   const updateSuggestions = async () => {
     if (value.trim() !== "") {
-      fetchFunction(value)
+      const inputValue =
+        templateId > 0 ? value + `&tempId=${templateId}` : value;
+      fetchFunction(inputValue)
         .then((data) => {
           const names = combinedSearch ? data : getTemplateNamesFromData(data);
           setSuggestions(names);

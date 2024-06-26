@@ -167,6 +167,7 @@ export const fetchAllRankingsFiltered = (filters) => {
  * @returns data containing all fetched top list names
  */
 export const fetchRankingNamesByInput = (input) => {
+  console.log(input);
   return fetch(
     `${API_BASE_URL}/toplists?namesOnly=true&rname=${input}&from=0&amount=10`
   ).then((response) => response.json());
