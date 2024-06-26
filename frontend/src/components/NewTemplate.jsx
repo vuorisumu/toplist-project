@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { clearAll } from "./util";
+import { clearAll } from "../util/misc";
 import { addNewTemplate } from "./api";
 import Login from "./Login";
 import { useNavigate } from "react-router-dom";

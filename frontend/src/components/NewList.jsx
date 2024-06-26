@@ -3,7 +3,7 @@ import { useLocation, Link, useNavigate } from "react-router-dom";
 import { addNewRanking, fetchTemplateById } from "./api";
 import { DnDContainer } from "./Dnd";
 import { v4 as uuid } from "uuid";
-import { clearAll } from "./util";
+import { clearAll } from "../util/misc";
 import { formatData } from "../util/dataHandler";
 import ToplistContainer from "./ToplistContainer";
 import { isCreatorOfTemplate } from "../util/permissions";

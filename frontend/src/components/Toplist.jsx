@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { formatDate } from "./util";
+import { formatDate } from "../util/misc";
 import ButtonPrompt from "./ButtonPrompt";
 import { deleteRanking } from "./api";
 import { isAdmin } from "../util/permissions";

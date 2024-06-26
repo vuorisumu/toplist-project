@@ -1,12 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { clearAll, getTagNumbers } from "./util";
-import {
-  fetchTemplateById,
-  fetchTagById,
-  updateTemplate,
-  deleteTemplate,
-} from "./api";
+import { clearAll } from "../util/misc";
+import { fetchTemplateById, updateTemplate, deleteTemplate } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
 import { formatData } from "../util/dataHandler";
 import { isCreatorOfTemplate } from "../util/permissions";
@@ -24,8 +19,6 @@ function EditTemplate() {
   const [canEdit, setCanEdit] = useState(false);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [tags, setTags] = useState([""]);
-
   const location = useLocation();
   const navigate = useNavigate();
   const templateId = parseInt(location.pathname.replace("/edit-template/", ""));
@@ -88,65 +81,6 @@ function EditTemplate() {
     }
 
     setTemplate(tempData);
-  };
-
-  /**
-   * Fetches tag names from the database, using the tag ID numbers specified
-   * in the template data
-   * @param {object} tempData - template data containing tag IDs
-   */
-  const fetchTagNames = async (tempData) => {
-    const fetchedNames = [];
-    await Promise.all(
-      tempData.tags.map(async (t) => {
-        await fetchTagById(t)
-          .then((data) => {
-            fetchedNames.push(data[0].name);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      })
-    );
-    setTags(fetchedNames);
-  };
-
-  /**
-   * Updates the name of a tag with the specified index
-   * @param {string} newName - new name for the tag
-   * @param {number} index - index of the tag in the tag container
-   */
-  const updateTagName = (newName, index) => {
-    setTags((prev) => {
-      const tempTags = [...prev];
-      tempTags[index] = newName;
-      return tempTags;
-    });
-  };
-
-  /**
-   * Deletes a tag from a specified index
-   * @param {number} index - index of the tag
-   */
-  const deleteTag = (index) => {
-    const newTags = tags.filter((_, i) => i !== index);
-    setTags(newTags);
-  };
-
-  /**
-   * Adds a new tag field if the latest tag field is not empty
-   * Does nothing if the newest tag field is empty
-   */
-  const addNewTagField = () => {
-    const lastTag = tags[tags.length - 1];
-    if (lastTag.trim() === "") {
-      return;
-    }
-    setTags((prevTags) => {
-      const tempTags = [...prevTags];
-      tempTags.push("");
-      return tempTags;
-    });
   };
 
   /**
@@ -216,10 +150,6 @@ function EditTemplate() {
    * Packs the data and saves the changes to database
    */
   const saveChanges = async () => {
-    // fetch tag numbers of non empty tags
-    const nonEmptyTags = tags.filter((t) => t.trim() !== "");
-    const tagNumbers = await getTagNumbers(nonEmptyTags);
-
     // only store non empty items
     const nonEmptyItems = template.items.filter(
       (t) => t.item_name.trim() !== ""
@@ -230,10 +160,6 @@ function EditTemplate() {
       name: template.name,
       items: nonEmptyItems,
     };
-
-    if (tagNumbers.length > 0) {
-      updatedData.tags = tagNumbers;
-    }
 
     if (template.description) {
       updatedData.description = template.description;
@@ -330,37 +256,6 @@ function EditTemplate() {
             ))}
             <li>
               <button type="button" onClick={addNewField} className="addButton">
-                <span className="material-symbols-outlined">add</span>
-              </button>
-            </li>
-          </ul>
-        </div>
-
-        <div className="addCont addTags">
-          <h2>Tags</h2>
-          <ul>
-            {tags.map((t, index) => (
-              <li key={"tag" + index}>
-                <input
-                  type="text"
-                  value={t}
-                  onChange={(e) => updateTagName(e.target.value, index)}
-                />
-                <button
-                  type="button"
-                  onClick={() => deleteTag(index)}
-                  className="deleteButton"
-                >
-                  <span className="material-symbols-outlined">delete</span>
-                </button>
-              </li>
-            ))}
-            <li>
-              <button
-                type="button"
-                onClick={addNewTagField}
-                className="addButton"
-              >
                 <span className="material-symbols-outlined">add</span>
               </button>
             </li>

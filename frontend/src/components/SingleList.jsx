@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { formatDate } from "./util";
+import { formatDate } from "../util/misc";
 import { fetchRankingById, deleteRanking } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
 import { formatData } from "../util/dataHandler";
