@@ -114,7 +114,7 @@ async function filteredRankingQuery(req) {
     }
   } else {
     filteredQuery +=
-      " top.toplist_id, top.toplist_name, top.ranked_items, top.toplist_desc, top.creation_time, u.user_name, t.name, top.template_id FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id LEFT JOIN templates t ON top.template_id = t.id";
+      " top.toplist_id, top.toplist_name, top.ranked_items, top.toplist_desc, top.creation_time, u.user_name, t.name, top.template_id, t.category FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id LEFT JOIN templates t ON top.template_id = t.id";
   }
 
   const conditions = [];
@@ -147,15 +147,17 @@ async function filteredRankingQuery(req) {
     queryParams["uname"] = `${value.uname}%`;
   }
 
-  if (value.tag) {
-    const tags = Array.isArray(value.tag) ? value.tag : [value.tag];
-    const tagConditions = [];
-    for (let i = 0; i < tags.length; i++) {
-      tagConditions.push(`JSON_EXISTS(tags, '$[*]?(@ == :tag${i})')`);
-      queryParams[`tag${i}`] = tags[i];
+  if (value.category) {
+    const category = Array.isArray(value.category)
+      ? value.category
+      : [value.category];
+    const categoryConditions = [];
+    for (let i = 0; i < category.length; i++) {
+      categoryConditions.push(`t.category = :cat${i}`);
+      queryParams[`cat${i}`] = category[i];
     }
-    const tagQuery = "(" + tagConditions.join(" OR ") + ")";
-    conditions.push(tagQuery);
+    const categoryQuery = "(" + categoryConditions.join(" OR ") + ")";
+    conditions.push(categoryQuery);
   }
 
   if (conditions.length > 0) {

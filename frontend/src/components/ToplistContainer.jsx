@@ -30,7 +30,7 @@ function ToplistContainer({ templateId = 0 }) {
     if (listCount > 0) {
       loadLists();
     }
-  }, [listCount]);
+  }, [listCount, filters]);
 
   /**
    * Fetches the full list count and sets the count value to state.
