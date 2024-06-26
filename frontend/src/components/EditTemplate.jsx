@@ -1,15 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { clearAll, getTagNumbers } from "./util";
 import {
   fetchTemplateById,
   fetchTagById,
   updateTemplate,
   deleteTemplate,
-  fetchTemplateCreatorId,
 } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
-import { formatData, getTemplateCreatorIdFromData } from "../util/dataHandler";
+import { formatData } from "../util/dataHandler";
 import { isAdmin, isCreatorOfTemplate } from "../util/permissions";
 
 /**
@@ -23,9 +22,9 @@ import { isAdmin, isCreatorOfTemplate } from "../util/permissions";
 function EditTemplate() {
   const [template, setTemplate] = useState(null);
   const [canEdit, setCanEdit] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [tags, setTags] = useState([""]);
-  const creatorId = useRef(0);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,17 +35,28 @@ function EditTemplate() {
 
   useEffect(() => {
     checkPermission();
-    if (isAdmin()) {
-      fetchTemplate();
-    }
   }, []);
 
+  useEffect(() => {
+    if (canEdit) {
+      fetchTemplate();
+    }
+  }, [canEdit]);
+
+  /**
+   * Checks if the user is logged in as admin or is the creator of the
+   * currently chosen template.
+   */
   const checkPermission = async () => {
-    try {
-      const isCreator = await isCreatorOfTemplate(templateId);
-      console.log("creator:", isCreator);
-    } catch (err) {
-      console.log(err);
+    if (isAdmin()) {
+      setCanEdit(true);
+    } else {
+      try {
+        const isCreator = await isCreatorOfTemplate(templateId);
+        setCanEdit(isCreator);
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -58,7 +68,7 @@ function EditTemplate() {
     await fetchTemplateById(templateId)
       .then((data) => {
         handleSetTemplate(formatData(data)[0]);
-        setCanEdit(true);
+        setLoading(false);
       })
       .catch((err) => {
         setNotFound(true);
@@ -254,12 +264,27 @@ function EditTemplate() {
     return <p>{`Template doesn't exist or it has been deleted`}</p>;
   }
 
-  if (!canEdit && !template) {
+  if (!canEdit) {
     return (
       <div className="container">
         <h1>Edit template</h1>
         <div className="no-stretch">
-          <p>To edit this template, please login as admin</p>
+          <p>You don't have a permission to edit this template</p>
+          <br />
+          <button onClick={() => navigate(-1)} className="backButton">
+            Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!template || loading) {
+    return (
+      <div className="container">
+        <h1>Edit template</h1>
+        <div className="no-stretch">
+          <p>Loading...</p>
           <br />
           <button onClick={() => navigate(-1)} className="backButton">
             Back
