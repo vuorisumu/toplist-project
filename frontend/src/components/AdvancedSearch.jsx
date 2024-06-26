@@ -5,6 +5,8 @@ import {
   fetchRankingNamesByInput,
   fetchTemplateNamesByInput,
   fetchUserNamesByInput,
+  fetchUserNamesWithTemplatesByInput,
+  fetchUserNamesWithTopListsByInput,
 } from "./api";
 import {
   fetchAllNamesByInput,
@@ -127,8 +129,13 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
               <label>Search from creator: </label>
               <Search
                 valueUpdated={setUserSearch}
-                fetchFunction={fetchUserNamesByInput}
+                fetchFunction={
+                  searchLists
+                    ? fetchUserNamesWithTopListsByInput
+                    : fetchUserNamesWithTemplatesByInput
+                }
                 onClear={clearInput}
+                templateId={templateId}
               />
             </div>
 
