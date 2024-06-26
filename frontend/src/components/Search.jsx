@@ -27,7 +27,7 @@ function Search({
   templateId,
   onEnterKey,
 }) {
-  const placeholder = "placeholder";
+  const placeholder = "";
   const [value, setValue] = useState("");
   const [hideSuggestions, setHideSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
