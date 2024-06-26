@@ -10,25 +10,33 @@ async function filteredTemplatesQuery(req) {
   if (error) {
     throw error;
   }
-  let filteredQuery = `SELECT * FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
+  let filteredQuery = value.namesOnly
+    ? "SELECT DISTINCT t.name "
+    : "SELECT t.id, t.name, t.description, u.user_name ";
+
+  filteredQuery +=
+    "FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id";
+
   const conditions = [];
   const queryParams = {};
 
   // add conditions
   if (value.search) {
-    conditions.push("(t.name LIKE :search OR u.user_name LIKE :search)");
+    conditions.push(
+      "(lower(t.name) LIKE lower(:search) OR lower(u.user_name) LIKE lower(:search))"
+    );
     for (let i = 0; i < 2; i++) {
       queryParams["search"] = `%${value.search}%`;
     }
   }
 
   if (value.tname) {
-    conditions.push("t.name LIKE :tname");
+    conditions.push("lower(t.name) LIKE lower(:tname)");
     queryParams["tname"] = `${value.tname}%`;
   }
 
   if (value.uname) {
-    conditions.push("u.user_name LIKE :uname");
+    conditions.push("lower(u.user_name) LIKE lower(:uname)");
     queryParams["uname"] = `${value.uname}%`;
   }
 
@@ -92,20 +100,28 @@ async function filteredRankingQuery(req) {
     throw error;
   }
 
-  let filteredQuery = "SELECT";
-  if (value.distinct) {
-    filteredQuery += " DISTINCT top.toplist_name";
+  let filteredQuery = value.distinct ? "SELECT DISTINCT" : "SELECT";
+  if (value.namesOnly) {
+    if (!value.distinct) {
+      filteredQuery += " DISTINCT";
+    }
+
+    filteredQuery += " top.toplist_name FROM toplists top";
+    if (value.tempId) {
+      filteredQuery += ` LEFT JOIN templates t ON top.template_id = t.id`;
+    }
   } else {
-    filteredQuery += " *";
+    filteredQuery +=
+      " top.toplist_id, top.toplist_name, top.ranked_items, top.toplist_desc, top.creation_time, u.user_name, t.name, top.template_id FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id LEFT JOIN templates t ON top.template_id = t.id";
   }
-  filteredQuery += ` FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id LEFT JOIN templates t ON top.template_id = t.id`;
+
   const conditions = [];
   const queryParams = {};
 
   // add conditions
   if (value.search) {
     conditions.push(
-      "(top.toplist_name LIKE :search OR u.user_name LIKE :search)"
+      "(lower(top.toplist_name) LIKE lower(:search) OR lower(u.user_name) LIKE lower(:search))"
     );
     queryParams["search"] = `%${value.search}%`;
   }
@@ -116,16 +132,16 @@ async function filteredRankingQuery(req) {
   }
 
   if (value.tname) {
-    conditions.push("t.name LIKE :tname");
+    conditions.push("lower(t.name) LIKE lower(:tname)");
     queryParams["tname"] = `${value.tname}%`;
   }
   if (value.rname) {
-    conditions.push("top.toplist_name LIKE :rname");
+    conditions.push("lower(top.toplist_name) LIKE lower(:rname)");
     queryParams["rname"] = `${value.rname}%`;
   }
 
   if (value.uname) {
-    conditions.push("u.user_name LIKE :uname");
+    conditions.push("lower(u.user_name) LIKE lower(:uname)");
     queryParams["uname"] = `${value.uname}%`;
   }
 
@@ -184,6 +200,7 @@ async function filteredRankingQuery(req) {
     filteredQuery += ` OFFSET ${value.from} ROWS FETCH NEXT ${value.amount} ROWS ONLY`;
   }
 
+  console.log(filteredQuery);
   return { filteredQuery, queryParams };
 }
 
@@ -221,7 +238,14 @@ async function filteredUserQuery(req) {
     return { filteredQuery, queryParams };
   }
 
-  filteredQuery = `SELECT user_id, user_name FROM users`;
+  filteredQuery = value.search
+    ? `SELECT user_name FROM users`
+    : `SELECT user_id, user_name FROM users`;
+
+  if (value.search) {
+    conditions.push(`lower(user_name) LIKE lower(:search)`);
+    queryParams["search"] = `${value.search}%`;
+  }
 
   if (value.name) {
     conditions.push(`user_name = :name`);
@@ -236,6 +260,12 @@ async function filteredUserQuery(req) {
   if (conditions.length > 0) {
     filteredQuery += " WHERE " + conditions.join(" OR ");
   }
+
+  if (value.amount) {
+    filteredQuery += ` OFFSET ${value.from} ROWS FETCH NEXT ${value.amount} ROWS ONLY`;
+  }
+
+  console.log(filteredQuery);
   return { filteredQuery, queryParams };
 }
 

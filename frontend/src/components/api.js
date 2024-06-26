@@ -38,6 +38,17 @@ export const fetchAllTemplatesFiltered = (filters) => {
 };
 
 /**
+ * Fetches template names by given input.
+ * @param {string} input - input string for searching templates by name
+ * @returns data containing all fetched template names
+ */
+export const fetchTemplateNamesByInput = (input) => {
+  return fetch(
+    `${API_BASE_URL}/templates?namesOnly=true&tname=${input}&from=0&amount=10`
+  ).then((response) => response.json());
+};
+
+/**
  * Fetches a template with a specified ID
  * @param {number} id - ID of the template to be fetched
  * @returns data containing the fetched template
@@ -151,12 +162,24 @@ export const fetchAllRankingsFiltered = (filters) => {
 };
 
 /**
+ * Fetches top list names by given input.
+ * @param {string} input - input string for searching top lists by name
+ * @returns data containing all fetched top list names
+ */
+export const fetchRankingNamesByInput = (input) => {
+  console.log(input);
+  return fetch(
+    `${API_BASE_URL}/toplists?namesOnly=true&rname=${input}&from=0&amount=10`
+  ).then((response) => response.json());
+};
+
+/**
  * Fetches the count of rankings from the database
  * @param {number} id - id of the template used in the rankings
  * @returns data containing the count of ranking lists
  */
 export const fetchRankingCount = (id) => {
-  let searchQuery = `${API_BASE_URL}/toplists?count=true}`;
+  let searchQuery = `${API_BASE_URL}/toplists?count=true`;
   if (id > 0) {
     searchQuery += `&tempId=${id}`;
   }
@@ -275,6 +298,43 @@ export const addNewTag = (tagData) => {
  */
 export const fetchAllUsers = () => {
   return fetch(`${API_BASE_URL}/users`).then((response) => response.json());
+};
+
+/**
+ * Fetches usernames by given input.
+ * @param {string} input - input string for searching users by name
+ * @returns data containing all fetched usernames
+ */
+export const fetchUserNamesByInput = (input) => {
+  return fetch(`${API_BASE_URL}/users?search=${input}&from=0&amount=10`).then(
+    (response) => response.json()
+  );
+};
+
+/**
+ * Fetches usernames, of users that have made templates, by given input.
+ * @param {string} input - input string for searching users by name
+ * @param {number} id - ID of a template, or 0 when wetching users with any template
+ * @returns data containing all fetched usernames
+ */
+export const fetchUserNamesWithTemplatesByInput = (input, id) => {
+  let searchQuery = `${API_BASE_URL}/users?hasTemplates=true&search=${input}&from=0&amount=10`;
+  if (id > 0) searchQuery += `&tempId=${id}`;
+
+  return fetch(searchQuery).then((response) => response.json());
+};
+
+/**
+ * Fetches usernames, of users that have made top lists, by given input.
+ * @param {string} input - input string for searching users by name
+ * @param {number} id - ID of a template, or 0 when wetching users with any template
+ * @returns data containing all fetched usernames
+ */
+export const fetchUserNamesWithTopListsByInput = (input, id) => {
+  let searchQuery = `${API_BASE_URL}/users?hasRankings=true&search=${input}&from=0&amount=10`;
+  if (id > 0) searchQuery += `&tempId=${id}`;
+
+  return fetch(searchQuery).then((response) => response.json());
 };
 
 /**

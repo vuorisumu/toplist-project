@@ -255,7 +255,7 @@ function NewList() {
           </button>
         </div>
       </div>
-      <ToplistContainer id={templateId} />
+      <ToplistContainer templateId={templateId} />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 const Joi = require("joi").extend(require("@joi/date"));
 
 const querySchema = Joi.object({
+  namesOnly: Joi.boolean().optional(),
   search: Joi.string().optional(),
   tname: Joi.string().optional(),
   uname: Joi.string().optional(),
@@ -16,6 +17,7 @@ const querySchema = Joi.object({
 });
 
 const rankingQuerySchema = Joi.object({
+  namesOnly: Joi.boolean().optional(),
   search: Joi.string().optional(),
   distinct: Joi.boolean().optional(),
   count: Joi.number().optional(),
@@ -36,11 +38,14 @@ const rankingQuerySchema = Joi.object({
 });
 
 const userQuerySchema = Joi.object({
+  search: Joi.string().optional(),
   hasRankings: Joi.boolean().optional(),
   hasTemplates: Joi.boolean().optional(),
   name: Joi.string().optional(),
   email: Joi.string().optional(),
   tempId: Joi.number().optional(),
+  from: Joi.number().integer().optional(),
+  amount: Joi.number().integer().optional(),
 });
 
 const tagQuerySchema = Joi.object({
