@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { isLoggedIn } from "../util/permissions";
 import { formatData } from "../util/dataHandler";
 import Dropdown from "./Dropdown";
+import { getCategories } from "../util/storage";
 
 /**
  * View where the user can create a new template and add it to the database.
@@ -29,29 +30,11 @@ function NewTemplate() {
   useEffect(() => {
     if (isLoggedIn()) {
       setCanCreate(true);
-      if (sessionStorage.getItem("categories") !== null) {
-        console.log("session storage found");
-        setCategories(JSON.parse(sessionStorage.getItem("categories")));
-      } else {
-        console.log("no session storage, adding..");
-        fetchAllCategories()
-          .then((data) => {
-            const formattedData = formatData(data);
-            setCategories(formattedData);
-          })
-          .catch((err) => console.log(err));
-      }
+      getCategories().then((data) => setCategories(data));
     } else {
       setCanCreate(false);
     }
   }, []);
-
-  useEffect(() => {
-    if (categories !== null) {
-      console.log("adding to session storage");
-      sessionStorage.setItem("categories", JSON.stringify(categories));
-    }
-  }, [categories]);
 
   /**
    * Adds new item to the template, only if the latest item is not blank

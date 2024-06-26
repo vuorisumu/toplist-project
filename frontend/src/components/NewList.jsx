@@ -7,6 +7,7 @@ import { getLocalTime, clearAll } from "./util";
 import { formatData } from "../util/dataHandler";
 import ToplistContainer from "./ToplistContainer";
 import { isAdmin, isCreatorOfTemplate } from "../util/permissions";
+import { getCategoryById } from "../util/storage";
 
 /**
  * View where the user can create a new list from a chosen template.
@@ -46,6 +47,7 @@ function NewList() {
   const [newEntry, setNewEntry] = useState("");
   const [errorMessages, setErrorMessages] = useState([]);
   const [canEdit, setCanEdit] = useState(false);
+  const [category, setCategory] = useState("");
 
   /**
    * Checks if the user is logged in as admin or is the creator of the
@@ -105,6 +107,15 @@ function NewList() {
         console.log(err);
       });
   }, [templateId]);
+
+  useEffect(() => {
+    if (template) {
+      getCategoryById(template.category).then((data) => {
+        console.log(data);
+        setCategory(data);
+      });
+    }
+  }, [template]);
 
   /**
    * Adds a new item to be used in the ranking. Will not save the item to the actual template,
@@ -211,6 +222,8 @@ function NewList() {
           Template: <span className="alt">{template.name}</span> by{" "}
           {template.user_name ? template.user_name : "Unknown"}
         </p>
+
+        <p className="templateInfo">Category: {category}</p>
 
         <p className="templateInfo desc">
           {template.description
