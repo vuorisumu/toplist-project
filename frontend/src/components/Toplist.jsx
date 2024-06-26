@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { checkAdminStatus, formatDate } from "./util";
+import { formatDate } from "./util";
 import ButtonPrompt from "./ButtonPrompt";
 import { deleteRanking } from "./api";
 import { isAdmin } from "../util/permissions";
@@ -35,7 +35,11 @@ function Toplist({ data, general }) {
       {general && (
         <p>
           Template:{" "}
-          <Link to={`/createlist/${data.template_id}`}>{data.name}</Link>
+          {data.name ? (
+            <Link to={`/createlist/${data.template_id}`}>{data.name}</Link>
+          ) : (
+            "[Deleted]"
+          )}
         </p>
       )}
       <p>Creation time: {formatDate(data.creation_time)}</p>
