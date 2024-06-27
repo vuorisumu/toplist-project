@@ -273,62 +273,8 @@ async function filteredUserQuery(req) {
   return { filteredQuery, queryParams };
 }
 
-/**
- * Constructs an SQL query with filters and/or sorting for tag related queries
- * @param {Object} req - object containing requested filters
- * @returns an object containing the full query and an array with all parameters
- */
-async function filteredTagQuery(req) {
-  const { error, value } = schemas.tagQuerySchema.validate(req);
-  if (error) {
-    throw error;
-  }
-
-  console.log(value);
-
-  let filteredQuery = "";
-  const conditions = [];
-  const queryParams = {};
-
-  if (value.count) {
-    filteredQuery = `SELECT tags.id, tags.name, COUNT(t.id) AS count
-      FROM tags
-      LEFT JOIN templates t
-      ON JSON_EXISTS(tags, '$[*]?(@ == "tags.id")')
-      GROUP BY tags.id, tags.name
-      HAVING count(t.id) > 0`;
-    return { filteredQuery, queryParams };
-
-    //JSON_EXISTS(tags, '$[*]?(@ == :tag${i})')
-  }
-
-  if (value.rcount) {
-    filteredQuery = `SELECT tags.id, tags.name, COUNT(top.toplist_id) AS count
-      FROM tags
-      LEFT JOIN templates t ON JSON_EXISTS(tags, '$[*]?(@ == "tags.id")')
-      LEFT JOIN toplists top ON t.id = top.template_id
-      GROUP BY tags.id, tags.name
-      HAVING count(t.id) > 0`;
-    return { filteredQuery, queryParams };
-  }
-
-  filteredQuery = `SELECT * FROM tags t`;
-
-  if (value.name) {
-    conditions.push(`t.name = :name`);
-    queryParams.name = value.name;
-  }
-
-  if (conditions.length > 0) {
-    filteredQuery += " WHERE " + conditions.join(" AND ");
-  }
-
-  return { filteredQuery, queryParams };
-}
-
 module.exports = {
   filteredTemplatesQuery,
   filteredRankingQuery,
   filteredUserQuery,
-  filteredTagQuery,
 };

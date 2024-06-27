@@ -2,7 +2,6 @@ const oracledb = require("oracledb");
 const database = require("../config/database");
 const { filteredTemplatesQuery } = require("../filteredQueries");
 const { templateSchema, querySchema } = require("../schemas");
-const bcrypt = require("bcrypt");
 const express = require("express");
 const templateRouter = express.Router();
 
@@ -83,40 +82,6 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
 });
 
 /**
- * Sends edit key information to database with a specified ID
- * Responds with template data on successful query
- */
-templateRouter.post("/:id([0-9]+)/edit/", async (req, res) => {
-  try {
-    const { editkey } = req.body;
-    const id = parseInt(req.params.id);
-    const templateData = await database.query(
-      `SELECT * FROM templates WHERE id = :id`,
-      { id: id }
-    );
-
-    if (templateData.length > 0) {
-      const hashedPassword = templateData[0].editkey;
-      bcrypt.compare(editkey, hashedPassword, (bcryptErr, bcryptRes) => {
-        if (bcryptErr) {
-          throw bcryptErr;
-        }
-
-        if (bcryptRes) {
-          res.status(200).json({ msg: "Login successful", data: templateData });
-        } else {
-          res.status(401).json({ msg: "Invalid editkey" });
-        }
-      });
-    } else {
-      res.status(401).json({ msg: "Invalid id" });
-    }
-  } catch (err) {
-    res.status(500).send(databaseError);
-  }
-});
-
-/**
  * Validates data and adds new template to database
  * Responds with newly added template ID on successful insert
  */
@@ -152,12 +117,6 @@ templateRouter.post("/", async (req, res) => {
     if (req.body.category) {
       placeholders.push("category");
       values["category"] = req.body.category;
-    }
-
-    // optional tags
-    if (req.body.tags) {
-      placeholders.push("tags");
-      values["tags"] = JSON.stringify(req.body.tags);
     }
 
     const placeholdersString = placeholders.map((t) => `:${t}`).join(", ");
@@ -227,17 +186,6 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     if (req.body.category) {
       placeholders.push("category = :category");
       values["category"] = req.body.category;
-    }
-
-    if (req.body.tags) {
-      fields.push("tags = :tags");
-      values["tags"] = JSON.stringify(req.body.tags);
-    }
-
-    if (req.body.editkey) {
-      fields.push("editkey = ?");
-      const encryptedKey = await bcrypt.hash(req.body.editkey, 10);
-      values.push(`${encryptedKey}`);
     }
 
     const updateString = fields.join(", ");

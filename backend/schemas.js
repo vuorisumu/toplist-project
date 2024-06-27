@@ -49,12 +49,6 @@ const userQuerySchema = Joi.object({
   amount: Joi.number().integer().optional(),
 });
 
-const tagQuerySchema = Joi.object({
-  count: Joi.boolean().optional(),
-  rcount: Joi.boolean().optional(),
-  name: Joi.string().optional(),
-});
-
 const templateSchema = Joi.object({
   name: Joi.string().required(),
   creator_id: Joi.number().optional(),
@@ -67,8 +61,6 @@ const templateSchema = Joi.object({
       })
     )
     .required(),
-  editkey: Joi.string().optional(),
-  tags: Joi.array().items(Joi.number()).optional(),
 });
 
 const rankingSchema = Joi.object({
@@ -97,17 +89,11 @@ const userSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
-const tagSchema = Joi.object({
-  name: Joi.string().required(),
-});
-
 module.exports = {
   querySchema,
   rankingQuerySchema,
   userQuerySchema,
-  tagQuerySchema,
   templateSchema,
   rankingSchema,
   userSchema,
-  tagSchema,
 };
