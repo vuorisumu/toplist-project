@@ -13,6 +13,7 @@ import NewList from "./components/NewList.jsx";
 import SingleList from "./components/SingleList.jsx";
 import Register from "./components/Register.jsx";
 import { isLoggedIn } from "./util/permissions.js";
+import User from "./components/User.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -107,6 +108,7 @@ class App extends React.Component {
           <Route path="/edit-template/:templateid" element={<EditTemplate />} />
           <Route path="/toplists/:listId" element={<SingleList />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/user/:username" element={<User />} />
         </Routes>
       </Router>
     );
