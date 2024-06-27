@@ -197,7 +197,11 @@ function NewList() {
   };
 
   if (!template) {
-    return <div>Loading...</div>;
+    return (
+      <div className="container">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
