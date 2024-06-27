@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { fetchAllTemplatesFromUser, fetchUserByName } from "./api";
+import {
+  fetchAllListsByUser,
+  fetchAllTemplatesFromUser,
+  fetchUserByName,
+} from "./api";
 import { formatData } from "../util/dataHandler";
 import Template from "./Template";
+import Toplist from "./Toplist";
 
 function User() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [templates, setTemplates] = useState(null);
   const [loadingTemplates, setLoadingTemplates] = useState(true);
+  const [lists, setLists] = useState(null);
+  const [loadingLists, setLoadingLists] = useState(true);
   const location = useLocation();
   const userName = decodeURI(location.pathname.replace("/user/", ""));
 
@@ -30,6 +37,12 @@ function User() {
         const formattedData = formatData(data);
         setTemplates(formattedData);
         setLoadingTemplates(false);
+      });
+
+      fetchAllListsByUser(userData.user_id).then((data) => {
+        const formattedData = formatData(data);
+        setLists(formattedData);
+        setLoadingLists(false);
       });
     }
   }, [userData]);
@@ -77,7 +90,22 @@ function User() {
 
       <div>
         <h3>Top lists</h3>
-        <p>Top lists created by this user</p>
+        {loadingLists ? (
+          <p>Loading templates...</p>
+        ) : lists.length <= 0 ? (
+          <p>No top lists created</p>
+        ) : (
+          <>
+            <p>Top lists created by {userData.user_name}:</p>
+            <ul>
+              {lists.map((list) => (
+                <li key={list.id}>
+                  <Toplist data={list} general={true} />
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </div>
     </div>
   );

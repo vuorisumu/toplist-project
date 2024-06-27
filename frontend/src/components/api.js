@@ -155,6 +155,18 @@ export const fetchAllRankingsFiltered = (filters) => {
 };
 
 /**
+ * Fetches all top lists from specified user
+ *
+ * @param {number} userId - ID of the user
+ * @returns data containing all fetched lists
+ */
+export const fetchAllListsByUser = (userId) => {
+  return fetch(`${API_BASE_URL}/toplists?creatorId=${userId}`).then(
+    (response) => response.json()
+  );
+};
+
+/**
  * Fetches top list names by given input.
  *
  * @param {string} input - input string for searching top lists by name

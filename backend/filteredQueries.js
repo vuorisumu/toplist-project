@@ -119,7 +119,7 @@ async function filteredRankingQuery(req) {
     }
   } else {
     filteredQuery +=
-      " top.toplist_id, top.toplist_name, top.ranked_items, top.toplist_desc, top.creation_time, u.user_name, t.name, top.template_id, t.category FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id LEFT JOIN templates t ON top.template_id = t.id";
+      " top.toplist_id, top.toplist_name, top.ranked_items, top.toplist_desc, top.creation_time, top.creator_id, u.user_name, t.name, top.template_id, t.category FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id LEFT JOIN templates t ON top.template_id = t.id";
   }
 
   const conditions = [];
@@ -150,6 +150,11 @@ async function filteredRankingQuery(req) {
   if (value.uname) {
     conditions.push("lower(u.user_name) LIKE lower(:uname)");
     queryParams["uname"] = `${value.uname}%`;
+  }
+
+  if (value.creatorId) {
+    conditions.push("top.creator_id = :creatorId");
+    queryParams["creatorId"] = value.creatorId;
   }
 
   if (value.category) {

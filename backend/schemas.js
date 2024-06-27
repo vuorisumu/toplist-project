@@ -37,6 +37,7 @@ const rankingQuerySchema = Joi.object({
   sortOrder: Joi.string().valid("asc", "desc").default("asc").optional(),
   from: Joi.number().integer().optional(),
   amount: Joi.number().integer().optional(),
+  creatorId: Joi.number().optional(),
 });
 
 const userQuerySchema = Joi.object({
