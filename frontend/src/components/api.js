@@ -25,6 +25,18 @@ export const fetchAllTemplatesFiltered = (filters) => {
 };
 
 /**
+ * Fetches all templates from a specified user from the database
+ *
+ * @param {number} userId - ID of the user
+ * @returns data containing all fetched templates
+ */
+export const fetchAllTemplatesFromUser = (userId) => {
+  return fetch(`${API_BASE_URL}/templates?creatorId=${userId}`).then(
+    (response) => response.json()
+  );
+};
+
+/**
  * Fetches template names by given input.
  *
  * @param {string} input - input string for searching templates by name
@@ -49,9 +61,9 @@ export const fetchTemplateById = (id) => {
 };
 
 export const fetchTemplateCreatorId = (templateId) => {
-  return fetch(`${API_BASE_URL}/templates/${templateId}?creatorId=true`).then(
-    (response) => response.json()
-  );
+  return fetch(
+    `${API_BASE_URL}/templates/${templateId}?getCreatorId=true`
+  ).then((response) => response.json());
 };
 
 /**

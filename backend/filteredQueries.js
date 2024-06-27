@@ -40,6 +40,11 @@ async function filteredTemplatesQuery(req) {
     queryParams["uname"] = `${value.uname}%`;
   }
 
+  if (value.creatorId) {
+    conditions.push("t.creator_id = :creatorId");
+    queryParams["creatorId"] = value.creatorId;
+  }
+
   if (value.category) {
     const category = Array.isArray(value.category)
       ? value.category

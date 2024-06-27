@@ -29,6 +29,7 @@ templateRouter.get("/", async (req, res) => {
         const { filteredQuery, queryParams } = await filteredTemplatesQuery(
           req.query
         );
+
         results = await database.query(filteredQuery, queryParams);
       }
     } else {
@@ -57,7 +58,7 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
         throw error;
       }
 
-      if (value.creatorId) {
+      if (value.getCreatorId) {
         result = await database.query(
           `SELECT creator_id FROM templates WHERE id = :id`,
           { id: id }

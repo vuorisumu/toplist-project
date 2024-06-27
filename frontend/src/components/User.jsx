@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { fetchUserByName } from "./api";
+import { fetchAllTemplatesFromUser, fetchUserByName } from "./api";
 import { formatData } from "../util/dataHandler";
+import Template from "./Template";
 
 function User() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [templates, setTemplates] = useState(null);
+  const [loadingTemplates, setLoadingTemplates] = useState(true);
   const location = useLocation();
   const userName = decodeURI(location.pathname.replace("/user/", ""));
 
@@ -21,6 +24,16 @@ function User() {
     }
   }, []);
 
+  useEffect(() => {
+    if (userData !== null) {
+      fetchAllTemplatesFromUser(userData.user_id).then((data) => {
+        const formattedData = formatData(data);
+        setTemplates(formattedData);
+        setLoadingTemplates(false);
+      });
+    }
+  }, [userData]);
+
   if (loading) {
     return (
       <div className="container">
@@ -29,7 +42,7 @@ function User() {
     );
   }
 
-  if (userData.length <= 0) {
+  if (!userData) {
     return (
       <div className="container">
         <p>User not found</p>
@@ -44,7 +57,22 @@ function User() {
 
       <div>
         <h3>Templates</h3>
-        <p>Templates created by this user</p>
+        {loadingTemplates ? (
+          <p>Loading templates...</p>
+        ) : templates.length <= 0 ? (
+          <p>No templates created</p>
+        ) : (
+          <>
+            <p>Templates created by {userData.user_name}:</p>
+            <ul>
+              {templates.map((template) => (
+                <li key={template.id} className="template">
+                  <Template data={template} />
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </div>
 
       <div>
