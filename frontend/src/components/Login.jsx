@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { auth, userLogin } from "./api";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -16,6 +16,8 @@ function Login({ isFixed }) {
   const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState("");
+  const [active, setActive] = useState(false);
+  const loginRef = useRef(null);
 
   useEffect(() => {
     if (sessionStorage.getItem("login")) {
@@ -28,6 +30,30 @@ function Login({ isFixed }) {
       setUser(sessionStorage.getItem("user"));
     }
   }, [loggedIn]);
+
+  useEffect(() => {
+    const clickOutside = (event) => {
+      if (loginRef.current && !loginRef.current.contains(event.target)) {
+        if (
+          document.getElementById("loginCont").classList.contains("active") &&
+          !event.target.classList.contains("loginIcon")
+        ) {
+          toggleLogin();
+        }
+      }
+    };
+
+    document.addEventListener("click", clickOutside);
+
+    return () => {
+      document.removeEventListener("click", clickOutside);
+    };
+  }, [loginRef]);
+
+  const toggleLogin = () => {
+    document.getElementById("loginCont").classList.toggle("active");
+    document.getElementById("navLogin").classList.toggle("active");
+  };
 
   /**
    * Handles login attempt, clears the password field on unsuccessful
@@ -97,7 +123,11 @@ function Login({ isFixed }) {
 
   return (
     <>
-      <div id="loginCont" className={isFixed ? "fixedLogin" : "nonFixedLogin"}>
+      <div
+        ref={loginRef}
+        id="loginCont"
+        className={isFixed ? "fixedLogin" : "nonFixedLogin"}
+      >
         <div>
           {!loggedIn ? (
             <>

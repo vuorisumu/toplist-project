@@ -86,11 +86,15 @@ class App extends React.Component {
               <ThemeButton />
             </li>
             <li>
-              <div className="toggleLogin" onClick={toggleLogin} id="navLogin">
-                <span className="material-symbols-outlined icon">
+              <div
+                className="toggleLogin loginIcon"
+                onClick={toggleLogin}
+                id="navLogin"
+              >
+                <span className="material-symbols-outlined icon loginIcon">
                   {isLoggedIn() ? "lock_open" : "lock"}
                 </span>
-                <span className="linkName">
+                <span className="linkName loginIcon">
                   {isLoggedIn() ? "Logged in" : "Login"}
                 </span>
               </div>
