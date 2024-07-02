@@ -176,7 +176,7 @@ function EditTemplate() {
       });
     setTemplate((prevTemp) => ({
       ...prevTemp,
-      category: newCategoryId,
+      category: newCategoryId[0],
     }));
   };
 
