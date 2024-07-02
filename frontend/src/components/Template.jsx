@@ -9,6 +9,8 @@ import { getCategoryById } from "../util/storage";
  * Reusable component displaying a preview of a template
  *
  * @param {object} props.data - The data of the template
+ * @param {boolean} props.showCreator - Whether to display creator name,
+ * true by default
  * @returns {JSX.Element} Template preview component
  */
 function Template({ data, showCreator = true }) {
