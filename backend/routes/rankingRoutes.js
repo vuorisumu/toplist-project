@@ -1,7 +1,7 @@
 const oracledb = require("oracledb");
 const database = require("../config/database");
-const { filteredRankingQuery } = require("../filteredQueries");
-const { rankingSchema } = require("../schemas");
+const { filteredRankingQuery } = require("../filteredQueries/toplistQueries");
+const { rankingSchema } = require("../schemas/toplistSchemas");
 const express = require("express");
 const rankRouter = express.Router();
 

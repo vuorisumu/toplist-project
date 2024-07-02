@@ -1,7 +1,7 @@
 const oracledb = require("oracledb");
 const database = require("../config/database");
-const { filteredUserQuery } = require("../filteredQueries");
-const { userSchema } = require("../schemas");
+const { filteredUserQuery } = require("../filteredQueries/userQueries");
+const { userSchema } = require("../schemas/userSchemas");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const express = require("express");

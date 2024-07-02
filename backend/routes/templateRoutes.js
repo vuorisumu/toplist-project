@@ -1,7 +1,9 @@
 const oracledb = require("oracledb");
 const database = require("../config/database");
-const { filteredTemplatesQuery } = require("../filteredQueries");
-const { templateSchema, querySchema } = require("../schemas");
+const {
+  filteredTemplatesQuery,
+} = require("../filteredQueries/templateQueries");
+const { templateSchema, querySchema } = require("../schemas/templateSchemas");
 const express = require("express");
 const templateRouter = express.Router();
 
