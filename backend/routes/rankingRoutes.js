@@ -17,28 +17,20 @@ rankRouter.get("/", async (req, res) => {
   try {
     let results;
     if (Object.keys(req.query).length !== 0) {
-      if (req.query.count) {
-        let countQuery = `SELECT COUNT(toplist_id) AS count
-          FROM toplists`;
-
-        if (req.query.tempId && req.query.tempId !== 0) {
-          countQuery += ` WHERE template_id = :tempId`;
-          results = await database.query(countQuery, {
-            tempId: req.query.tempId,
-          });
-        } else {
-          results = await database.query(countQuery);
-        }
-      } else {
-        // query has filters
-        const { filteredQuery, queryParams } = await filteredRankingQuery(
-          req.query
-        );
+      try {
+        const { filteredQuery, queryParams } = filteredRankingQuery(req.query);
         results = await database.query(filteredQuery, queryParams);
+      } catch (err) {
+        res.status(400).send(err.message);
       }
     } else {
       // query does not have filters
-      const query = `SELECT * FROM toplists top LEFT JOIN users u ON top.creator_id = u.user_id LEFT JOIN templates t ON top.template_id = t.id`;
+      const query = `SELECT top.toplist_id, top.toplist_name, top.ranked_items, 
+      top.toplist_desc, top.creation_time, top.creator_id, u.user_name, t.name, 
+      top.template_id, t.category 
+      FROM toplists top 
+      LEFT JOIN users u ON top.creator_id = u.user_id 
+      LEFT JOIN templates t ON top.template_id = t.id`;
       results = await database.query(query);
     }
 

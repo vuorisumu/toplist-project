@@ -4,7 +4,6 @@ const Joi = require("joi").extend(require("@joi/date"));
 const rankingQuerySchema = Joi.object({
   namesOnly: Joi.boolean().optional(),
   search: Joi.string().optional(),
-  distinct: Joi.boolean().optional(),
   count: Joi.number().optional(),
   tempId: Joi.number().optional(),
   tname: Joi.string().optional(),
