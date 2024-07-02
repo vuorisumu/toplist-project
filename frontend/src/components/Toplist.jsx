@@ -12,7 +12,7 @@ import { isAdmin } from "../util/permissions";
  * information about the template or no.
  * @returns {JSX.Element} Top list preview component
  */
-function Toplist({ data, general }) {
+function Toplist({ data, general, showCreator = true }) {
   /**
    * Deletes the top list from the database.
    */
@@ -31,7 +31,17 @@ function Toplist({ data, general }) {
         {general ? <h3>{data.toplist_name}</h3> : <h2>{data.toplist_name}</h2>}
       </Link>
 
-      <p>List creator: {data.user_name || "Anonymous"}</p>
+      {showCreator && (
+        <p>
+          List creator:{" "}
+          {data.user_name ? (
+            <Link to={`/user/${data.user_name}`}>{data.user_name}</Link>
+          ) : (
+            "Anonymous"
+          )}
+        </p>
+      )}
+
       {general && (
         <p>
           Template:{" "}
