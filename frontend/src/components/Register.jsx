@@ -22,11 +22,14 @@ function Register() {
    */
   const userSchema = Joi.object({
     user_name: Joi.string()
+      .regex(RegExp("^[\u00C0-\u017Fa-zA-Z'][\u00C0-\u017Fa-zA-Z-' .()]*$"))
+      .max(50)
       .required()
       .label("username")
-      .error((err) => {
-        err[0].message = "Username must not be blank";
-        return err;
+      .messages({
+        "string.empty": "Username must not be blank",
+        "string.max": "Username must not be more than 50 characters",
+        "string.pattern.base": "Username contains unallowed special characters",
       }),
     email: Joi.string()
       .email({ tlds: false })
