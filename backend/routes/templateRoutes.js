@@ -33,7 +33,9 @@ templateRouter.get("/", async (req, res) => {
       }
     } else {
       // query does not have filters
-      const query = `SELECT t.id, t.name, t.description, u.user_name FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
+      const query = `SELECT t.id, t.name, t.description, u.user_name 
+      FROM templates t 
+      LEFT JOIN users u ON t.creator_id = u.user_id`;
       results = await database.query(query);
     }
 
@@ -65,8 +67,12 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
         );
       }
     } else {
+      // default query
       result = await database.query(
-        `SELECT t.id, t.name, t.description, t.items, t.tags, u.user_name, t.creator_id, t.category FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id WHERE id = :id`,
+        `SELECT t.id, t.name, t.description, t.items, t.tags, u.user_name, t.creator_id, t.category 
+        FROM templates t 
+        LEFT JOIN users u ON t.creator_id = u.user_id 
+        WHERE id = :id`,
         { id: id }
       );
     }
