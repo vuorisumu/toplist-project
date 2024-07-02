@@ -22,19 +22,13 @@
   }
 }
 
-nav {
-  width: 100%;
-  position: absolute;
-  top: 0;
-  z-index: 3;
-
+@mixin navDefaults() {
   ul {
     list-style: none;
     padding: 0;
     display: flex;
     justify-content: space-evenly;
     align-items: flex-start;
-    padding: 15px 10px 5px 10px;
     margin: 0;
     position: relative;
     z-index: 3;
@@ -62,31 +56,75 @@ nav {
         font-weight: 400;
         font-size: 8pt;
       }
+    }
 
-      &:first-child {
-        flex-grow: 1;
-      }
+    #logoCont span {
+      font-size: 16pt;
+      line-height: 20pt;
+    }
+  }
+}
+
+nav {
+  @include navDefaults();
+  width: 100%;
+  position: absolute;
+  top: 0;
+  z-index: 3;
+
+  ul {
+    padding: 15px 10px 5px 10px;
+
+    li:first-child {
+      flex-grow: 1;
+    }
+  }
+
+  .fixedLogin {
+    @include login();
+    position: absolute;
+    width: 100%;
+    margin-top: -150px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: theme.$primary-color;
+    transition: 0.3s;
+
+    &.active {
+      margin-top: 0;
+    }
+  }
+}
+
+.mobileNav {
+  @include navDefaults();
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  z-index: 3;
+
+  ul {
+    padding: 15px 10px 15px 10px;
+  }
+
+  .fixedLogin {
+    @include login();
+    position: absolute;
+    width: 100%;
+    bottom: -150px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    background-color: theme.$primary-color;
+    transition: 0.3s;
+
+    &.active {
+      bottom: 70px;
     }
   }
 }
 
 .toggleLogin {
   cursor: pointer;
-}
-
-.fixedLogin {
-  @include login();
-  position: absolute;
-  width: 100%;
-  margin-top: -150px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  background-color: theme.$primary-color;
-  transition: 0.3s;
-
-  &.active {
-    margin-top: 0;
-  }
 }
 
 #logoCont {
