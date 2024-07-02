@@ -3,7 +3,11 @@ const database = require("../config/database");
 const {
   filteredTemplatesQuery,
 } = require("../filteredQueries/templateQueries");
-const { templateSchema, querySchema } = require("../schemas/templateSchemas");
+const {
+  templateSchema,
+  querySchema,
+  specifiedIdSchema,
+} = require("../schemas/templateSchemas");
 const express = require("express");
 const templateRouter = express.Router();
 
@@ -49,11 +53,12 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
     const id = parseInt(req.params.id);
     let result;
     if (Object.keys(req.query).length !== 0) {
-      const { error, value } = querySchema.validate(req.query);
+      const { error, value } = specifiedIdSchema.validate(req.query);
       if (error) {
         res.status(400).send(error.message);
       }
 
+      // get templates from a specified creator
       if (value.getCreatorId) {
         result = await database.query(
           `SELECT creator_id FROM templates WHERE id = :id`,

@@ -15,8 +15,11 @@ const querySchema = Joi.object({
   sortOrder: Joi.string().valid("asc", "desc").default("asc").optional(),
   from: Joi.number().integer().optional(),
   amount: Joi.number().integer().optional(),
-  getCreatorId: Joi.boolean().optional(),
   creatorId: Joi.number().optional(),
+});
+
+const specifiedIdSchema = Joi.object({
+  getCreatorId: Joi.boolean().optional(),
 });
 
 const templateSchema = Joi.object({
@@ -35,5 +38,6 @@ const templateSchema = Joi.object({
 
 module.exports = {
   querySchema,
+  specifiedIdSchema,
   templateSchema,
 };
