@@ -163,38 +163,44 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     const values = {};
     const fields = [];
 
+    // template name
     if (req.body.name) {
       fields.push("name = :name");
       values["name"] = req.body.name;
     }
 
+    // template items
     if (req.body.items) {
       fields.push("items = :items");
       values["items"] = JSON.stringify(req.body.items);
     }
 
+    // template creator
     if (req.body.creator_id) {
       fields.push("creator_id = :creatorid");
       values["creatorid"] = req.body.creator_id;
     }
 
+    // template description
     if (req.body.description) {
       fields.push("description = :description");
       values["description"] = req.body.description;
     } else {
+      // set null if no description was found
       fields.push("description = NULL");
     }
 
+    // template category
     if (req.body.category) {
       fields.push("category = :category");
       values["category"] = req.body.category;
     }
 
+    // build the string
     const updateString = fields.join(", ");
     const query = `UPDATE templates SET ${updateString} WHERE id = :id`;
     values["id"] = req.params.id;
 
-    console.log(query);
     const result = await database.query(query, values);
 
     if (result.affectedRows === 0) {
