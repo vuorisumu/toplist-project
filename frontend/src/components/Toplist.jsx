@@ -10,6 +10,8 @@ import { isAdmin } from "../util/permissions";
  * @param {object} props.data - Top list data to be displayed
  * @param {boolean} props.general - whether the top list should display
  * information about the template or no.
+ * @param {boolean} props.showCreator - whether to display the creator name,
+ * true by default
  * @returns {JSX.Element} Top list preview component
  */
 function Toplist({ data, general, showCreator = true }) {
