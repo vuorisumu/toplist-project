@@ -11,7 +11,7 @@ console.log("Category router accessed");
  */
 categoryRouter.get("/", async (req, res) => {
   try {
-    const query = `SELECT * FROM categories`;
+    const query = `SELECT * FROM categories ORDER BY CASE WHEN name = 'Uncategorized' THEN 1 ELSE 0 END, name ASC`;
     const results = await database.query(query);
 
     res.status(200).json(results);
