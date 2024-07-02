@@ -24,6 +24,7 @@ function EditTemplate() {
   const [canEdit, setCanEdit] = useState(false);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [errors, setErrors] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
   const templateId = parseInt(location.pathname.replace("/edit-template/", ""));
@@ -181,9 +182,43 @@ function EditTemplate() {
   };
 
   /**
+   * Checks if the created template meets the minimum requirements
+   * for saving to the database
+   *
+   * @returns true if requirements have been met, false if the name field
+   * is empty or if the template has less than five items
+   */
+  const meetsRequirements = () => {
+    const tempErrors = [];
+    const hasName = template.name.trim() !== "";
+    if (!hasName) {
+      tempErrors.push("Template must have a name");
+      document.getElementById("tempName").classList.add("error");
+    } else {
+      document.getElementById("tempName").classList.remove("error");
+    }
+
+    const enoughItems =
+      template.items.filter((i) => i.item_name.trim() !== "").length >= 5;
+    if (!enoughItems) {
+      tempErrors.push("Template must have at least 5 items");
+      document.getElementById("tempItems").classList.add("error");
+    } else {
+      document.getElementById("tempItems").classList.remove("error");
+    }
+
+    setErrors(tempErrors);
+    return hasName && enoughItems;
+  };
+
+  /**
    * Packs the data and saves the changes to database
    */
   const saveChanges = async () => {
+    if (!meetsRequirements()) {
+      return;
+    }
+
     // only store non empty items
     const nonEmptyItems = template.items.filter(
       (t) => t.item_name.trim() !== ""
@@ -197,6 +232,8 @@ function EditTemplate() {
 
     if (template.description) {
       updatedData.description = template.description;
+    } else {
+      updatedData.description = "";
     }
 
     if (template.category) {
@@ -262,6 +299,7 @@ function EditTemplate() {
           <label>Template name: </label>
           <input
             type="text"
+            id="tempName"
             value={template.name}
             onChange={(e) => updateTemplateName(e.target.value)}
           />
@@ -286,7 +324,7 @@ function EditTemplate() {
 
         <div className="addCont addItems">
           <h2>Items</h2>
-          <ul>
+          <ul id="tempItems">
             {template.items.map((i, index) => (
               <li key={"item" + index}>
                 <input
@@ -310,6 +348,14 @@ function EditTemplate() {
             </li>
           </ul>
         </div>
+
+        {errors.length > 0 && (
+          <ul>
+            {errors.map((err, index) => (
+              <li key={"error" + index}>{err}</li>
+            ))}
+          </ul>
+        )}
 
         <button type="button" onClick={saveChanges}>
           Save changes
