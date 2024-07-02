@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { formatDate } from "../util/misc";
 import ButtonPrompt from "./ButtonPrompt";
-import { deleteRanking } from "./api";
 import { isAdmin } from "../util/permissions";
+import { deleteToplist } from "../api/toplists";
 
 /**
  * Reusable component displaying top list data.
@@ -19,7 +19,7 @@ function Toplist({ data, general, showCreator = true }) {
    * Deletes the top list from the database.
    */
   const handleDelete = () => {
-    deleteRanking(data.toplist_id)
+    deleteToplist(data.toplist_id)
       .then((res) => {
         console.log(res);
         window.location.reload(false);

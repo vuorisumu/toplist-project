@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import {
-  fetchAllListsByUser,
-  fetchAllTemplatesFromUser,
-  fetchUserByName,
-} from "./api";
 import { formatData } from "../util/dataHandler";
 import Template from "./Template";
 import Toplist from "./Toplist";
+import { fetchAllTemplatesFromUser } from "../api/templates";
+import { fetchAllListsByUser } from "../api/toplists";
+import { fetchUserByName } from "../api/users";
 
 function User() {
   const [userData, setUserData] = useState(null);

@@ -1,4 +1,4 @@
-import { fetchAllCategories } from "../components/api";
+import { fetchAllCategories } from "../api/categories";
 import { formatData } from "./dataHandler";
 
 export const getCategories = async () => {

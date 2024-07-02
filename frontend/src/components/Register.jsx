@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { addNewUser, fetchUserByNameOrEmail } from "./api";
 import { formatData } from "../util/dataHandler";
 import Joi from "joi";
 import { useNavigate } from "react-router-dom";
+import { fetchUserByNameOrEmail, addNewUser } from "../api/users";
 
 /**
  * View for new user registration. Renders a form for account creation.

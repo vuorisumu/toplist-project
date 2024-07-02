@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { formatDate } from "../util/misc";
-import { fetchRankingById, deleteRanking } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
 import { formatData } from "../util/dataHandler";
 import { isAdmin } from "../util/permissions";
+import { deleteToplist, fetchToplistById } from "../api/toplists";
 
 /**
  * View of a single ranking rendering all information related to the ranking
@@ -25,7 +25,7 @@ function SingleList() {
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    fetchRankingById(rankingId)
+    fetchToplistById(rankingId)
       .then((data) => {
         const formattedData = formatData(data);
         if (formattedData.length > 0) {
@@ -44,7 +44,7 @@ function SingleList() {
    * Deletes a ranking from the database and refreshes the page
    */
   const handleDelete = () => {
-    deleteRanking(rankingId)
+    deleteToplist(rankingId)
       .then((res) => {
         console.log(res);
         window.location.reload(false);

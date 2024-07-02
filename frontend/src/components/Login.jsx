@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { auth, userLogin } from "./api";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { userLogin, auth } from "../api/users";
 
 /**
  * Reusable login component that renders input fields for the

@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
-import { fetchTemplateCreatorId } from "../components/api";
 import { getTemplateCreatorIdFromData } from "./dataHandler";
+import { fetchTemplateCreatorId } from "../api/templates";
 
 export const isAdmin = () => {
   const token = sessionStorage.getItem("token");

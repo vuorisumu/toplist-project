@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { clearAll } from "../util/misc";
-import { addNewTemplate } from "./api";
 import Login from "./Login";
 import { useNavigate } from "react-router-dom";
 import { isLoggedIn } from "../util/permissions";
 import Dropdown from "./Dropdown";
 import { getCategories } from "../util/storage";
+import { addNewTemplate } from "../api/templates";
 
 /**
  * View where the user can create a new template and add it to the database.

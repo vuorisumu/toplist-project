@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import { addNewRanking, fetchTemplateById } from "./api";
 import { DnDContainer } from "./Dnd";
 import { v4 as uuid } from "uuid";
 import { clearAll } from "../util/misc";
@@ -8,6 +7,8 @@ import { formatData } from "../util/dataHandler";
 import ToplistContainer from "./ToplistContainer";
 import { isCreatorOfTemplate } from "../util/permissions";
 import { getCategoryById } from "../util/storage";
+import { fetchTemplateById } from "../api/templates";
+import { addNewToplist } from "../api/toplists";
 
 /**
  * View where the user can create a new list from a chosen template.
@@ -189,7 +190,7 @@ function NewList() {
         toplistData.toplist_desc = toplistDesc;
       }
 
-      const res = await addNewRanking(toplistData);
+      const res = await addNewToplist(toplistData);
       navigate(`/toplists/${res.toplist_id}`);
     } catch (err) {
       console.error(err);

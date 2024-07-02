@@ -2,16 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import Search from "./Search";
 import Dropdown from "./Dropdown";
 import {
-  fetchRankingNamesByInput,
-  fetchTemplateNamesByInput,
-  fetchUserNamesWithTemplatesByInput,
-  fetchUserNamesWithTopListsByInput,
-} from "./api";
-import {
   fetchAllNamesByInput,
   fetchCombinedToplistNamesByInput,
 } from "../util/dataHandler";
 import { getCategories } from "../util/storage";
+import { fetchTemplateNamesByInput } from "../api/templates";
+import { fetchListNamesByInput } from "../api/toplists";
+import {
+  fetchUserNamesWithTemplatesByInput,
+  fetchUserNamesWithTopListsByInput,
+} from "../api/users";
 
 /**
  * Reusable Advanced Search component that has one general search field and
@@ -203,7 +203,7 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
                 <label>Search top list by name: </label>
                 <Search
                   valueUpdated={setNameInput}
-                  fetchFunction={fetchRankingNamesByInput}
+                  fetchFunction={fetchListNamesByInput}
                   onClear={clearInput}
                   templateId={templateId}
                   onEnterKey={onEnterName}

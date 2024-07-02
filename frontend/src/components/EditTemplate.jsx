@@ -1,12 +1,13 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { clearAll } from "../util/misc";
-import { fetchTemplateById, updateTemplate, deleteTemplate } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
 import { formatData } from "../util/dataHandler";
 import { isCreatorOfTemplate } from "../util/permissions";
 import { getCategories } from "../util/storage";
 import Dropdown from "./Dropdown";
+import { fetchTemplateById } from "../api/templates";
+import { updateTemplate, deleteTemplate } from "../api/templates";
 
 /**
  * Edit template view that asks for the user to either be logged in as admin or to input

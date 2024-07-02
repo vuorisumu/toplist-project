@@ -1,8 +1,6 @@
-import {
-  fetchRankingNamesByInput,
-  fetchTemplateNamesByInput,
-  fetchUserNamesByInput,
-} from "../components/api";
+import { fetchTemplateNamesByInput } from "../api/templates";
+import { fetchListNamesByInput } from "../api/toplists";
+import { fetchUserNamesByInput } from "../api/users";
 
 export const formatData = (data) => {
   if (data && data.rows && data.metaData) {
@@ -70,7 +68,7 @@ export const fetchAllNamesByInput = async (input) => {
 export const fetchCombinedToplistNamesByInput = async (input) => {
   try {
     const [topListNameData, userNameData] = await Promise.all([
-      fetchRankingNamesByInput(input),
+      fetchListNamesByInput(input),
       fetchUserNamesByInput(input),
     ]);
 

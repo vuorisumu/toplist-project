@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { deleteTemplate } from "./api";
 import ButtonPrompt from "./ButtonPrompt";
 import { isAdmin, isCreatorOfTemplate } from "../util/permissions";
 import { useEffect, useState } from "react";
 import { getCategoryById } from "../util/storage";
+import { deleteTemplate } from "../api/templates";
 
 /**
  * Reusable component displaying a preview of a template

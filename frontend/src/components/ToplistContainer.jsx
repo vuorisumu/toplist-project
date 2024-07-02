@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { fetchAllRankingsFiltered, fetchRankingCount } from "./api";
 import { formatData, getCountFromData } from "../util/dataHandler";
 import Toplist from "./Toplist";
 import AdvancedSearch from "./AdvancedSearch";
+import { fetchToplistCount, fetchToplists } from "../api/toplists";
 
 /**
  * Container for displaying the top lists and the search bar.
@@ -37,7 +37,7 @@ function ToplistContainer({ templateId = 0 }) {
    * If the count is 0, set loading to false.
    */
   const getListCount = async () => {
-    fetchRankingCount(templateId)
+    fetchToplistCount(templateId)
       .then((data) => {
         const count = getCountFromData(data);
         setListCount(count);
@@ -58,7 +58,7 @@ function ToplistContainer({ templateId = 0 }) {
 
     let q = templateId > 0 ? `tempId=${templateId}&` : ``;
     q += `${filters}`;
-    fetchAllRankingsFiltered(`${q}&from=${loaded}&amount=${loadMoreAmount}`)
+    fetchToplists(`${q}&from=${loaded}&amount=${loadMoreAmount}`)
       .then((data) => {
         const formattedData = formatData(data);
         if (!loadMore) {
