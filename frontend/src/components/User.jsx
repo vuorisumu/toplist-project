@@ -66,7 +66,6 @@ function User() {
   return (
     <div className="container">
       <h2>{userData.user_name}</h2>
-      <p>User page here</p>
 
       <div>
         <h3>Templates</h3>
