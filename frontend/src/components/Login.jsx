@@ -15,7 +15,7 @@ function Login({ isFixed }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
-  const [role, setRole] = useState("");
+  const [user, setUser] = useState("");
 
   useEffect(() => {
     if (sessionStorage.getItem("login")) {
@@ -25,7 +25,7 @@ function Login({ isFixed }) {
 
   useEffect(() => {
     if (loggedIn) {
-      setRole(sessionStorage.getItem("user"));
+      setUser(sessionStorage.getItem("user"));
     }
   }, [loggedIn]);
 
@@ -145,7 +145,22 @@ function Login({ isFixed }) {
             </>
           ) : (
             <>
-              <p>{`Logged in as ${role}`}</p>
+              <p>
+                {`Logged in as `}
+                <Link
+                  to={`/user/${user}`}
+                  onClick={() => {
+                    document
+                      .getElementById("loginCont")
+                      .classList.toggle("active");
+                    document
+                      .getElementById("navLogin")
+                      .classList.toggle("active");
+                  }}
+                >
+                  {user}
+                </Link>
+              </p>
               <button type="button" onClick={onLogout} className="logoutButton">
                 Logout
               </button>
