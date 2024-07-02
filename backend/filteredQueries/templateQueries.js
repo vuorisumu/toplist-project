@@ -10,15 +10,24 @@ async function filteredTemplatesQuery(req) {
   if (error) {
     throw error;
   }
-  let filteredQuery = value.namesOnly
+
+  const conditions = [];
+  const queryParams = {};
+  let filteredQuery;
+
+  // fetch just the count of the templates and return
+  if (value.count) {
+    filteredQuery = "SELECT COUNT(id) AS count FROM templates";
+    return { filteredQuery, queryParams };
+  }
+
+  // fetch just the names or all relevant information
+  filteredQuery = value.namesOnly
     ? "SELECT DISTINCT t.name "
     : "SELECT t.id, t.name, t.description, u.user_name, t.creator_id, t.category ";
 
   filteredQuery +=
     "FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id";
-
-  const conditions = [];
-  const queryParams = {};
 
   // add conditions
   if (value.search) {

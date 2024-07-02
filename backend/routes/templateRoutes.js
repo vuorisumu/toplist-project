@@ -19,21 +19,12 @@ templateRouter.get("/", async (req, res) => {
   try {
     let results;
     if (Object.keys(req.query).length !== 0) {
-      if (req.query.count) {
-        results = await database.query(
-          `SELECT COUNT(id) AS count FROM templates`
-        );
-      } else if (req.query.distinct) {
-        // fetch distinct names for suggestions
-        results = await database.query(`SELECT DISTINCT name FROM templates`);
-      } else {
-        // query has filters
-        const { filteredQuery, queryParams } = await filteredTemplatesQuery(
-          req.query
-        );
+      // query has filters
+      const { filteredQuery, queryParams } = await filteredTemplatesQuery(
+        req.query
+      );
 
-        results = await database.query(filteredQuery, queryParams);
-      }
+      results = await database.query(filteredQuery, queryParams);
     } else {
       // query does not have filters
       const query = `SELECT t.id, t.name, t.description, u.user_name FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;

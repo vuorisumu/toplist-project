@@ -126,7 +126,7 @@ export const deleteTemplate = (id) => {
  * @returns data containing the count of templates
  */
 export const fetchTemplateCount = () => {
-  return fetch(`${API_BASE_URL}/templates?count=true}`).then((response) =>
+  return fetch(`${API_BASE_URL}/templates?count=true`).then((response) =>
     response.json()
   );
 };

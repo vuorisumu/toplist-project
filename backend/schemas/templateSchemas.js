@@ -2,6 +2,7 @@
 const Joi = require("joi").extend(require("@joi/date"));
 
 const querySchema = Joi.object({
+  count: Joi.boolean().optional(),
   namesOnly: Joi.boolean().optional(),
   search: Joi.string().optional(),
   tname: Joi.string().optional(),
