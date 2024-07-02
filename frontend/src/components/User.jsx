@@ -79,7 +79,7 @@ function User() {
             <ul>
               {templates.map((template) => (
                 <li key={template.id} className="template">
-                  <Template data={template} />
+                  <Template data={template} showCreator={false} />
                 </li>
               ))}
             </ul>

@@ -11,7 +11,7 @@ import { getCategoryById } from "../util/storage";
  * @param {object} props.data - The data of the template
  * @returns {JSX.Element} Template preview component
  */
-function Template({ data }) {
+function Template({ data, showCreator = true }) {
   const [canEdit, setCanEdit] = useState(false);
   const [category, setCategory] = useState("");
 
@@ -64,9 +64,11 @@ function Template({ data }) {
         <h2>{data.name}</h2>{" "}
       </Link>
       <p>Category: {category}</p>
-      <p className="creator">
-        Creator: {data.user_name ? data.user_name : "Anonymous"}
-      </p>
+      {showCreator && (
+        <p className="creator">
+          Creator: {data.user_name ? data.user_name : "Anonymous"}
+        </p>
+      )}
 
       {data.description && <p className="description">{data.description}</p>}
 
