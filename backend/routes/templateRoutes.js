@@ -159,8 +159,6 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
       return res.status(400).json({ msg: error.details[0].message });
     }
 
-    console.log(req.body);
-
     const values = {};
     const fields = [];
 
@@ -185,7 +183,7 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     }
 
     if (req.body.category) {
-      placeholders.push("category = :category");
+      fields.push("category = :category");
       values["category"] = req.body.category;
     }
 
@@ -202,7 +200,7 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
 
     // successful insert
     res.status(201).json({
-      msg: "Added new template",
+      msg: "Template updated",
       id: req.params.id,
     });
   } catch (err) {
