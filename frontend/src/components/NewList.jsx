@@ -223,7 +223,11 @@ function NewList() {
         {/* Template information */}
         <p className="templateInfo">
           Template: <span className="alt">{template.name}</span> by{" "}
-          {template.user_name ? template.user_name : "Unknown"}
+          {template.user_name ? (
+            <Link to={`/user/${template.user_name}`}>{template.user_name}</Link>
+          ) : (
+            "Unknown"
+          )}
         </p>
 
         <p className="templateInfo">Category: {category}</p>
