@@ -15,7 +15,7 @@ async function filteredTemplatesQuery(req) {
   const queryParams = {};
   let filteredQuery;
 
-  // fetch just the count of the templates and return
+  // fetch just the count of the templates and return immediately
   if (value.count) {
     filteredQuery = "SELECT COUNT(id) AS count FROM templates";
     return { filteredQuery, queryParams };
@@ -26,10 +26,11 @@ async function filteredTemplatesQuery(req) {
     ? "SELECT DISTINCT t.name "
     : "SELECT t.id, t.name, t.description, u.user_name, t.creator_id, t.category ";
 
+  // join relevant tables
   filteredQuery +=
     "FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id";
 
-  // add conditions
+  // general search
   if (value.search) {
     conditions.push(
       "(lower(t.name) LIKE lower(:search) OR lower(u.user_name) LIKE lower(:search))"
@@ -39,27 +40,32 @@ async function filteredTemplatesQuery(req) {
     }
   }
 
+  // template name search
   if (value.tname) {
     conditions.push("lower(t.name) LIKE lower(:tname)");
     queryParams["tname"] = `${value.tname}%`;
   }
 
+  // username search
   if (value.uname) {
     conditions.push("lower(u.user_name) LIKE lower(:uname)");
     queryParams["uname"] = `${value.uname}%`;
   }
 
+  // get templates from a specified creator
   if (value.creatorId) {
     conditions.push("t.creator_id = :creatorId");
     queryParams["creatorId"] = value.creatorId;
   }
 
+  // get templates from specified categories
   if (value.category) {
     const category = Array.isArray(value.category)
       ? value.category
       : [value.category];
     const categoryConditions = [];
     for (let i = 0; i < category.length; i++) {
+      // 21 = Uncategorized
       if (category[i] === 21) {
         categoryConditions.push("t.category IS NULL");
       }
@@ -70,6 +76,7 @@ async function filteredTemplatesQuery(req) {
     conditions.push(categoryQuery);
   }
 
+  // add conditions to query string
   if (conditions.length > 0) {
     filteredQuery += " WHERE " + conditions.join(" AND ");
   }
@@ -78,11 +85,12 @@ async function filteredTemplatesQuery(req) {
   if (value.sortBy && ["id", "name", "creatorname"].includes(value.sortBy)) {
     let sortBy = value.sortBy;
 
+    // sort by template id
     if (value.sortBy === "id") {
       sortBy = "t.id";
     }
 
-    // if sorting by creator name
+    // sort by creator name
     if (value.sortBy === "creatorname") {
       sortBy = "u.user_name";
     }
@@ -101,6 +109,7 @@ async function filteredTemplatesQuery(req) {
     }
   }
 
+  // get a specific amount of rows
   if (value.amount) {
     filteredQuery += ` OFFSET ${value.from} ROWS FETCH NEXT ${value.amount} ROWS ONLY`;
   }
