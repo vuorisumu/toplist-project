@@ -5,7 +5,6 @@ const {
 } = require("../filteredQueries/templateQueries");
 const {
   templateSchema,
-  querySchema,
   specifiedIdSchema,
 } = require("../schemas/templateSchemas");
 const express = require("express");
