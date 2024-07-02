@@ -66,7 +66,12 @@ function Template({ data, showCreator = true }) {
       <p>Category: {category}</p>
       {showCreator && (
         <p className="creator">
-          Creator: {data.user_name ? data.user_name : "Anonymous"}
+          Creator:{" "}
+          {data.user_name ? (
+            <Link to={`/user/${data.user_name}`}>{data.user_name}</Link>
+          ) : (
+            "Anonymous"
+          )}
         </p>
       )}
 
