@@ -45,13 +45,15 @@ rankRouter.get("/", async (req, res) => {
 });
 
 /**
- * Gets a ranking from database by given ID
+ * Gets a top list from database by given ID
  */
 rankRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const result = await database.query(
-      `SELECT * FROM toplists top
+      `SELECT top.toplist_id, top.toplist_name, top.ranked_items, top.toplist_desc, 
+      top.creation_time, top.creator_id, u.user_name, t.name, top.template_id, t.category 
+      FROM toplists top
       LEFT JOIN users u ON top.creator_id = u.user_id
       LEFT JOIN templates t ON top.template_id = t.id
       WHERE top.toplist_id = :id`,

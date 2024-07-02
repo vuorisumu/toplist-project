@@ -17,13 +17,15 @@ function filteredRankingQuery(req) {
 
   // select count of lists only and return immediately
   if (value.count) {
-    filteredQuery = `COUNT(toplist_id) AS count FROM toplists`;
+    filteredQuery += `COUNT(toplist_id) AS count FROM toplists`;
 
     // select count of lists using specified template
     if (value.tempId) {
       filteredQuery += ` WHERE template_id = :tempId`;
       queryParams["tempId"] = value.tempId;
     }
+
+    console.log(filteredQuery);
     return { filteredQuery, queryParams };
   }
 
