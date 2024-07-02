@@ -13,13 +13,14 @@ export const getCategories = async () => {
       })
       .catch((err) => console.log(err));
 
-    sessionStorage.setItem("category", JSON.stringify(categoryData));
+    sessionStorage.setItem("categories", JSON.stringify(categoryData));
     return categoryData;
   }
 };
 
 export const getCategoryById = async (id) => {
   if (!id || id <= 0) return "Uncategorized";
+
   try {
     const categories = await getCategories();
     const foundCategory = categories.filter((category) => category.id === id);
