@@ -56,7 +56,8 @@ function EditTemplate() {
   const fetchTemplate = async () => {
     await fetchTemplateById(templateId)
       .then((data) => {
-        handleSetTemplate(formatData(data)[0]);
+        const formattedData = formatData(data);
+        handleSetTemplate(formattedData[0]);
         setLoading(false);
       })
       .catch((err) => {
@@ -73,12 +74,6 @@ function EditTemplate() {
     const tempData = data;
     const tempItems = data.items;
     tempData.items = tempItems;
-
-    if (data.tags) {
-      const tempTags = data.tags;
-      tempData.tags = tempTags;
-      fetchTagNames(tempData);
-    }
 
     setTemplate(tempData);
   };
