@@ -53,10 +53,9 @@ async function filteredTemplatesQuery(req) {
     for (let i = 0; i < category.length; i++) {
       if (category[i] === 21) {
         categoryConditions.push("t.category IS NULL");
-      } else {
-        categoryConditions.push(`t.category = :cat${i}`);
-        queryParams[`cat${i}`] = category[i];
       }
+      categoryConditions.push(`t.category = :cat${i}`);
+      queryParams[`cat${i}`] = category[i];
     }
     const categoryQuery = "(" + categoryConditions.join(" OR ") + ")";
     conditions.push(categoryQuery);
@@ -169,10 +168,9 @@ async function filteredRankingQuery(req) {
     for (let i = 0; i < category.length; i++) {
       if (category[i] === 21) {
         categoryConditions.push("t.category IS NULL");
-      } else {
-        categoryConditions.push(`t.category = :cat${i}`);
-        queryParams[`cat${i}`] = category[i];
       }
+      categoryConditions.push(`t.category = :cat${i}`);
+      queryParams[`cat${i}`] = category[i];
     }
     const categoryQuery = "(" + categoryConditions.join(" OR ") + ")";
     conditions.push(categoryQuery);
