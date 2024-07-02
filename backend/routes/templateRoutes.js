@@ -20,11 +20,14 @@ templateRouter.get("/", async (req, res) => {
     let results;
     if (Object.keys(req.query).length !== 0) {
       // query has filters
-      const { filteredQuery, queryParams } = await filteredTemplatesQuery(
-        req.query
-      );
-
-      results = await database.query(filteredQuery, queryParams);
+      try {
+        const { filteredQuery, queryParams } = await filteredTemplatesQuery(
+          req.query
+        );
+        results = await database.query(filteredQuery, queryParams);
+      } catch (err) {
+        res.status(400).send(err.message);
+      }
     } else {
       // query does not have filters
       const query = `SELECT t.id, t.name, t.description, u.user_name FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
