@@ -147,7 +147,7 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     // check if template exists
     const id = parseInt(req.params.id);
     const exists = await database.query(
-      "SELECT * FROM templates WHERE id = :id",
+      "SELECT name FROM templates WHERE id = :id",
       { id: id }
     );
     if (exists.length === 0) {
@@ -192,7 +192,6 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     const query = `UPDATE templates SET ${updateString} WHERE id = :id`;
     values["id"] = req.params.id;
 
-    console.log(query);
     const result = await database.query(query, values);
 
     if (result.affectedRows === 0) {
