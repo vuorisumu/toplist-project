@@ -1,60 +1,40 @@
 # LISTMAKER 9000
 
-For making top lists from existing templates and comparing list rankings with other users.
+[![Static Badge](https://img.shields.io/badge/Listmaker-9000-green)](https://toplistmaker.onrender.com/)
 
-[DEMO](https://toplistmaker.onrender.com/)
-
-Creator account:
-
-username: creator
-
-password: rankingenjoyer420
+Make your own top lists using existing templates or create your own template and compare your lists with other users!
 
 ![Screenshot of the Listmaker 9000](./img/frontpage.png)
 
-## About the project
+## Why Listmaker?
 
-I like ranking things and making lists, so I wanted to make an application where I could make templates and top lists easily, share them with friends, and store the date and time of creating the list.
+Listmaker allows you to make templates and top lists easily and compare the results with other users. It also stores the date and time of top list creation, allowing you to use the same template again and compare how your own opinions have changed over time.
+
+Top list creation mode also allows you to add a description, as well as item-specific notes, if you feel the need to explain your choices. It also allows you to add new items that weren't present in the original template, so you don't need to make a completely new one if the original creator of the template forgot to put something in there.
 
 ## How to use Listmaker 9000?
 
-Front page: On the front page of the application you'll see templates stored in the database. You can search for a specific template using the filter and sorting options.
-
-Templates: The same view as the front page, but without the introduction text
-
-Top lists: All top lists added by users, can be filtered in the same way as templates.
-
-By clicking a name of a template you will be taken to a top list creation view, where you can make your own top list using the given template. When you save the list, you will be redirected to the URL of your new top list.
-
-The last icon in the navigation bar is a login button. Log in with your admin or creator account, and you will also see a New Template link on the navigation bar.
-
-New template: Build your own template and save it to the database
+Go to [Listmaker 9000 website](https://toplistmaker.onrender.com/), find a template you like and start ranking! Or create an account and start making your own templates!
 
 ## Installation
 
-![Tables in MySQL database](./img/database.png)
-Create necessary tables to your MySQL database and add .env file to backend folder with your MySQL credentials and base URL
+![Database](./img/database.drawio.png)
+
+If you want to clone Listmaker 9000 for your own use, clone this repository, create the necessary tables to your database and add following information to your .env file:
 
 ```
-MYSQL_HOST=
-MYSQL_USER=
-MYSQL_PASSWORD=
-MYSQL_DATABASE
-BASE_URL=http://localhost:3000
+BASE_URL=
+ORACLE_USER=
+ORACLE_PASSWORD=
+ORACLE_CONNSTR=
+JWT_SECRET_KEY=
+JWT_EXPIRES_IN=
+ADMIN_USER=
 ```
 
-Add admin and/or creator roles to your database
+Note that the Listmaker 9000 is done using Oracle DB.
 
-```
-INSERT INTO roles (role_name, password)
-VALUES ("admin", PASSWORD('yourpassword'));
-
-INSERT INTO roles (role_name, password)
-VALUES ("creator", PASSWORD('yourpassword'));
-```
-
-Add .env.development to frontend folder and add your api base URL
-`VITE_API_URL=http://localhost:3000/api`
+Add .env.development to the frontend folder and add your API base URL: `VITE_API_URL=http://localhost:3000/api`
 
 Go to root folder and run
 
@@ -63,12 +43,19 @@ npm install
 npm start
 ```
 
-Enjoy!
+Then register a user with the same username as what you wrote down to .env, that will be your admin user.
+
+## Technologies
+
+![Express.js](https://img.shields.io/badge/Express%20js-000000?style=for-the-badge&logo=express&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Node.js](https://img.shields.io/badge/Node%20js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Oracle](https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=Oracle&logoColor=white)
+![SASS](https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white)
 
 ## Credits
 
-Inspired by [Tiermaker](https://tiermaker.com/)
-ChatGPT used as a helping tool whenever I was stuck with unexpected errors and typos I couldn't notice, and whenever I felt like I need to understand better how a function works to properly use it.
+Inspired by Tiermaker
 
 ## License
 

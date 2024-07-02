@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import { addNewRanking, fetchTemplateById } from "./api";
 import { DnDContainer } from "./Dnd";
 import { v4 as uuid } from "uuid";
-import { getLocalTime, clearAll, checkAdminStatus, getUserId } from "./util";
-import ShowRankings from "./ShowRankings";
+import { clearAll } from "../util/misc";
 import { formatData } from "../util/dataHandler";
 import ToplistContainer from "./ToplistContainer";
-import { isAdmin } from "../util/permissions";
+import { isCreatorOfTemplate } from "../util/permissions";
+import { getCategoryById } from "../util/storage";
+import { fetchTemplateById } from "../api/templates";
+import { addNewToplist } from "../api/toplists";
 
 /**
  * View where the user can create a new list from a chosen template.
@@ -16,6 +17,8 @@ import { isAdmin } from "../util/permissions";
  * Uses DnD component for building the ranked list.
  * Provides an option to add new items to be used in the ranking.
  * Finally renders a ShowRankings component with current template ID
+ *
+ * @returns {JSX.Element} New list creation component
  */
 function NewList() {
   const location = useLocation();
@@ -44,14 +47,32 @@ function NewList() {
   const [toplistDesc, setToplistDesc] = useState("");
   const [newEntry, setNewEntry] = useState("");
   const [errorMessages, setErrorMessages] = useState([]);
+  const [canEdit, setCanEdit] = useState(false);
+  const [category, setCategory] = useState("");
+
+  /**
+   * Checks if the user is logged in as admin or is the creator of the
+   * currently chosen template.
+   */
+  const checkPermission = async () => {
+    try {
+      const isCreator = await isCreatorOfTemplate(templateId);
+      setCanEdit(isCreator);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   /**
    * On page load, fetch necessary template data from the database
    * and buiild the necessary containers for the items to be used in the ranking
    */
   useEffect(() => {
+    checkPermission();
+
     fetchTemplateById(templateId)
       .then((data) => {
+        console.log(data);
         const formattedData = formatData(data)[0];
         setTemplate(formattedData);
 
@@ -87,6 +108,14 @@ function NewList() {
         console.log(err);
       });
   }, [templateId]);
+
+  useEffect(() => {
+    if (template) {
+      getCategoryById(template.category).then((data) => {
+        setCategory(data);
+      });
+    }
+  }, [template]);
 
   /**
    * Adds a new item to be used in the ranking. Will not save the item to the actual template,
@@ -161,7 +190,7 @@ function NewList() {
         toplistData.toplist_desc = toplistDesc;
       }
 
-      const res = await addNewRanking(toplistData);
+      const res = await addNewToplist(toplistData);
       navigate(`/toplists/${res.toplist_id}`);
     } catch (err) {
       console.error(err);
@@ -169,7 +198,11 @@ function NewList() {
   };
 
   if (!template) {
-    return <div>Loading...</div>;
+    return (
+      <div className="container">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
@@ -177,7 +210,7 @@ function NewList() {
       <div className="createRank">
         <h1>Create a Top List</h1>
 
-        {(template.editkey || isAdmin()) && (
+        {canEdit && (
           <Link to={`/edit-template/${template.id}`} className="editButton">
             <span
               className="material-symbols-outlined"
@@ -191,10 +224,20 @@ function NewList() {
         {/* Template information */}
         <p className="templateInfo">
           Template: <span className="alt">{template.name}</span> by{" "}
-          {template.user_name ? template.user_name : "Unknown"}
+          {template.user_name ? (
+            <Link to={`/user/${template.user_name}`}>{template.user_name}</Link>
+          ) : (
+            "Unknown"
+          )}
         </p>
+
+        <p className="templateInfo">Category: {category}</p>
+
         <p className="templateInfo desc">
-          Template description: {template.description}
+          {template.description
+            ? "Template description"
+            : `Create your own top list using this template`}
+          {template.description}
         </p>
 
         {/* Ranking information */}

@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
-import { fetchAllTemplatesFiltered, fetchTemplateCount } from "./api";
 import { formatData, getCountFromData } from "../util/dataHandler";
 import Template from "./Template";
 import AdvancedSearch from "./AdvancedSearch";
+import { fetchTemplates, fetchTemplateCount } from "../api/templates";
 
 /**
  * Container for displaying templates and the search bar.
  * Handles the displaying and loading of the templates.
+ *
+ * @returns {JSX.Element} Template container component with a
+ * search component attached
  */
 function TemplateContainer() {
   const [templates, setTemplates] = useState([]);
@@ -50,9 +53,7 @@ function TemplateContainer() {
   const loadTemplates = async (loadMore = false) => {
     const loaded = loadMore ? loadedCount : 0;
 
-    fetchAllTemplatesFiltered(
-      `${filters}&from=${loaded}&amount=${loadMoreAmount}`
-    )
+    fetchTemplates(`${filters}&from=${loaded}&amount=${loadMoreAmount}`)
       .then((data) => {
         const formattedData = formatData(data);
         if (!loadMore) {

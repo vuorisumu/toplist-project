@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { addNewUser, fetchUserByNameOrEmail } from "./api";
 import { formatData } from "../util/dataHandler";
 import Joi from "joi";
+import { useNavigate } from "react-router-dom";
+import { fetchUserByNameOrEmail, addNewUser } from "../api/users";
 
 /**
  * View for new user registration. Renders a form for account creation.
+ *
+ * @returns {JSX.Element} Registration component
  */
 function Register() {
   const [username, setUsername] = useState("");
@@ -12,6 +15,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [errors, setErrors] = useState([]);
+  const navigate = useNavigate();
 
   /**
    * Validation schema for new account creation.
@@ -20,11 +24,14 @@ function Register() {
    */
   const userSchema = Joi.object({
     user_name: Joi.string()
+      .regex(RegExp("^[\u00C0-\u017Fa-zA-Z0-9-' .()]*$"))
+      .max(50)
       .required()
       .label("username")
-      .error((err) => {
-        err[0].message = "Username must not be blank";
-        return err;
+      .messages({
+        "string.empty": "Username must not be blank",
+        "string.max": "Username must not be more than 50 characters",
+        "string.pattern.base": "Username contains unallowed special characters",
       }),
     email: Joi.string()
       .email({ tlds: false })
@@ -78,7 +85,7 @@ function Register() {
           password: password,
         };
         const newUserRes = await addNewUser(newUserData);
-        navigate(`/`);
+        navigate(`/user/${newUserRes.user_name}`);
       } else {
         setErrors([{ message: "User already exists" }]);
       }

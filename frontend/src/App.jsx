@@ -6,15 +6,14 @@ import NewTemplate from "./components/NewTemplate.jsx";
 import Login from "./components/Login.jsx";
 import EditTemplate from "./components/EditTemplate.jsx";
 import BrowseToplists from "./components/BrowseToplists.jsx";
-import Ranking from "./components/SingleList.jsx";
 import BrowseTemplates from "./components/BrowseTemplates.jsx";
-import { checkCreatorStatus } from "./components/util.js";
 import logo from "./assets/logo.svg";
 import ThemeButton from "./components/ThemeButton.jsx";
 import NewList from "./components/NewList.jsx";
 import SingleList from "./components/SingleList.jsx";
 import Register from "./components/Register.jsx";
 import { isLoggedIn } from "./util/permissions.js";
+import User from "./components/User.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -87,11 +86,15 @@ class App extends React.Component {
               <ThemeButton />
             </li>
             <li>
-              <div className="toggleLogin" onClick={toggleLogin} id="navLogin">
-                <span className="material-symbols-outlined icon">
+              <div
+                className="toggleLogin loginIcon"
+                onClick={toggleLogin}
+                id="navLogin"
+              >
+                <span className="material-symbols-outlined icon loginIcon">
                   {isLoggedIn() ? "lock_open" : "lock"}
                 </span>
-                <span className="linkName">
+                <span className="linkName loginIcon">
                   {isLoggedIn() ? "Logged in" : "Login"}
                 </span>
               </div>
@@ -105,13 +108,14 @@ class App extends React.Component {
           <Route path="/createlist" element={<Main />} />
           <Route path="/toplists" element={<BrowseToplists />} />
           <Route path="/new-template" element={<NewTemplate />} />
-          <Route path="/createlist/:templateId" element={<NewList />} />
           <Route
-            path="/edit-template/:templateid"
-            element={<EditTemplate admin={true} />}
+            path="/createlist/:templateId"
+            element={<NewList key={Math.random()} />}
           />
+          <Route path="/edit-template/:templateid" element={<EditTemplate />} />
           <Route path="/toplists/:listId" element={<SingleList />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/user/:username" element={<User />} />
         </Routes>
       </Router>
     );

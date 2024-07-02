@@ -1,31 +1,31 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
-import { checkAdminStatus, clearAll, getTagNumbers, getUserId } from "./util";
-import {
-  enterTemplateEditMode,
-  fetchTemplateById,
-  fetchTagById,
-  updateTemplate,
-  deleteTemplate,
-} from "./api";
+import { useState, useEffect, useRef } from "react";
+import { clearAll } from "../util/misc";
 import ButtonPrompt from "./ButtonPrompt";
 import { formatData } from "../util/dataHandler";
-import { isAdmin } from "../util/permissions";
+import { isCreatorOfTemplate } from "../util/permissions";
+import { getCategories } from "../util/storage";
+import Dropdown from "./Dropdown";
+import { fetchTemplateById } from "../api/templates";
+import { updateTemplate, deleteTemplate } from "../api/templates";
 
 /**
  * Edit template view that asks for the user to either be logged in as admin or to input
  * an edit key that is the optional password set for a template. When authorized, the user
  * can then edit the template or delete it completely
- * @returns the input field for edit key if not logged in, or the view where the template
+ *
+ * @returns {JSX.Element} the input field for edit key if not logged in, or the view where the template
  * can be edited
  */
 function EditTemplate() {
   const [template, setTemplate] = useState(null);
+  const categories = useRef([]);
+  // const [categories, setCategories] = useState(null);
+  const [chosenCategory, setChosenCategory] = useState("Uncategorized");
   const [canEdit, setCanEdit] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [tags, setTags] = useState([""]);
-
+  const [errors, setErrors] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
   const templateId = parseInt(location.pathname.replace("/edit-template/", ""));
@@ -34,20 +34,42 @@ function EditTemplate() {
   }
 
   useEffect(() => {
-    if (isAdmin()) {
+    checkPermission();
+  }, []);
+
+  useEffect(() => {
+    if (canEdit) {
       fetchTemplate();
     }
-  }, []);
+  }, [canEdit]);
+
+  /**
+   * Checks if the user is logged in as admin or is the creator of the
+   * currently chosen template.
+   */
+  const checkPermission = async () => {
+    try {
+      const isCreator = await isCreatorOfTemplate(templateId);
+      setCanEdit(isCreator);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   /**
    * Fetches the template from the database according to the template id
    * specified in the path name of this current view.
    */
   const fetchTemplate = async () => {
+    await getCategories()
+      .then((data) => (categories.current = data))
+      .catch((err) => console.log(err));
+
     await fetchTemplateById(templateId)
       .then((data) => {
-        handleSetTemplate(formatData(data)[0]);
-        setCanEdit(true);
+        const formattedData = formatData(data);
+        handleSetTemplate(formattedData[0]);
+        setLoading(false);
       })
       .catch((err) => {
         setNotFound(true);
@@ -57,83 +79,28 @@ function EditTemplate() {
 
   /**
    * Handles unpacking the template data
+   *
    * @param {object} data - data object to be unpacked
    */
   const handleSetTemplate = (data) => {
     const tempData = data;
     const tempItems = data.items;
     tempData.items = tempItems;
-
-    if (data.tags) {
-      const tempTags = data.tags;
-      tempData.tags = tempTags;
-      fetchTagNames(tempData);
+    if (data.category) {
+      const categoryName = categories.current
+        .filter((category) => category.id === data.category)
+        .map((category) => {
+          return category.name;
+        });
+      setChosenCategory(categoryName[0]);
     }
 
     setTemplate(tempData);
   };
 
   /**
-   * Fetches tag names from the database, using the tag ID numbers specified
-   * in the template data
-   * @param {object} tempData - template data containing tag IDs
-   */
-  const fetchTagNames = async (tempData) => {
-    const fetchedNames = [];
-    await Promise.all(
-      tempData.tags.map(async (t) => {
-        await fetchTagById(t)
-          .then((data) => {
-            fetchedNames.push(data[0].name);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      })
-    );
-    setTags(fetchedNames);
-  };
-
-  /**
-   * Updates the name of a tag with the specified index
-   * @param {string} newName - new name for the tag
-   * @param {number} index - index of the tag in the tag container
-   */
-  const updateTagName = (newName, index) => {
-    setTags((prev) => {
-      const tempTags = [...prev];
-      tempTags[index] = newName;
-      return tempTags;
-    });
-  };
-
-  /**
-   * Deletes a tag from a specified index
-   * @param {number} index - index of the tag
-   */
-  const deleteTag = (index) => {
-    const newTags = tags.filter((_, i) => i !== index);
-    setTags(newTags);
-  };
-
-  /**
-   * Adds a new tag field if the latest tag field is not empty
-   * Does nothing if the newest tag field is empty
-   */
-  const addNewTagField = () => {
-    const lastTag = tags[tags.length - 1];
-    if (lastTag.trim() === "") {
-      return;
-    }
-    setTags((prevTags) => {
-      const tempTags = [...prevTags];
-      tempTags.push("");
-      return tempTags;
-    });
-  };
-
-  /**
    * Updates the template name
+   *
    * @param {string} newName - new name for the template
    */
   const updateTemplateName = (newName) => {
@@ -145,6 +112,7 @@ function EditTemplate() {
 
   /**
    * Updates the template description
+   *
    * @param {string} newDesc - new description for the template
    */
   const updateDescription = (newDesc) => {
@@ -155,18 +123,8 @@ function EditTemplate() {
   };
 
   /**
-   * Updates the template creator name
-   * @param {string} newCreator - new creator name
-   */
-  const updateCreatorName = (newCreator) => {
-    setTemplate((prev) => ({
-      ...prev,
-      user_name: newCreator,
-    }));
-  };
-
-  /**
    * Updates the name of an item at a specified index
+   *
    * @param {string} newName - new item name
    * @param {number} index - index of the item to be renamed
    */
@@ -181,6 +139,7 @@ function EditTemplate() {
 
   /**
    * Deletes an item from a specified index
+   *
    * @param {number} index - index of the item to be deleted
    */
   const deleteItem = (index) => {
@@ -207,12 +166,59 @@ function EditTemplate() {
   };
 
   /**
+   * Updates the category of the template.
+   *
+   * @param {string} newCategory - Chosen category
+   */
+  const updateCategory = (newCategory) => {
+    const newCategoryId = categories.current
+      .filter((category) => category.name === newCategory)
+      .map((category) => {
+        return category.id;
+      });
+    setTemplate((prevTemp) => ({
+      ...prevTemp,
+      category: newCategoryId[0],
+    }));
+  };
+
+  /**
+   * Checks if the created template meets the minimum requirements
+   * for saving to the database
+   *
+   * @returns true if requirements have been met, false if the name field
+   * is empty or if the template has less than five items
+   */
+  const meetsRequirements = () => {
+    const tempErrors = [];
+    const hasName = template.name.trim() !== "";
+    if (!hasName) {
+      tempErrors.push("Template must have a name");
+      document.getElementById("tempName").classList.add("error");
+    } else {
+      document.getElementById("tempName").classList.remove("error");
+    }
+
+    const enoughItems =
+      template.items.filter((i) => i.item_name.trim() !== "").length >= 5;
+    if (!enoughItems) {
+      tempErrors.push("Template must have at least 5 items");
+      document.getElementById("tempItems").classList.add("error");
+    } else {
+      document.getElementById("tempItems").classList.remove("error");
+    }
+
+    setErrors(tempErrors);
+    return hasName && enoughItems;
+  };
+
+  /**
    * Packs the data and saves the changes to database
    */
   const saveChanges = async () => {
-    // fetch tag numbers of non empty tags
-    const nonEmptyTags = tags.filter((t) => t.trim() !== "");
-    const tagNumbers = await getTagNumbers(nonEmptyTags);
+    if (!meetsRequirements()) {
+      return;
+    }
 
     // only store non empty items
     const nonEmptyItems = template.items.filter(
@@ -225,18 +231,14 @@ function EditTemplate() {
       items: nonEmptyItems,
     };
 
-    if (template.user_name) {
-      // get the creator id
-      const userNumber = await getUserId(template.user_name);
-      updatedData.creator_id = userNumber;
-    }
-
-    if (tagNumbers.length > 0) {
-      updatedData.tags = tagNumbers;
-    }
-
     if (template.description) {
       updatedData.description = template.description;
+    } else {
+      updatedData.description = "";
+    }
+
+    if (template.category) {
+      updatedData.category = template.category;
     }
 
     // save changes to database
@@ -260,12 +262,27 @@ function EditTemplate() {
     return <p>{`Template doesn't exist or it has been deleted`}</p>;
   }
 
-  if (!canEdit && !template) {
+  if (!canEdit) {
     return (
       <div className="container">
         <h1>Edit template</h1>
         <div className="no-stretch">
-          <p>To edit this template, please login as admin</p>
+          <p>You don't have a permission to edit this template</p>
+          <br />
+          <button onClick={() => navigate(-1)} className="backButton">
+            Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!template || loading) {
+    return (
+      <div className="container">
+        <h1>Edit template</h1>
+        <div className="no-stretch">
+          <p>Loading...</p>
           <br />
           <button onClick={() => navigate(-1)} className="backButton">
             Back
@@ -283,6 +300,7 @@ function EditTemplate() {
           <label>Template name: </label>
           <input
             type="text"
+            id="tempName"
             value={template.name}
             onChange={(e) => updateTemplateName(e.target.value)}
           />
@@ -292,18 +310,22 @@ function EditTemplate() {
             value={template.description || ""}
             onChange={(e) => updateDescription(e.target.value)}
           />
+        </div>
 
-          <label>Creator: </label>
-          <input
-            type="text"
-            value={template.user_name}
-            onChange={(e) => updateCreatorName(e.target.value)}
-          />
+        <div>
+          {categories.current && (
+            <Dropdown
+              label={"Category"}
+              placeholder={chosenCategory}
+              items={categories.current.map((c) => c.name)}
+              onSelect={updateCategory}
+            />
+          )}
         </div>
 
         <div className="addCont addItems">
           <h2>Items</h2>
-          <ul>
+          <ul id="tempItems">
             {template.items.map((i, index) => (
               <li key={"item" + index}>
                 <input
@@ -328,36 +350,13 @@ function EditTemplate() {
           </ul>
         </div>
 
-        <div className="addCont addTags">
-          <h2>Tags</h2>
+        {errors.length > 0 && (
           <ul>
-            {tags.map((t, index) => (
-              <li key={"tag" + index}>
-                <input
-                  type="text"
-                  value={t}
-                  onChange={(e) => updateTagName(e.target.value, index)}
-                />
-                <button
-                  type="button"
-                  onClick={() => deleteTag(index)}
-                  className="deleteButton"
-                >
-                  <span className="material-symbols-outlined">delete</span>
-                </button>
-              </li>
+            {errors.map((err, index) => (
+              <li key={"error" + index}>{err}</li>
             ))}
-            <li>
-              <button
-                type="button"
-                onClick={addNewTagField}
-                className="addButton"
-              >
-                <span className="material-symbols-outlined">add</span>
-              </button>
-            </li>
           </ul>
-        </div>
+        )}
 
         <button type="button" onClick={saveChanges}>
           Save changes
@@ -375,9 +374,5 @@ function EditTemplate() {
     </div>
   );
 }
-
-EditTemplate.propTypes = {
-  admin: PropTypes.bool.isRequired,
-};
 
 export default EditTemplate;

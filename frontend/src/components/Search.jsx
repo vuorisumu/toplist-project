@@ -1,20 +1,40 @@
 import { useState, useEffect, useRef } from "react";
-import { fetchTemplateNamesByInput } from "./api";
 import { getTemplateNamesFromData } from "../util/dataHandler";
 
+/**
+ * Reusable custom search bar that displays suggestions based on user
+ * input. Fetches the suggestions after a small delay to avoid unnecessary
+ * queries.
+ *
+ * @param {function(string)} props.valueUpdated -  Callback function that
+ * is called after a small delay when the search value is updated.
+ * @param {function(string)} props.fetchFunction - Function that is used for
+ * fetching data with the given input
+ * @param {boolean} props.combinedSearch - Whether to search from multiple sources
+ * at once or not. Defaults to false.
+ * @param {boolean} props.onClear - Flag to clear the search input
+ * @param {number} props.templateId - Optional template ID to be used in search
+ * queries
+ * @param {function(string)} props.onEnterKey - Callback function when the user
+ * presses the enter key on input field
+ * @returns {JSX.Element} The Search component.
+ */
 function Search({
   valueUpdated,
   fetchFunction,
   combinedSearch = false,
   onClear,
   templateId,
+  onEnterKey,
 }) {
-  const placeholder = "placeholder";
+  const placeholder = "";
   const [value, setValue] = useState("");
   const [hideSuggestions, setHideSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const suggRef = useRef(null);
+  const userInputRef = useRef(true);
 
+  // Clears the input field
   useEffect(() => {
     if (onClear) {
       setValue("");
@@ -24,9 +44,17 @@ function Search({
   // Only send the value to callback after the user has stopped typing
   useEffect(() => {
     const delayedUpdate = setTimeout(() => {
-      valueUpdated(value);
-      setHideSuggestions(false);
-      updateSuggestions();
+      if (userInputRef.current) {
+        valueUpdated(value);
+        updateSuggestions();
+
+        // Don't show suggestions if the input is blank
+        if (value.trim() === "") {
+          setHideSuggestions(true);
+        } else {
+          setHideSuggestions(false);
+        }
+      }
     }, 600);
 
     return () => clearTimeout(delayedUpdate);
@@ -47,6 +75,10 @@ function Search({
     };
   }, [suggRef]);
 
+  /**
+   * Uses the given fetchFunction with the input value and sets the
+   * retrieved data to state.
+   */
   const updateSuggestions = async () => {
     if (value.trim() !== "") {
       const inputValue =
@@ -60,18 +92,25 @@ function Search({
     }
   };
 
+  /**
+   * Handles user input
+   *
+   * @param {ChangeEvent} e - event containing information about the current input value
+   */
   const handleChange = (e) => {
-    setHideSuggestions(false);
+    userInputRef.current = true;
     setValue(e.target.value);
   };
 
-  const keyUp = () => {
-    // console.log("key up");
-  };
-
+  /**
+   * Checks which key was pressed and passes the current value to callback
+   * on Enter key.
+   *
+   * @param {ChangeEvent} e - event containing information about the current input value
+   */
   const checkKey = (e) => {
     if (e.key === "Enter") {
-      console.log("enter was pressed");
+      onEnterKey(value);
     }
   };
 
@@ -83,7 +122,6 @@ function Search({
           placeholder={placeholder}
           value={value}
           onChange={handleChange}
-          onKeyUp={keyUp}
           onKeyDown={checkKey}
         />
       </div>
@@ -94,7 +132,9 @@ function Search({
             <div
               key={"" + item + index}
               onClick={() => {
-                console.log(item);
+                userInputRef.current = false;
+                setValue(item);
+                setHideSuggestions(true);
               }}
             >
               {item}

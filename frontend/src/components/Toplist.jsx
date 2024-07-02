@@ -1,18 +1,25 @@
 import { Link } from "react-router-dom";
-import { checkAdminStatus, formatDate } from "./util";
+import { formatDate } from "../util/misc";
 import ButtonPrompt from "./ButtonPrompt";
-import { deleteRanking } from "./api";
 import { isAdmin } from "../util/permissions";
+import { deleteToplist } from "../api/toplists";
 
-function Toplist(props) {
-  const data = props.data;
-  const general = props.general;
-
+/**
+ * Reusable component displaying top list data.
+ *
+ * @param {object} props.data - Top list data to be displayed
+ * @param {boolean} props.general - whether the top list should display
+ * information about the template or no.
+ * @param {boolean} props.showCreator - whether to display the creator name,
+ * true by default
+ * @returns {JSX.Element} Top list preview component
+ */
+function Toplist({ data, general, showCreator = true }) {
   /**
    * Deletes the top list from the database.
    */
   const handleDelete = () => {
-    deleteRanking(data.toplist_id)
+    deleteToplist(data.toplist_id)
       .then((res) => {
         console.log(res);
         window.location.reload(false);
@@ -26,11 +33,25 @@ function Toplist(props) {
         {general ? <h3>{data.toplist_name}</h3> : <h2>{data.toplist_name}</h2>}
       </Link>
 
-      <p>List creator: {data.user_name || "Anonymous"}</p>
+      {showCreator && (
+        <p>
+          List creator:{" "}
+          {data.user_name ? (
+            <Link to={`/user/${data.user_name}`}>{data.user_name}</Link>
+          ) : (
+            "Anonymous"
+          )}
+        </p>
+      )}
+
       {general && (
         <p>
           Template:{" "}
-          <Link to={`/createlist/${data.template_id}`}>{data.name}</Link>
+          {data.name ? (
+            <Link to={`/createlist/${data.template_id}`}>{data.name}</Link>
+          ) : (
+            "[Deleted]"
+          )}
         </p>
       )}
       <p>Creation time: {formatDate(data.creation_time)}</p>

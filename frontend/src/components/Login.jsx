@@ -1,18 +1,23 @@
-import { useEffect, useState } from "react";
-import { auth, login, userLogin } from "./api";
-import { checkCreatorStatus } from "./util";
+import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { userLogin, auth } from "../api/users";
 
 /**
  * Reusable login component that renders input fields for the
  * username and password, as well as a login button.
+ *
+ * @param {boolean} props.isFixed - Whether the position of the
+ * component is fixed.
+ * @returns {JSX.Element} Login component
  */
 function Login({ isFixed }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
-  const [role, setRole] = useState("");
+  const [user, setUser] = useState("");
+  const [active, setActive] = useState(false);
+  const loginRef = useRef(null);
 
   useEffect(() => {
     if (sessionStorage.getItem("login")) {
@@ -22,9 +27,33 @@ function Login({ isFixed }) {
 
   useEffect(() => {
     if (loggedIn) {
-      setRole(sessionStorage.getItem("user"));
+      setUser(sessionStorage.getItem("user"));
     }
   }, [loggedIn]);
+
+  useEffect(() => {
+    const clickOutside = (event) => {
+      if (loginRef.current && !loginRef.current.contains(event.target)) {
+        if (
+          document.getElementById("loginCont").classList.contains("active") &&
+          !event.target.classList.contains("loginIcon")
+        ) {
+          toggleLogin();
+        }
+      }
+    };
+
+    document.addEventListener("click", clickOutside);
+
+    return () => {
+      document.removeEventListener("click", clickOutside);
+    };
+  }, [loginRef]);
+
+  const toggleLogin = () => {
+    document.getElementById("loginCont").classList.toggle("active");
+    document.getElementById("navLogin").classList.toggle("active");
+  };
 
   /**
    * Handles login attempt, clears the password field on unsuccessful
@@ -94,7 +123,11 @@ function Login({ isFixed }) {
 
   return (
     <>
-      <div id="loginCont" className={isFixed ? "fixedLogin" : "nonFixedLogin"}>
+      <div
+        ref={loginRef}
+        id="loginCont"
+        className={isFixed ? "fixedLogin" : "nonFixedLogin"}
+      >
         <div>
           {!loggedIn ? (
             <>
@@ -142,7 +175,22 @@ function Login({ isFixed }) {
             </>
           ) : (
             <>
-              <p>{`Logged in as ${role}`}</p>
+              <p>
+                {`Logged in as `}
+                <Link
+                  to={`/user/${user}`}
+                  onClick={() => {
+                    document
+                      .getElementById("loginCont")
+                      .classList.toggle("active");
+                    document
+                      .getElementById("navLogin")
+                      .classList.toggle("active");
+                  }}
+                >
+                  {user}
+                </Link>
+              </p>
               <button type="button" onClick={onLogout} className="logoutButton">
                 Logout
               </button>

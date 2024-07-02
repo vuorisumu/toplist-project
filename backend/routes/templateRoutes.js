@@ -1,8 +1,12 @@
 const oracledb = require("oracledb");
 const database = require("../config/database");
-const { filteredTemplatesQuery } = require("../filteredQueries");
-const { templateSchema } = require("../schemas");
-const bcrypt = require("bcrypt");
+const {
+  filteredTemplatesQuery,
+} = require("../filteredQueries/templateQueries");
+const {
+  templateSchema,
+  specifiedIdSchema,
+} = require("../schemas/templateSchemas");
 const express = require("express");
 const templateRouter = express.Router();
 
@@ -18,23 +22,20 @@ templateRouter.get("/", async (req, res) => {
   try {
     let results;
     if (Object.keys(req.query).length !== 0) {
-      if (req.query.count) {
-        results = await database.query(
-          `SELECT COUNT(id) AS count FROM templates`
-        );
-      } else if (req.query.distinct) {
-        // fetch distinct names for suggestions
-        results = await database.query(`SELECT DISTINCT name FROM templates`);
-      } else {
-        // query has filters
-        const { filteredQuery, queryParams } = await filteredTemplatesQuery(
+      // query has filters
+      try {
+        const { filteredQuery, queryParams } = filteredTemplatesQuery(
           req.query
         );
         results = await database.query(filteredQuery, queryParams);
+      } catch (err) {
+        res.status(400).send(err.message);
       }
     } else {
       // query does not have filters
-      const query = `SELECT t.id, t.name, t.description, u.user_name FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id`;
+      const query = `SELECT t.id, t.name, t.description, u.user_name 
+      FROM templates t 
+      LEFT JOIN users u ON t.creator_id = u.user_id`;
       results = await database.query(query);
     }
 
@@ -51,11 +52,30 @@ templateRouter.get("/", async (req, res) => {
 templateRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const result = await database.query(
-      `SELECT t.id, t.name, t.description, t.items, t.tags, u.user_name FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id WHERE id = :id`,
-      { id: id }
-    );
+    let result;
+    if (Object.keys(req.query).length !== 0) {
+      const { error, value } = specifiedIdSchema.validate(req.query);
+      if (error) {
+        res.status(400).send(error.message);
+      }
 
+      // get templates from a specified creator
+      if (value.getCreatorId) {
+        result = await database.query(
+          `SELECT creator_id FROM templates WHERE id = :id`,
+          { id: id }
+        );
+      }
+    } else {
+      // default query
+      result = await database.query(
+        `SELECT t.id, t.name, t.description, t.items, t.tags, u.user_name, t.creator_id, t.category 
+        FROM templates t 
+        LEFT JOIN users u ON t.creator_id = u.user_id 
+        WHERE id = :id`,
+        { id: id }
+      );
+    }
     // id not found
     if (result.length === 0) {
       return res.status(404).send(notfoundError);
@@ -63,40 +83,6 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
 
     // all good
     res.status(200).json(result);
-  } catch (err) {
-    res.status(500).send(databaseError);
-  }
-});
-
-/**
- * Sends edit key information to database with a specified ID
- * Responds with template data on successful query
- */
-templateRouter.post("/:id([0-9]+)/edit/", async (req, res) => {
-  try {
-    const { editkey } = req.body;
-    const id = parseInt(req.params.id);
-    const templateData = await database.query(
-      `SELECT * FROM templates WHERE id = :id`,
-      { id: id }
-    );
-
-    if (templateData.length > 0) {
-      const hashedPassword = templateData[0].editkey;
-      bcrypt.compare(editkey, hashedPassword, (bcryptErr, bcryptRes) => {
-        if (bcryptErr) {
-          throw bcryptErr;
-        }
-
-        if (bcryptRes) {
-          res.status(200).json({ msg: "Login successful", data: templateData });
-        } else {
-          res.status(401).json({ msg: "Invalid editkey" });
-        }
-      });
-    } else {
-      res.status(401).json({ msg: "Invalid id" });
-    }
   } catch (err) {
     res.status(500).send(databaseError);
   }
@@ -134,10 +120,10 @@ templateRouter.post("/", async (req, res) => {
       values["description"] = req.body.description;
     }
 
-    // optional tags
-    if (req.body.tags) {
-      placeholders.push("tags");
-      values["tags"] = JSON.stringify(req.body.tags);
+    // optional category
+    if (req.body.category) {
+      placeholders.push("category");
+      values["category"] = req.body.category;
     }
 
     const placeholdersString = placeholders.map((t) => `:${t}`).join(", ");
@@ -166,7 +152,7 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     // check if template exists
     const id = parseInt(req.params.id);
     const exists = await database.query(
-      "SELECT * FROM templates WHERE id = :id",
+      "SELECT name FROM templates WHERE id = :id",
       { id: id }
     );
     if (exists.length === 0) {
@@ -179,47 +165,47 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
       return res.status(400).json({ msg: error.details[0].message });
     }
 
-    console.log(req.body);
-
     const values = {};
     const fields = [];
 
+    // template name
     if (req.body.name) {
       fields.push("name = :name");
       values["name"] = req.body.name;
     }
 
+    // template items
     if (req.body.items) {
       fields.push("items = :items");
       values["items"] = JSON.stringify(req.body.items);
     }
 
+    // template creator
     if (req.body.creator_id) {
       fields.push("creator_id = :creatorid");
       values["creatorid"] = req.body.creator_id;
     }
 
+    // template description
     if (req.body.description) {
       fields.push("description = :description");
       values["description"] = req.body.description;
+    } else {
+      // set null if no description was found
+      fields.push("description = NULL");
     }
 
-    if (req.body.tags) {
-      fields.push("tags = :tags");
-      values["tags"] = JSON.stringify(req.body.tags);
+    // template category
+    if (req.body.category) {
+      fields.push("category = :category");
+      values["category"] = req.body.category;
     }
 
-    if (req.body.editkey) {
-      fields.push("editkey = ?");
-      const encryptedKey = await bcrypt.hash(req.body.editkey, 10);
-      values.push(`${encryptedKey}`);
-    }
-
+    // build the string
     const updateString = fields.join(", ");
     const query = `UPDATE templates SET ${updateString} WHERE id = :id`;
     values["id"] = req.params.id;
 
-    console.log(query);
     const result = await database.query(query, values);
 
     if (result.affectedRows === 0) {
@@ -228,7 +214,7 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
 
     // successful insert
     res.status(201).json({
-      msg: "Added new template",
+      msg: "Template updated",
       id: req.params.id,
     });
   } catch (err) {

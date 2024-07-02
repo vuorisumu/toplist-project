@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import { fetchAllRankingsFiltered, fetchRankingCount } from "./api";
 import { formatData, getCountFromData } from "../util/dataHandler";
 import Toplist from "./Toplist";
 import AdvancedSearch from "./AdvancedSearch";
+import { fetchToplistCount, fetchToplists } from "../api/toplists";
 
 /**
  * Container for displaying the top lists and the search bar.
  * Displays the search bar with filters and top lists fetched from the
  * database. If the id is given, displays top lists only using that template id.
+ *
  * @param {number} props.templateId - The ID of the template to be used when
  * fetching from the database. Defaults to 0, meaning no template was chosen.
+ * @returns {JSX.Element} Top list container component
  */
 function ToplistContainer({ templateId = 0 }) {
   const defaultQuery = `sortBy=id&sortOrder=desc`;
@@ -28,14 +30,14 @@ function ToplistContainer({ templateId = 0 }) {
     if (listCount > 0) {
       loadLists();
     }
-  }, [listCount]);
+  }, [listCount, filters]);
 
   /**
    * Fetches the full list count and sets the count value to state.
    * If the count is 0, set loading to false.
    */
   const getListCount = async () => {
-    fetchRankingCount(templateId)
+    fetchToplistCount(templateId)
       .then((data) => {
         const count = getCountFromData(data);
         setListCount(count);
@@ -56,7 +58,7 @@ function ToplistContainer({ templateId = 0 }) {
 
     let q = templateId > 0 ? `tempId=${templateId}&` : ``;
     q += `${filters}`;
-    fetchAllRankingsFiltered(`${q}&from=${loaded}&amount=${loadMoreAmount}`)
+    fetchToplists(`${q}&from=${loaded}&amount=${loadMoreAmount}`)
       .then((data) => {
         const formattedData = formatData(data);
         if (!loadMore) {

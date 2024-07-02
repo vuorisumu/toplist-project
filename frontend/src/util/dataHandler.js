@@ -1,9 +1,6 @@
-import {
-  fetchRankingNamesByInput,
-  fetchTagById,
-  fetchTemplateNamesByInput,
-  fetchUserNamesByInput,
-} from "../components/api";
+import { fetchTemplateNamesByInput } from "../api/templates";
+import { fetchListNamesByInput } from "../api/toplists";
+import { fetchUserNamesByInput } from "../api/users";
 
 export const formatData = (data) => {
   if (data && data.rows && data.metaData) {
@@ -28,24 +25,15 @@ export const getCountFromData = (data) => {
   return 0;
 };
 
-export const tagNamesByIds = async (tagNumbers) => {
-  const tagNames = [];
-  try {
-    await Promise.all(
-      tagNumbers.map(async (t) => {
-        const fetchedTag = await fetchTagById(parseInt(t));
-        const formattedTags = formatData(fetchedTag);
-        let tagName;
-        if (formattedTags.length > 0) {
-          tagName = formattedTags[0].name;
-        }
-        tagNames.push(tagName);
-      })
-    );
-    return tagNames;
-  } catch (err) {
-    console.error(err);
+export const getTemplateCreatorIdFromData = (data) => {
+  const formattedData = formatData(data);
+  if (
+    formattedData.length > 0 &&
+    formattedData[0].hasOwnProperty("creator_id")
+  ) {
+    return parseInt(formattedData[0].creator_id);
   }
+  return 0;
 };
 
 export const getTemplateNamesFromData = (data) => {
@@ -80,7 +68,7 @@ export const fetchAllNamesByInput = async (input) => {
 export const fetchCombinedToplistNamesByInput = async (input) => {
   try {
     const [topListNameData, userNameData] = await Promise.all([
-      fetchRankingNamesByInput(input),
+      fetchListNamesByInput(input),
       fetchUserNamesByInput(input),
     ]);
 

@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { formatDate, checkAdminStatus } from "./util";
-import { fetchRankingById, deleteRanking } from "./api";
+import { formatDate } from "../util/misc";
 import ButtonPrompt from "./ButtonPrompt";
 import { formatData } from "../util/dataHandler";
 import { isAdmin } from "../util/permissions";
+import { deleteToplist, fetchToplistById } from "../api/toplists";
 
 /**
  * View of a single ranking rendering all information related to the ranking
  * and a back button. Also renders a delete button if the user is logged in as
  * admin
+ *
+ * @returns {JSX.Element} Component displaying a single top list
  */
 function SingleList() {
   const location = useLocation();
@@ -23,7 +25,7 @@ function SingleList() {
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    fetchRankingById(rankingId)
+    fetchToplistById(rankingId)
       .then((data) => {
         const formattedData = formatData(data);
         if (formattedData.length > 0) {
@@ -42,7 +44,7 @@ function SingleList() {
    * Deletes a ranking from the database and refreshes the page
    */
   const handleDelete = () => {
-    deleteRanking(rankingId)
+    deleteToplist(rankingId)
       .then((res) => {
         console.log(res);
         window.location.reload(false);
@@ -73,9 +75,22 @@ function SingleList() {
         <div className="rank-info">
           <p>
             Template:{" "}
-            <Link to={`/createlist/${list.template_id}`}>{list.name}</Link>
+            {list.name ? (
+              <Link to={`/createlist/${list.template_id}`}>{list.name}</Link>
+            ) : (
+              "[Deleted]"
+            )}
           </p>
-          <p>Creator: {list.user_name || "Anonymous"}</p>
+
+          <p>
+            Creator:{" "}
+            {list.user_name ? (
+              <Link to={`/user/${list.user_name}`}>{list.user_name}</Link>
+            ) : (
+              "Anonymous"
+            )}
+          </p>
+
           <p>Creation date: {formatDate(list.creation_time)}</p>
           {list.toplist_desc && <p>{list.toplist_desc}</p>}
         </div>

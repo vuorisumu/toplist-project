@@ -1,12 +1,11 @@
 const express = require("express");
 const database = require("./config/database");
 const rankRoutes = require("./routes/rankingRoutes");
-const roleRoutes = require("./routes/roleRoutes");
-const tagRoutes = require("./routes/tagRoutes");
 const templateRoutes = require("./routes/templateRoutes");
 const userRoutes = require("./routes/userRoutes");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const categoryRoutes = require("./routes/categoryRoutes");
 
 dotenv.config();
 
@@ -27,9 +26,8 @@ database.init().then(() => {
   app.use(express.json());
   app.use("/api/toplists", rankRoutes);
   app.use("/api/templates", templateRoutes);
-  app.use("/api/login", roleRoutes);
   app.use("/api/users", userRoutes);
-  app.use("/api/tags", tagRoutes);
+  app.use("/api/categories", categoryRoutes);
   app.use(express.static("./frontend/dist"));
 
   app
