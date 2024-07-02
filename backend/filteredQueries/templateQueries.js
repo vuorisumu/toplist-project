@@ -5,7 +5,7 @@ const schemas = require("../schemas/templateSchemas");
  * @param {Object} req - object containing requested filters
  * @returns an object containing the full query and an array with all parameters
  */
-async function filteredTemplatesQuery(req) {
+function filteredTemplatesQuery(req) {
   const { error, value } = schemas.querySchema.validate(req);
   if (error) {
     throw error;

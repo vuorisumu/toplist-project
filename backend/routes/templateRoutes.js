@@ -21,7 +21,7 @@ templateRouter.get("/", async (req, res) => {
     if (Object.keys(req.query).length !== 0) {
       // query has filters
       try {
-        const { filteredQuery, queryParams } = await filteredTemplatesQuery(
+        const { filteredQuery, queryParams } = filteredTemplatesQuery(
           req.query
         );
         results = await database.query(filteredQuery, queryParams);
@@ -51,7 +51,7 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
     if (Object.keys(req.query).length !== 0) {
       const { error, value } = querySchema.validate(req.query);
       if (error) {
-        throw error;
+        res.status(400).send(error.message);
       }
 
       if (value.getCreatorId) {
