@@ -43,13 +43,13 @@ function filteredTemplatesQuery(req) {
   // template name search
   if (value.tname) {
     conditions.push("lower(t.name) LIKE lower(:tname)");
-    queryParams["tname"] = `${value.tname}%`;
+    queryParams["tname"] = `%${value.tname}%`;
   }
 
   // username search
   if (value.uname) {
     conditions.push("lower(u.user_name) LIKE lower(:uname)");
-    queryParams["uname"] = `${value.uname}%`;
+    queryParams["uname"] = `%${value.uname}%`;
   }
 
   // get templates from a specified creator
