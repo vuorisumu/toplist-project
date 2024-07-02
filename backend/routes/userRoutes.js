@@ -96,6 +96,10 @@ userRouter.post("/", async (req, res) => {
   }
 });
 
+/**
+ * Tries to log in with given credentials, returning user information on
+ * successful login.
+ */
 userRouter.post("/login/", async (req, res) => {
   try {
     const { user, password } = req.body;
@@ -146,6 +150,10 @@ userRouter.post("/login/", async (req, res) => {
   }
 });
 
+/**
+ * Checks authorization using the given token, returns the user id and the
+ * admin status of currently logged in user
+ */
 userRouter.get("/auth/", verifyToken, async (req, res) => {
   res.status(200).json({ id: req.user_id, admin: req.isAdmin });
 });
