@@ -25,7 +25,6 @@ function filteredRankingQuery(req) {
       queryParams["tempId"] = value.tempId;
     }
 
-    console.log(filteredQuery);
     return { filteredQuery, queryParams };
   }
 
