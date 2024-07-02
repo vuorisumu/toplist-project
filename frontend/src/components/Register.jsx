@@ -2,6 +2,7 @@ import { useState } from "react";
 import { addNewUser, fetchUserByNameOrEmail } from "./api";
 import { formatData } from "../util/dataHandler";
 import Joi from "joi";
+import { useNavigate } from "react-router-dom";
 
 /**
  * View for new user registration. Renders a form for account creation.
@@ -14,6 +15,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [errors, setErrors] = useState([]);
+  const navigate = useNavigate();
 
   /**
    * Validation schema for new account creation.
@@ -22,7 +24,7 @@ function Register() {
    */
   const userSchema = Joi.object({
     user_name: Joi.string()
-      .regex(RegExp("^[\u00C0-\u017Fa-zA-Z'][\u00C0-\u017Fa-zA-Z-' .()]*$"))
+      .regex(RegExp("^[\u00C0-\u017Fa-zA-Z0-9-' .()]*$"))
       .max(50)
       .required()
       .label("username")
@@ -83,7 +85,7 @@ function Register() {
           password: password,
         };
         const newUserRes = await addNewUser(newUserData);
-        navigate(`/`);
+        navigate(`/user/${newUserRes.user_name}`);
       } else {
         setErrors([{ message: "User already exists" }]);
       }

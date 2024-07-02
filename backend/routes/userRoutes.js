@@ -88,6 +88,7 @@ userRouter.post("/", async (req, res) => {
     // successful insert
     res.status(201).json({
       msg: "Added new user",
+      user_name: values.user_name,
       user_id: result.outBinds.user_id[0],
     });
   } catch (err) {
