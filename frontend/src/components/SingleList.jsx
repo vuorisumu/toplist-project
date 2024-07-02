@@ -75,9 +75,22 @@ function SingleList() {
         <div className="rank-info">
           <p>
             Template:{" "}
-            <Link to={`/createlist/${list.template_id}`}>{list.name}</Link>
+            {list.name ? (
+              <Link to={`/createlist/${list.template_id}`}>{list.name}</Link>
+            ) : (
+              "[Deleted]"
+            )}
           </p>
-          <p>Creator: {list.user_name || "Anonymous"}</p>
+
+          <p>
+            Creator:{" "}
+            {list.user_name ? (
+              <Link to={`/user/${list.user_name}`}>{list.user_name}</Link>
+            ) : (
+              "Anonymous"
+            )}
+          </p>
+
           <p>Creation date: {formatDate(list.creation_time)}</p>
           {list.toplist_desc && <p>{list.toplist_desc}</p>}
         </div>
