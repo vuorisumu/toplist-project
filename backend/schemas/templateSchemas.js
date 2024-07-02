@@ -25,7 +25,7 @@ const specifiedIdSchema = Joi.object({
 const templateSchema = Joi.object({
   name: Joi.string().required(),
   creator_id: Joi.number().optional(),
-  description: Joi.string().optional(),
+  description: Joi.alternatives(Joi.string().optional(), Joi.allow(null)),
   category: Joi.number().optional(),
   items: Joi.array()
     .items(

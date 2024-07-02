@@ -181,6 +181,8 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     if (req.body.description) {
       fields.push("description = :description");
       values["description"] = req.body.description;
+    } else {
+      fields.push("description = NULL");
     }
 
     if (req.body.category) {
@@ -192,6 +194,7 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     const query = `UPDATE templates SET ${updateString} WHERE id = :id`;
     values["id"] = req.params.id;
 
+    console.log(query);
     const result = await database.query(query, values);
 
     if (result.affectedRows === 0) {
