@@ -187,10 +187,6 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
           templateId={templateId}
           onEnterKey={onEnterDefault}
         />
-
-        <button type="button" onClick={handleSearch} className="searchButton">
-          Search
-        </button>
       </div>
 
       {filtersOpen ? (
@@ -279,6 +275,10 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
             className="closeButton"
           >
             Close filters
+          </button>
+
+          <button type="button" onClick={handleSearch} className="searchButton">
+            Search
           </button>
         </div>
       ) : (

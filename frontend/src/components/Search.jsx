@@ -124,6 +124,15 @@ function Search({
           onChange={handleChange}
           onKeyDown={checkKey}
         />
+        {combinedSearch && (
+          <button
+            type="button"
+            onClick={() => onEnterKey(value)}
+            className="searchIcon"
+          >
+            <span>search</span>
+          </button>
+        )}
       </div>
 
       <div className={`suggestions ${hideSuggestions ? "" : "active"}`}>

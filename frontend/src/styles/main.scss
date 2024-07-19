@@ -1,3 +1,4 @@
+@use "defaults";
 @use "nav";
 @use "lists";
 @use "theme";
@@ -55,24 +56,9 @@ textarea {
   padding: 5px;
 }
 
-// default button styles
 button {
-  border-radius: 5px;
   border: none;
-  padding: 0.3em 0.9em;
-  margin: 5px;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: color-mix(in srgb, theme.$accent, theme.$primary-color 10%);
   cursor: pointer;
-  transition: 0.2s;
-  color: white;
-
-  &:hover {
-    background-color: color-mix(in srgb, theme.$accent, white 5%);
-    box-shadow: 0px 2px theme.$shadow;
-  }
 }
 
 // bigger screen

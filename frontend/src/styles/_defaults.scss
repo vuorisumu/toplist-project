@@ -1,0 +1,24 @@
+@use "theme";
+
+@mixin defaultButton() {
+  border-radius: 5px;
+  padding: 0.3em 0.9em;
+  margin: 5px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: color-mix(in srgb, theme.$accent, theme.$primary-color 10%);
+  transition: 0.2s;
+  color: theme.$text-primary;
+
+  &:hover {
+    background-color: color-mix(in srgb, theme.$accent, white 5%);
+    box-shadow: 0px 2px theme.$shadow;
+  }
+}
+
+@mixin reset() {
+  background: none;
+  margin: 0;
+  padding: 0;
+}

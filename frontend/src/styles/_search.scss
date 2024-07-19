@@ -1,7 +1,9 @@
 @use "theme";
+@use "defaults";
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0");
 
 @mixin altButton($color) {
+  @include defaults.defaultButton();
   background-color: color-mix(in srgb, $color, theme.$primary-color 35%);
 
   &:hover {
@@ -10,6 +12,7 @@
 }
 
 %filterButton {
+  cursor: pointer;
   padding: 7px 15px;
   border-radius: 25px;
   font-weight: 600;
@@ -86,25 +89,25 @@
         flex-grow: 1;
       }
 
-      // search icon for the main search field
-      .searchWrapper::before {
-        content: "search";
+      .searchWrapper .searchIcon {
+        @include defaults.reset();
+        height: 100%;
+        padding: 0 12px;
+        border-radius: 50%;
+        background: none;
         font-family: "Material Symbols Outlined";
         position: absolute;
         font-size: 16pt;
-        left: 5px;
-        pointer-events: none;
-      }
-
-      .searchButton {
-        margin: 0;
+        right: 0;
+        color: theme.$mid-color;
       }
 
       // main search is bigger than the rest
       input[type="search"] {
         height: 30px;
         border-radius: 15px;
-        padding-left: 30px;
+        padding-left: 15px;
+        padding-right: 40px;
       }
 
       // more padding to make room for the icon
@@ -157,6 +160,11 @@
     font-size: 0.85em;
   }
 
+  .searchButton {
+    @include defaults.defaultButton();
+    font-size: 0.85em;
+  }
+
   .showAdvancedButton {
     @include altButton(theme.$mid-color);
     font-size: 0.85em;
@@ -177,12 +185,14 @@
   width: 170px;
 
   // dropdown button
-  button {
+  .dropdownButton {
     @extend %filterButton;
     width: 100%;
     text-align: left;
-    margin: 0;
     background-color: transparent;
+    color: theme.$text-primary;
+    font-family: inherit;
+    font-size: 1em;
 
     // icon for dropdown
     &::after {
@@ -190,7 +200,7 @@
       font-family: "Material Symbols Outlined";
       position: absolute;
       right: 10px;
-      top: 9px;
+      top: 8px;
     }
 
     // change outline when active
