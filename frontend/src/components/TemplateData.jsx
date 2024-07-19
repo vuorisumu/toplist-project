@@ -2,22 +2,37 @@ import { useEffect, useRef, useState } from "react";
 import { clearAll } from "../util/misc";
 import Dropdown from "./Dropdown";
 import { getCategories } from "../util/storage";
-import { resizeImage } from "../util/imageHandler";
+import { blobToFile, resizeImage } from "../util/imageHandler";
 
 function TemplateData({ data, onSubmit, submitText }) {
   const [templateName, setTemplateName] = useState(data?.name || "");
   const [description, setDescription] = useState(data?.description || "");
   const [items, setItems] = useState(data?.items || [{ item_name: "" }]);
-  // const [canCreate, setCanCreate] = useState(false);
   const [errors, setErrors] = useState([]);
   const [categories, setCategories] = useState(null);
-  const [chosenCategory, setChosenCategory] = useState("");
+  const [chosenCategory, setChosenCategory] = useState("Choose category");
   const [coverImage, setCoverImage] = useState({});
   const imgRef = useRef();
 
   useEffect(() => {
     getCategories().then((data) => setCategories(data));
+
+    if (data && data.cover_image) {
+      const img = blobToFile(data.cover_image);
+      setCoverImage(img);
+    }
   }, []);
+
+  useEffect(() => {
+    if (categories && data?.category) {
+      const categoryName = categories
+        .filter((category) => category.id === data.category)
+        .map((category) => {
+          return category.name;
+        });
+      setChosenCategory(categoryName[0]);
+    }
+  }, [categories]);
 
   /**
    * Handles the selection of a cover image, resizing it if it is big.
@@ -136,7 +151,7 @@ function TemplateData({ data, onSubmit, submitText }) {
     }
 
     // category
-    if (chosenCategory !== "") {
+    if (chosenCategory !== "" || chosenCategory !== "Choose category") {
       const categoryId = categories
         .filter((category) => category.name === chosenCategory)
         .map((category) => {
@@ -193,7 +208,7 @@ function TemplateData({ data, onSubmit, submitText }) {
         {categories && (
           <Dropdown
             label={"Category"}
-            placeholder={"Choose category"}
+            placeholder={chosenCategory}
             items={categories.map((c) => c.name)}
             onSelect={setChosenCategory}
           />

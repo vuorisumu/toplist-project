@@ -71,3 +71,13 @@ export const getImgUrl = (image) => {
     return err;
   }
 };
+
+export const blobToFile = (data) => {
+  const blob = new Blob([new Uint8Array(data.data)], {
+    type: data.contentType,
+  });
+  const file = new File([blob], "fetched_image." + blob.type.split("/")[1], {
+    type: blob.type,
+  });
+  return file;
+};
