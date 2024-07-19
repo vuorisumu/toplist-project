@@ -199,7 +199,7 @@ function NewTemplate() {
               <div id="imagePreview">
                 <img src={URL.createObjectURL(coverImage)} />
                 <button type="button" onClick={removeImage}>
-                  Remove
+                  X
                 </button>
               </div>
             )}

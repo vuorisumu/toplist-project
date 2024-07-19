@@ -626,12 +626,22 @@ nav .fixedLogin.active {
   display: flex;
   justify-content: center;
   align-items: center;
+  display: block;
+  position: relative;
 }
 .info #imagePreview img {
   max-height: 150px;
   width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
+}
+.info #imagePreview button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.8em;
+  font-weight: 400;
+  padding: 0.3em 0.7em;
 }
 
 .addCont {
