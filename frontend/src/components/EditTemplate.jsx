@@ -8,6 +8,7 @@ import { getCategories } from "../util/storage";
 import Dropdown from "./Dropdown";
 import { fetchTemplateById } from "../api/templates";
 import { updateTemplate, deleteTemplate } from "../api/templates";
+import TemplateData from "./TemplateData";
 
 /**
  * Edit template view that asks for the user to either be logged in as admin or to input
@@ -215,32 +216,7 @@ function EditTemplate() {
   /**
    * Packs the data and saves the changes to database
    */
-  const saveChanges = async () => {
-    if (!meetsRequirements()) {
-      return;
-    }
-
-    // only store non empty items
-    const nonEmptyItems = template.items.filter(
-      (t) => t.item_name.trim() !== ""
-    );
-
-    // build data
-    const updatedData = {
-      name: template.name,
-      items: nonEmptyItems,
-    };
-
-    if (template.description) {
-      updatedData.description = template.description;
-    } else {
-      updatedData.description = "";
-    }
-
-    if (template.category) {
-      updatedData.category = template.category;
-    }
-
+  const saveChanges = async (updatedData) => {
     // save changes to database
     updateTemplate(templateId, updatedData);
     navigate(`/createlist/${templateId}`);
@@ -296,74 +272,11 @@ function EditTemplate() {
     <div className="container">
       <h1>Edit template</h1>
       <div className="no-stretch">
-        <div className="info">
-          <label>Template name: </label>
-          <input
-            type="text"
-            id="tempName"
-            value={template.name}
-            onChange={(e) => updateTemplateName(e.target.value)}
-          />
-
-          <label>Description: </label>
-          <textarea
-            value={template.description || ""}
-            onChange={(e) => updateDescription(e.target.value)}
-          />
-        </div>
-
-        <div>
-          {categories.current && (
-            <Dropdown
-              label={"Category"}
-              placeholder={chosenCategory}
-              items={categories.current.map((c) => c.name)}
-              onSelect={updateCategory}
-            />
-          )}
-        </div>
-
-        <div className="addCont addItems">
-          <h2>Items</h2>
-          <ul id="tempItems">
-            {template.items.map((i, index) => (
-              <li key={"item" + index}>
-                <input
-                  type="text"
-                  value={i.item_name}
-                  onChange={(e) => updateItemName(e.target.value, index)}
-                />
-                <button
-                  type="button"
-                  onClick={() => deleteItem(index)}
-                  className="deleteButton"
-                >
-                  <span className="material-symbols-outlined">delete</span>
-                </button>
-              </li>
-            ))}
-            <li>
-              <button type="button" onClick={addNewField} className="addButton">
-                <span className="material-symbols-outlined">add</span>
-              </button>
-            </li>
-          </ul>
-        </div>
-
-        {errors.length > 0 && (
-          <ul>
-            {errors.map((err, index) => (
-              <li key={"error" + index}>{err}</li>
-            ))}
-          </ul>
-        )}
-
-        <button type="button" onClick={saveChanges}>
-          Save changes
-        </button>
-        <button type="button" onClick={clearAll}>
-          Reset
-        </button>
+        <TemplateData
+          data={template}
+          onSubmit={saveChanges}
+          submitText="Save changes"
+        />
 
         <ButtonPrompt
           buttonName="Delete template"

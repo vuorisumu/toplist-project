@@ -127,7 +127,7 @@ templateRouter.post("/", async (req, res) => {
     }
 
     // optional cover image
-    if (req.files.cover_image) {
+    if (req.files?.cover_image) {
       placeholders.push("cover_image");
       values["cover_image"] = {
         val: req.files.cover_image.data,
@@ -186,7 +186,7 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     // template items
     if (req.body.items) {
       fields.push("items = :items");
-      values["items"] = JSON.stringify(req.body.items);
+      values["items"] = req.body.items;
     }
 
     // template creator
@@ -210,6 +210,23 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
       values["category"] = req.body.category;
     }
 
+    // optional cover image
+    if (req.files?.cover_image) {
+      fields.push("cover_image = :cover_image");
+      values["cover_image"] = {
+        val: req.files.cover_image.data,
+        type: oracledb.BLOB,
+      };
+    } else {
+      if (req.body.cover_image) {
+        fields.push("cover_image = :cover_image");
+        values["cover_image"] = {
+          val: null,
+          type: oracledb.BLOB,
+        };
+      }
+    }
+
     // build the string
     const updateString = fields.join(", ");
     const query = `UPDATE templates SET ${updateString} WHERE id = :id`;
@@ -227,6 +244,7 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
       id: req.params.id,
     });
   } catch (err) {
+    console.log(err);
     res.status(500).send(databaseError);
   }
 });

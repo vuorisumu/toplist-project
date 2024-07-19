@@ -117,12 +117,29 @@ export const testAddNewTemplate = (templateData) => {
  * @returns the ID of the edited template on successful edit
  */
 export const updateTemplate = (id, templateData) => {
+  const formData = new FormData();
+  formData.append("name", templateData.name);
+  formData.append("items", JSON.stringify(templateData.items));
+
+  if (templateData.cover_image) {
+    formData.append("cover_image", templateData.cover_image);
+  }
+
+  if (templateData.description) {
+    formData.append("description", templateData.description);
+  }
+
+  if (templateData.category) {
+    formData.append("category", templateData.category);
+  }
+
+  for (let [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
+
   return fetch(`${API_BASE_URL}/templates/${id}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(templateData),
+    body: formData,
   })
     .then((response) => response.json())
     .catch((error) => console.error("Error:", error));
