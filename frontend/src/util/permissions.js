@@ -3,7 +3,7 @@ import { getTemplateCreatorIdFromData } from "./dataHandler";
 import { fetchTemplateCreatorId } from "../api/templates";
 
 export const isAdmin = () => {
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   if (!token) return false;
 
   try {
@@ -16,7 +16,7 @@ export const isAdmin = () => {
 };
 
 export const isLoggedIn = () => {
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   if (!token) return false;
   return true;
 };
@@ -24,7 +24,7 @@ export const isLoggedIn = () => {
 export const isCreatorOfTemplate = async (id) => {
   if (isAdmin() === true) return true;
 
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   if (!token) return false;
 
   try {

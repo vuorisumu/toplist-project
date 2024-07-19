@@ -117,7 +117,7 @@ function NewTemplate() {
     const templateData = {
       name: templateName,
       items: itemObjects,
-      creator_id: sessionStorage.getItem("userId"),
+      creator_id: localStorage.getItem("userId"),
     };
 
     // optional description
