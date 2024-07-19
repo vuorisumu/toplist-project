@@ -1,4 +1,5 @@
 @use "theme";
+@use "defaults";
 @import url("https://fonts.googleapis.com/css2?family=Viga&display=swap");
 
 @mixin login() {
@@ -125,6 +126,10 @@ nav {
 
 .toggleLogin {
   cursor: pointer;
+}
+
+.loginButton {
+  @include defaults.defaultButton();
 }
 
 #logoCont {

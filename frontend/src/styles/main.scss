@@ -57,8 +57,7 @@ textarea {
 }
 
 button {
-  border: none;
-  cursor: pointer;
+  @include defaults.defaultButton();
 }
 
 // bigger screen

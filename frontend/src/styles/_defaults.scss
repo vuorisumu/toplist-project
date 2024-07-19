@@ -10,6 +10,8 @@
   background-color: color-mix(in srgb, theme.$accent, theme.$primary-color 10%);
   transition: 0.2s;
   color: theme.$text-primary;
+  border: none;
+  cursor: pointer;
 
   &:hover {
     background-color: color-mix(in srgb, theme.$accent, white 5%);

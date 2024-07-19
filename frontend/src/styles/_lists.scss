@@ -1,5 +1,6 @@
 @use "theme";
 @use "search";
+@use "defaults";
 
 @import url("https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap");
 
@@ -320,6 +321,7 @@
 }
 
 .loadMoreButton {
+  @include defaults.defaultButton();
   margin-top: 15px;
 }
 
