@@ -1,5 +1,12 @@
 import { Buffer } from "buffer";
 
+/**
+ * Resizes a given image to preferred dimensions if it is too big.
+ *
+ * @param {File} file - Image file to be resized
+ * @param {JSON} options - Options for maximum size and quality
+ * @returns the given file resized
+ */
 export const resizeImage = async (
   file,
   options = {
@@ -63,6 +70,12 @@ export const resizeImage = async (
   });
 };
 
+/**
+ * Converts an image file to base64 and returns the URL of the image.
+ *
+ * @param {File} image - Image file from which to get the URL
+ * @returns the image URL, or an error on unsuccessful conversion.
+ */
 export const getImgUrl = (image) => {
   try {
     const base64Image = Buffer.from(image.data).toString("base64");
@@ -72,6 +85,12 @@ export const getImgUrl = (image) => {
   }
 };
 
+/**
+ * Converts a given blob to a File
+ *
+ * @param {Blob} data - Image data to be converted to a File
+ * @returns the given blob converted to a File
+ */
 export const blobToFile = (data) => {
   const blob = new Blob([new Uint8Array(data.data)], {
     type: data.contentType,
