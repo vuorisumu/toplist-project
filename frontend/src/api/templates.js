@@ -85,8 +85,8 @@ export const testAddNewTemplate = (templateData) => {
   formData.append("items", JSON.stringify(templateData.items));
   formData.append("creator_id", templateData.creator_id);
 
-  if (templateData.coverImage) {
-    formData.append("cover_image", templateData.coverImage);
+  if (templateData.cover_image) {
+    formData.append("cover_image", templateData.cover_image);
   }
 
   if (templateData.description) {

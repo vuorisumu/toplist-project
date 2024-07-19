@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { clearAll } from "../util/misc";
 import Login from "./Login";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import { isLoggedIn } from "../util/permissions";
 import Dropdown from "./Dropdown";
 import { getCategories } from "../util/storage";
 import { addNewTemplate, testAddNewTemplate } from "../api/templates";
+import { resizeImage } from "../util/imageHandler";
 
 /**
  * View where the user can create a new template and add it to the database.
@@ -25,6 +26,7 @@ function NewTemplate() {
   const [categories, setCategories] = useState(null);
   const [chosenCategory, setChosenCategory] = useState("");
   const [coverImage, setCoverImage] = useState({});
+  const imgRef = useRef();
 
   useEffect(() => {
     if (isLoggedIn()) {
@@ -35,13 +37,27 @@ function NewTemplate() {
     }
   }, []);
 
-  const handleImageSelected = (e) => {
+  /**
+   * Handles the selection of a cover image, resizing it if it is big.
+   *
+   * @param {ChangeEvent} e - event containing information about the current value
+   */
+  const handleImageSelected = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      setCoverImage(file);
+      const resized = await resizeImage(file);
+      setCoverImage(resized);
     } else {
       console.log("no file");
     }
+  };
+
+  /**
+   * Removes the chosen image.
+   */
+  const removeImage = () => {
+    imgRef.current.value = "";
+    setCoverImage({});
   };
 
   /**
@@ -104,63 +120,13 @@ function NewTemplate() {
     return hasName && enoughItems;
   };
 
-  const testSubmit = async (e) => {
-    e.preventDefault();
-
-    const nonEnptyItems = items.filter((i) => i.trim() !== "");
-    const itemObjects = [];
-    nonEnptyItems.map((i) => {
-      const newItem = {
-        item_name: i,
-      };
-      itemObjects.push(newItem);
-    });
-
-    // mandatory data
-    const templateData = {
-      name: templateName,
-      items: itemObjects,
-      creator_id: localStorage.getItem("userId"),
-    };
-
-    // optional description
-    if (description.trim() !== "") {
-      templateData.description = description;
-    }
-
-    // cover image
-    if (coverImage.name) {
-      templateData.coverImage = coverImage;
-    }
-
-    // category
-    if (chosenCategory !== "") {
-      const categoryId = categories
-        .filter((category) => category.name === chosenCategory)
-        .map((category) => {
-          return category.id;
-        });
-      templateData.category = categoryId[0];
-    }
-
-    // add template to database
-    try {
-      console.log(templateData);
-      const res = await testAddNewTemplate(templateData);
-      console.log(res);
-      // const res = await addNewTemplate(templateData);
-      // navigate(`/createlist/${res.id}`);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   /**
    * Tries to add the template to the database. Does nothing if the minimum
    * requirements haven't been met. Otherwise builds the template data and
    * sends it to the database.
    */
-  const createTemplate = async () => {
+  const createTemplate = async (e) => {
+    e.preventDefault();
     if (!meetsRequirements()) {
       return;
     }
@@ -186,6 +152,11 @@ function NewTemplate() {
       templateData.description = description;
     }
 
+    // cover image
+    if (coverImage.name) {
+      templateData.cover_image = coverImage;
+    }
+
     // category
     if (chosenCategory !== "") {
       const categoryId = categories
@@ -198,7 +169,8 @@ function NewTemplate() {
 
     // add template to database
     try {
-      const res = await addNewTemplate(templateData);
+      console.log(templateData);
+      const res = await testAddNewTemplate(templateData);
       navigate(`/createlist/${res.id}`);
     } catch (err) {
       console.log(err);
@@ -220,18 +192,22 @@ function NewTemplate() {
     <div className="container">
       <h1>New Template</h1>
       <div className="no-stretch newTemplate">
-        <form encType="multipart/form-data" onSubmit={testSubmit}>
+        <form encType="multipart/form-data" onSubmit={createTemplate}>
           <div className="info">
             <h2>Template info</h2>
             {coverImage.name && (
               <div id="imagePreview">
                 <img src={URL.createObjectURL(coverImage)} />
+                <button type="button" onClick={removeImage}>
+                  Remove
+                </button>
               </div>
             )}
 
             <label>Cover image:</label>
             <input
               type="file"
+              ref={imgRef}
               id="coverImage"
               name="image"
               accept="image/png, image/gif, image/jpeg"
@@ -308,18 +284,13 @@ function NewTemplate() {
             </ul>
           )}
 
-          <button
-            type="button"
-            onClick={createTemplate}
-            className="createButton"
-          >
+          <button type="submit" className="createButton">
             Create
           </button>
+
           <button type="button" onClick={clearAll} className="resetButton">
             Reset
           </button>
-
-          <input type="submit" value="Test" />
         </form>
       </div>
     </div>
