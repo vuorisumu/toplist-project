@@ -226,6 +226,10 @@ nav .fixedLogin.active {
   background-color: color-mix(in srgb, var(--mid-color), transparent 70%);
 }
 
+.searchContainer .filtersContainer {
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--mid-color);
+}
 .searchContainer h3 {
   margin: 15px;
 }
@@ -278,23 +282,29 @@ nav .fixedLogin.active {
 .searchContainer .suggestionCont {
   position: relative;
 }
+.searchContainer h4 {
+  font-size: 13pt;
+  margin: 20px 0 8px 0;
+}
 .searchContainer .tagFilters {
-  max-height: 100px;
-  overflow-y: auto;
-  max-width: 450px;
-  margin: 20px auto;
+  margin: 0 auto 20px auto;
 }
 .searchContainer .tagFilters li {
   display: inline-block;
-  padding: 2px 10px;
+  padding: 12px 6px;
 }
 .searchContainer .tagFilters input[type=checkbox] {
-  width: 15px;
-  height: 15px;
-  position: relative;
-  top: 1px;
-  accent-color: #6a9d23;
-  border: 1px solid black;
+  display: none;
+}
+.searchContainer .tagFilters input + span {
+  padding: 7px 15px;
+  border-radius: 25px;
+  font-weight: 600;
+  box-shadow: inset 0px 0px 0px 1px var(--mid-color);
+}
+.searchContainer .tagFilters input:checked + span {
+  background-color: #6a9d23;
+  box-shadow: none;
 }
 .searchContainer .closeButton,
 .searchContainer .clearButton {
@@ -715,12 +725,14 @@ ul {
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
   font-family: "Viga", sans-serif;
 }
 h1 span,
 h2 span,
-h3 span {
+h3 span,
+h4 span {
   color: #6a9d23;
 }
 

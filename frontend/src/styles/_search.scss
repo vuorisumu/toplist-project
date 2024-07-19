@@ -35,6 +35,11 @@
 }
 
 .searchContainer {
+  .filtersContainer {
+    padding-bottom: 15px;
+    border-bottom: 1px solid theme.$mid-color;
+  }
+
   h3 {
     margin: 15px;
   }
@@ -105,25 +110,38 @@
     position: relative;
   }
 
+  // category title
+  h4 {
+    font-size: 13pt;
+    margin: 20px 0 8px 0;
+  }
+
   // tag checkboxes
   .tagFilters {
-    max-height: 100px;
-    overflow-y: auto;
-    max-width: 450px;
-    margin: 20px auto;
+    margin: 0 auto 20px auto;
 
     li {
       display: inline-block;
-      padding: 2px 10px;
+      padding: 12px 6px;
     }
 
+    // hide checkbox
     input[type="checkbox"] {
-      width: 15px;
-      height: 15px;
-      position: relative;
-      top: 1px;
-      accent-color: theme.$accent;
-      border: 1px solid black;
+      display: none;
+    }
+
+    // category button defaults
+    input + span {
+      padding: 7px 15px;
+      border-radius: 25px;
+      font-weight: 600;
+      box-shadow: inset 0px 0px 0px 1px theme.$mid-color;
+    }
+
+    // checked category
+    input:checked + span {
+      background-color: theme.$accent;
+      box-shadow: none;
     }
   }
 
