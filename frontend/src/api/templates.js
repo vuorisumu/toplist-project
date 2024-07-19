@@ -61,25 +61,7 @@ export const fetchTemplateCreatorId = (templateId) => {
  * @param {object} template - template data
  * @returns the ID of the newly added template on successful insert
  */
-export const addNewTemplate = (template) => {
-  return fetch(`${API_BASE_URL}/templates/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(template),
-  })
-    .then((response) => response.json())
-    .catch((error) => console.error("Error:", error));
-};
-
-/**
- * Adds a new template to database
- *
- * @param {object} template - template data
- * @returns the ID of the newly added template on successful insert
- */
-export const testAddNewTemplate = (templateData) => {
+export const addNewTemplate = (templateData) => {
   const formData = new FormData();
   formData.append("name", templateData.name);
   formData.append("items", JSON.stringify(templateData.items));

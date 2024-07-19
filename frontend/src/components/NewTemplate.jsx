@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Login from "./Login";
 import { useNavigate } from "react-router-dom";
 import { isLoggedIn } from "../util/permissions";
-import { addNewTemplate, testAddNewTemplate } from "../api/templates";
+import { addNewTemplate } from "../api/templates";
 import TemplateData from "./TemplateData";
 
 /**
@@ -33,7 +33,7 @@ function NewTemplate() {
   const createTemplate = async (templateData) => {
     try {
       console.log(templateData);
-      const res = await testAddNewTemplate(templateData);
+      const res = await addNewTemplate(templateData);
       navigate(`/createlist/${res.id}`);
     } catch (err) {
       console.log(err);
