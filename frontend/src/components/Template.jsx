@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getCategoryById } from "../util/storage";
 import { deleteTemplate } from "../api/templates";
 import { Buffer } from "buffer";
+import { getImgUrl } from "../util/imageHandler";
 
 /**
  * Reusable component displaying a preview of a template
@@ -26,9 +27,8 @@ function Template({ data, showCreator = true }) {
       .catch((err) => console.log(err));
 
     if (data.cover_image) {
-      const base64Image = Buffer.from(data.cover_image.data).toString("base64");
-      setImgUrl(`data:image/png;base64,${base64Image}`);
-      // console.log(imgUrl);
+      const url = getImgUrl(data.cover_image);
+      setImgUrl(url);
     }
   }, []);
 

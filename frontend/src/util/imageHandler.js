@@ -1,3 +1,5 @@
+import { Buffer } from "buffer";
+
 export const resizeImage = async (
   file,
   options = {
@@ -59,4 +61,13 @@ export const resizeImage = async (
     };
     reader.readAsDataURL(file);
   });
+};
+
+export const getImgUrl = (image) => {
+  try {
+    const base64Image = Buffer.from(image.data).toString("base64");
+    return `data:image/png;base64,${base64Image}`;
+  } catch (err) {
+    return err;
+  }
 };
