@@ -4,6 +4,7 @@ import { isAdmin, isCreatorOfTemplate } from "../util/permissions";
 import { useEffect, useState } from "react";
 import { getCategoryById } from "../util/storage";
 import { deleteTemplate } from "../api/templates";
+import { Buffer } from "buffer";
 
 /**
  * Reusable component displaying a preview of a template
@@ -16,12 +17,19 @@ import { deleteTemplate } from "../api/templates";
 function Template({ data, showCreator = true }) {
   const [canEdit, setCanEdit] = useState(false);
   const [category, setCategory] = useState("");
+  const [imgUrl, setImgUrl] = useState("");
 
   useEffect(() => {
     checkPermission();
     getCategoryById(data.category)
       .then((c) => setCategory(c))
       .catch((err) => console.log(err));
+
+    if (data.cover_image) {
+      const base64Image = Buffer.from(data.cover_image.data).toString("base64");
+      setImgUrl(`data:image/png;base64,${base64Image}`);
+      // console.log(imgUrl);
+    }
   }, []);
 
   /**
@@ -65,6 +73,13 @@ function Template({ data, showCreator = true }) {
       <Link to={`/createlist/${data.id}`}>
         <h2>{data.name}</h2>{" "}
       </Link>
+
+      {data.cover_image && (
+        <div className="coverImage">
+          <img src={imgUrl} />
+        </div>
+      )}
+
       <p>Category: {category}</p>
       {showCreator && (
         <p className="creator">

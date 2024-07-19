@@ -24,3 +24,15 @@
   margin: 0;
   padding: 0;
 }
+
+@mixin coverImage() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    max-height: 150px;
+    width: 100%;
+    object-fit: cover;
+  }
+}

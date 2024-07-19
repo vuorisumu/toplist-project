@@ -658,6 +658,18 @@ nav .fixedLogin.active {
 .addCont ul li input[type=search] {
   width: 100%;
 }
+.coverImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.coverImage img {
+  max-height: 150px;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
 .rank-item {
   display: flex;
   align-items: center;
