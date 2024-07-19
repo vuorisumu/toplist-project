@@ -74,6 +74,42 @@ export const addNewTemplate = (template) => {
 };
 
 /**
+ * Adds a new template to database
+ *
+ * @param {object} template - template data
+ * @returns the ID of the newly added template on successful insert
+ */
+export const testAddNewTemplate = (templateData) => {
+  const formData = new FormData();
+  formData.append("name", templateData.name);
+  formData.append("items", JSON.stringify(templateData.items));
+  formData.append("creator_id", templateData.creator_id);
+
+  if (templateData.coverImage) {
+    formData.append("cover_image", templateData.coverImage);
+  }
+
+  if (templateData.description) {
+    formData.append("description", templateData.description);
+  }
+
+  if (templateData.category) {
+    formData.append("category", templateData.category);
+  }
+
+  for (let [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
+
+  return fetch(`${API_BASE_URL}/templates/`, {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
+/**
  * Updates data of a template with given ID
  *
  * @param {number} id - ID of the template to be edited

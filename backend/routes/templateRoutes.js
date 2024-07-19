@@ -104,7 +104,7 @@ templateRouter.post("/", async (req, res) => {
     placeholders.push("name", "items");
     const values = {
       name: req.body.name,
-      items: JSON.stringify(req.body.items),
+      items: req.body.items,
       id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
     };
 
@@ -124,6 +124,15 @@ templateRouter.post("/", async (req, res) => {
     if (req.body.category) {
       placeholders.push("category");
       values["category"] = req.body.category;
+    }
+
+    // optional cover image
+    if (req.files.cover_image) {
+      placeholders.push("cover_image");
+      values["cover_image"] = {
+        val: req.files.cover_image.data,
+        type: oracledb.BLOB,
+      };
     }
 
     const placeholdersString = placeholders.map((t) => `:${t}`).join(", ");

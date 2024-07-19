@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { isLoggedIn } from "../util/permissions";
 import Dropdown from "./Dropdown";
 import { getCategories } from "../util/storage";
-import { addNewTemplate } from "../api/templates";
+import { addNewTemplate, testAddNewTemplate } from "../api/templates";
 
 /**
  * View where the user can create a new template and add it to the database.
@@ -24,6 +24,7 @@ function NewTemplate() {
   const [errors, setErrors] = useState([]);
   const [categories, setCategories] = useState(null);
   const [chosenCategory, setChosenCategory] = useState("");
+  const [coverImage, setCoverImage] = useState({});
 
   useEffect(() => {
     if (isLoggedIn()) {
@@ -33,6 +34,15 @@ function NewTemplate() {
       setCanCreate(false);
     }
   }, []);
+
+  const handleImageSelected = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setCoverImage(file);
+    } else {
+      console.log("no file");
+    }
+  };
 
   /**
    * Adds new item to the template, only if the latest item is not blank
@@ -92,6 +102,57 @@ function NewTemplate() {
 
     setErrors(tempErrors);
     return hasName && enoughItems;
+  };
+
+  const testSubmit = async (e) => {
+    e.preventDefault();
+
+    const nonEnptyItems = items.filter((i) => i.trim() !== "");
+    const itemObjects = [];
+    nonEnptyItems.map((i) => {
+      const newItem = {
+        item_name: i,
+      };
+      itemObjects.push(newItem);
+    });
+
+    // mandatory data
+    const templateData = {
+      name: templateName,
+      items: itemObjects,
+      creator_id: localStorage.getItem("userId"),
+    };
+
+    // optional description
+    if (description.trim() !== "") {
+      templateData.description = description;
+    }
+
+    // cover image
+    if (coverImage.name) {
+      templateData.coverImage = coverImage;
+    }
+
+    // category
+    if (chosenCategory !== "") {
+      const categoryId = categories
+        .filter((category) => category.name === chosenCategory)
+        .map((category) => {
+          return category.id;
+        });
+      templateData.category = categoryId[0];
+    }
+
+    // add template to database
+    try {
+      console.log(templateData);
+      const res = await testAddNewTemplate(templateData);
+      console.log(res);
+      // const res = await addNewTemplate(templateData);
+      // navigate(`/createlist/${res.id}`);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   /**
@@ -159,80 +220,107 @@ function NewTemplate() {
     <div className="container">
       <h1>New Template</h1>
       <div className="no-stretch newTemplate">
-        <div className="info">
-          <h2>Template info</h2>
-          <label>Template name: </label>
-          <input
-            type="text"
-            id="tempName"
-            placeholder="New Template"
-            value={templateName}
-            onChange={(e) => setTemplateName(e.target.value)}
-          />
+        <form encType="multipart/form-data" onSubmit={testSubmit}>
+          <div className="info">
+            <h2>Template info</h2>
+            {coverImage.name && (
+              <div id="imagePreview">
+                <img src={URL.createObjectURL(coverImage)} />
+              </div>
+            )}
 
-          <label>Template description: </label>
-          <textarea
-            placeholder="Description"
-            style={{ width: "", height: "" }}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-
-        <div>
-          {categories && (
-            <Dropdown
-              label={"Category"}
-              placeholder={"Choose category"}
-              items={categories.map((c) => c.name)}
-              onSelect={setChosenCategory}
+            <label>Cover image:</label>
+            <input
+              type="file"
+              id="coverImage"
+              name="image"
+              accept="image/png, image/gif, image/jpeg"
+              onChange={handleImageSelected}
             />
+
+            <label>Template name: </label>
+            <input
+              type="text"
+              id="tempName"
+              placeholder="New Template"
+              value={templateName}
+              onChange={(e) => setTemplateName(e.target.value)}
+            />
+
+            <label>Template description: </label>
+            <textarea
+              placeholder="Description"
+              style={{ width: "", height: "" }}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+
+          <div>
+            {categories && (
+              <Dropdown
+                label={"Category"}
+                placeholder={"Choose category"}
+                items={categories.map((c) => c.name)}
+                onSelect={setChosenCategory}
+              />
+            )}
+          </div>
+
+          <div className="addCont addItems">
+            <h2>Template items</h2>
+            <ul id="tempItems">
+              {items.map((i, index) => (
+                <li key={"item" + index}>
+                  <input
+                    type="text"
+                    placeholder="List item"
+                    value={i}
+                    onChange={(e) => handleItemEdits(index, e.target.value)}
+                  />
+                  {index !== items.length - 1 ? (
+                    <button
+                      type="button"
+                      onClick={() => deleteItem(index)}
+                      className="deleteButton"
+                    >
+                      <span className="material-symbols-outlined">delete</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={addItem}
+                      className="addButton"
+                    >
+                      <span className="material-symbols-outlined">add</span>
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {errors.length > 0 && (
+            <ul>
+              {errors.map((err, index) => (
+                <li key={"error" + index}>{err}</li>
+              ))}
+            </ul>
           )}
-        </div>
 
-        <div className="addCont addItems">
-          <h2>Template items</h2>
-          <ul id="tempItems">
-            {items.map((i, index) => (
-              <li key={"item" + index}>
-                <input
-                  type="text"
-                  placeholder="List item"
-                  value={i}
-                  onChange={(e) => handleItemEdits(index, e.target.value)}
-                />
-                {index !== items.length - 1 ? (
-                  <button
-                    type="button"
-                    onClick={() => deleteItem(index)}
-                    className="deleteButton"
-                  >
-                    <span className="material-symbols-outlined">delete</span>
-                  </button>
-                ) : (
-                  <button type="button" onClick={addItem} className="addButton">
-                    <span className="material-symbols-outlined">add</span>
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
+          <button
+            type="button"
+            onClick={createTemplate}
+            className="createButton"
+          >
+            Create
+          </button>
+          <button type="button" onClick={clearAll} className="resetButton">
+            Reset
+          </button>
 
-        {errors.length > 0 && (
-          <ul>
-            {errors.map((err, index) => (
-              <li key={"error" + index}>{err}</li>
-            ))}
-          </ul>
-        )}
-
-        <button type="button" onClick={createTemplate} className="createButton">
-          Create
-        </button>
-        <button type="button" onClick={clearAll} className="resetButton">
-          Reset
-        </button>
+          <input type="submit" value="Test" />
+        </form>
       </div>
     </div>
   );
