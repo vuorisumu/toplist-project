@@ -8,6 +8,14 @@
     background-color: color-mix(in srgb, $color, theme.$primary-color 50%);
   }
 }
+
+%filterButton {
+  padding: 7px 15px;
+  border-radius: 25px;
+  font-weight: 600;
+  box-shadow: inset 0px 0px 0px 1px theme.$mid-color;
+}
+
 // suggestion box
 .suggestions {
   display: none;
@@ -132,10 +140,7 @@
 
     // category button defaults
     input + span {
-      padding: 7px 15px;
-      border-radius: 25px;
-      font-weight: 600;
-      box-shadow: inset 0px 0px 0px 1px theme.$mid-color;
+      @extend %filterButton;
     }
 
     // checked category
@@ -160,43 +165,44 @@
 }
 .dropdownElement {
   display: flex;
-  align-items: center;
   gap: 10px;
   margin-bottom: 15px;
+  align-items: center;
+  justify-content: center;
 }
 
 .dropdownCont {
   position: relative;
-  flex-grow: 1;
-  width: fit-content;
+  min-width: fit-content;
+  width: 170px;
 
   // dropdown button
   button {
+    @extend %filterButton;
     width: 100%;
     text-align: left;
     margin: 0;
     background-color: transparent;
-    outline: 1px solid theme.$shadow;
 
     // icon for dropdown
     &::after {
       content: "unfold_more";
       font-family: "Material Symbols Outlined";
       position: absolute;
-      right: 0;
-      top: 6px;
+      right: 10px;
+      top: 9px;
     }
 
     // change outline when active
     &:active,
     &:focus {
-      outline: 1px solid theme.$accent;
-      box-shadow: 0px 0px 2px theme.$accent;
+      // outline: 1px solid theme.$accent;
+      box-shadow: inset 0 0 0 2px theme.$accent;
     }
 
     // disable the shadow
     &:hover {
-      box-shadow: none;
+      @extend %filterButton;
       background-color: transparent;
     }
   }

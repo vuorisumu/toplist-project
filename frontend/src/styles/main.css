@@ -204,6 +204,13 @@ nav .fixedLogin.active {
   margin: auto;
 }
 
+.dropdownCont button:hover, .dropdownCont button, .searchContainer .tagFilters input + span {
+  padding: 7px 15px;
+  border-radius: 25px;
+  font-weight: 600;
+  box-shadow: inset 0px 0px 0px 1px var(--mid-color);
+}
+
 .suggestions {
   display: none;
   text-align: left;
@@ -296,12 +303,6 @@ nav .fixedLogin.active {
 .searchContainer .tagFilters input[type=checkbox] {
   display: none;
 }
-.searchContainer .tagFilters input + span {
-  padding: 7px 15px;
-  border-radius: 25px;
-  font-weight: 600;
-  box-shadow: inset 0px 0px 0px 1px var(--mid-color);
-}
 .searchContainer .tagFilters input:checked + span {
   background-color: #6a9d23;
   box-shadow: none;
@@ -326,37 +327,35 @@ nav .fixedLogin.active {
 
 .dropdownElement {
   display: flex;
-  align-items: center;
   gap: 10px;
   margin-bottom: 15px;
+  align-items: center;
+  justify-content: center;
 }
 
 .dropdownCont {
   position: relative;
-  flex-grow: 1;
-  width: -moz-fit-content;
-  width: fit-content;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+  width: 170px;
 }
 .dropdownCont button {
   width: 100%;
   text-align: left;
   margin: 0;
   background-color: transparent;
-  outline: 1px solid var(--shadow);
 }
 .dropdownCont button::after {
   content: "unfold_more";
   font-family: "Material Symbols Outlined";
   position: absolute;
-  right: 0;
-  top: 6px;
+  right: 10px;
+  top: 9px;
 }
 .dropdownCont button:active, .dropdownCont button:focus {
-  outline: 1px solid #6a9d23;
-  box-shadow: 0px 0px 2px #6a9d23;
+  box-shadow: inset 0 0 0 2px #6a9d23;
 }
 .dropdownCont button:hover {
-  box-shadow: none;
   background-color: transparent;
 }
 
@@ -774,7 +773,8 @@ button:hover {
   .no-stretch,
   .createRank,
   .pageInfo,
-  .searchContainer {
+  .searchInput.general,
+  .wordFilters {
     max-width: 550px;
     margin: auto;
   }

@@ -196,46 +196,48 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
       {filtersOpen ? (
         <div className="filtersContainer">
           <div>
-            <h3>Advanced search:</h3>
-            {searchLists ? (
+            <div className="wordFilters">
+              <h3>Advanced search:</h3>
+              {searchLists ? (
+                <div className="searchInput">
+                  {/* Top list name search */}
+                  <label>Search top list by name: </label>
+                  <Search
+                    valueUpdated={setNameInput}
+                    fetchFunction={fetchListNamesByInput}
+                    onClear={clearInput}
+                    templateId={templateId}
+                    onEnterKey={onEnterName}
+                  />
+                </div>
+              ) : (
+                <div className="searchInput">
+                  {/* Template name search */}
+                  <label>Search template by name: </label>
+                  <Search
+                    valueUpdated={setNameInput}
+                    fetchFunction={fetchTemplateNamesByInput}
+                    onClear={clearInput}
+                    onEnterKey={onEnterName}
+                  />
+                </div>
+              )}
+
               <div className="searchInput">
-                {/* Top list name search */}
-                <label>Search top list by name: </label>
+                {/* Username search */}
+                <label>Search from creator: </label>
                 <Search
-                  valueUpdated={setNameInput}
-                  fetchFunction={fetchListNamesByInput}
+                  valueUpdated={setUserInput}
+                  fetchFunction={
+                    searchLists
+                      ? fetchUserNamesWithTopListsByInput
+                      : fetchUserNamesWithTemplatesByInput
+                  }
                   onClear={clearInput}
                   templateId={templateId}
-                  onEnterKey={onEnterName}
+                  onEnterKey={onEnterUser}
                 />
               </div>
-            ) : (
-              <div className="searchInput">
-                {/* Template name search */}
-                <label>Search template by name: </label>
-                <Search
-                  valueUpdated={setNameInput}
-                  fetchFunction={fetchTemplateNamesByInput}
-                  onClear={clearInput}
-                  onEnterKey={onEnterName}
-                />
-              </div>
-            )}
-
-            <div className="searchInput">
-              {/* Username search */}
-              <label>Search from creator: </label>
-              <Search
-                valueUpdated={setUserInput}
-                fetchFunction={
-                  searchLists
-                    ? fetchUserNamesWithTopListsByInput
-                    : fetchUserNamesWithTemplatesByInput
-                }
-                onClear={clearInput}
-                templateId={templateId}
-                onEnterKey={onEnterUser}
-              />
             </div>
 
             {!templateId && (

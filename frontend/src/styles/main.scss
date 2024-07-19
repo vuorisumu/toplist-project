@@ -75,6 +75,7 @@ button {
   }
 }
 
+// bigger screen
 @media only screen and (min-width: 850px) {
   .container {
     max-width: 1000px;
@@ -83,7 +84,8 @@ button {
   .no-stretch,
   .createRank,
   .pageInfo,
-  .searchContainer {
+  .searchInput.general,
+  .wordFilters {
     max-width: 550px;
     margin: auto;
   }
