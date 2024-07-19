@@ -825,6 +825,21 @@ nav .fixedLogin.active {
   position: relative;
 }
 
+.newTemplate .dropdownElement {
+  margin: 5px 0;
+}
+.newTemplate .dropdownElement label {
+  flex-grow: 1;
+  text-align: start;
+}
+.newTemplate .dropdownElement .dropdownCont {
+  flex-grow: 1;
+}
+.newTemplate .dropdownElement .dropdownCont button {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .dndCont .droppable {
   min-height: 50px;
 }

@@ -352,3 +352,22 @@
   padding-left: 20px;
   position: relative;
 }
+
+// category dropdown
+.newTemplate {
+  .dropdownElement {
+    margin: 5px 0;
+    label {
+      flex-grow: 1;
+      text-align: start;
+    }
+
+    .dropdownCont {
+      flex-grow: 1;
+      button {
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+  }
+}
