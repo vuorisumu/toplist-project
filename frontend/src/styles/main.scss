@@ -1,3 +1,4 @@
+@use "defaults";
 @use "nav";
 @use "lists";
 @use "theme";
@@ -35,7 +36,8 @@ ul {
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
   @include titles();
 }
 
@@ -54,32 +56,11 @@ textarea {
   padding: 5px;
 }
 
-// default button styles
 button {
-  border-radius: 5px;
-  border: none;
-  padding: 0.3em 0.9em;
-  margin: 5px;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: color-mix(in srgb, theme.$accent, theme.$primary-color 10%);
-  cursor: pointer;
-  transition: 0.2s;
-  color: white;
-
-  &:hover {
-    background-color: color-mix(in srgb, theme.$accent, white 5%);
-    box-shadow: 0px 2px theme.$shadow;
-  }
+  @include defaults.defaultButton();
 }
 
-@media only screen and (min-width: 600px) {
-  #logoCont span {
-    font-size: 16pt;
-  }
-}
-
+// bigger screen
 @media only screen and (min-width: 850px) {
   .container {
     max-width: 1000px;
@@ -88,7 +69,8 @@ button {
   .no-stretch,
   .createRank,
   .pageInfo,
-  .searchContainer {
+  .searchInput.general,
+  .wordFilters {
     max-width: 550px;
     margin: auto;
   }
@@ -106,7 +88,7 @@ button {
     padding: 50px 10px;
   }
 
-  nav ul li {
+  nav:not(.mobile) ul li {
     padding: 0 6px;
     line-height: 8px;
     .icon {
@@ -118,15 +100,16 @@ button {
     }
 
     #logoCont span {
-      margin-bottom: 10px;
-      font-size: 10pt;
+      font-size: 12pt;
     }
   }
 }
 
 // too small screens
 @media only screen and (max-width: 330px) {
-  #logoCont span {
-    display: none;
+  nav:not(.mobile) ul li {
+    #logoCont span {
+      display: none;
+    }
   }
 }

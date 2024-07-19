@@ -31,7 +31,6 @@ nav ul {
   display: flex;
   justify-content: space-evenly;
   align-items: flex-start;
-  padding: 15px 10px 5px 10px;
   margin: 0;
   position: relative;
   z-index: 3;
@@ -57,15 +56,17 @@ nav ul li .linkName {
   font-weight: 400;
   font-size: 8pt;
 }
+nav ul #logoCont span {
+  font-size: 16pt;
+  line-height: 20pt;
+}
+nav ul {
+  padding: 15px 10px 5px 10px;
+}
 nav ul li:first-child {
   flex-grow: 1;
 }
-
-.toggleLogin {
-  cursor: pointer;
-}
-
-.fixedLogin {
+nav .fixedLogin {
   position: absolute;
   width: 100%;
   margin-top: -150px;
@@ -74,7 +75,7 @@ nav ul li:first-child {
   background-color: var(--primary-color);
   transition: 0.3s;
 }
-.fixedLogin div {
+nav .fixedLogin div {
   display: grid;
   grid-template-columns: auto auto;
   justify-content: center;
@@ -82,16 +83,111 @@ nav ul li:first-child {
   align-items: center;
   gap: 10px;
 }
-.fixedLogin div .buttonCont {
+nav .fixedLogin div .buttonCont {
   grid-column: 1/3;
   width: 100%;
 }
-.fixedLogin div .buttonCont button {
+nav .fixedLogin div .buttonCont button {
   width: 100%;
   margin: auto;
 }
-.fixedLogin.active {
+nav .fixedLogin.active {
   margin-top: 0;
+}
+
+.mobileNav {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  z-index: 3;
+}
+.mobileNav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  margin: 0;
+  position: relative;
+  z-index: 3;
+  background-color: var(--primary-color);
+}
+.mobileNav ul li {
+  padding: 0 10px;
+  line-height: 12px;
+}
+.mobileNav ul li a,
+.mobileNav ul li div {
+  color: #6a9d23;
+}
+.mobileNav ul li a.active,
+.mobileNav ul li div.active {
+  color: #d4af37;
+}
+.mobileNav ul li .icon {
+  display: block;
+  font-size: 20pt;
+}
+.mobileNav ul li .linkName {
+  font-weight: 400;
+  font-size: 8pt;
+}
+.mobileNav ul #logoCont span {
+  font-size: 16pt;
+  line-height: 20pt;
+}
+.mobileNav ul {
+  padding: 15px 10px 15px 10px;
+}
+.mobileNav .fixedLogin {
+  position: absolute;
+  width: 100%;
+  bottom: -150px;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  background-color: var(--primary-color);
+  transition: 0.3s;
+}
+.mobileNav .fixedLogin div {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  justify-items: end;
+  align-items: center;
+  gap: 10px;
+}
+.mobileNav .fixedLogin div .buttonCont {
+  grid-column: 1/3;
+  width: 100%;
+}
+.mobileNav .fixedLogin div .buttonCont button {
+  width: 100%;
+  margin: auto;
+}
+.mobileNav .fixedLogin.active {
+  bottom: 70px;
+}
+
+.toggleLogin {
+  cursor: pointer;
+}
+
+.loginButton {
+  border-radius: 5px;
+  padding: 0.3em 0.9em;
+  margin: 5px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  transition: 0.2s;
+  color: var(--text-primary);
+  border: none;
+  cursor: pointer;
+}
+.loginButton:hover {
+  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  box-shadow: 0px 2px var(--shadow);
 }
 
 #logoCont {
@@ -126,6 +222,14 @@ nav ul li:first-child {
   margin: auto;
 }
 
+.dropdownCont .dropdownButton:hover, .dropdownCont .dropdownButton, .searchContainer .tagFilters input + span {
+  cursor: pointer;
+  padding: 7px 15px;
+  border-radius: 25px;
+  font-weight: 600;
+  box-shadow: inset 0px 0px 0px 1px var(--mid-color);
+}
+
 .suggestions {
   display: none;
   text-align: left;
@@ -148,6 +252,10 @@ nav ul li:first-child {
   background-color: color-mix(in srgb, var(--mid-color), transparent 70%);
 }
 
+.searchContainer .filtersContainer {
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--mid-color);
+}
 .searchContainer h3 {
   margin: 15px;
 }
@@ -178,21 +286,25 @@ nav ul li:first-child {
 .searchContainer .searchInput.general div {
   flex-grow: 1;
 }
-.searchContainer .searchInput.general .searchWrapper::before {
-  content: "search";
+.searchContainer .searchInput.general .searchWrapper .searchIcon {
+  background: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  padding: 0 12px;
+  border-radius: 50%;
+  background: none;
   font-family: "Material Symbols Outlined";
   position: absolute;
   font-size: 16pt;
-  left: 5px;
-  pointer-events: none;
-}
-.searchContainer .searchInput.general .searchButton {
-  margin: 0;
+  right: 0;
+  color: var(--mid-color);
 }
 .searchContainer .searchInput.general input[type=search] {
   height: 30px;
   border-radius: 15px;
-  padding-left: 30px;
+  padding-left: 15px;
+  padding-right: 40px;
 }
 .searchContainer .searchInput.general .suggestions div {
   padding-left: 30px;
@@ -200,37 +312,86 @@ nav ul li:first-child {
 .searchContainer .suggestionCont {
   position: relative;
 }
+.searchContainer h4 {
+  font-size: 13pt;
+  margin: 20px 0 8px 0;
+}
 .searchContainer .tagFilters {
-  max-height: 100px;
-  overflow-y: auto;
-  max-width: 450px;
-  margin: 20px auto;
+  margin: 0 auto 20px auto;
 }
 .searchContainer .tagFilters li {
   display: inline-block;
-  padding: 2px 10px;
+  padding: 12px 6px;
 }
 .searchContainer .tagFilters input[type=checkbox] {
-  width: 15px;
-  height: 15px;
-  position: relative;
-  top: 1px;
-  accent-color: #6a9d23;
-  border: 1px solid black;
+  display: none;
+}
+.searchContainer .tagFilters input:checked + span {
+  background-color: #6a9d23;
+  box-shadow: none;
 }
 .searchContainer .closeButton,
 .searchContainer .clearButton {
+  border-radius: 5px;
+  padding: 0.3em 0.9em;
+  margin: 5px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  transition: 0.2s;
+  color: var(--text-primary);
+  border: none;
+  cursor: pointer;
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
   font-size: 0.85em;
 }
 .searchContainer .closeButton:hover,
 .searchContainer .clearButton:hover {
+  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  box-shadow: 0px 2px var(--shadow);
+}
+.searchContainer .closeButton:hover,
+.searchContainer .clearButton:hover {
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 50%);
 }
+.searchContainer .searchButton {
+  border-radius: 5px;
+  padding: 0.3em 0.9em;
+  margin: 5px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  transition: 0.2s;
+  color: var(--text-primary);
+  border: none;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+.searchContainer .searchButton:hover {
+  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  box-shadow: 0px 2px var(--shadow);
+}
 .searchContainer .showAdvancedButton {
+  border-radius: 5px;
+  padding: 0.3em 0.9em;
+  margin: 5px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  transition: 0.2s;
+  color: var(--text-primary);
+  border: none;
+  cursor: pointer;
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
   font-size: 0.85em;
   margin-top: 10px;
+}
+.searchContainer .showAdvancedButton:hover {
+  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  box-shadow: 0px 2px var(--shadow);
 }
 .searchContainer .showAdvancedButton:hover {
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 50%);
@@ -238,37 +399,37 @@ nav ul li:first-child {
 
 .dropdownElement {
   display: flex;
-  align-items: center;
   gap: 10px;
   margin-bottom: 15px;
+  align-items: center;
+  justify-content: center;
 }
 
 .dropdownCont {
   position: relative;
-  flex-grow: 1;
-  width: -moz-fit-content;
-  width: fit-content;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+  width: 170px;
 }
-.dropdownCont button {
+.dropdownCont .dropdownButton {
   width: 100%;
   text-align: left;
-  margin: 0;
   background-color: transparent;
-  outline: 1px solid var(--shadow);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 1em;
 }
-.dropdownCont button::after {
+.dropdownCont .dropdownButton::after {
   content: "unfold_more";
   font-family: "Material Symbols Outlined";
   position: absolute;
-  right: 0;
-  top: 6px;
+  right: 7px;
+  top: 14px;
 }
-.dropdownCont button:active, .dropdownCont button:focus {
-  outline: 1px solid #6a9d23;
-  box-shadow: 0px 0px 2px #6a9d23;
+.dropdownCont .dropdownButton:active, .dropdownCont .dropdownButton:focus {
+  box-shadow: inset 0 0 0 2px #6a9d23;
 }
-.dropdownCont button:hover {
-  box-shadow: none;
+.dropdownCont .dropdownButton:hover {
   background-color: transparent;
 }
 
@@ -564,8 +725,24 @@ nav ul li:first-child {
 }
 .resetButton,
 .backButton {
+  border-radius: 5px;
+  padding: 0.3em 0.9em;
+  margin: 5px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  transition: 0.2s;
+  color: var(--text-primary);
+  border: none;
+  cursor: pointer;
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
   margin-top: 20px;
+}
+.resetButton:hover,
+.backButton:hover {
+  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  box-shadow: 0px 2px var(--shadow);
 }
 .resetButton:hover,
 .backButton:hover {
@@ -573,13 +750,44 @@ nav ul li:first-child {
 }
 
 .loadMoreButton {
+  border-radius: 5px;
+  padding: 0.3em 0.9em;
+  margin: 5px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  transition: 0.2s;
+  color: var(--text-primary);
+  border: none;
+  cursor: pointer;
   margin-top: 15px;
+}
+.loadMoreButton:hover {
+  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  box-shadow: 0px 2px var(--shadow);
 }
 
 .cancelButton,
 .promptButton {
+  border-radius: 5px;
+  padding: 0.3em 0.9em;
+  margin: 5px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  transition: 0.2s;
+  color: var(--text-primary);
+  border: none;
+  cursor: pointer;
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
   margin-bottom: 10px;
+}
+.cancelButton:hover,
+.promptButton:hover {
+  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  box-shadow: 0px 2px var(--shadow);
 }
 .cancelButton:hover,
 .promptButton:hover {
@@ -587,7 +795,22 @@ nav ul li:first-child {
 }
 
 .confirmButton {
+  border-radius: 5px;
+  padding: 0.3em 0.9em;
+  margin: 5px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  transition: 0.2s;
+  color: var(--text-primary);
+  border: none;
+  cursor: pointer;
   background-color: color-mix(in srgb, #5c0f0f, var(--primary-color) 35%);
+}
+.confirmButton:hover {
+  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  box-shadow: 0px 2px var(--shadow);
 }
 .confirmButton:hover {
   background-color: color-mix(in srgb, #5c0f0f, var(--primary-color) 50%);
@@ -600,6 +823,21 @@ nav ul li:first-child {
 .itemNote {
   padding-left: 20px;
   position: relative;
+}
+
+.newTemplate .dropdownElement {
+  margin: 5px 0;
+}
+.newTemplate .dropdownElement label {
+  flex-grow: 1;
+  text-align: start;
+}
+.newTemplate .dropdownElement .dropdownCont {
+  flex-grow: 1;
+}
+.newTemplate .dropdownElement .dropdownCont button {
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .dndCont .droppable {
@@ -637,12 +875,14 @@ ul {
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
   font-family: "Viga", sans-serif;
 }
 h1 span,
 h2 span,
-h3 span {
+h3 span,
+h4 span {
   color: #6a9d23;
 }
 
@@ -661,27 +901,22 @@ textarea {
 
 button {
   border-radius: 5px;
-  border: none;
   padding: 0.3em 0.9em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
   background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
-  cursor: pointer;
   transition: 0.2s;
-  color: white;
+  color: var(--text-primary);
+  border: none;
+  cursor: pointer;
 }
 button:hover {
   background-color: color-mix(in srgb, #6a9d23, white 5%);
   box-shadow: 0px 2px var(--shadow);
 }
 
-@media only screen and (min-width: 600px) {
-  #logoCont span {
-    font-size: 16pt;
-  }
-}
 @media only screen and (min-width: 850px) {
   .container {
     max-width: 1000px;
@@ -689,7 +924,8 @@ button:hover {
   .no-stretch,
   .createRank,
   .pageInfo,
-  .searchContainer {
+  .searchInput.general,
+  .wordFilters {
     max-width: 550px;
     margin: auto;
   }
@@ -703,23 +939,22 @@ button:hover {
   .container {
     padding: 50px 10px;
   }
-  nav ul li {
+  nav:not(.mobile) ul li {
     padding: 0 6px;
     line-height: 8px;
   }
-  nav ul li .icon {
+  nav:not(.mobile) ul li .icon {
     font-size: 18pt;
   }
-  nav ul li .linkName {
+  nav:not(.mobile) ul li .linkName {
     font-size: 6pt;
   }
-  nav ul li #logoCont span {
-    margin-bottom: 10px;
-    font-size: 10pt;
+  nav:not(.mobile) ul li #logoCont span {
+    font-size: 12pt;
   }
 }
 @media only screen and (max-width: 330px) {
-  #logoCont span {
+  nav:not(.mobile) ul li #logoCont span {
     display: none;
   }
 }/*# sourceMappingURL=main.css.map */

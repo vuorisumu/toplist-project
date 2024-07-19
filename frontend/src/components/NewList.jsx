@@ -181,8 +181,8 @@ function NewList() {
       };
 
       // user id if logged in
-      if (sessionStorage.getItem("userId")) {
-        toplistData.creator_id = sessionStorage.getItem("userId");
+      if (localStorage.getItem("userId")) {
+        toplistData.creator_id = localStorage.getItem("userId");
       }
 
       // optional description

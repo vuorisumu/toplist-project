@@ -20,14 +20,14 @@ function Login({ isFixed }) {
   const loginRef = useRef(null);
 
   useEffect(() => {
-    if (sessionStorage.getItem("login")) {
+    if (localStorage.getItem("login")) {
       setLoggedIn(true);
     }
   }, []);
 
   useEffect(() => {
     if (loggedIn) {
-      setUser(sessionStorage.getItem("user"));
+      setUser(localStorage.getItem("user"));
     }
   }, [loggedIn]);
 
@@ -72,7 +72,7 @@ function Login({ isFixed }) {
       console.log(res);
       if (!res.error) {
         // successfully log in
-        sessionStorage.setItem("token", res.token);
+        localStorage.setItem("token", res.token);
         const credentials = await auth();
         onLogin(credentials, res.user_name, res.email);
       } else {
@@ -96,27 +96,27 @@ function Login({ isFixed }) {
   };
 
   /**
-   * Logs in to a specific account and sets the login information to sessionStorage.
+   * Logs in to a specific account and sets the login information to localStorage.
    * @param {JSON} credentials - Authorization credentials
    * @param {string} username - Username of the account
    * @param {string} email - Email of the account
    */
   const onLogin = async (credentials, username, email) => {
-    sessionStorage.setItem("admin", credentials.admin);
-    sessionStorage.setItem("userId", credentials.id);
-    sessionStorage.setItem("login", "true");
-    sessionStorage.setItem("user", username);
-    sessionStorage.setItem("email", email);
+    localStorage.setItem("admin", credentials.admin);
+    localStorage.setItem("userId", credentials.id);
+    localStorage.setItem("login", "true");
+    localStorage.setItem("user", username);
+    localStorage.setItem("email", email);
     setLoggedIn(true);
     window.location.reload(false);
   };
 
   /**
-   * Logs the user out, clears sessionStorage and refreshes the page.
+   * Logs the user out, clears localStorage and refreshes the page.
    */
   const onLogout = () => {
     // store logout
-    sessionStorage.clear();
+    localStorage.clear();
     setLoggedIn(false);
     window.location.reload(false);
   };

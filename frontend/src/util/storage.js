@@ -2,9 +2,9 @@ import { fetchAllCategories } from "../api/categories";
 import { formatData } from "./dataHandler";
 
 export const getCategories = async () => {
-  if (sessionStorage.getItem("categories") !== null) {
+  if (localStorage.getItem("categories") !== null) {
     console.log("session storage found");
-    return JSON.parse(sessionStorage.getItem("categories"));
+    return JSON.parse(localStorage.getItem("categories"));
   } else {
     console.log("no session storage, adding..");
     const categoryData = await fetchAllCategories()
@@ -13,7 +13,7 @@ export const getCategories = async () => {
       })
       .catch((err) => console.log(err));
 
-    sessionStorage.setItem("categories", JSON.stringify(categoryData));
+    localStorage.setItem("categories", JSON.stringify(categoryData));
     return categoryData;
   }
 };

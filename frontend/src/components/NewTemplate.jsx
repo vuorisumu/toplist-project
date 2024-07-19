@@ -117,7 +117,7 @@ function NewTemplate() {
     const templateData = {
       name: templateName,
       items: itemObjects,
-      creator_id: sessionStorage.getItem("userId"),
+      creator_id: localStorage.getItem("userId"),
     };
 
     // optional description
@@ -158,7 +158,7 @@ function NewTemplate() {
   return (
     <div className="container">
       <h1>New Template</h1>
-      <div className="no-stretch">
+      <div className="no-stretch newTemplate">
         <div className="info">
           <h2>Template info</h2>
           <label>Template name: </label>
