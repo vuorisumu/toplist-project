@@ -74,7 +74,7 @@ function User() {
         ) : (
           <>
             <p>Templates created by {userData.user_name}:</p>
-            <ul>
+            <ul className="lists">
               {templates.map((template) => (
                 <li key={template.id} className="template">
                   <Template data={template} showCreator={false} />
@@ -94,7 +94,7 @@ function User() {
         ) : (
           <>
             <p>Top lists created by {userData.user_name}:</p>
-            <ul>
+            <ul className="lists">
               {lists.map((list) => (
                 <li key={list.id}>
                   <Toplist data={list} general={true} />

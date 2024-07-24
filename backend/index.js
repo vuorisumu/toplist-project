@@ -6,12 +6,15 @@ const userRoutes = require("./routes/userRoutes");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const categoryRoutes = require("./routes/categoryRoutes");
+const fileUpload = require("express-fileupload");
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(cors());
+
+app.use(fileUpload());
 
 app.use((req, res, next) => {
   if (req.url.endsWith(".js") || req.url.endsWith(".jsx")) {

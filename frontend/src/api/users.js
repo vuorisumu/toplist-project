@@ -120,7 +120,7 @@ export const userLogin = (loginData) => {
  * @returns a response containing information about authorization
  */
 export const auth = () => {
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   return fetch(`${API_BASE_URL}/users/auth/`, {
     headers: {
       Authorization: `${token}`,

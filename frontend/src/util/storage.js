@@ -3,7 +3,6 @@ import { formatData } from "./dataHandler";
 
 export const getCategories = async () => {
   if (localStorage.getItem("categories") !== null) {
-    console.log("session storage found");
     return JSON.parse(localStorage.getItem("categories"));
   } else {
     console.log("no session storage, adding..");

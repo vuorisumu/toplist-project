@@ -69,7 +69,7 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
     } else {
       // default query
       result = await database.query(
-        `SELECT t.id, t.name, t.description, t.items, t.tags, u.user_name, t.creator_id, t.category 
+        `SELECT t.id, t.name, t.description, t.items, t.tags, u.user_name, t.creator_id, t.category, t.cover_image 
         FROM templates t 
         LEFT JOIN users u ON t.creator_id = u.user_id 
         WHERE id = :id`,
@@ -104,7 +104,7 @@ templateRouter.post("/", async (req, res) => {
     placeholders.push("name", "items");
     const values = {
       name: req.body.name,
-      items: JSON.stringify(req.body.items),
+      items: req.body.items,
       id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
     };
 
@@ -124,6 +124,15 @@ templateRouter.post("/", async (req, res) => {
     if (req.body.category) {
       placeholders.push("category");
       values["category"] = req.body.category;
+    }
+
+    // optional cover image
+    if (req.files?.cover_image) {
+      placeholders.push("cover_image");
+      values["cover_image"] = {
+        val: req.files.cover_image.data,
+        type: oracledb.BLOB,
+      };
     }
 
     const placeholdersString = placeholders.map((t) => `:${t}`).join(", ");
@@ -177,7 +186,7 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     // template items
     if (req.body.items) {
       fields.push("items = :items");
-      values["items"] = JSON.stringify(req.body.items);
+      values["items"] = req.body.items;
     }
 
     // template creator
@@ -201,6 +210,23 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
       values["category"] = req.body.category;
     }
 
+    // optional cover image
+    if (req.files?.cover_image) {
+      fields.push("cover_image = :cover_image");
+      values["cover_image"] = {
+        val: req.files.cover_image.data,
+        type: oracledb.BLOB,
+      };
+    } else {
+      if (req.body.cover_image) {
+        fields.push("cover_image = :cover_image");
+        values["cover_image"] = {
+          val: null,
+          type: oracledb.BLOB,
+        };
+      }
+    }
+
     // build the string
     const updateString = fields.join(", ");
     const query = `UPDATE templates SET ${updateString} WHERE id = :id`;
@@ -218,6 +244,7 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
       id: req.params.id,
     });
   } catch (err) {
+    console.log(err);
     res.status(500).send(databaseError);
   }
 });

@@ -9,6 +9,7 @@ import { isCreatorOfTemplate } from "../util/permissions";
 import { getCategoryById } from "../util/storage";
 import { fetchTemplateById } from "../api/templates";
 import { addNewToplist } from "../api/toplists";
+import { getImgUrl } from "../util/imageHandler";
 
 /**
  * View where the user can create a new list from a chosen template.
@@ -42,6 +43,7 @@ function NewList() {
   };
 
   const [template, setTemplate] = useState(null);
+  const [imgUrl, setImgUrl] = useState("");
   const [containers, setContainers] = useState(itemContainers);
   const [toplistName, setToplistName] = useState("");
   const [toplistDesc, setToplistDesc] = useState("");
@@ -75,6 +77,11 @@ function NewList() {
         console.log(data);
         const formattedData = formatData(data)[0];
         setTemplate(formattedData);
+
+        if (formattedData.cover_image) {
+          const url = getImgUrl(formattedData.cover_image);
+          setImgUrl(url);
+        }
 
         const blankAmount = 5;
         const blanks = [];
@@ -209,7 +216,6 @@ function NewList() {
     <div className="container">
       <div className="createRank">
         <h1>Create a Top List</h1>
-
         {canEdit && (
           <Link to={`/edit-template/${template.id}`} className="editButton">
             <span
@@ -230,6 +236,12 @@ function NewList() {
             "Unknown"
           )}
         </p>
+
+        {imgUrl && (
+          <div className="coverImage">
+            <img src={imgUrl} />
+          </div>
+        )}
 
         <p className="templateInfo">Category: {category}</p>
 

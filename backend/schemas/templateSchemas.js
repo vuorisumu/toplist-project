@@ -27,13 +27,8 @@ const templateSchema = Joi.object({
   creator_id: Joi.number().optional(),
   description: Joi.alternatives(Joi.string().optional(), Joi.allow(null)),
   category: Joi.number().optional(),
-  items: Joi.array()
-    .items(
-      Joi.object().keys({
-        item_name: Joi.string().required(),
-      })
-    )
-    .required(),
+  items: Joi.string().required(),
+  cover_image: Joi.string().optional(),
 });
 
 module.exports = {

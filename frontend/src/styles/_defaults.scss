@@ -24,3 +24,17 @@
   margin: 0;
   padding: 0;
 }
+
+@mixin coverImage() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    aspect-ratio: 12 / 5;
+    width: 100%;
+    max-width: 800px;
+    width: 100%;
+    object-fit: cover;
+  }
+}

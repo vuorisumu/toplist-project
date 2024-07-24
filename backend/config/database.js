@@ -3,6 +3,8 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
+oracledb.fetchAsBuffer = [oracledb.BLOB];
+
 let pool;
 /**
  * Initializes the connection pool with credentials found in .env file.

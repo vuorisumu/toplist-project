@@ -618,8 +618,32 @@ nav .fixedLogin.active {
   margin-top: 50px;
 }
 
-.info h2 {
+.info h2,
+.info #imagePreview {
   grid-column: 1/3;
+}
+.info #imagePreview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: block;
+  position: relative;
+}
+.info #imagePreview img {
+  aspect-ratio: 12/5;
+  width: 100%;
+  max-width: 800px;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.info #imagePreview button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.8em;
+  font-weight: 400;
+  padding: 0.3em 0.7em;
 }
 
 .addCont {
@@ -646,6 +670,20 @@ nav .fixedLogin.active {
 .addCont ul li input[type=search] {
   width: 100%;
 }
+.coverImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.coverImage img {
+  aspect-ratio: 12/5;
+  width: 100%;
+  max-width: 800px;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
 .rank-item {
   display: flex;
   align-items: center;

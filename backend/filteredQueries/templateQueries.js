@@ -24,7 +24,7 @@ function filteredTemplatesQuery(req) {
   // fetch just the names or all relevant information
   filteredQuery = value.namesOnly
     ? "SELECT DISTINCT t.name "
-    : "SELECT t.id, t.name, t.description, u.user_name, t.creator_id, t.category ";
+    : "SELECT t.id, t.name, t.description, u.user_name, t.creator_id, t.category, t.cover_image ";
 
   // join relevant tables
   filteredQuery +=
