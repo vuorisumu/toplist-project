@@ -31,7 +31,9 @@
   align-items: center;
 
   img {
-    max-height: 150px;
+    aspect-ratio: 12 / 5;
+    width: 100%;
+    max-width: 800px;
     width: 100%;
     object-fit: cover;
   }

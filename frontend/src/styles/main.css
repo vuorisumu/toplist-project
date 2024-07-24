@@ -630,7 +630,9 @@ nav .fixedLogin.active {
   position: relative;
 }
 .info #imagePreview img {
-  max-height: 150px;
+  aspect-ratio: 12/5;
+  width: 100%;
+  max-width: 800px;
   width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
@@ -674,7 +676,9 @@ nav .fixedLogin.active {
   align-items: center;
 }
 .coverImage img {
-  max-height: 150px;
+  aspect-ratio: 12/5;
+  width: 100%;
+  max-width: 800px;
   width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
