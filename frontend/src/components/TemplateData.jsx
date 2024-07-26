@@ -64,12 +64,14 @@ function TemplateData({ data, onSubmit, submitText }) {
   const handleAddItemImage = async (e, index) => {
     const file = e.target.files[0];
     if (file) {
-      const resized = await resizeImage(file);
+      const resized = await resizeImage(file, {
+        maxWidth: 150,
+        maxHeight: 150,
+      });
       const imgId = uuid();
       items[index].img_id = imgId;
       items[index].img = resized;
       console.log(items[index]);
-      // setCoverImage(resized);
     } else {
       console.log("no file");
     }
