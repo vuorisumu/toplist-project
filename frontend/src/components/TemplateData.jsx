@@ -61,6 +61,12 @@ function TemplateData({ data, onSubmit, submitText }) {
     setCoverImage({});
   };
 
+  /**
+   * Adds an image to an item with the given index
+   *
+   * @param {ChangeEvent} e - event containing information about the current value
+   * @param {number} index - Item index to which the image is added
+   */
   const handleAddItemImage = async (e, index) => {
     const file = e.target.files[0];
     if (file) {
@@ -153,6 +159,12 @@ function TemplateData({ data, onSubmit, submitText }) {
     return hasName && enoughItems && imagesOkay;
   };
 
+  /**
+   * Handles submitting the newly created template.
+   * Doesn't do anything if the template doesn't meet the minimum requirements.
+   *
+   * @param {Event} e - event information
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!meetsRequirements()) {
