@@ -24,7 +24,6 @@ function DnDContainer({
 }) {
   // items with notes
   const [selectedItems, setSelectedItems] = useState([]);
-  const [images, setImages] = useState([]);
   const minSize = 5;
 
   useEffect(() => {
@@ -37,10 +36,13 @@ function DnDContainer({
     }
   }, []);
 
+  /**
+   * Gets images from the database and adds their urls to corresponding items.
+   *
+   * @param {Array} imageIds - Array of image IDs
+   */
   const getImages = async (imageIds) => {
     const fetchedImages = await getItemImages(imageIds);
-    console.log(fetchedImages);
-    setImages(fetchedImages);
 
     const updatedItems = containers[ITEMS_REMAINING].items.map((i) => {
       return {
