@@ -16,6 +16,7 @@ function TemplateData({ data, onSubmit, submitText }) {
   const [categories, setCategories] = useState(null);
   const [chosenCategory, setChosenCategory] = useState("Choose category");
   const [coverImage, setCoverImage] = useState({});
+  const [loading, setLoading] = useState(true);
   const imgRef = useRef();
 
   useEffect(() => {
@@ -34,6 +35,8 @@ function TemplateData({ data, onSubmit, submitText }) {
           imageIds.push(i.img_id);
         });
         getImages(imageIds);
+      } else {
+        setLoading(false);
       }
     }
   }, []);
@@ -52,6 +55,7 @@ function TemplateData({ data, onSubmit, submitText }) {
   const getImages = async (imageIds) => {
     const fetchedImages = await getItemImages(imageIds);
     setItemImages(fetchedImages);
+    setLoading(false);
   };
 
   /**
@@ -325,6 +329,8 @@ function TemplateData({ data, onSubmit, submitText }) {
                       <img src={URL.createObjectURL(itemImages[index])} />
                     ) : itemImages[index]?.img_url ? (
                       <img src={itemImages[index].img_url} />
+                    ) : loading ? (
+                      <p>Loading</p>
                     ) : (
                       <p>Placeholder</p>
                     )}
@@ -365,7 +371,7 @@ function TemplateData({ data, onSubmit, submitText }) {
         </ul>
       )}
 
-      <button type="submit" className="createButton">
+      <button type="submit" className="createButton" disabled={loading}>
         {submitText}
       </button>
 
