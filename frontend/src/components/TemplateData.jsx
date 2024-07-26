@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { clearAll } from "../util/misc";
 import Dropdown from "./Dropdown";
 import { getCategories } from "../util/storage";
-import { blobToFile, resizeImage } from "../util/imageHandler";
+import { blobToFile, getItemImages, resizeImage } from "../util/imageHandler";
 import { v4 as uuid } from "uuid";
 import { addNewImages } from "../api/images";
 
@@ -21,9 +21,20 @@ function TemplateData({ data, onSubmit, submitText }) {
   useEffect(() => {
     getCategories().then((data) => setCategories(data));
 
-    if (data && data.cover_image) {
-      const img = blobToFile(data.cover_image);
-      setCoverImage(img);
+    if (data) {
+      if (data.cover_image) {
+        const img = blobToFile(data.cover_image);
+        setCoverImage(img);
+      }
+
+      if (data.items[0].img_id) {
+        setHasImages(true);
+        const imageIds = [];
+        data.items.map((i) => {
+          imageIds.push(i.img_id);
+        });
+        getImages(imageIds);
+      }
     }
   }, []);
 
@@ -37,6 +48,11 @@ function TemplateData({ data, onSubmit, submitText }) {
       setChosenCategory(categoryName[0]);
     }
   }, [categories]);
+
+  const getImages = async (imageIds) => {
+    const fetchedImages = await getItemImages(imageIds);
+    setItemImages(fetchedImages);
+  };
 
   /**
    * Handles the selection of a cover image, resizing it if it is big.
@@ -305,6 +321,8 @@ function TemplateData({ data, onSubmit, submitText }) {
                   <div className="itemImage">
                     {itemImages[index]?.name ? (
                       <img src={URL.createObjectURL(itemImages[index])} />
+                    ) : itemImages[index]?.img_url ? (
+                      <img src={itemImages[index].img_url} />
                     ) : (
                       <p>Placeholder</p>
                     )}
