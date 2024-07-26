@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { DnDContainer } from "./Dnd";
 import { v4 as uuid } from "uuid";
@@ -55,6 +55,7 @@ function NewList() {
   const [hasImages, setHasImages] = useState(false);
   const [newImage, setNewImage] = useState({});
   const [addedImages, setAddedImages] = useState([]);
+  const imgRef = useRef();
 
   /**
    * Checks if the user is logged in as admin or is the creator of the
@@ -138,6 +139,13 @@ function NewList() {
    * Only adds a new item if the name of the entry is not blank
    */
   const addEntry = () => {
+    if (hasImages && !newImage.id) {
+      setErrorMessages(["New item must have an image"]);
+      document.getElementById("newItemsCont").classList.add("error");
+    } else {
+      document.getElementById("newItemsCont").classList.remove("error");
+    }
+
     // only adds new if entry isn't empty
     if (newEntry.trim() !== "" && (!hasImages || (hasImages && newImage.id))) {
       const addedEntry = {
@@ -166,6 +174,7 @@ function NewList() {
 
       if (hasImages) {
         setNewImage({});
+        imgRef.current.value = "";
       }
     }
   };
@@ -340,7 +349,7 @@ function NewList() {
         />
 
         {/* Add new items */}
-        <div className="newItemsCont">
+        <div className="newItemsCont" id="newItemsCont">
           <label>New item: </label>
           <input
             type="text"
@@ -351,6 +360,7 @@ function NewList() {
           {hasImages && (
             <input
               type="file"
+              ref={imgRef}
               id={`newImage`}
               name={`newImage`}
               accept="image/png, image/gif, image/jpeg"
