@@ -27,10 +27,6 @@ function TemplateData({ data, onSubmit, submitText }) {
   }, []);
 
   useEffect(() => {
-    console.log(hasImages);
-  }, [hasImages]);
-
-  useEffect(() => {
     if (categories && data?.category) {
       const categoryName = categories
         .filter((category) => category.id === data.category)
@@ -128,15 +124,30 @@ function TemplateData({ data, onSubmit, submitText }) {
 
     const enoughItems =
       items.filter((i) => i.item_name.trim() !== "").length >= 5;
+
     if (!enoughItems) {
       tempErrors.push("Template must have at least 5 items");
+    }
+
+    const imagesOkay = hasImages
+      ? items.filter((i) => i.img).length ===
+        items.filter((i) => i.item_name.trim() !== "").length
+      : true;
+
+    if (!imagesOkay) {
+      tempErrors.push(
+        "All items must have an image when making a template with images"
+      );
+    }
+
+    if (!enoughItems || !imagesOkay) {
       document.getElementById("tempItems").classList.add("error");
     } else {
       document.getElementById("tempItems").classList.remove("error");
     }
 
     setErrors(tempErrors);
-    return hasName && enoughItems;
+    return hasName && enoughItems && imagesOkay;
   };
 
   const handleSubmit = async (e) => {
