@@ -16,13 +16,15 @@ export const fetchImage = (id) => {
 /**
  * Adds a new image to database
  *
- * @param {object} image - image data
+ * @param {object} images - image data
  * @returns the ID of the newly added template on successful insert
  */
-export const addNewImage = (image) => {
+export const addNewImages = (images) => {
   const formData = new FormData();
-  formData.append("id", image.id);
-  formData.append("img", image.img);
+  images.forEach((image, index) => {
+    formData.append(`imageId[${index}]`, image.id);
+    formData.append(`image[${index}]`, image.img);
+  });
 
   for (let [key, value] of formData.entries()) {
     console.log(key, value);

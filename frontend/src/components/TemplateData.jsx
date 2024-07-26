@@ -4,6 +4,7 @@ import Dropdown from "./Dropdown";
 import { getCategories } from "../util/storage";
 import { blobToFile, resizeImage } from "../util/imageHandler";
 import { v4 as uuid } from "uuid";
+import { addNewImages } from "../api/images";
 
 function TemplateData({ data, onSubmit, submitText }) {
   const [templateName, setTemplateName] = useState(data?.name || "");
@@ -159,7 +160,7 @@ function TemplateData({ data, onSubmit, submitText }) {
     const addedImages = items
       .filter((i) => i.item_name.trim() !== "")
       .map((i) => ({
-        img_id: i.img_id,
+        id: i.img_id,
         img: i.img,
       }));
 
@@ -205,6 +206,9 @@ function TemplateData({ data, onSubmit, submitText }) {
     }
 
     console.log(templateData);
+    console.log(addedImages);
+    const res = await addNewImages(addedImages);
+    console.log(res);
     // onSubmit(templateData);
   };
 

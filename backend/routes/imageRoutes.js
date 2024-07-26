@@ -40,35 +40,37 @@ imageRouter.get("/:id", async (req, res) => {
  */
 imageRouter.post("/", async (req, res) => {
   try {
-    // validate data
-    const { error } = imageSchema.validate(req.body, { abortEarly: false });
-    if (error) {
-      return res.status(400).json({ message: error.details });
-    }
-
-    if (!req.files) {
+    if (!req.files || req.body.images) {
       return res.status(400).json({ msg: "No images provided" });
     }
 
-    const values = {
-      img: {
-        val: req.files.img.data,
-        type: oracledb.BLOB,
-      },
-      id: req.body.id,
-    };
+    const imageIds = Object.keys(req.body).filter((key) =>
+      key.startsWith("imageId")
+    );
+    let query = "INSERT INTO images (id, img) VALUES ";
+    let values = [];
+    let placeholders = [];
 
-    const query = "INSERT INTO images (id, img) VALUES (:id, :img)";
+    imageIds.forEach((key, index) => {
+      const imageId = req.body[key];
+      const fileKey = `image[${index}]`;
+      const imgData = req.files[fileKey].data;
+      placeholders.push(`(:id${index}, :img${index})`);
+      values.push(imageId, { val: imgData, type: oracledb.BLOB });
+    });
 
-    // const result = await database.query(query, values);
+    query += placeholders.join(", ");
+
+    const result = await database.query(query, values);
 
     // successful insert
     res.status(201).json({
       msg: "Added new image",
-      id: values.id,
+      ids: imageIds,
     });
   } catch (err) {
     res.status(500).send(err.message);
+    console.log(err.message);
   }
 });
 
