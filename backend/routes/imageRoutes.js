@@ -18,7 +18,7 @@ const imageSchema = Joi.object({
  */
 imageRouter.get("/:id", async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
     const result = await database.query(`SELECT * FROM images WHERE id = :id`, {
       id: id,
     });
