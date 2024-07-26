@@ -7,9 +7,8 @@ import { isAdmin } from "../util/permissions";
 import { deleteToplist, fetchToplistById } from "../api/toplists";
 
 /**
- * View of a single ranking rendering all information related to the ranking
- * and a back button. Also renders a delete button if the user is logged in as
- * admin
+ * View of a single ranking rendering all information related to the top list
+ * and a back button.
  *
  * @returns {JSX.Element} Component displaying a single top list
  */
@@ -72,43 +71,7 @@ function SingleList() {
     <div className="container">
       <div className="rank-container no-title">
         <h2>{list.toplist_name}</h2>
-        <div className="rank-info">
-          <p>
-            Template:{" "}
-            {list.name ? (
-              <Link to={`/createlist/${list.template_id}`}>{list.name}</Link>
-            ) : (
-              "[Deleted]"
-            )}
-          </p>
-
-          <p>
-            Creator:{" "}
-            {list.user_name ? (
-              <Link to={`/user/${list.user_name}`}>{list.user_name}</Link>
-            ) : (
-              "Anonymous"
-            )}
-          </p>
-
-          <p>Creation date: {formatDate(list.creation_time)}</p>
-          {list.toplist_desc && <p>{list.toplist_desc}</p>}
-        </div>
-
-        <div>
-          <ol className="rank">
-            {list.ranked_items.map((item, index) => (
-              <li key={"item" + index}>
-                <p>{item.item_name}</p>
-                {item.item_note && <p className="itemNote">{item.item_note}</p>}
-              </li>
-            ))}
-          </ol>
-        </div>
-
-        {isAdmin() && (
-          <ButtonPrompt buttonName="Delete ranking" confirm={handleDelete} />
-        )}
+        <ToplistData data={list} showTemplate={true} showCreator={true} />
 
         <button onClick={() => navigate(-1)} className="backButton">
           Back

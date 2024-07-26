@@ -3,9 +3,10 @@ import { formatDate } from "../util/misc";
 import ButtonPrompt from "./ButtonPrompt";
 import { isAdmin } from "../util/permissions";
 import { deleteToplist } from "../api/toplists";
+import ToplistData from "./ToplistData";
 
 /**
- * Reusable component displaying top list data.
+ * Reusable component displaying top list title and data
  *
  * @param {object} props.data - Top list data to be displayed
  * @param {boolean} props.general - whether the top list should display
@@ -33,45 +34,11 @@ function Toplist({ data, general, showCreator = true }) {
         {general ? <h3>{data.toplist_name}</h3> : <h2>{data.toplist_name}</h2>}
       </Link>
 
-      {showCreator && (
-        <p>
-          List creator:{" "}
-          {data.user_name ? (
-            <Link to={`/user/${data.user_name}`}>{data.user_name}</Link>
-          ) : (
-            "Anonymous"
-          )}
-        </p>
-      )}
-
-      {general && (
-        <p>
-          Template:{" "}
-          {data.name ? (
-            <Link to={`/createlist/${data.template_id}`}>{data.name}</Link>
-          ) : (
-            "[Deleted]"
-          )}
-        </p>
-      )}
-      <p>Creation time: {formatDate(data.creation_time)}</p>
-      {data.toplist_desc && <p>{data.toplist_desc}</p>}
-
-      <ol className="rank">
-        {data.ranked_items.map((item) => (
-          <li key={`${data.toplist_id} ${item.rank_number}`}>
-            <p>{item.item_name}</p>
-            {item.item_note && <p className="itemNote">{item.item_note}</p>}
-          </li>
-        ))}
-      </ol>
-
-      {isAdmin() && (
-        <ButtonPrompt
-          buttonName="Delete top list"
-          confirm={() => handleDelete(data.toplist_id)}
-        />
-      )}
+      <ToplistData
+        data={data}
+        showTemplate={general}
+        showCreator={showCreator}
+      />
     </>
   );
 }
