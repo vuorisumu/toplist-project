@@ -3,6 +3,7 @@ import { clearAll } from "../util/misc";
 import Dropdown from "./Dropdown";
 import { getCategories } from "../util/storage";
 import { blobToFile, resizeImage } from "../util/imageHandler";
+import { v4 as uuid } from "uuid";
 
 function TemplateData({ data, onSubmit, submitText }) {
   const [templateName, setTemplateName] = useState(data?.name || "");
@@ -55,6 +56,20 @@ function TemplateData({ data, onSubmit, submitText }) {
   const removeImage = () => {
     imgRef.current.value = "";
     setCoverImage({});
+  };
+
+  const handleAddItemImage = async (e, index) => {
+    const file = e.target.files[0];
+    if (file) {
+      const resized = await resizeImage(file);
+      const imgId = uuid();
+      items[index].img_id = imgId;
+      items[index].img = resized;
+      console.log(items[index]);
+      // setCoverImage(resized);
+    } else {
+      console.log("no file");
+    }
   };
 
   /**
@@ -225,6 +240,13 @@ function TemplateData({ data, onSubmit, submitText }) {
                 placeholder="List item"
                 value={i.item_name}
                 onChange={(e) => handleItemEdits(index, e.target.value)}
+              />
+              <input
+                type="file"
+                id={`item${index}`}
+                name={`item${index}`}
+                accept="image/png, image/gif, image/jpeg"
+                onChange={(e) => handleAddItemImage(e, index)}
               />
               {index !== items.length - 1 ? (
                 <button
