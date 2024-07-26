@@ -159,11 +159,13 @@ function NewList() {
       (i) => i.item_name.trim() !== ""
     );
 
+    console.log(nonEmptyRanked);
+
     if (nonEmptyRanked.length === 0) {
       errors.push("Top list container must have at least one item");
       document.getElementById("Ranked").classList.add("error");
     } else {
-      document.getElementById("Ranked").classList.add("error");
+      document.getElementById("Ranked").classList.remove("error");
     }
 
     if (!toplistName) {
