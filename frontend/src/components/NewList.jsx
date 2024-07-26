@@ -10,6 +10,7 @@ import { getCategoryById } from "../util/storage";
 import { fetchTemplateById } from "../api/templates";
 import { addNewToplist } from "../api/toplists";
 import { getImgUrl, resizeImage } from "../util/imageHandler";
+import { addNewImages } from "../api/images";
 
 /**
  * View where the user can create a new list from a chosen template.
@@ -148,6 +149,8 @@ function NewList() {
       if (hasImages) {
         addedEntry.img_id = newImage.id;
         addedEntry.img_url = URL.createObjectURL(newImage.img);
+
+        setAddedImages((prevImages) => [...prevImages, newImage]);
       }
 
       setContainers((prevContainers) => ({
@@ -192,11 +195,19 @@ function NewList() {
    */
   const saveToplist = async () => {
     const errors = [];
-    const nonEmptyRanked = containers[ITEMS_RANKED].items.filter(
-      (i) => i.item_name.trim() !== ""
-    );
+    const nonEmptyRanked = containers[ITEMS_RANKED].items
+      .filter((i) => i.item_name.trim() !== "")
+      .map((i) => {
+        const { img_url: _, ...rest } = i;
+        return rest;
+      });
 
-    console.log(nonEmptyRanked);
+    const userAdded = containers[ITEMS_RANKED].items
+      .filter((i) => i.deletable === true)
+      .map((i) => {
+        return addedImages.find((img) => img.id === i.img_id);
+      });
+    console.log(userAdded);
 
     if (nonEmptyRanked.length === 0) {
       errors.push("Top list container must have at least one item");
@@ -234,6 +245,11 @@ function NewList() {
       // optional description
       if (toplistDesc !== "") {
         toplistData.toplist_desc = toplistDesc;
+      }
+
+      if (userAdded.length > 0) {
+        const imgRes = await addNewImages(userAdded);
+        console.log(imgRes);
       }
 
       const res = await addNewToplist(toplistData);
