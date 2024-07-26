@@ -9,6 +9,7 @@ function TemplateData({ data, onSubmit, submitText }) {
   const [templateName, setTemplateName] = useState(data?.name || "");
   const [description, setDescription] = useState(data?.description || "");
   const [items, setItems] = useState(data?.items || [{ item_name: "" }]);
+  const [itemImages, setItemImages] = useState([]);
   const [errors, setErrors] = useState([]);
   const [categories, setCategories] = useState(null);
   const [chosenCategory, setChosenCategory] = useState("Choose category");
@@ -139,7 +140,19 @@ function TemplateData({ data, onSubmit, submitText }) {
       return;
     }
 
-    const nonEmptyItems = items.filter((i) => i.item_name.trim() !== "");
+    const addedImages = items
+      .filter((i) => i.item_name.trim() !== "")
+      .map((i) => ({
+        img_id: i.img_id,
+        img: i.img,
+      }));
+
+    const nonEmptyItems = items
+      .filter((i) => i.item_name.trim() !== "")
+      .map((i) => ({
+        item_name: i.item_name,
+        img_id: i.img_id,
+      }));
 
     // mandatory data
     const templateData = {
@@ -175,7 +188,8 @@ function TemplateData({ data, onSubmit, submitText }) {
       templateData.category = categoryId[0];
     }
 
-    onSubmit(templateData);
+    console.log(templateData);
+    // onSubmit(templateData);
   };
 
   return (
