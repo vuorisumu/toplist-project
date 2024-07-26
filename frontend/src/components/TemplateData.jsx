@@ -77,7 +77,11 @@ function TemplateData({ data, onSubmit, submitText }) {
       const imgId = uuid();
       items[index].img_id = imgId;
       items[index].img = resized;
-      console.log(items[index]);
+      setItemImages((prevImages) => {
+        const newImages = [...prevImages];
+        newImages[index] = resized;
+        return newImages;
+      });
     } else {
       console.log("no file");
     }
@@ -297,13 +301,22 @@ function TemplateData({ data, onSubmit, submitText }) {
                 onChange={(e) => handleItemEdits(index, e.target.value)}
               />
               {hasImages === true && (
-                <input
-                  type="file"
-                  id={`item${index}`}
-                  name={`item${index}`}
-                  accept="image/png, image/gif, image/jpeg"
-                  onChange={(e) => handleAddItemImage(e, index)}
-                />
+                <>
+                  <div className="itemImage">
+                    {itemImages[index]?.name ? (
+                      <img src={URL.createObjectURL(itemImages[index])} />
+                    ) : (
+                      <p>Placeholder</p>
+                    )}
+                  </div>
+                  <input
+                    type="file"
+                    id={`item${index}`}
+                    name={`item${index}`}
+                    accept="image/png, image/gif, image/jpeg"
+                    onChange={(e) => handleAddItemImage(e, index)}
+                  />
+                </>
               )}
 
               {index !== items.length - 1 ? (
