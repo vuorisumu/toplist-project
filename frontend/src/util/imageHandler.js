@@ -103,6 +103,12 @@ export const blobToFile = (data) => {
   return file;
 };
 
+/**
+ * Fetches all images from the database and convert them to urls.
+ *
+ * @param {Array} imageIds - Array of image ids
+ * @returns the images in an array
+ */
 export const getItemImages = async (imageIds) => {
   const fetchImagePromises = imageIds.map((id) => fetchImage(id));
   const fetchedImages = await Promise.all(fetchImagePromises);
