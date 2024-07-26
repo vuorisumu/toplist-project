@@ -10,6 +10,7 @@ function TemplateData({ data, onSubmit, submitText }) {
   const [description, setDescription] = useState(data?.description || "");
   const [items, setItems] = useState(data?.items || [{ item_name: "" }]);
   const [itemImages, setItemImages] = useState([]);
+  const [hasImages, setHasImages] = useState(false);
   const [errors, setErrors] = useState([]);
   const [categories, setCategories] = useState(null);
   const [chosenCategory, setChosenCategory] = useState("Choose category");
@@ -24,6 +25,10 @@ function TemplateData({ data, onSubmit, submitText }) {
       setCoverImage(img);
     }
   }, []);
+
+  useEffect(() => {
+    console.log(hasImages);
+  }, [hasImages]);
 
   useEffect(() => {
     if (categories && data?.category) {
@@ -246,6 +251,16 @@ function TemplateData({ data, onSubmit, submitText }) {
 
       <div className="addCont addItems">
         <h2>Template items</h2>
+        <div className="toggle">
+          <label>Add images: </label>
+          <input
+            type="checkbox"
+            name="toggleImages"
+            id="toggleImages"
+            checked={hasImages.value}
+            onChange={() => setHasImages(!hasImages)}
+          />
+        </div>
         <ul id="tempItems">
           {items.map((i, index) => (
             <li key={"item" + index}>
@@ -255,13 +270,16 @@ function TemplateData({ data, onSubmit, submitText }) {
                 value={i.item_name}
                 onChange={(e) => handleItemEdits(index, e.target.value)}
               />
-              <input
-                type="file"
-                id={`item${index}`}
-                name={`item${index}`}
-                accept="image/png, image/gif, image/jpeg"
-                onChange={(e) => handleAddItemImage(e, index)}
-              />
+              {hasImages === true && (
+                <input
+                  type="file"
+                  id={`item${index}`}
+                  name={`item${index}`}
+                  accept="image/png, image/gif, image/jpeg"
+                  onChange={(e) => handleAddItemImage(e, index)}
+                />
+              )}
+
               {index !== items.length - 1 ? (
                 <button
                   type="button"
