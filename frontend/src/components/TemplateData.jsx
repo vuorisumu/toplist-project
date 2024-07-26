@@ -159,7 +159,7 @@ function TemplateData({ data, onSubmit, submitText }) {
     }
 
     const imagesOkay = hasImages
-      ? items.filter((i) => i.img).length ===
+      ? itemImages.length ===
         items.filter((i) => i.item_name.trim() !== "").length
       : true;
 
@@ -192,7 +192,7 @@ function TemplateData({ data, onSubmit, submitText }) {
     }
 
     const addedImages = items
-      .filter((i) => i.item_name.trim() !== "")
+      .filter((i) => i.item_name.trim() !== "" && i.img)
       .map((i) => ({
         id: i.img_id,
         img: i.img,
@@ -239,7 +239,9 @@ function TemplateData({ data, onSubmit, submitText }) {
       templateData.category = categoryId[0];
     }
 
-    const res = await addNewImages(addedImages);
+    if (addedImages.length > 0) {
+      const res = await addNewImages(addedImages);
+    }
     onSubmit(templateData);
   };
 
