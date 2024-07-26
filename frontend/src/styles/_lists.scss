@@ -373,6 +373,17 @@
   position: relative;
 }
 
+// item images
+.itemImage {
+  max-width: 50px;
+  max-height: 50px;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
 // category dropdown
 .newTemplate {
   .dropdownElement {
