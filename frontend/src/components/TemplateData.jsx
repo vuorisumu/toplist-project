@@ -20,14 +20,18 @@ function TemplateData({ data, onSubmit, submitText }) {
   const imgRef = useRef();
 
   useEffect(() => {
+    // Gets the category list from the database
     getCategories().then((data) => setCategories(data));
 
+    // Sets the existing data when in edit mode
     if (data) {
+      // Cover image
       if (data.cover_image) {
         const img = blobToFile(data.cover_image);
         setCoverImage(img);
       }
 
+      // List has existing images
       if (data.items[0].img_id) {
         setHasImages(true);
         const imageIds = [];
@@ -38,9 +42,12 @@ function TemplateData({ data, onSubmit, submitText }) {
       } else {
         setLoading(false);
       }
+    } else {
+      setLoading(false);
     }
   }, []);
 
+  // Sets the chosen category after categories are loaded from the database
   useEffect(() => {
     if (categories && data?.category) {
       const categoryName = categories
@@ -52,6 +59,11 @@ function TemplateData({ data, onSubmit, submitText }) {
     }
   }, [categories]);
 
+  /**
+   * Gets all images with the given IDs from the database and set them to state.
+   *
+   * @param {Array} imageIds - Array of image IDs
+   */
   const getImages = async (imageIds) => {
     const fetchedImages = await getItemImages(imageIds);
     setItemImages(fetchedImages);
@@ -309,7 +321,7 @@ function TemplateData({ data, onSubmit, submitText }) {
             type="checkbox"
             name="toggleImages"
             id="toggleImages"
-            checked={hasImages.value}
+            checked={hasImages}
             onChange={() => setHasImages(!hasImages)}
           />
         </div>
