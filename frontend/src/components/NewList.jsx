@@ -316,9 +316,8 @@ function NewList() {
 
         <p className="templateInfo desc">
           {template.description
-            ? "Template description"
+            ? `Template description: ${template.description}`
             : `Create your own top list using this template`}
-          {template.description}
         </p>
 
         {/* Ranking information */}
