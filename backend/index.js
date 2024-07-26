@@ -7,6 +7,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const categoryRoutes = require("./routes/categoryRoutes");
 const fileUpload = require("express-fileupload");
+const imageRoutes = require("./routes/imageRoutes");
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ database.init().then(() => {
   app.use("/api/templates", templateRoutes);
   app.use("/api/users", userRoutes);
   app.use("/api/categories", categoryRoutes);
+  app.use("/api/images", imageRoutes);
   app.use(express.static("./frontend/dist"));
 
   app
