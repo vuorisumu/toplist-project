@@ -39,7 +39,23 @@ function DnDContainer({
 
   const getImages = async (imageIds) => {
     const fetchedImages = await getItemImages(imageIds);
+    console.log(fetchedImages);
     setImages(fetchedImages);
+
+    const updatedItems = containers[ITEMS_REMAINING].items.map((i) => {
+      return {
+        ...i,
+        img_url: fetchedImages.find((img) => img.id === i.img_id).img_url,
+      };
+    });
+
+    setContainers((prevContainers) => ({
+      ...prevContainers,
+      [ITEMS_REMAINING]: {
+        ...prevContainers[ITEMS_REMAINING],
+        items: updatedItems,
+      },
+    }));
   };
 
   /**
@@ -272,13 +288,24 @@ function DnDContainer({
 
                           {/* Item */}
                           {item.img_id &&
-                            (images[index] ? (
+                            (item.img_url ? (
+                              <div className="itemImage">
+                                <img src={item.img_url} />
+                              </div>
+                            ) : (
+                              <p>Loading</p>
+                            ))}
+                          {/*(images[index] ? (
                               <div className="itemImage">
                                 <img src={images[index].img_url} />
                               </div>
+                            ) : item.img_url ? (
+                              <div className="itemImage">
+                                <img src={item.img_url} />
+                              </div>
                             ) : (
                               <p>Loading image</p>
-                            ))}
+                            ))}*/}
                           <p>{item.item_name}</p>
 
                           {/* Note options only on ranked container */}

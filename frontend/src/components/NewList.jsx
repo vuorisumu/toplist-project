@@ -9,7 +9,7 @@ import { isCreatorOfTemplate } from "../util/permissions";
 import { getCategoryById } from "../util/storage";
 import { fetchTemplateById } from "../api/templates";
 import { addNewToplist } from "../api/toplists";
-import { getImgUrl } from "../util/imageHandler";
+import { getImgUrl, resizeImage } from "../util/imageHandler";
 
 /**
  * View where the user can create a new list from a chosen template.
@@ -51,6 +51,9 @@ function NewList() {
   const [errorMessages, setErrorMessages] = useState([]);
   const [canEdit, setCanEdit] = useState(false);
   const [category, setCategory] = useState("");
+  const [hasImages, setHasImages] = useState(false);
+  const [newImage, setNewImage] = useState({});
+  const [addedImages, setAddedImages] = useState([]);
 
   /**
    * Checks if the user is logged in as admin or is the creator of the
@@ -81,6 +84,10 @@ function NewList() {
         if (formattedData.cover_image) {
           const url = getImgUrl(formattedData.cover_image);
           setImgUrl(url);
+        }
+
+        if (formattedData.items[0].img_id) {
+          setHasImages(true);
         }
 
         const blankAmount = 5;
@@ -131,20 +138,50 @@ function NewList() {
    */
   const addEntry = () => {
     // only adds new if entry isn't empty
-    if (newEntry.trim() !== "") {
+    if (newEntry.trim() !== "" && (!hasImages || (hasImages && newImage.id))) {
+      const addedEntry = {
+        item_name: newEntry,
+        deletable: true,
+        id: uuid(),
+      };
+
+      if (hasImages) {
+        addedEntry.img_id = newImage.id;
+        addedEntry.img_url = URL.createObjectURL(newImage.img);
+      }
+
       setContainers((prevContainers) => ({
         ...prevContainers,
         [ITEMS_REMAINING]: {
           ...prevContainers[ITEMS_REMAINING],
-          items: [
-            ...prevContainers[ITEMS_REMAINING].items,
-            { item_name: newEntry, deletable: true, id: uuid() },
-          ],
+          items: [...prevContainers[ITEMS_REMAINING].items, addedEntry],
         },
       }));
 
       // reset entry
       setNewEntry("");
+
+      if (hasImages) {
+        setNewImage({});
+      }
+    }
+  };
+
+  const handleAddItemImage = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const resized = await resizeImage(file, {
+        maxWidth: 150,
+        maxHeight: 150,
+      });
+      const imgId = uuid();
+      setNewImage({
+        id: imgId,
+        img: resized,
+      });
+      console.log("added imgae");
+    } else {
+      console.log("no file");
     }
   };
 
@@ -289,6 +326,13 @@ function NewList() {
             value={newEntry}
             onChange={(e) => setNewEntry(e.target.value)}
             placeholder="New Item"
+          />
+          <input
+            type="file"
+            id={`newImage`}
+            name={`newImage`}
+            accept="image/png, image/gif, image/jpeg"
+            onChange={handleAddItemImage}
           />
           <button type="button" onClick={addEntry}>
             <span className="material-symbols-outlined">add</span>
