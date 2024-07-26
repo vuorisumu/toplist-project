@@ -343,13 +343,15 @@ function NewList() {
             onChange={(e) => setNewEntry(e.target.value)}
             placeholder="New Item"
           />
-          <input
-            type="file"
-            id={`newImage`}
-            name={`newImage`}
-            accept="image/png, image/gif, image/jpeg"
-            onChange={handleAddItemImage}
-          />
+          {hasImages && (
+            <input
+              type="file"
+              id={`newImage`}
+              name={`newImage`}
+              accept="image/png, image/gif, image/jpeg"
+              onChange={handleAddItemImage}
+            />
+          )}
           <button type="button" onClick={addEntry}>
             <span className="material-symbols-outlined">add</span>
           </button>
