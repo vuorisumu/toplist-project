@@ -34,6 +34,7 @@ const rankingSchema = Joi.object({
         item_note: Joi.string().optional(),
         deletable: Joi.boolean().optional(),
         rank_number: Joi.number().required(),
+        img_id: Joi.string().optional(),
         blank: Joi.boolean().optional(),
         id: Joi.string().optional(),
       })
