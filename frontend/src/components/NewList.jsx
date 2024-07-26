@@ -170,6 +170,11 @@ function NewList() {
     }
   };
 
+  /**
+   * Resizes the given image and adds it to state.
+   *
+   * @param {ChangeEvent} e - event containing information about the current value
+   */
   const handleAddItemImage = async (e) => {
     const file = e.target.files[0];
     if (file) {
