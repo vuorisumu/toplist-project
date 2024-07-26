@@ -205,11 +205,8 @@ function TemplateData({ data, onSubmit, submitText }) {
       templateData.category = categoryId[0];
     }
 
-    console.log(templateData);
-    console.log(addedImages);
     const res = await addNewImages(addedImages);
-    console.log(res);
-    // onSubmit(templateData);
+    onSubmit(templateData);
   };
 
   return (

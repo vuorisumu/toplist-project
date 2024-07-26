@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { v4 as uuid } from "uuid";
+import { getItemImages } from "../util/imageHandler";
 
 /**
  * Renders a Drag n Drop element with two containers, the first one of which is where the user makes the
@@ -23,7 +24,23 @@ function DnDContainer({
 }) {
   // items with notes
   const [selectedItems, setSelectedItems] = useState([]);
+  const [images, setImages] = useState([]);
   const minSize = 5;
+
+  useEffect(() => {
+    if (containers[ITEMS_REMAINING].items[0].img_id) {
+      const imageIds = [];
+      containers[ITEMS_REMAINING].items.map((i) => {
+        imageIds.push(i.img_id);
+      });
+      getImages(imageIds);
+    }
+  }, []);
+
+  const getImages = async (imageIds) => {
+    const fetchedImages = await getItemImages(imageIds);
+    setImages(fetchedImages);
+  };
 
   /**
    * Updates the note on a specified item and re-sets the containers with updated data
@@ -254,6 +271,14 @@ function DnDContainer({
                           )}
 
                           {/* Item */}
+                          {item.img_id &&
+                            (images[index] ? (
+                              <div className="itemImage">
+                                <img src={images[index].img_url} />
+                              </div>
+                            ) : (
+                              <p>Loading image</p>
+                            ))}
                           <p>{item.item_name}</p>
 
                           {/* Note options only on ranked container */}
