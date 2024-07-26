@@ -3,6 +3,8 @@ import { formatDate } from "../util/misc";
 import ButtonPrompt from "./ButtonPrompt";
 import { isAdmin } from "../util/permissions";
 import { deleteToplist } from "../api/toplists";
+import { useEffect, useState } from "react";
+import { getItemImages } from "../util/imageHandler";
 
 /**
  * Reusable component displaying top list data.
@@ -15,6 +17,32 @@ import { deleteToplist } from "../api/toplists";
  * @returns {JSX.Element} Top list preview component
  */
 function ToplistData({ data, showTemplate, showCreator }) {
+  const [itemImages, setItemImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (data.ranked_items[0].img_id) {
+      const imageIds = [];
+      data.ranked_items.map((i) => {
+        imageIds.push(i.img_id);
+      });
+      getImages(imageIds);
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
+  /**
+   * Gets all images with the given IDs from the database and set them to state.
+   *
+   * @param {Array} imageIds - Array of image IDs
+   */
+  const getImages = async (imageIds) => {
+    const fetchedImages = await getItemImages(imageIds);
+    setItemImages(fetchedImages);
+    setLoading(false);
+  };
+
   /**
    * Deletes the top list from the database.
    */
@@ -54,8 +82,19 @@ function ToplistData({ data, showTemplate, showCreator }) {
       {data.toplist_desc && <p>{data.toplist_desc}</p>}
 
       <ol className="rank">
-        {data.ranked_items.map((item) => (
+        {data.ranked_items.map((item, index) => (
           <li key={`${data.toplist_id} ${item.rank_number}`}>
+            {item.img_id && (
+              <div className="itemImage">
+                {itemImages[index]?.name ? (
+                  <img src={URL.createObjectURL(itemImages[index])} />
+                ) : itemImages[index]?.img_url ? (
+                  <img src={itemImages[index].img_url} />
+                ) : (
+                  <p>Loading</p>
+                )}
+              </div>
+            )}
             <p>{item.item_name}</p>
             {item.item_note && <p className="itemNote">{item.item_note}</p>}
           </li>

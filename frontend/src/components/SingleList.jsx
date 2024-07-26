@@ -5,6 +5,7 @@ import ButtonPrompt from "./ButtonPrompt";
 import { formatData } from "../util/dataHandler";
 import { isAdmin } from "../util/permissions";
 import { deleteToplist, fetchToplistById } from "../api/toplists";
+import ToplistData from "./ToplistData";
 
 /**
  * View of a single ranking rendering all information related to the top list
