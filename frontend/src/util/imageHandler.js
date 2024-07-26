@@ -1,4 +1,6 @@
 import { Buffer } from "buffer";
+import { fetchImage } from "../api/images";
+import { formatData } from "./dataHandler";
 
 /**
  * Resizes a given image to preferred dimensions if it is too big.
@@ -99,4 +101,15 @@ export const blobToFile = (data) => {
     type: blob.type,
   });
   return file;
+};
+
+export const getItemImages = async (imageIds) => {
+  const fetchImagePromises = imageIds.map((id) => fetchImage(id));
+  const fetchedImages = await Promise.all(fetchImagePromises);
+  return fetchedImages
+    .map((imageData) => formatData(imageData)[0])
+    .map((formattedData) => ({
+      ...formattedData,
+      img_url: getImgUrl(formattedData.img),
+    }));
 };
