@@ -315,15 +315,18 @@ function TemplateData({ data, onSubmit, submitText }) {
 
       <div className="addCont addItems">
         <h2>Template items</h2>
-        <div className="toggle">
+        <div>
           <label>Add images: </label>
-          <input
-            type="checkbox"
-            name="toggleImages"
-            id="toggleImages"
-            checked={hasImages}
-            onChange={() => setHasImages(!hasImages)}
-          />
+          <div className="toggle">
+            <input
+              type="checkbox"
+              name="toggleImages"
+              id="toggleImages"
+              checked={hasImages}
+              onChange={() => setHasImages(!hasImages)}
+            />
+            <label htmlFor="toggleImages"></label>
+          </div>
         </div>
         <ul id="tempItems">
           {items.map((i, index) => (

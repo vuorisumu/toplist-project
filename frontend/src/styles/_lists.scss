@@ -171,6 +171,10 @@
       @extend %smallButton;
     }
   }
+
+  .toggle {
+    @include defaults.toggle();
+  }
 }
 
 .coverImage {
