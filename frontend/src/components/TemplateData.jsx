@@ -345,9 +345,13 @@ function TemplateData({ data, onSubmit, submitText }) {
                     ) : itemImages[index]?.img_url ? (
                       <img src={itemImages[index].img_url} />
                     ) : loading ? (
-                      <p>Loading</p>
+                      <span className="material-symbols-outlined imagePlaceholder">
+                        pending
+                      </span>
                     ) : (
-                      <p>Placeholder</p>
+                      <span className="material-symbols-outlined imagePlaceholder">
+                        image
+                      </span>
                     )}
                   </div>
                   <input

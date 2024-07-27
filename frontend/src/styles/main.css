@@ -614,6 +614,12 @@ nav .fixedLogin.active {
   color: #9f7a34;
 }
 
+.imagePlaceholder {
+  font-size: 24pt;
+  vertical-align: middle;
+  color: var(--mid-color);
+}
+
 .no-title {
   margin-top: 50px;
 }
