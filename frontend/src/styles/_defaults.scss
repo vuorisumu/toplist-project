@@ -89,7 +89,7 @@
 @mixin toggle() {
   position: relative;
   display: inline-block;
-  top: 5px;
+  top: 8px;
 
   input[type="checkbox"] {
     height: 0;

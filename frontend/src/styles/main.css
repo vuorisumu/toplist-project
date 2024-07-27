@@ -690,7 +690,7 @@ nav .fixedLogin.active {
 .addCont .toggle {
   position: relative;
   display: inline-block;
-  top: 5px;
+  top: 8px;
 }
 .addCont .toggle input[type=checkbox] {
   height: 0;
