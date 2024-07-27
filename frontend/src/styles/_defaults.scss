@@ -38,3 +38,50 @@
     object-fit: cover;
   }
 }
+
+@mixin template() {
+  background-color: theme.$secondary-color;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+
+  ol {
+    border-top: 1px solid theme.$text-secondary;
+    text-align: left;
+  }
+
+  ul {
+    border: 1px solid theme.$text-secondary;
+    margin: 0 20px;
+  }
+
+  h2,
+  a h3 {
+    padding-top: 15px;
+  }
+
+  h4 {
+    margin: auto;
+    margin-top: 25px;
+    margin-bottom: -9px;
+    padding: 0 7px;
+    width: fit-content;
+    color: theme.$text-primary;
+    font-weight: 600;
+    background-color: theme.$secondary-color;
+    text-decoration: underline theme.$accent;
+    position: relative;
+    z-index: 3;
+  }
+
+  a,
+  h2,
+  h3 {
+    display: block;
+    width: fit-content;
+    margin: auto;
+  }
+
+  .confirmButton {
+    margin-bottom: 15px;
+  }
+}
