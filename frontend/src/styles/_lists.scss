@@ -75,14 +75,16 @@
   }
 }
 
-// displaying rankings
+// displaying top lists
 .rank-container {
   @include defaults.template();
 
+  // top list rankings
   ol li {
     padding: 10px;
     position: relative;
 
+    // number styles
     &::marker {
       color: theme.$accent;
       font-size: 16pt;
@@ -113,11 +115,13 @@
   margin-top: 50px;
 }
 
+// custom styles for file input
 .fileInput {
   cursor: pointer;
   width: 40px;
   height: 40px;
 
+  // upload icon
   &::before {
     font-family: "Material Symbols Outlined";
     content: "upload";
@@ -138,11 +142,13 @@
     grid-column: 1/3;
   }
 
+  // cover image
   #imagePreview {
     @include defaults.coverImage();
     display: block;
     position: relative;
 
+    // remove cover image button
     button {
       position: absolute;
       top: 0;
