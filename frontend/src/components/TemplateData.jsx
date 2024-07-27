@@ -81,7 +81,7 @@ function TemplateData({ data, onSubmit, submitText }) {
       const resized = await resizeImage(file);
       setCoverImage(resized);
     } else {
-      console.log("no file");
+      removeImage();
     }
   };
 
@@ -115,7 +115,11 @@ function TemplateData({ data, onSubmit, submitText }) {
         return newImages;
       });
     } else {
-      console.log("no file");
+      setItemImages((prevImages) => {
+        const newImages = [...prevImages];
+        newImages[index] = {};
+        return newImages;
+      });
     }
   };
 
@@ -275,14 +279,16 @@ function TemplateData({ data, onSubmit, submitText }) {
         )}
 
         <label>Cover image:</label>
-        <input
-          type="file"
-          ref={imgRef}
-          id="coverImage"
-          name="image"
-          accept="image/png, image/gif, image/jpeg"
-          onChange={handleImageSelected}
-        />
+        <label className="fileInput">
+          <input
+            type="file"
+            ref={imgRef}
+            id="coverImage"
+            name="image"
+            accept="image/png, image/gif, image/jpeg"
+            onChange={handleImageSelected}
+          />
+        </label>
 
         <label>Template name: </label>
         <input

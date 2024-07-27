@@ -136,6 +136,7 @@
 // info container
 .info {
   @extend %justifiedInputs;
+  align-items: center;
 
   h2,
   #imagePreview {

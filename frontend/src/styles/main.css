@@ -633,6 +633,9 @@ nav .fixedLogin.active {
   visibility: hidden;
 }
 
+.info {
+  align-items: center;
+}
 .info h2,
 .info #imagePreview {
   grid-column: 1/3;
