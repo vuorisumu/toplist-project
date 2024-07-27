@@ -109,14 +109,24 @@
   }
 }
 
-.imagePlaceholder {
-  font-size: 24pt;
-  vertical-align: middle;
-  color: theme.$mid-color;
-}
-
 .no-title {
   margin-top: 50px;
+}
+
+.fileInput {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+
+  &::before {
+    font-family: "Material Symbols Outlined";
+    content: "upload";
+    font-size: 22pt;
+    color: theme.$text-primary;
+  }
+  input {
+    visibility: hidden;
+  }
 }
 
 // info container
@@ -151,13 +161,12 @@
 
   ul li {
     display: flex;
-    gap: 20px;
     flex-wrap: wrap;
+    gap: 10px;
     align-items: center;
     margin: 10px 0;
 
-    input,
-    div {
+    input {
       flex-grow: 1;
     }
 
@@ -337,12 +346,20 @@
 
 // item images
 .itemImage {
-  max-width: 50px;
-  max-height: 50px;
+  width: 40px;
+  height: 40px;
 
   img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
+  }
+
+  .imagePlaceholder {
+    font-size: 24pt;
+    height: 100%;
+    line-height: 40px;
+    color: theme.$mid-color;
   }
 }
 

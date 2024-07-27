@@ -331,12 +331,6 @@ function TemplateData({ data, onSubmit, submitText }) {
         <ul id="tempItems">
           {items.map((i, index) => (
             <li key={"item" + index}>
-              <input
-                type="text"
-                placeholder="List item"
-                value={i.item_name}
-                onChange={(e) => handleItemEdits(index, e.target.value)}
-              />
               {hasImages === true && (
                 <>
                   <div className="itemImage">
@@ -354,15 +348,23 @@ function TemplateData({ data, onSubmit, submitText }) {
                       </span>
                     )}
                   </div>
-                  <input
-                    type="file"
-                    id={`item${index}`}
-                    name={`item${index}`}
-                    accept="image/png, image/gif, image/jpeg"
-                    onChange={(e) => handleAddItemImage(e, index)}
-                  />
+                  <label className="fileInput">
+                    <input
+                      type="file"
+                      id={`item${index}`}
+                      name={`item${index}`}
+                      accept="image/png, image/gif, image/jpeg"
+                      onChange={(e) => handleAddItemImage(e, index)}
+                    />
+                  </label>
                 </>
               )}
+              <input
+                type="text"
+                placeholder="List item"
+                value={i.item_name}
+                onChange={(e) => handleItemEdits(index, e.target.value)}
+              />
 
               {index !== items.length - 1 ? (
                 <button
