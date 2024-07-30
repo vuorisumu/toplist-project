@@ -3,7 +3,6 @@ import {
   HashRouter as Router,
   Routes,
   Route,
-  NavLink,
   Navigate,
   useParams,
 } from "react-router-dom";
@@ -18,6 +17,7 @@ import SingleList from "./components/SingleList.jsx";
 import Register from "./components/Register.jsx";
 import User from "./components/User.jsx";
 import Nav from "./components/Nav.jsx";
+import { isMobile } from "react-device-detect";
 
 class App extends React.Component {
   constructor(props) {
@@ -73,6 +73,9 @@ class App extends React.Component {
           <Route path="/user/:username" element={<User />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
+        <footer className={`${isMobile ? "mobile" : ""}`}>
+          <p>Sumu Vuori 2024</p>
+        </footer>
       </Router>
     );
   }

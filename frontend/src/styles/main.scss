@@ -24,6 +24,7 @@
 // page container
 .container {
   max-width: 550px;
+  min-height: 100vh;
   margin: auto;
   padding: 50px 20px;
 }
@@ -58,6 +59,19 @@ textarea {
 
 button {
   @include defaults.defaultButton();
+}
+
+footer {
+  width: 100%;
+
+  p {
+    font-size: 10pt;
+    opacity: 0.5;
+  }
+
+  &.mobile {
+    padding-bottom: 60px;
+  }
 }
 
 // bigger screen
