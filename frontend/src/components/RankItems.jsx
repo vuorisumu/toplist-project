@@ -142,6 +142,13 @@ function RankItems({ containers, setContainers }) {
                     />
                   ))}
 
+                  {container.keyName === RANKED &&
+                    container.items.length === 0 && (
+                      <p className="placeholder">
+                        Drag and drop items here to rank them
+                      </p>
+                    )}
+
                   {provided.placeholder}
                 </div>
               )}
