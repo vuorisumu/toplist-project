@@ -69,6 +69,25 @@ function RankItems({ containers, setContainers }) {
     }
   };
 
+  const updateNote = (id, note) => {
+    const updatedItems = containers[RANKED].items.map((i) => {
+      if (i.id === id) {
+        return note === ""
+          ? { ...i, item_note: undefined }
+          : { ...i, item_note: note };
+      }
+      return i;
+    });
+
+    setContainers((prev) => ({
+      ...prev,
+      [RANKED]: {
+        ...prev[RANKED],
+        items: updatedItems,
+      },
+    }));
+  };
+
   return (
     <DragDropContext onDragEnd={(res) => onDragEnd(res)}>
       {Object.entries(containers).map(([id, container]) => (
@@ -89,6 +108,7 @@ function RankItems({ containers, setContainers }) {
                       item={item}
                       index={index}
                       isRanked={container.keyName === RANKED}
+                      updateNote={updateNote}
                       key={item.id}
                     />
                   ))}

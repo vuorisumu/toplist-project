@@ -333,6 +333,12 @@ function NewList() {
         {/* Ranking builder */}
         <RankItems containers={containers} setContainers={setContainers} />
 
+        <DnDContainer
+          containers={containers}
+          setContainers={setContainers}
+          ITEMS_RANKED={ITEMS_RANKED}
+          ITEMS_REMAINING={ITEMS_REMAINING}
+        />
         {/* Add new items */}
         <div className="newItemsCont" id="newItemsCont">
           <label>New item: </label>
