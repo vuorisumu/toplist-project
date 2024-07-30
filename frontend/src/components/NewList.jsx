@@ -93,16 +93,6 @@ function NewList() {
           setHasImages(true);
         }
 
-        const blankAmount = 5;
-        const blanks = [];
-        for (let i = 0; i < blankAmount; i++) {
-          blanks.push({
-            item_name: " ",
-            blank: true,
-            id: uuid(),
-          });
-        }
-
         // Add uuid() to each item
         const setIds = formattedData.items.map((item) => ({
           ...item,
@@ -113,7 +103,7 @@ function NewList() {
         setContainers((cont) => ({
           [ITEMS_RANKED]: {
             ...cont[ITEMS_RANKED],
-            items: blanks,
+            items: [],
           },
           [ITEMS_REMAINING]: {
             ...cont[ITEMS_REMAINING],
