@@ -1,7 +1,15 @@
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import DraggableItem from "./DraggableItem";
-import { useEffect, useState } from "react";
 
+/**
+ * Drag n Drop container for creating ranked top lists. Elements can be
+ * moved from one container to another and they can be rearranged. When the
+ * containers are rearranged, sends the rearranged containers back to parent object.
+ *
+ * @param {JSON} props.containers - container objects that can be used as drag and drop fields
+ * @param {useState} props.setContainers - callback setContainers for resetting the container data
+ * @returns {JSX.Element} containing Drag n Drop functionality
+ */
 function RankItems({ containers, setContainers }) {
   const RANKED = "ranked";
 
