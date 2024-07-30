@@ -96,7 +96,9 @@ function DraggableItem({ item, index, isRanked, updateNote, deleteItem }) {
                 </button>
 
                 {item.item_note && (
-                  <p className="rankedNote">{item.item_note}</p>
+                  <p className={`rankedNote ${item.img_id ? "img" : ""}`}>
+                    {item.item_note}
+                  </p>
                 )}
               </>
             ))}

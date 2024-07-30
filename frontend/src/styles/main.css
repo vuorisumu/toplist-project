@@ -748,7 +748,7 @@ nav .fixedLogin.active {
   align-items: center;
   justify-content: flex-start;
   flex-wrap: wrap;
-  padding-left: 10px;
+  padding: 5px 5px 5px 10px;
   min-height: 50px;
   text-align: left;
 }
@@ -767,6 +767,7 @@ nav .fixedLogin.active {
   font-family: "Alfa Slab One", serif;
   font-weight: 800;
   padding: 10px;
+  min-width: 20px;
 }
 .rank-item p {
   flex: 1;
@@ -777,8 +778,11 @@ nav .fixedLogin.active {
 .rank-item p.rankedNote {
   position: relative;
   margin: -15px 0 0 45px;
-  padding: 0 0 0 20px;
+  padding: 0 20px 0 20px;
   flex: 100%;
+}
+.rank-item p.rankedNote.img {
+  margin: -15px 0 0 85px;
 }
 .rank-item .noteArea {
   resize: vertical;
@@ -787,15 +791,9 @@ nav .fixedLogin.active {
 .rank-item button {
   margin: 10px;
 }
-.rank-item p {
-  padding: 5px;
-}
 
 .dndCont ~ .dndCont .rank-item {
   min-height: 40px;
-}
-.dndCont ~ .dndCont .rank-item p {
-  margin: 4px;
 }
 
 .newItemsCont {
@@ -925,6 +923,7 @@ nav .fixedLogin.active {
 .itemImage {
   width: 40px;
   height: 40px;
+  padding-right: 10px;
 }
 .itemImage img {
   width: 100%;
