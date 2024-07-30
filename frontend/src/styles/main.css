@@ -956,6 +956,7 @@ nav .fixedLogin.active {
 
 .dndCont .droppable {
   min-height: 50px;
+  position: relative;
 }
 .dndCont .dragOver {
   background-color: color-mix(in srgb, #6a9d23, var(--secondary-color) 70%);
@@ -972,6 +973,13 @@ nav .fixedLogin.active {
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--mid-color) var(--secondary-color);
+}
+.dndCont .placeholder {
+  position: absolute;
+  align-content: center;
+  margin: 0;
+  inset: 0;
+  opacity: 0.5;
 }
 
 :root {

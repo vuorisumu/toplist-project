@@ -3,6 +3,7 @@
 .dndCont {
   .droppable {
     min-height: 50px;
+    position: relative;
   }
 
   .dragOver {
@@ -31,5 +32,13 @@
     overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: theme.$mid-color theme.$secondary-color;
+  }
+
+  .placeholder {
+    position: absolute;
+    align-content: center;
+    margin: 0;
+    inset: 0;
+    opacity: 0.5;
   }
 }
