@@ -377,14 +377,16 @@ function NewList() {
             placeholder="New Item"
           />
           {hasImages && (
-            <input
-              type="file"
-              ref={imgRef}
-              id={`newImage`}
-              name={`newImage`}
-              accept="image/png, image/gif, image/jpeg"
-              onChange={handleAddItemImage}
-            />
+            <label className="fileInput">
+              <input
+                type="file"
+                ref={imgRef}
+                id={`newImage`}
+                name={`newImage`}
+                accept="image/png, image/gif, image/jpeg"
+                onChange={handleAddItemImage}
+              />
+            </label>
           )}
           <button type="button" onClick={addEntry}>
             <span className="material-symbols-outlined">add</span>
