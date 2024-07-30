@@ -51,7 +51,9 @@ function DraggableItem({ item, index, isRanked, updateNote, deleteItem }) {
                 <img src={item.img_url} />
               </div>
             ) : (
-              <p>Loading</p>
+              <span className="material-symbols-outlined imagePlaceholder">
+                pending
+              </span>
             ))}
 
           <p>{item.item_name}</p>
