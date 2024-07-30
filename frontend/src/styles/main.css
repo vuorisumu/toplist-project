@@ -665,7 +665,7 @@ nav .fixedLogin.active {
 }
 
 .addCont {
-  max-width: 450px;
+  width: 80%;
   margin: auto;
 }
 .addCont ul li {
@@ -995,6 +995,7 @@ nav .fixedLogin.active {
   min-height: 100vh;
   margin: auto;
   padding: 50px 20px;
+  overflow-x: hidden;
 }
 
 ul {
