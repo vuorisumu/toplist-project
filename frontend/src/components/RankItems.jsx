@@ -14,6 +14,12 @@ function RankItems({ containers, setContainers }) {
   const RANKED = "ranked";
   const UNRANKED = "unused";
 
+  /**
+   * Handles the end of drag, setting the containers to their new orders.
+   *
+   * @param {Response} res - Response containing information of the drag and drop source and destination
+   * @returns without doing anything if the destination is missing
+   */
   const onDragEnd = (res) => {
     if (!res.destination) return;
     const { source, destination } = res;
@@ -70,6 +76,12 @@ function RankItems({ containers, setContainers }) {
     }
   };
 
+  /**
+   * Updates an item with the given ID with the new note.
+   *
+   * @param {string} id - The ID of the item
+   * @param {string} note - The new note to be added to the item
+   */
   const updateNote = (id, note) => {
     const updatedItems = containers[RANKED].items.map((i) => {
       if (i.id === id) {
@@ -89,6 +101,11 @@ function RankItems({ containers, setContainers }) {
     }));
   };
 
+  /**
+   * Deletes an item from the unranked container from the given index.
+   *
+   * @param {number} index - The index of the item
+   */
   const deleteItem = (index) => {
     setContainers((prev) => ({
       ...prev,
