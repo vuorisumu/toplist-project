@@ -11,6 +11,7 @@ import { fetchTemplateById } from "../api/templates";
 import { addNewToplist } from "../api/toplists";
 import { getImgUrl, resizeImage } from "../util/imageHandler";
 import { addNewImages } from "../api/images";
+import RankItems from "./RankItems";
 
 /**
  * View where the user can create a new list from a chosen template.
@@ -340,12 +341,7 @@ function NewList() {
         </div>
 
         {/* Ranking builder */}
-        <DnDContainer
-          containers={containers}
-          setContainers={setContainers}
-          ITEMS_RANKED={ITEMS_RANKED}
-          ITEMS_REMAINING={ITEMS_REMAINING}
-        />
+        <RankItems containers={containers} setContainers={setContainers} />
 
         {/* Add new items */}
         <div className="newItemsCont" id="newItemsCont">
