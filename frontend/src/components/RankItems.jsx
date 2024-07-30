@@ -12,6 +12,7 @@ import DraggableItem from "./DraggableItem";
  */
 function RankItems({ containers, setContainers }) {
   const RANKED = "ranked";
+  const UNRANKED = "unused";
 
   const onDragEnd = (res) => {
     if (!res.destination) return;
@@ -88,6 +89,16 @@ function RankItems({ containers, setContainers }) {
     }));
   };
 
+  const deleteItem = (index) => {
+    setContainers((prev) => ({
+      ...prev,
+      [UNRANKED]: {
+        ...prev[UNRANKED],
+        items: prev[UNRANKED].items.filter((_, i) => i !== index),
+      },
+    }));
+  };
+
   return (
     <DragDropContext onDragEnd={(res) => onDragEnd(res)}>
       {Object.entries(containers).map(([id, container]) => (
@@ -109,6 +120,7 @@ function RankItems({ containers, setContainers }) {
                       index={index}
                       isRanked={container.keyName === RANKED}
                       updateNote={updateNote}
+                      deleteItem={deleteItem}
                       key={item.id}
                     />
                   ))}

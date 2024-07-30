@@ -211,7 +211,8 @@ function NewList() {
       .filter((i) => i.deletable === true)
       .map((i) => {
         return addedImages.find((img) => img.id === i.img_id);
-      });
+      })
+      .filter((img) => img !== undefined);
     console.log(userAdded);
 
     if (nonEmptyRanked.length === 0) {
@@ -333,12 +334,6 @@ function NewList() {
         {/* Ranking builder */}
         <RankItems containers={containers} setContainers={setContainers} />
 
-        <DnDContainer
-          containers={containers}
-          setContainers={setContainers}
-          ITEMS_RANKED={ITEMS_RANKED}
-          ITEMS_REMAINING={ITEMS_REMAINING}
-        />
         {/* Add new items */}
         <div className="newItemsCont" id="newItemsCont">
           <label>New item: </label>

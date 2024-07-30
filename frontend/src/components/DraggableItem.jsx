@@ -1,11 +1,15 @@
 import { Draggable } from "@hello-pangea/dnd";
 import { useState } from "react";
 
-function DraggableItem({ item, index, isRanked, updateNote }) {
+function DraggableItem({ item, index, isRanked, updateNote, deleteItem }) {
   const [showNote, setShowNote] = useState(false);
 
   const handleNoteUpdate = (e) => {
     updateNote(item.id, e.target.value);
+  };
+
+  const handleDelete = () => {
+    deleteItem(index);
   };
 
   return (
@@ -62,6 +66,13 @@ function DraggableItem({ item, index, isRanked, updateNote }) {
                 )}
               </>
             ))}
+
+          {/* Delete button only on unranked container */}
+          {item.deletable && !isRanked && (
+            <button type="button" onClick={handleDelete}>
+              <span className="material-symbols-outlined">delete</span>
+            </button>
+          )}
         </div>
       )}
     </Draggable>
