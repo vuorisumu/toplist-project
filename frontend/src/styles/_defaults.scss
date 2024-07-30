@@ -38,3 +38,100 @@
     object-fit: cover;
   }
 }
+
+@mixin template() {
+  background-color: theme.$secondary-color;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+
+  ol {
+    border-top: 1px solid theme.$text-secondary;
+    text-align: left;
+  }
+
+  ul {
+    border: 1px solid theme.$text-secondary;
+    margin: 0 20px;
+  }
+
+  h2,
+  a h3 {
+    padding-top: 15px;
+  }
+
+  h4 {
+    margin: auto;
+    margin-top: 25px;
+    margin-bottom: -9px;
+    padding: 0 7px;
+    width: fit-content;
+    color: theme.$text-primary;
+    font-weight: 600;
+    background-color: theme.$secondary-color;
+    text-decoration: underline theme.$accent;
+    position: relative;
+    z-index: 3;
+  }
+
+  a,
+  h2,
+  h3 {
+    display: block;
+    width: fit-content;
+    margin: auto;
+  }
+
+  .confirmButton {
+    margin-bottom: 15px;
+  }
+}
+
+@mixin toggle() {
+  position: relative;
+  display: inline-block;
+  top: 8px;
+
+  input[type="checkbox"] {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+    position: absolute;
+
+    &:checked {
+      + label {
+        background: theme.$accent;
+
+        &::after {
+          left: calc(100% - 3px);
+          transform: translateX(-100%);
+        }
+      }
+    }
+  }
+
+  label {
+    cursor: pointer;
+    width: 40px;
+    height: 27px;
+    background: theme.$mid-color;
+    display: block;
+    border-radius: 30px;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 22px;
+      height: 22px;
+      background: #fff;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    &:active::after {
+      width: 28px;
+    }
+  }
+}

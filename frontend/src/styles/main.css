@@ -618,6 +618,24 @@ nav .fixedLogin.active {
   margin-top: 50px;
 }
 
+.fileInput {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+}
+.fileInput::before {
+  font-family: "Material Symbols Outlined";
+  content: "upload";
+  font-size: 22pt;
+  color: var(--text-primary);
+}
+.fileInput input {
+  visibility: hidden;
+}
+
+.info {
+  align-items: center;
+}
 .info h2,
 .info #imagePreview {
   grid-column: 1/3;
@@ -652,13 +670,12 @@ nav .fixedLogin.active {
 }
 .addCont ul li {
   display: flex;
-  gap: 20px;
   flex-wrap: wrap;
+  gap: 10px;
   align-items: center;
   margin: 10px 0;
 }
-.addCont ul li input,
-.addCont ul li div {
+.addCont ul li input {
   flex-grow: 1;
 }
 .addCont ul li .suggestionCont {
@@ -670,6 +687,48 @@ nav .fixedLogin.active {
 .addCont ul li input[type=search] {
   width: 100%;
 }
+.addCont .toggle {
+  position: relative;
+  display: inline-block;
+  top: 8px;
+}
+.addCont .toggle input[type=checkbox] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+  position: absolute;
+}
+.addCont .toggle input[type=checkbox]:checked + label {
+  background: #6a9d23;
+}
+.addCont .toggle input[type=checkbox]:checked + label::after {
+  left: calc(100% - 3px);
+  transform: translateX(-100%);
+}
+.addCont .toggle label {
+  cursor: pointer;
+  width: 40px;
+  height: 27px;
+  background: var(--mid-color);
+  display: block;
+  border-radius: 30px;
+  position: relative;
+}
+.addCont .toggle label::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+.addCont .toggle label:active::after {
+  width: 28px;
+}
+
 .coverImage {
   display: flex;
   justify-content: center;
@@ -689,7 +748,7 @@ nav .fixedLogin.active {
   align-items: center;
   justify-content: flex-start;
   flex-wrap: wrap;
-  padding-left: 10px;
+  padding: 5px 5px 5px 10px;
   min-height: 50px;
   text-align: left;
 }
@@ -708,6 +767,7 @@ nav .fixedLogin.active {
   font-family: "Alfa Slab One", serif;
   font-weight: 800;
   padding: 10px;
+  min-width: 20px;
 }
 .rank-item p {
   flex: 1;
@@ -718,8 +778,11 @@ nav .fixedLogin.active {
 .rank-item p.rankedNote {
   position: relative;
   margin: -15px 0 0 45px;
-  padding: 0 0 0 20px;
+  padding: 0 20px 0 20px;
   flex: 100%;
+}
+.rank-item p.rankedNote.img {
+  margin: -15px 0 0 85px;
 }
 .rank-item .noteArea {
   resize: vertical;
@@ -728,15 +791,9 @@ nav .fixedLogin.active {
 .rank-item button {
   margin: 10px;
 }
-.rank-item p {
-  padding: 5px;
-}
 
 .dndCont ~ .dndCont .rank-item {
   min-height: 40px;
-}
-.dndCont ~ .dndCont .rank-item p {
-  margin: 4px;
 }
 
 .newItemsCont {
@@ -863,6 +920,24 @@ nav .fixedLogin.active {
   position: relative;
 }
 
+.itemImage {
+  width: 40px;
+  height: 40px;
+  padding-right: 10px;
+}
+.itemImage img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.itemImage .imagePlaceholder {
+  font-size: 24pt;
+  height: 100%;
+  line-height: 40px;
+  color: var(--mid-color);
+}
+
 .newTemplate .dropdownElement {
   margin: 5px 0;
 }
@@ -880,6 +955,7 @@ nav .fixedLogin.active {
 
 .dndCont .droppable {
   min-height: 50px;
+  position: relative;
 }
 .dndCont .dragOver {
   background-color: color-mix(in srgb, #6a9d23, var(--secondary-color) 70%);
@@ -889,6 +965,20 @@ nav .fixedLogin.active {
 }
 .dndCont .dragging {
   background-color: color-mix(in srgb, var(--secondary-color), var(--mid-color) 20%);
+}
+.dndCont #unused {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--mid-color) var(--secondary-color);
+}
+.dndCont .placeholder {
+  position: absolute;
+  align-content: center;
+  margin: 0;
+  inset: 0;
+  opacity: 0.5;
 }
 
 :root {
@@ -902,8 +992,10 @@ nav .fixedLogin.active {
 
 .container {
   max-width: 550px;
+  min-height: 100vh;
   margin: auto;
   padding: 50px 20px;
+  overflow-x: hidden;
 }
 
 ul {
@@ -953,6 +1045,17 @@ button {
 button:hover {
   background-color: color-mix(in srgb, #6a9d23, white 5%);
   box-shadow: 0px 2px var(--shadow);
+}
+
+footer {
+  width: 100%;
+}
+footer p {
+  font-size: 10pt;
+  opacity: 0.5;
+}
+footer.mobile {
+  padding-bottom: 60px;
 }
 
 @media only screen and (min-width: 850px) {

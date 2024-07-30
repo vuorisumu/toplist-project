@@ -14,6 +14,7 @@ function User() {
   const [loadingTemplates, setLoadingTemplates] = useState(true);
   const [lists, setLists] = useState(null);
   const [loadingLists, setLoadingLists] = useState(true);
+  const [notFound, setNotFound] = useState(false);
   const location = useLocation();
   const userName = decodeURI(location.pathname.replace("/user/", ""));
 
@@ -22,7 +23,11 @@ function User() {
       fetchUserByName(userName)
         .then((data) => {
           const formattedData = formatData(data);
-          setUserData(formattedData[0]);
+          if (formattedData.length > 0) {
+            setUserData(formattedData[0]);
+          } else {
+            setNotFound(true);
+          }
           setLoading(false);
         })
         .catch((err) => console.log(err));
@@ -53,10 +58,11 @@ function User() {
     );
   }
 
-  if (!userData) {
+  if (notFound) {
     return (
       <div className="container">
-        <p>User not found</p>
+        <h1>Not found</h1>
+        <p>User doesn't exist</p>
       </div>
     );
   }

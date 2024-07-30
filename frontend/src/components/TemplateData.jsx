@@ -2,27 +2,52 @@ import { useEffect, useRef, useState } from "react";
 import { clearAll } from "../util/misc";
 import Dropdown from "./Dropdown";
 import { getCategories } from "../util/storage";
-import { blobToFile, resizeImage } from "../util/imageHandler";
+import { blobToFile, getItemImages, resizeImage } from "../util/imageHandler";
+import { v4 as uuid } from "uuid";
+import { addNewImages } from "../api/images";
 
 function TemplateData({ data, onSubmit, submitText }) {
   const [templateName, setTemplateName] = useState(data?.name || "");
   const [description, setDescription] = useState(data?.description || "");
   const [items, setItems] = useState(data?.items || [{ item_name: "" }]);
+  const [itemImages, setItemImages] = useState([]);
+  const [hasImages, setHasImages] = useState(false);
   const [errors, setErrors] = useState([]);
   const [categories, setCategories] = useState(null);
   const [chosenCategory, setChosenCategory] = useState("Choose category");
   const [coverImage, setCoverImage] = useState({});
+  const [loading, setLoading] = useState(true);
   const imgRef = useRef();
 
   useEffect(() => {
+    // Gets the category list from the database
     getCategories().then((data) => setCategories(data));
 
-    if (data && data.cover_image) {
-      const img = blobToFile(data.cover_image);
-      setCoverImage(img);
+    // Sets the existing data when in edit mode
+    if (data) {
+      // Cover image
+      if (data.cover_image) {
+        const img = blobToFile(data.cover_image);
+        setCoverImage(img);
+      }
+
+      // List has existing images
+      if (data.items[0].img_id) {
+        setHasImages(true);
+        const imageIds = [];
+        data.items.map((i) => {
+          imageIds.push(i.img_id);
+        });
+        getImages(imageIds);
+      } else {
+        setLoading(false);
+      }
+    } else {
+      setLoading(false);
     }
   }, []);
 
+  // Sets the chosen category after categories are loaded from the database
   useEffect(() => {
     if (categories && data?.category) {
       const categoryName = categories
@@ -35,6 +60,17 @@ function TemplateData({ data, onSubmit, submitText }) {
   }, [categories]);
 
   /**
+   * Gets all images with the given IDs from the database and set them to state.
+   *
+   * @param {Array} imageIds - Array of image IDs
+   */
+  const getImages = async (imageIds) => {
+    const fetchedImages = await getItemImages(imageIds);
+    setItemImages(fetchedImages);
+    setLoading(false);
+  };
+
+  /**
    * Handles the selection of a cover image, resizing it if it is big.
    *
    * @param {ChangeEvent} e - event containing information about the current value
@@ -45,7 +81,7 @@ function TemplateData({ data, onSubmit, submitText }) {
       const resized = await resizeImage(file);
       setCoverImage(resized);
     } else {
-      console.log("no file");
+      removeImage();
     }
   };
 
@@ -55,6 +91,36 @@ function TemplateData({ data, onSubmit, submitText }) {
   const removeImage = () => {
     imgRef.current.value = "";
     setCoverImage({});
+  };
+
+  /**
+   * Adds an image to an item with the given index
+   *
+   * @param {ChangeEvent} e - event containing information about the current value
+   * @param {number} index - Item index to which the image is added
+   */
+  const handleAddItemImage = async (e, index) => {
+    const file = e.target.files[0];
+    if (file) {
+      const resized = await resizeImage(file, {
+        maxWidth: 150,
+        maxHeight: 150,
+      });
+      const imgId = uuid();
+      items[index].img_id = imgId;
+      items[index].img = resized;
+      setItemImages((prevImages) => {
+        const newImages = [...prevImages];
+        newImages[index] = resized;
+        return newImages;
+      });
+    } else {
+      setItemImages((prevImages) => {
+        const newImages = [...prevImages];
+        newImages[index] = {};
+        return newImages;
+      });
+    }
   };
 
   /**
@@ -107,24 +173,57 @@ function TemplateData({ data, onSubmit, submitText }) {
 
     const enoughItems =
       items.filter((i) => i.item_name.trim() !== "").length >= 5;
+
     if (!enoughItems) {
       tempErrors.push("Template must have at least 5 items");
+    }
+
+    const imagesOkay = hasImages
+      ? itemImages.length ===
+        items.filter((i) => i.item_name.trim() !== "").length
+      : true;
+
+    if (!imagesOkay) {
+      tempErrors.push(
+        "All items must have an image when making a template with images"
+      );
+    }
+
+    if (!enoughItems || !imagesOkay) {
       document.getElementById("tempItems").classList.add("error");
     } else {
       document.getElementById("tempItems").classList.remove("error");
     }
 
     setErrors(tempErrors);
-    return hasName && enoughItems;
+    return hasName && enoughItems && imagesOkay;
   };
 
+  /**
+   * Handles submitting the newly created template.
+   * Doesn't do anything if the template doesn't meet the minimum requirements.
+   *
+   * @param {Event} e - event information
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!meetsRequirements()) {
       return;
     }
 
-    const nonEmptyItems = items.filter((i) => i.item_name.trim() !== "");
+    const addedImages = items
+      .filter((i) => i.item_name.trim() !== "" && i.img)
+      .map((i) => ({
+        id: i.img_id,
+        img: i.img,
+      }));
+
+    const nonEmptyItems = items
+      .filter((i) => i.item_name.trim() !== "")
+      .map((i) => ({
+        item_name: i.item_name,
+        img_id: i.img_id,
+      }));
 
     // mandatory data
     const templateData = {
@@ -160,6 +259,9 @@ function TemplateData({ data, onSubmit, submitText }) {
       templateData.category = categoryId[0];
     }
 
+    if (addedImages.length > 0) {
+      const res = await addNewImages(addedImages);
+    }
     onSubmit(templateData);
   };
 
@@ -177,14 +279,16 @@ function TemplateData({ data, onSubmit, submitText }) {
         )}
 
         <label>Cover image:</label>
-        <input
-          type="file"
-          ref={imgRef}
-          id="coverImage"
-          name="image"
-          accept="image/png, image/gif, image/jpeg"
-          onChange={handleImageSelected}
-        />
+        <label className="fileInput">
+          <input
+            type="file"
+            ref={imgRef}
+            id="coverImage"
+            name="image"
+            accept="image/png, image/gif, image/jpeg"
+            onChange={handleImageSelected}
+          />
+        </label>
 
         <label>Template name: </label>
         <input
@@ -217,15 +321,57 @@ function TemplateData({ data, onSubmit, submitText }) {
 
       <div className="addCont addItems">
         <h2>Template items</h2>
+        <div>
+          <label>Add images: </label>
+          <div className="toggle">
+            <input
+              type="checkbox"
+              name="toggleImages"
+              id="toggleImages"
+              checked={hasImages}
+              onChange={() => setHasImages(!hasImages)}
+            />
+            <label htmlFor="toggleImages"></label>
+          </div>
+        </div>
         <ul id="tempItems">
           {items.map((i, index) => (
             <li key={"item" + index}>
+              {hasImages === true && (
+                <>
+                  <div className="itemImage">
+                    {itemImages[index]?.name ? (
+                      <img src={URL.createObjectURL(itemImages[index])} />
+                    ) : itemImages[index]?.img_url ? (
+                      <img src={itemImages[index].img_url} />
+                    ) : loading ? (
+                      <span className="material-symbols-outlined imagePlaceholder">
+                        pending
+                      </span>
+                    ) : (
+                      <span className="material-symbols-outlined imagePlaceholder">
+                        image
+                      </span>
+                    )}
+                  </div>
+                  <label className="fileInput">
+                    <input
+                      type="file"
+                      id={`item${index}`}
+                      name={`item${index}`}
+                      accept="image/png, image/gif, image/jpeg"
+                      onChange={(e) => handleAddItemImage(e, index)}
+                    />
+                  </label>
+                </>
+              )}
               <input
                 type="text"
                 placeholder="List item"
                 value={i.item_name}
                 onChange={(e) => handleItemEdits(index, e.target.value)}
               />
+
               {index !== items.length - 1 ? (
                 <button
                   type="button"
@@ -252,7 +398,7 @@ function TemplateData({ data, onSubmit, submitText }) {
         </ul>
       )}
 
-      <button type="submit" className="createButton">
+      <button type="submit" className="createButton" disabled={loading}>
         {submitText}
       </button>
 

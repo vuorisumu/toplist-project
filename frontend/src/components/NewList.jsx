@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import { DnDContainer } from "./Dnd";
 import { v4 as uuid } from "uuid";
 import { clearAll } from "../util/misc";
 import { formatData } from "../util/dataHandler";
@@ -9,7 +8,9 @@ import { isCreatorOfTemplate } from "../util/permissions";
 import { getCategoryById } from "../util/storage";
 import { fetchTemplateById } from "../api/templates";
 import { addNewToplist } from "../api/toplists";
-import { getImgUrl } from "../util/imageHandler";
+import { getImgUrl, getItemImages, resizeImage } from "../util/imageHandler";
+import { addNewImages } from "../api/images";
+import RankItems from "./RankItems";
 
 /**
  * View where the user can create a new list from a chosen template.
@@ -25,6 +26,10 @@ function NewList() {
   const location = useLocation();
   const navigate = useNavigate();
   const templateId = parseInt(location.pathname.replace("/createlist/", ""));
+
+  if (isNaN(templateId)) {
+    console.error("Invalid templateId: ", templateId);
+  }
 
   // drag n drop containers
   const ITEMS_RANKED = "ranked";
@@ -42,6 +47,7 @@ function NewList() {
     },
   };
 
+  const [notFound, setNotFound] = useState(false);
   const [template, setTemplate] = useState(null);
   const [imgUrl, setImgUrl] = useState("");
   const [containers, setContainers] = useState(itemContainers);
@@ -51,6 +57,10 @@ function NewList() {
   const [errorMessages, setErrorMessages] = useState([]);
   const [canEdit, setCanEdit] = useState(false);
   const [category, setCategory] = useState("");
+  const [hasImages, setHasImages] = useState(false);
+  const [newImage, setNewImage] = useState({});
+  const [addedImages, setAddedImages] = useState([]);
+  const imgRef = useRef();
 
   /**
    * Checks if the user is logged in as admin or is the creator of the
@@ -74,7 +84,6 @@ function NewList() {
 
     fetchTemplateById(templateId)
       .then((data) => {
-        console.log(data);
         const formattedData = formatData(data)[0];
         setTemplate(formattedData);
 
@@ -83,14 +92,8 @@ function NewList() {
           setImgUrl(url);
         }
 
-        const blankAmount = 5;
-        const blanks = [];
-        for (let i = 0; i < blankAmount; i++) {
-          blanks.push({
-            item_name: " ",
-            blank: true,
-            id: uuid(),
-          });
+        if (formattedData.items[0].img_id) {
+          setHasImages(true);
         }
 
         // Add uuid() to each item
@@ -103,7 +106,7 @@ function NewList() {
         setContainers((cont) => ({
           [ITEMS_RANKED]: {
             ...cont[ITEMS_RANKED],
-            items: blanks,
+            items: [],
           },
           [ITEMS_REMAINING]: {
             ...cont[ITEMS_REMAINING],
@@ -112,7 +115,7 @@ function NewList() {
         }));
       })
       .catch((err) => {
-        console.log(err);
+        setNotFound(true);
       });
   }, [templateId]);
 
@@ -130,21 +133,66 @@ function NewList() {
    * Only adds a new item if the name of the entry is not blank
    */
   const addEntry = () => {
+    if (hasImages && !newImage.id) {
+      setErrorMessages(["New item must have an image"]);
+      document.getElementById("newItemsCont").classList.add("error");
+    } else {
+      document.getElementById("newItemsCont").classList.remove("error");
+    }
+
     // only adds new if entry isn't empty
-    if (newEntry.trim() !== "") {
+    if (newEntry.trim() !== "" && (!hasImages || (hasImages && newImage.id))) {
+      const addedEntry = {
+        item_name: newEntry,
+        deletable: true,
+        id: uuid(),
+      };
+
+      if (hasImages) {
+        addedEntry.img_id = newImage.id;
+        addedEntry.img_url = URL.createObjectURL(newImage.img);
+
+        setAddedImages((prevImages) => [...prevImages, newImage]);
+      }
+
       setContainers((prevContainers) => ({
         ...prevContainers,
         [ITEMS_REMAINING]: {
           ...prevContainers[ITEMS_REMAINING],
-          items: [
-            ...prevContainers[ITEMS_REMAINING].items,
-            { item_name: newEntry, deletable: true, id: uuid() },
-          ],
+          items: [...prevContainers[ITEMS_REMAINING].items, addedEntry],
         },
       }));
 
       // reset entry
       setNewEntry("");
+
+      if (hasImages) {
+        setNewImage({});
+        imgRef.current.value = "";
+      }
+    }
+  };
+
+  /**
+   * Resizes the given image and adds it to state.
+   *
+   * @param {ChangeEvent} e - event containing information about the current value
+   */
+  const handleAddItemImage = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const resized = await resizeImage(file, {
+        maxWidth: 150,
+        maxHeight: 150,
+      });
+      const imgId = uuid();
+      setNewImage({
+        id: imgId,
+        img: resized,
+      });
+      console.log("added imgae");
+    } else {
+      console.log("no file");
     }
   };
 
@@ -155,15 +203,26 @@ function NewList() {
    */
   const saveToplist = async () => {
     const errors = [];
-    const nonEmptyRanked = containers[ITEMS_RANKED].items.filter(
-      (i) => i.item_name.trim() !== ""
-    );
+    const nonEmptyRanked = containers[ITEMS_RANKED].items
+      .filter((i) => i.item_name.trim() !== "")
+      .map((i) => {
+        const { img_url: _, ...rest } = i;
+        return rest;
+      });
+
+    const userAdded = containers[ITEMS_RANKED].items
+      .filter((i) => i.deletable === true)
+      .map((i) => {
+        return addedImages.find((img) => img.id === i.img_id);
+      })
+      .filter((img) => img !== undefined);
+    console.log(userAdded);
 
     if (nonEmptyRanked.length === 0) {
       errors.push("Top list container must have at least one item");
-      document.getElementById("Ranked").classList.add("error");
+      document.getElementById("ranked").classList.add("error");
     } else {
-      document.getElementById("Ranked").classList.add("error");
+      document.getElementById("ranked").classList.remove("error");
     }
 
     if (!toplistName) {
@@ -197,12 +256,26 @@ function NewList() {
         toplistData.toplist_desc = toplistDesc;
       }
 
+      if (userAdded.length > 0) {
+        const imgRes = await addNewImages(userAdded);
+        console.log(imgRes);
+      }
+
       const res = await addNewToplist(toplistData);
       navigate(`/toplists/${res.toplist_id}`);
     } catch (err) {
       console.error(err);
     }
   };
+
+  if (notFound) {
+    return (
+      <div className="container">
+        <h1>Not found</h1>
+        <p>Template doesn't exist or it has been deleted</p>
+      </div>
+    );
+  }
 
   if (!template) {
     return (
@@ -247,9 +320,8 @@ function NewList() {
 
         <p className="templateInfo desc">
           {template.description
-            ? "Template description"
+            ? `Template description: ${template.description}`
             : `Create your own top list using this template`}
-          {template.description}
         </p>
 
         {/* Ranking information */}
@@ -272,15 +344,10 @@ function NewList() {
         </div>
 
         {/* Ranking builder */}
-        <DnDContainer
-          containers={containers}
-          setContainers={setContainers}
-          ITEMS_RANKED={ITEMS_RANKED}
-          ITEMS_REMAINING={ITEMS_REMAINING}
-        />
+        <RankItems containers={containers} setContainers={setContainers} />
 
         {/* Add new items */}
-        <div className="newItemsCont">
+        <div className="newItemsCont" id="newItemsCont">
           <label>New item: </label>
           <input
             type="text"
@@ -288,6 +355,29 @@ function NewList() {
             onChange={(e) => setNewEntry(e.target.value)}
             placeholder="New Item"
           />
+          {hasImages && (
+            <>
+              <div className="itemImage">
+                {newImage?.img ? (
+                  <img src={URL.createObjectURL(newImage.img)} />
+                ) : (
+                  <span className="material-symbols-outlined imagePlaceholder">
+                    image
+                  </span>
+                )}
+              </div>
+              <label className="fileInput">
+                <input
+                  type="file"
+                  ref={imgRef}
+                  id={`newImage`}
+                  name={`newImage`}
+                  accept="image/png, image/gif, image/jpeg"
+                  onChange={handleAddItemImage}
+                />
+              </label>
+            </>
+          )}
           <button type="button" onClick={addEntry}>
             <span className="material-symbols-outlined">add</span>
           </button>
