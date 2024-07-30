@@ -1,5 +1,12 @@
 import React from "react";
-import { HashRouter as Router, Routes, Route, NavLink } from "react-router-dom";
+import {
+  HashRouter as Router,
+  Routes,
+  Route,
+  NavLink,
+  Navigate,
+  useParams,
+} from "react-router-dom";
 import "./App.css";
 import Main from "./components/Main.jsx";
 import NewTemplate from "./components/NewTemplate.jsx";
@@ -38,12 +45,21 @@ class App extends React.Component {
   }
 
   render() {
+    function RedirectToCreateList() {
+      const { templateId } = useParams();
+      return <Navigate to={`/createlist/${templateId}`} />;
+    }
+
     return (
       <Router>
         <Nav />
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/templates" element={<BrowseTemplates />} />
+          <Route
+            path="/templates/:templateId"
+            element={<RedirectToCreateList />}
+          />
           <Route path="/createlist" element={<Main />} />
           <Route path="/toplists" element={<BrowseToplists />} />
           <Route path="/new-template" element={<NewTemplate />} />

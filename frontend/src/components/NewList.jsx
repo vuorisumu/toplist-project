@@ -27,6 +27,10 @@ function NewList() {
   const navigate = useNavigate();
   const templateId = parseInt(location.pathname.replace("/createlist/", ""));
 
+  if (isNaN(templateId)) {
+    console.error("Invalid templateId: ", templateId);
+  }
+
   // drag n drop containers
   const ITEMS_RANKED = "ranked";
   const ITEMS_REMAINING = "unused";
@@ -43,6 +47,7 @@ function NewList() {
     },
   };
 
+  const [notFound, setNotFound] = useState(false);
   const [template, setTemplate] = useState(null);
   const [imgUrl, setImgUrl] = useState("");
   const [containers, setContainers] = useState(itemContainers);
@@ -110,7 +115,7 @@ function NewList() {
         }));
       })
       .catch((err) => {
-        console.log(err);
+        setNotFound(true);
       });
   }, [templateId]);
 
@@ -262,6 +267,15 @@ function NewList() {
       console.error(err);
     }
   };
+
+  if (notFound) {
+    return (
+      <div className="container">
+        <h1>Not found</h1>
+        <p>Template doesn't exist or it has been deleted</p>
+      </div>
+    );
+  }
 
   if (!template) {
     return (
