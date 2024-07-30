@@ -79,7 +79,6 @@ function NewList() {
 
     fetchTemplateById(templateId)
       .then((data) => {
-        console.log(data);
         const formattedData = formatData(data)[0];
         setTemplate(formattedData);
 
