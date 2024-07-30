@@ -71,6 +71,7 @@ class App extends React.Component {
           <Route path="/toplists/:listId" element={<SingleList />} />
           <Route path="/register" element={<Register />} />
           <Route path="/user/:username" element={<User />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
     );
