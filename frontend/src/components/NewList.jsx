@@ -8,7 +8,7 @@ import { isCreatorOfTemplate } from "../util/permissions";
 import { getCategoryById } from "../util/storage";
 import { fetchTemplateById } from "../api/templates";
 import { addNewToplist } from "../api/toplists";
-import { getImgUrl, resizeImage } from "../util/imageHandler";
+import { getImgUrl, getItemImages, resizeImage } from "../util/imageHandler";
 import { addNewImages } from "../api/images";
 import RankItems from "./RankItems";
 
@@ -122,6 +122,40 @@ function NewList() {
       });
     }
   }, [template]);
+
+  useEffect(() => {
+    if (hasImages) {
+      const imageIds = [];
+      containers[ITEMS_REMAINING].items.map((i) => {
+        imageIds.push(i.img_id);
+      });
+      getImages(imageIds);
+    }
+  }, [hasImages]);
+
+  /**
+   * Gets images from the database and adds their urls to corresponding items.
+   *
+   * @param {Array} imageIds - Array of image IDs
+   */
+  const getImages = async (imageIds) => {
+    const fetchedImages = await getItemImages(imageIds);
+
+    const updatedItems = containers[ITEMS_REMAINING].items.map((i) => {
+      return {
+        ...i,
+        img_url: fetchedImages.find((img) => img.id === i.img_id).img_url,
+      };
+    });
+
+    setContainers((prevContainers) => ({
+      ...prevContainers,
+      [ITEMS_REMAINING]: {
+        ...prevContainers[ITEMS_REMAINING],
+        items: updatedItems,
+      },
+    }));
+  };
 
   /**
    * Adds a new item to be used in the ranking. Will not save the item to the actual template,
