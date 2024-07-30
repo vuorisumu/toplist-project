@@ -66,7 +66,11 @@ function EditTemplate() {
     await fetchTemplateById(templateId)
       .then((data) => {
         const formattedData = formatData(data);
-        handleSetTemplate(formattedData[0]);
+        if (formattedData.length > 0) {
+          handleSetTemplate(formattedData[0]);
+        } else {
+          setNotFound(true);
+        }
         setLoading(false);
       })
       .catch((err) => {
@@ -109,7 +113,12 @@ function EditTemplate() {
   };
 
   if (notFound) {
-    return <p>{`Template doesn't exist or it has been deleted`}</p>;
+    return (
+      <div className="container">
+        <h1>Not found</h1>
+        <p>{`Template doesn't exist or it has been deleted`}</p>
+      </div>
+    );
   }
 
   if (!canEdit) {
