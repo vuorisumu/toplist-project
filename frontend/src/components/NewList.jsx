@@ -250,9 +250,9 @@ function NewList() {
 
     if (nonEmptyRanked.length === 0) {
       errors.push("Top list container must have at least one item");
-      document.getElementById("Ranked").classList.add("error");
+      document.getElementById("ranked").classList.add("error");
     } else {
-      document.getElementById("Ranked").classList.remove("error");
+      document.getElementById("ranked").classList.remove("error");
     }
 
     if (!toplistName) {
@@ -377,16 +377,27 @@ function NewList() {
             placeholder="New Item"
           />
           {hasImages && (
-            <label className="fileInput">
-              <input
-                type="file"
-                ref={imgRef}
-                id={`newImage`}
-                name={`newImage`}
-                accept="image/png, image/gif, image/jpeg"
-                onChange={handleAddItemImage}
-              />
-            </label>
+            <>
+              <div className="itemImage">
+                {newImage?.img ? (
+                  <img src={URL.createObjectURL(newImage.img)} />
+                ) : (
+                  <span className="material-symbols-outlined imagePlaceholder">
+                    image
+                  </span>
+                )}
+              </div>
+              <label className="fileInput">
+                <input
+                  type="file"
+                  ref={imgRef}
+                  id={`newImage`}
+                  name={`newImage`}
+                  accept="image/png, image/gif, image/jpeg"
+                  onChange={handleAddItemImage}
+                />
+              </label>
+            </>
           )}
           <button type="button" onClick={addEntry}>
             <span className="material-symbols-outlined">add</span>
