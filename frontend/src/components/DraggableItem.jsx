@@ -1,5 +1,8 @@
 import { Draggable } from "@hello-pangea/dnd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchImage } from "../api/images";
+import { formatData } from "../util/dataHandler";
+import { getImgUrl } from "../util/imageHandler";
 
 /**
  * Reusable Item component for displaying the items on top list creation view.
@@ -13,6 +16,17 @@ import { useState } from "react";
  */
 function DraggableItem({ item, index, isRanked, updateNote, deleteItem }) {
   const [showNote, setShowNote] = useState(false);
+  const [imgUrl, setImgUrl] = useState("");
+
+  useEffect(() => {
+    if (item.img_id) {
+      fetchImage(item.img_id).then((data) => {
+        const formattedData = formatData(data);
+        const url = getImgUrl(formattedData[0].img);
+        setImgUrl(url);
+      });
+    }
+  }, []);
 
   /**
    * Handles the note update.
@@ -46,9 +60,9 @@ function DraggableItem({ item, index, isRanked, updateNote, deleteItem }) {
 
           {/* Item */}
           {item.img_id &&
-            (item.img_url ? (
+            (imgUrl !== "" ? (
               <div className="itemImage">
-                <img src={item.img_url} />
+                <img src={imgUrl} />
               </div>
             ) : (
               <span className="material-symbols-outlined imagePlaceholder">

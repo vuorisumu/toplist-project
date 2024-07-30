@@ -123,40 +123,6 @@ function NewList() {
     }
   }, [template]);
 
-  useEffect(() => {
-    if (hasImages) {
-      const imageIds = [];
-      containers[ITEMS_REMAINING].items.map((i) => {
-        imageIds.push(i.img_id);
-      });
-      getImages(imageIds);
-    }
-  }, [hasImages]);
-
-  /**
-   * Gets images from the database and adds their urls to corresponding items.
-   *
-   * @param {Array} imageIds - Array of image IDs
-   */
-  const getImages = async (imageIds) => {
-    const fetchedImages = await getItemImages(imageIds);
-
-    const updatedItems = containers[ITEMS_REMAINING].items.map((i) => {
-      return {
-        ...i,
-        img_url: fetchedImages.find((img) => img.id === i.img_id).img_url,
-      };
-    });
-
-    setContainers((prevContainers) => ({
-      ...prevContainers,
-      [ITEMS_REMAINING]: {
-        ...prevContainers[ITEMS_REMAINING],
-        items: updatedItems,
-      },
-    }));
-  };
-
   /**
    * Adds a new item to be used in the ranking. Will not save the item to the actual template,
    * and can be deleted during the ranking, unlike the items that belong to the original template.
