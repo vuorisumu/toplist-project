@@ -966,6 +966,13 @@ nav .fixedLogin.active {
 .dndCont .dragging {
   background-color: color-mix(in srgb, var(--secondary-color), var(--mid-color) 20%);
 }
+.dndCont #unused {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--mid-color) var(--secondary-color);
+}
 
 :root {
   background-color: var(--primary-color);

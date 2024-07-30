@@ -24,4 +24,12 @@
       theme.$mid-color 20%
     );
   }
+
+  #unused {
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: theme.$mid-color theme.$secondary-color;
+  }
 }

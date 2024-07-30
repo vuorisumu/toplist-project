@@ -121,7 +121,7 @@ function RankItems({ containers, setContainers }) {
       {Object.entries(containers).map(([id, container]) => (
         <div key={id} className="dndCont">
           <h3>{container.name}</h3>
-          <div id={container.name}>
+          <div id={container.keyName}>
             <Droppable droppableId={id} key={id}>
               {(provided, snapshot) => (
                 <div
