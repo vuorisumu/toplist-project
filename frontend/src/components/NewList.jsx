@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import { DnDContainer } from "./Dnd";
 import { v4 as uuid } from "uuid";
 import { clearAll } from "../util/misc";
 import { formatData } from "../util/dataHandler";
