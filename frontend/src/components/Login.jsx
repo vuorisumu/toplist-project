@@ -1,8 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { userLogin, auth } from "../api/users";
-import { onLogin } from "../util/permissions";
 import UserContext from "../util/UserContext";
 
 /**
@@ -16,9 +14,6 @@ import UserContext from "../util/UserContext";
 function Login({ isFixed }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
-  // const [user, setUser] = useState("");
-  const [active, setActive] = useState(false);
   const loginRef = useRef(null);
 
   const { user, login, logout } = useContext(UserContext);
@@ -27,21 +22,11 @@ function Login({ isFixed }) {
     if (user) {
       document.getElementById("loginCont").classList.remove("active");
       document.getElementById("navLogin").classList.remove("active");
+      setUsername("");
+      setPassword("");
     }
   }, [user]);
-  /*
-  useEffect(() => {
-    if (localStorage.getItem("login")) {
-      setLoggedIn(true);
-    }
-  }, []);
 
-  useEffect(() => {
-    if (loggedIn) {
-      setUser(localStorage.getItem("user"));
-    }
-  }, [loggedIn]);
-*/
   useEffect(() => {
     const clickOutside = (event) => {
       if (loginRef.current && !loginRef.current.contains(event.target)) {
@@ -78,21 +63,7 @@ function Login({ isFixed }) {
         user: username,
         password: password,
       };
-
       await login(loginData);
-      /*
-      const res = await userLogin(loginData);
-      console.log(res);
-      if (!res.error) {
-        // successfully log in
-        localStorage.setItem("token", res.token);
-        const credentials = await auth();
-        await onLogin(credentials, res.user_name, res.email);
-        setLoggedIn(true);
-      } else {
-        // clear password
-        setPassword("");
-      }*/
     } catch (err) {
       console.error("Error during login: " + err);
     }
@@ -114,11 +85,6 @@ function Login({ isFixed }) {
    */
   const onLogout = () => {
     logout();
-    // store logout
-    /*
-    localStorage.clear();
-    setLoggedIn(false);
-    window.location.reload(false);*/
   };
 
   return (

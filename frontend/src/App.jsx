@@ -23,31 +23,6 @@ import UserContext from "./util/UserContext.js";
 import { isLoggedIn, loginInfo } from "./util/permissions.js";
 
 function App() {
-  /*
-  constructor(props) {
-    super(props);
-
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-  }
-
-  componentDidMount() {
-    document.addEventListener("keydown", this.handleKeyPress);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeyPress);
-  }
-
-  handleKeyPress(e) {
-    if (
-      e.key === "Backspace" &&
-      document.activeElement.tagName !== "INPUT" &&
-      document.activeElement.tagName !== "TEXTAREA"
-    ) {
-      window.history.back();
-    }
-  }
-*/
   function RedirectToCreateList() {
     const { templateId } = useParams();
     return <Navigate to={`/createlist/${templateId}`} />;
