@@ -68,7 +68,8 @@ userRouter.post("/", async (req, res) => {
     // validate data
     const { error } = userSchema.validate(req.body, { abortEarly: false });
     if (error) {
-      return res.status(400).json({ message: error.details });
+      console.log(error);
+      return res.status(400).json({ msg: error.details });
     }
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);

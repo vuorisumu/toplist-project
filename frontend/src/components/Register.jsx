@@ -65,6 +65,7 @@ function Register() {
    * @param {Event} event - The form submission event object.
    */
   const onSubmit = async (event) => {
+    event.preventDefault();
     const userData = {
       user_name: username,
       email: email,
@@ -88,13 +89,12 @@ function Register() {
         if (newUserRes.user_name) {
           navigate(`/user/${newUserRes.user_name}`);
         } else {
-          setErrors([{ message: `Unexpected error: ${newUserRes.msg}` }]);
+          setErrors([{ message: "Unexpected error" }]);
         }
       } else {
         setErrors([{ message: "User already exists" }]);
       }
     }
-    event.preventDefault();
   };
 
   /**
