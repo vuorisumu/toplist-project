@@ -21,6 +21,7 @@ import { isMobile } from "react-device-detect";
 import { auth, userLogin } from "./api/users.js";
 import UserContext from "./util/UserContext.js";
 import { isLoggedIn, loginInfo } from "./util/permissions.js";
+import TemplatePreview from "./components/TemplatePreview.jsx";
 
 function App() {
   function RedirectToCreateList() {
@@ -71,10 +72,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/templates" element={<BrowseTemplates />} />
-          <Route
-            path="/templates/:templateId"
-            element={<RedirectToCreateList />}
-          />
+          <Route path="/templates/:templateId" element={<TemplatePreview />} />
           <Route path="/createlist" element={<Main />} />
           <Route path="/toplists" element={<BrowseToplists />} />
           <Route path="/new-template" element={<NewTemplate />} />

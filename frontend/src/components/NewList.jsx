@@ -304,7 +304,11 @@ function NewList() {
 
         {/* Template information */}
         <p className="templateInfo">
-          Template: <span className="alt">{template.name}</span> by{" "}
+          Template:{" "}
+          <Link to={`/templates/${templateId}`}>
+            <span className="alt">{template.name}</span>
+          </Link>{" "}
+          by{" "}
           {template.user_name ? (
             <Link to={`/user/${template.user_name}`}>{template.user_name}</Link>
           ) : (
@@ -403,7 +407,6 @@ function NewList() {
           </button>
         </div>
       </div>
-      <ToplistContainer templateId={templateId} />
     </div>
   );
 }

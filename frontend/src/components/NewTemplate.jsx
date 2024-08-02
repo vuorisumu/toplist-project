@@ -37,7 +37,7 @@ function NewTemplate() {
       console.log(templateData);
       const res = await addNewTemplate(templateData);
       setLoading(false);
-      navigate(`/createlist/${res.id}`);
+      navigate(`/templates/${res.id}`);
     } catch (err) {
       console.log(err);
     }
