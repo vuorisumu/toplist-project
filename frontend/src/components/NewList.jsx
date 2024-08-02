@@ -227,22 +227,19 @@ function NewList() {
       document.getElementById("ranked").classList.remove("error");
     }
 
-    if (!toplistName) {
-      errors.push("Top list must have a title");
-      document.getElementById("addRankTitle").classList.add("error");
-    } else {
-      document.getElementById("addRankTitle").classList.remove("error");
-    }
-
     if (errors.length > 0) {
       setErrorMessages(errors);
       return;
     }
 
     try {
+      const listName = toplistName
+        ? toplistName
+        : `${template.name} ranked by ${user ? user.user_name : "Anonymous"}`;
+
       // store toplist data
       const toplistData = {
-        toplist_name: toplistName,
+        toplist_name: listName,
         template_id: templateId,
         ranked_items: nonEmptyRanked,
         creation_time: new Date(),
