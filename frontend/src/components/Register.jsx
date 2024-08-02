@@ -85,7 +85,11 @@ function Register() {
           password: password,
         };
         const newUserRes = await addNewUser(newUserData);
-        navigate(`/user/${newUserRes.user_name}`);
+        if (newUserRes.user_name) {
+          navigate(`/user/${newUserRes.user_name}`);
+        } else {
+          setErrors([{ message: `Unexpected error: ${newUserRes.msg}` }]);
+        }
       } else {
         setErrors([{ message: "User already exists" }]);
       }
