@@ -18,6 +18,7 @@ function Register() {
   const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
   const { login } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
 
   /**
    * Validation schema for new account creation.
@@ -68,6 +69,8 @@ function Register() {
    */
   const onSubmit = async (event) => {
     event.preventDefault();
+    if (loading) return;
+
     const userData = {
       user_name: username,
       email: email,
@@ -79,6 +82,7 @@ function Register() {
       setErrors(error.details);
     } else {
       setErrors([]);
+      setLoading(true);
 
       const canCreateRes = await canCreate();
       if (canCreateRes) {
@@ -98,6 +102,7 @@ function Register() {
           } catch (err) {
             console.error("Error during login: " + err);
           }
+          setLoading(false);
           navigate(`/user/${newUserRes.user_name}`);
         } else {
           setErrors([{ message: "Unexpected error" }]);
@@ -179,7 +184,14 @@ function Register() {
             </ul>
           )}
 
-          <button type="submit" value="Submit">
+          {loading && <p>Creating account...</p>}
+
+          <button
+            type="submit"
+            value="Submit"
+            disabled={loading}
+            className={loading ? "disabled" : ""}
+          >
             Submit
           </button>
         </form>

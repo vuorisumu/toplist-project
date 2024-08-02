@@ -22,6 +22,7 @@ function EditTemplate() {
   const categories = useRef([]);
   const [canEdit, setCanEdit] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [creating, setCreating] = useState(false);
   const [notFound, setNotFound] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -96,7 +97,9 @@ function EditTemplate() {
    */
   const saveChanges = async (updatedData) => {
     // save changes to database
-    updateTemplate(templateId, updatedData);
+    setCreating(true);
+    await updateTemplate(templateId, updatedData);
+    setCreating(false);
     navigate(`/createlist/${templateId}`);
   };
 
@@ -159,6 +162,7 @@ function EditTemplate() {
           data={template}
           onSubmit={saveChanges}
           submitText="Save changes"
+          creating={creating}
         />
 
         <ButtonPrompt

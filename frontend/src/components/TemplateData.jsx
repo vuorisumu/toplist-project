@@ -7,7 +7,7 @@ import { v4 as uuid } from "uuid";
 import { addNewImages } from "../api/images";
 import UserContext from "../util/UserContext";
 
-function TemplateData({ data, onSubmit, submitText }) {
+function TemplateData({ data, onSubmit, submitText, creating }) {
   const [templateName, setTemplateName] = useState(data?.name || "");
   const [description, setDescription] = useState(data?.description || "");
   const [items, setItems] = useState(data?.items || [{ item_name: "" }]);
@@ -209,10 +209,13 @@ function TemplateData({ data, onSubmit, submitText }) {
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     if (!meetsRequirements()) {
       return;
     }
 
+    setLoading(true);
+    // setCreating(true);
     const addedImages = hasImages
       ? items
           .filter((i) => i.item_name.trim() !== "" && i.img)
@@ -266,6 +269,7 @@ function TemplateData({ data, onSubmit, submitText }) {
     if (addedImages.length > 0) {
       const res = await addNewImages(addedImages);
     }
+    setLoading(false);
     onSubmit(templateData);
   };
 
@@ -402,7 +406,11 @@ function TemplateData({ data, onSubmit, submitText }) {
         </ul>
       )}
 
-      <button type="submit" className="createButton" disabled={loading}>
+      <button
+        type="submit"
+        className={`createButton ${loading || creating ? "disabled" : ""}`}
+        disabled={loading || creating}
+      >
         {submitText}
       </button>
 
