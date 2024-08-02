@@ -68,7 +68,6 @@ userRouter.post("/", async (req, res) => {
     // validate data
     const { error } = userSchema.validate(req.body, { abortEarly: false });
     if (error) {
-      console.log(error);
       return res.status(400).json({ msg: error.details });
     }
 
@@ -129,7 +128,12 @@ userRouter.post("/login/", async (req, res) => {
           const isAdmin =
             simplifiedData[0].user_name === process.env.ADMIN_USER;
           const token = jwt.sign(
-            { id: simplifiedData[0].user_id, isAdmin: isAdmin },
+            {
+              id: simplifiedData[0].user_id,
+              user_name: simplifiedData[0].user_name,
+              email: simplifiedData[0].email,
+              isAdmin: isAdmin,
+            },
             process.env.JWT_SECRET_KEY,
             { expiresIn: process.env.JWT_EXPIRES_IN }
           );

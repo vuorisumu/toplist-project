@@ -28,6 +28,16 @@ export const isLoggedIn = () => {
   }
 };
 
+export const loginInfo = () => {
+  const token = localStorage.getItem("token");
+  try {
+    const decodedToken = jwtDecode(token);
+    return decodedToken;
+  } catch (err) {
+    return err;
+  }
+};
+
 export const isCreatorOfTemplate = async (id) => {
   if (isAdmin() === true) return true;
 
@@ -47,4 +57,20 @@ export const isCreatorOfTemplate = async (id) => {
     console.log(error);
     return false;
   }
+};
+
+/**
+ * Logs in to a specific account and sets the login information to localStorage.
+ * @param {JSON} credentials - Authorization credentials
+ * @param {string} username - Username of the account
+ * @param {string} email - Email of the account
+ */
+export const onLogin = async (credentials, username, email) => {
+  console.log(credentials);
+  localStorage.setItem("admin", credentials.admin);
+  localStorage.setItem("userId", credentials.id);
+  localStorage.setItem("login", "true");
+  localStorage.setItem("user", username);
+  localStorage.setItem("email", email);
+  // window.location.reload(false);
 };

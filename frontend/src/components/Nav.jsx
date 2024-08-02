@@ -4,8 +4,15 @@ import { isLoggedIn } from "../util/permissions";
 import logo from "../assets/logo.svg";
 import Login from "./Login";
 import { isMobile } from "react-device-detect";
+import { useContext, useEffect } from "react";
+import UserContext from "../util/UserContext";
 
 function Nav() {
+  const { user } = useContext(UserContext);
+  useEffect(() => {
+    console.log("user data updated");
+  }, [user]);
+
   const toggleLogin = () => {
     document.getElementById("loginCont").classList.toggle("active");
     document.getElementById("navLogin").classList.toggle("active");
@@ -44,7 +51,7 @@ function Nav() {
                 <span className="linkName">Top lists</span>
               </NavLink>
             </li>
-            {isLoggedIn() && (
+            {user && (
               <li>
                 <NavLink to="/new-template">
                   <span className="material-symbols-outlined icon">
@@ -64,10 +71,10 @@ function Nav() {
                 id="navLogin"
               >
                 <span className="material-symbols-outlined icon loginIcon">
-                  {isLoggedIn() ? "lock_open" : "lock"}
+                  {user ? "lock_open" : "lock"}
                 </span>
                 <span className="linkName loginIcon">
-                  {isLoggedIn() ? "Logged in" : "Login"}
+                  {user ? "Logged in" : "Login"}
                 </span>
               </div>
             </li>
@@ -100,7 +107,7 @@ function Nav() {
             <span className="linkName">Top lists</span>
           </NavLink>
         </li>
-        {isLoggedIn() && (
+        {user && (
           <li>
             <NavLink to="/new-template">
               <span className="material-symbols-outlined icon">
@@ -120,10 +127,10 @@ function Nav() {
             id="navLogin"
           >
             <span className="material-symbols-outlined icon loginIcon">
-              {isLoggedIn() ? "lock_open" : "lock"}
+              {user ? "lock_open" : "lock"}
             </span>
             <span className="linkName loginIcon">
-              {isLoggedIn() ? "Logged in" : "Login"}
+              {user ? "Logged in" : "Login"}
             </span>
           </div>
         </li>

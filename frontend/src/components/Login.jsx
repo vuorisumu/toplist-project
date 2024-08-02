@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { userLogin, auth } from "../api/users";
+import { onLogin } from "../util/permissions";
+import UserContext from "../util/UserContext";
 
 /**
  * Reusable login component that renders input fields for the
@@ -15,10 +17,19 @@ function Login({ isFixed }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState("");
+  // const [user, setUser] = useState("");
   const [active, setActive] = useState(false);
   const loginRef = useRef(null);
 
+  const { user, login, logout } = useContext(UserContext);
+
+  useEffect(() => {
+    if (user) {
+      document.getElementById("loginCont").classList.remove("active");
+      document.getElementById("navLogin").classList.remove("active");
+    }
+  }, [user]);
+  /*
   useEffect(() => {
     if (localStorage.getItem("login")) {
       setLoggedIn(true);
@@ -30,7 +41,7 @@ function Login({ isFixed }) {
       setUser(localStorage.getItem("user"));
     }
   }, [loggedIn]);
-
+*/
   useEffect(() => {
     const clickOutside = (event) => {
       if (loginRef.current && !loginRef.current.contains(event.target)) {
@@ -68,17 +79,20 @@ function Login({ isFixed }) {
         password: password,
       };
 
+      await login(loginData);
+      /*
       const res = await userLogin(loginData);
       console.log(res);
       if (!res.error) {
         // successfully log in
         localStorage.setItem("token", res.token);
         const credentials = await auth();
-        onLogin(credentials, res.user_name, res.email);
+        await onLogin(credentials, res.user_name, res.email);
+        setLoggedIn(true);
       } else {
         // clear password
         setPassword("");
-      }
+      }*/
     } catch (err) {
       console.error("Error during login: " + err);
     }
@@ -96,30 +110,15 @@ function Login({ isFixed }) {
   };
 
   /**
-   * Logs in to a specific account and sets the login information to localStorage.
-   * @param {JSON} credentials - Authorization credentials
-   * @param {string} username - Username of the account
-   * @param {string} email - Email of the account
-   */
-  const onLogin = async (credentials, username, email) => {
-    console.log(credentials);
-    localStorage.setItem("admin", credentials.admin);
-    localStorage.setItem("userId", credentials.id);
-    localStorage.setItem("login", "true");
-    localStorage.setItem("user", username);
-    localStorage.setItem("email", email);
-    setLoggedIn(true);
-    // window.location.reload(false);
-  };
-
-  /**
    * Logs the user out, clears localStorage and refreshes the page.
    */
   const onLogout = () => {
+    logout();
     // store logout
+    /*
     localStorage.clear();
     setLoggedIn(false);
-    window.location.reload(false);
+    window.location.reload(false);*/
   };
 
   return (
@@ -130,7 +129,7 @@ function Login({ isFixed }) {
         className={isFixed ? "fixedLogin" : "nonFixedLogin"}
       >
         <div>
-          {!loggedIn ? (
+          {!user ? (
             <>
               <label>User: </label>
               <input
@@ -179,7 +178,7 @@ function Login({ isFixed }) {
               <p>
                 {`Logged in as `}
                 <Link
-                  to={`/user/${user}`}
+                  to={`/user/${user.user_name}`}
                   onClick={() => {
                     document
                       .getElementById("loginCont")
@@ -189,7 +188,7 @@ function Login({ isFixed }) {
                       .classList.toggle("active");
                   }}
                 >
-                  {user}
+                  {user.user_name}
                 </Link>
               </p>
               <button type="button" onClick={onLogout} className="logoutButton">

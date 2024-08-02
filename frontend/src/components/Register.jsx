@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { formatData } from "../util/dataHandler";
 import Joi from "joi";
 import { useNavigate } from "react-router-dom";
 import { fetchUserByNameOrEmail, addNewUser } from "../api/users";
+import UserContext from "../util/UserContext";
 
 /**
  * View for new user registration. Renders a form for account creation.
@@ -16,6 +17,7 @@ function Register() {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
+  const { login } = useContext(UserContext);
 
   /**
    * Validation schema for new account creation.
@@ -87,6 +89,15 @@ function Register() {
         };
         const newUserRes = await addNewUser(newUserData);
         if (newUserRes.user_name) {
+          try {
+            const loginData = {
+              user: username,
+              password: password,
+            };
+            await login(loginData);
+          } catch (err) {
+            console.error("Error during login: " + err);
+          }
           navigate(`/user/${newUserRes.user_name}`);
         } else {
           setErrors([{ message: "Unexpected error" }]);

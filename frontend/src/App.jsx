@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   HashRouter as Router,
   Routes,
@@ -18,8 +18,12 @@ import Register from "./components/Register.jsx";
 import User from "./components/User.jsx";
 import Nav from "./components/Nav.jsx";
 import { isMobile } from "react-device-detect";
+import { auth, userLogin } from "./api/users.js";
+import UserContext from "./util/UserContext.js";
+import { isLoggedIn, loginInfo } from "./util/permissions.js";
 
-class App extends React.Component {
+function App() {
+  /*
   constructor(props) {
     super(props);
 
@@ -43,14 +47,50 @@ class App extends React.Component {
       window.history.back();
     }
   }
+*/
+  function RedirectToCreateList() {
+    const { templateId } = useParams();
+    return <Navigate to={`/createlist/${templateId}`} />;
+  }
 
-  render() {
-    function RedirectToCreateList() {
-      const { templateId } = useParams();
-      return <Navigate to={`/createlist/${templateId}`} />;
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    if (isLoggedIn()) {
+      setUser(loginInfo());
     }
+  }, []);
 
-    return (
+  const login = async (userData) => {
+    try {
+      const res = await userLogin(userData);
+      console.log(res);
+      if (!res.error) {
+        // successfully log in
+        localStorage.setItem("token", res.token);
+        const credentials = await auth();
+        const loginData = {
+          ...credentials,
+          user_name: res.user_name,
+          email: res.email,
+        };
+        setUser(loginData);
+      } else {
+        setUser(null);
+      }
+    } catch (err) {
+      console.error("Error during login: " + err);
+      setUser(null);
+    }
+  };
+
+  const logout = () => {
+    localStorage.clear();
+    setUser(null);
+  };
+
+  return (
+    <UserContext.Provider value={{ user, login, logout }}>
       <Router>
         <Nav />
         <Routes>
@@ -77,8 +117,8 @@ class App extends React.Component {
           <p>Sumu Vuori 2024</p>
         </footer>
       </Router>
-    );
-  }
+    </UserContext.Provider>
+  );
 }
 
 export default App;
