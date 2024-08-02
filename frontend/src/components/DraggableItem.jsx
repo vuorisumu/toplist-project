@@ -16,17 +16,18 @@ import { getImgUrl } from "../util/imageHandler";
  */
 function DraggableItem({ item, index, isRanked, updateNote, deleteItem }) {
   const [showNote, setShowNote] = useState(false);
-  const [imgUrl, setImgUrl] = useState("");
+  const [imgUrl, setImgUrl] = useState(item.img_url ? item.img_url : "");
 
   useEffect(() => {
-    if (item.img_id) {
+    if (item.img_id && !item.img_url) {
       fetchImage(item.img_id).then((data) => {
         const formattedData = formatData(data);
         const url = getImgUrl(formattedData[0].img);
         setImgUrl(url);
+        item.img_url = url;
       });
     }
-  }, []);
+  }, [item.img_id]);
 
   /**
    * Handles the note update.
