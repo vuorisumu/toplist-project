@@ -18,7 +18,14 @@ export const isAdmin = () => {
 export const isLoggedIn = () => {
   const token = localStorage.getItem("token");
   if (!token) return false;
-  return true;
+
+  try {
+    const decodedToken = jwtDecode(token);
+    return !isNaN(decodedToken.id);
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 };
 
 export const isCreatorOfTemplate = async (id) => {
