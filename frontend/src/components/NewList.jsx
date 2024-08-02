@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import { clearAll } from "../util/misc";
@@ -11,6 +11,7 @@ import { addNewToplist } from "../api/toplists";
 import { getImgUrl, getItemImages, resizeImage } from "../util/imageHandler";
 import { addNewImages } from "../api/images";
 import RankItems from "./RankItems";
+import UserContext from "../util/UserContext";
 
 /**
  * View where the user can create a new list from a chosen template.
@@ -26,6 +27,7 @@ function NewList() {
   const location = useLocation();
   const navigate = useNavigate();
   const templateId = parseInt(location.pathname.replace("/createlist/", ""));
+  const { user } = useContext(UserContext);
 
   if (isNaN(templateId)) {
     console.error("Invalid templateId: ", templateId);
@@ -247,8 +249,8 @@ function NewList() {
       };
 
       // user id if logged in
-      if (localStorage.getItem("userId")) {
-        toplistData.creator_id = localStorage.getItem("userId");
+      if (user) {
+        toplistData.creator_id = user.id;
       }
 
       // optional description
