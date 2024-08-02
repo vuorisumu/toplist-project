@@ -104,7 +104,7 @@ userRouter.post("/login/", async (req, res) => {
   try {
     const { user, password } = req.body;
     const userData = await database.query(
-      `SELECT * FROM users WHERE user_name = :1 OR email = :2`,
+      `SELECT * FROM users WHERE user_name = lower(:1) OR email = lower(:2)`,
       [user, user]
     );
 
