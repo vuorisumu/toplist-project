@@ -380,7 +380,7 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
                 onChange={(e) => handleItemEdits(index, e.target.value)}
               />
 
-              {index !== items.length - 1 ? (
+              {items.length > 1 && (
                 <button
                   type="button"
                   onClick={() => deleteItem(index)}
@@ -388,13 +388,12 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
                 >
                   <span className="material-symbols-outlined">delete</span>
                 </button>
-              ) : (
-                <button type="button" onClick={addItem} className="addButton">
-                  <span className="material-symbols-outlined">add</span>
-                </button>
               )}
             </li>
           ))}
+          <button type="button" onClick={addItem} className="addButton">
+            <span className="material-symbols-outlined">add</span>
+          </button>
         </ul>
       </div>
 
