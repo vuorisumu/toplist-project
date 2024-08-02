@@ -70,7 +70,7 @@ function Template({ data, showCreator = true }) {
         </Link>
       )}
 
-      <Link to={`/createlist/${data.id}`}>
+      <Link to={`/templates/${data.id}`}>
         <h2>{data.name}</h2>{" "}
       </Link>
 
