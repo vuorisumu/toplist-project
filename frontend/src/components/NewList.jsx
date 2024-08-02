@@ -200,7 +200,7 @@ function NewList() {
 
   /**
    * Saves the ranking data to database if the minimum requirements are met.
-   * Minimum requirements are: at least one item ranked and the list is given a name.
+   * Minimum requirements are: at least one item ranked
    * Trims all input fields from possible extra spaces
    */
   const saveToplist = async () => {
@@ -233,9 +233,10 @@ function NewList() {
     }
 
     try {
-      const listName = toplistName
-        ? toplistName
-        : `${template.name} ranked by ${user ? user.user_name : "Anonymous"}`;
+      const listName =
+        toplistName.trim() !== ""
+          ? toplistName
+          : `${template.name} ranked by ${user ? user.user_name : "Anonymous"}`;
 
       // store toplist data
       const toplistData = {
@@ -279,6 +280,7 @@ function NewList() {
   if (!template) {
     return (
       <div className="container">
+        <h1>Create a Top List</h1>
         <p>Loading...</p>
       </div>
     );
