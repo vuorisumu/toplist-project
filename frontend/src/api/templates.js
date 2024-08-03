@@ -20,9 +20,21 @@ export const fetchTemplates = (filters) => {
  * @returns data containing all fetched templates
  */
 export const fetchAllTemplatesFromUser = (userId) => {
-  return fetch(`${API_BASE_URL}/templates?creatorId=${userId}`).then(
-    (response) => response.json()
-  );
+  return fetch(
+    `${API_BASE_URL}/templates?creatorId=${userId}&sortBy=id&sortOrder=desc`
+  ).then((response) => response.json());
+};
+
+/**
+ * Fetches all templates from a specified user from the database
+ *
+ * @param {number} userId - ID of the user
+ * @returns data containing all fetched templates
+ */
+export const fetchAllTemplateNamesFromUser = (userId) => {
+  return fetch(
+    `${API_BASE_URL}/templates?creatorId=${userId}&idsAndNames=true`
+  ).then((response) => response.json());
 };
 
 /**

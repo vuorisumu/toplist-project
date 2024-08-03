@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import { clearAll } from "../util/misc";
@@ -11,6 +11,7 @@ import { addNewToplist } from "../api/toplists";
 import { getImgUrl, getItemImages, resizeImage } from "../util/imageHandler";
 import { addNewImages } from "../api/images";
 import RankItems from "./RankItems";
+import UserContext from "../util/UserContext";
 
 /**
  * View where the user can create a new list from a chosen template.
@@ -26,6 +27,7 @@ function NewList() {
   const location = useLocation();
   const navigate = useNavigate();
   const templateId = parseInt(location.pathname.replace("/createlist/", ""));
+  const { user } = useContext(UserContext);
 
   if (isNaN(templateId)) {
     console.error("Invalid templateId: ", templateId);
@@ -55,7 +57,6 @@ function NewList() {
   const [toplistDesc, setToplistDesc] = useState("");
   const [newEntry, setNewEntry] = useState("");
   const [errorMessages, setErrorMessages] = useState([]);
-  const [canEdit, setCanEdit] = useState(false);
   const [category, setCategory] = useState("");
   const [hasImages, setHasImages] = useState(false);
   const [newImage, setNewImage] = useState({});
@@ -63,25 +64,10 @@ function NewList() {
   const imgRef = useRef();
 
   /**
-   * Checks if the user is logged in as admin or is the creator of the
-   * currently chosen template.
-   */
-  const checkPermission = async () => {
-    try {
-      const isCreator = await isCreatorOfTemplate(templateId);
-      setCanEdit(isCreator);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  /**
    * On page load, fetch necessary template data from the database
    * and buiild the necessary containers for the items to be used in the ranking
    */
   useEffect(() => {
-    checkPermission();
-
     fetchTemplateById(templateId)
       .then((data) => {
         const formattedData = formatData(data)[0];
@@ -198,7 +184,7 @@ function NewList() {
 
   /**
    * Saves the ranking data to database if the minimum requirements are met.
-   * Minimum requirements are: at least one item ranked and the list is given a name.
+   * Minimum requirements are: at least one item ranked
    * Trims all input fields from possible extra spaces
    */
   const saveToplist = async () => {
@@ -225,30 +211,28 @@ function NewList() {
       document.getElementById("ranked").classList.remove("error");
     }
 
-    if (!toplistName) {
-      errors.push("Top list must have a title");
-      document.getElementById("addRankTitle").classList.add("error");
-    } else {
-      document.getElementById("addRankTitle").classList.remove("error");
-    }
-
     if (errors.length > 0) {
       setErrorMessages(errors);
       return;
     }
 
     try {
+      const listName =
+        toplistName.trim() !== ""
+          ? toplistName
+          : `${template.name} ranked by ${user ? user.user_name : "Anonymous"}`;
+
       // store toplist data
       const toplistData = {
-        toplist_name: toplistName,
+        toplist_name: listName,
         template_id: templateId,
         ranked_items: nonEmptyRanked,
         creation_time: new Date(),
       };
 
       // user id if logged in
-      if (localStorage.getItem("userId")) {
-        toplistData.creator_id = localStorage.getItem("userId");
+      if (user) {
+        toplistData.creator_id = user.id;
       }
 
       // optional description
@@ -280,6 +264,7 @@ function NewList() {
   if (!template) {
     return (
       <div className="container">
+        <h1>Create a Top List</h1>
         <p>Loading...</p>
       </div>
     );
@@ -289,20 +274,14 @@ function NewList() {
     <div className="container">
       <div className="createRank">
         <h1>Create a Top List</h1>
-        {canEdit && (
-          <Link to={`/edit-template/${template.id}`} className="editButton">
-            <span
-              className="material-symbols-outlined"
-              aria-label="edit template"
-            >
-              edit_square
-            </span>
-          </Link>
-        )}
 
         {/* Template information */}
         <p className="templateInfo">
-          Template: <span className="alt">{template.name}</span> by{" "}
+          Template:{" "}
+          <Link to={`/templates/${templateId}`}>
+            <span className="alt">{template.name}</span>
+          </Link>{" "}
+          by{" "}
           {template.user_name ? (
             <Link to={`/user/${template.user_name}`}>{template.user_name}</Link>
           ) : (
@@ -401,7 +380,6 @@ function NewList() {
           </button>
         </div>
       </div>
-      <ToplistContainer templateId={templateId} />
     </div>
   );
 }

@@ -16,6 +16,7 @@ import TemplateData from "./TemplateData";
 function NewTemplate() {
   const navigate = useNavigate();
   const [canCreate, setCanCreate] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isLoggedIn()) {
@@ -31,10 +32,12 @@ function NewTemplate() {
    * sends it to the database.
    */
   const createTemplate = async (templateData) => {
+    setLoading(true);
     try {
       console.log(templateData);
       const res = await addNewTemplate(templateData);
-      navigate(`/createlist/${res.id}`);
+      setLoading(false);
+      navigate(`/templates/${res.id}`);
     } catch (err) {
       console.log(err);
     }
@@ -55,7 +58,11 @@ function NewTemplate() {
     <div className="container">
       <h1>New Template</h1>
       <div className="no-stretch newTemplate">
-        <TemplateData onSubmit={createTemplate} submitText="Create" />
+        <TemplateData
+          onSubmit={createTemplate}
+          submitText="Create"
+          creating={loading}
+        />
       </div>
     </div>
   );

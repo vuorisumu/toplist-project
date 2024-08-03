@@ -4,6 +4,7 @@
 @use "theme";
 @use "dnd";
 @use "search";
+@use "user";
 
 @mixin titles() {
   font-family: "Viga", sans-serif;
@@ -15,6 +16,7 @@
 :root {
   background-color: theme.$primary-color;
   color: theme.$text-primary;
+  overflow-x: hidden;
 }
 
 .center {

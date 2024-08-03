@@ -28,6 +28,16 @@ export const isLoggedIn = () => {
   }
 };
 
+export const loginInfo = () => {
+  const token = localStorage.getItem("token");
+  try {
+    const decodedToken = jwtDecode(token);
+    return decodedToken;
+  } catch (err) {
+    return err;
+  }
+};
+
 export const isCreatorOfTemplate = async (id) => {
   if (isAdmin() === true) return true;
 

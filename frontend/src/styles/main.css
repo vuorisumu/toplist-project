@@ -19,6 +19,12 @@
   --text-secondary: #50565e;
 }
 
+.material-symbols-outlined {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
 nav {
   width: 100%;
   position: absolute;
@@ -51,6 +57,9 @@ nav ul li div.active {
 nav ul li .icon {
   display: block;
   font-size: 20pt;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 nav ul li .linkName {
   font-weight: 400;
@@ -65,34 +74,6 @@ nav ul {
 }
 nav ul li:first-child {
   flex-grow: 1;
-}
-nav .fixedLogin {
-  position: absolute;
-  width: 100%;
-  margin-top: -150px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  background-color: var(--primary-color);
-  transition: 0.3s;
-}
-nav .fixedLogin div {
-  display: grid;
-  grid-template-columns: auto auto;
-  justify-content: center;
-  justify-items: end;
-  align-items: center;
-  gap: 10px;
-}
-nav .fixedLogin div .buttonCont {
-  grid-column: 1/3;
-  width: 100%;
-}
-nav .fixedLogin div .buttonCont button {
-  width: 100%;
-  margin: auto;
-}
-nav .fixedLogin.active {
-  margin-top: 0;
 }
 
 .mobileNav {
@@ -127,6 +108,9 @@ nav .fixedLogin.active {
 .mobileNav ul li .icon {
   display: block;
   font-size: 20pt;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .mobileNav ul li .linkName {
   font-weight: 400;
@@ -139,33 +123,124 @@ nav .fixedLogin.active {
 .mobileNav ul {
   padding: 15px 10px 15px 10px;
 }
-.mobileNav .fixedLogin {
-  position: absolute;
+
+.hiddenMenuCont {
+  transition: 0.2s;
+  position: fixed;
+  z-index: 4;
   width: 100%;
-  bottom: -150px;
-  padding-bottom: 15px;
-  padding-top: 15px;
+  height: 100%;
+  background: transparent;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+.hiddenMenuCont .hiddenMenu {
+  position: relative;
+  transition: 0.2s;
+  width: 0;
   background-color: var(--primary-color);
+  overflow: hidden;
+}
+.hiddenMenuCont .hiddenMenu .innerMenu {
+  padding: 10px 20px;
+}
+.hiddenMenuCont .hiddenMenu .innerMenu .menuItems {
+  padding-top: 10px;
+}
+.hiddenMenuCont .hiddenMenu .innerMenu .menuItems ul li {
+  padding: 10px 0;
+  text-align: left;
+}
+.hiddenMenuCont .hiddenMenu .innerMenu .menuItems ul li:not(:last-child) {
+  border-bottom: 1px solid color-mix(in srgb, var(--shadow), transparent 80%);
+}
+.hiddenMenuCont .hiddenMenu .innerMenu .menuItems ul li div {
+  display: flex;
+  justify-content: space-between;
+}
+.hiddenMenuCont .hiddenMenu .innerMenu .closeButton {
+  background: none;
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  color: #6a9d23;
+  float: right;
+}
+.hiddenMenuCont .hiddenMenu .innerMenu .toggle {
+  position: relative;
+  display: inline-block;
+  top: 5px;
+}
+.hiddenMenuCont .hiddenMenu .innerMenu .toggle input[type=checkbox] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+  position: absolute;
+}
+.hiddenMenuCont .hiddenMenu .innerMenu .toggle input[type=checkbox]:checked + label {
+  background: #6a9d23;
+}
+.hiddenMenuCont .hiddenMenu .innerMenu .toggle input[type=checkbox]:checked + label::after {
+  left: calc(100% - 3px);
+  transform: translateX(-100%);
+}
+.hiddenMenuCont .hiddenMenu .innerMenu .toggle label {
+  cursor: pointer;
+  width: 36px;
+  height: 20px;
+  background: var(--mid-color);
+  display: block;
+  border-radius: 30px;
+  position: relative;
+}
+.hiddenMenuCont .hiddenMenu .innerMenu .toggle label::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
   transition: 0.3s;
 }
-.mobileNav .fixedLogin div {
-  display: grid;
-  grid-template-columns: auto auto;
-  justify-content: center;
-  justify-items: end;
-  align-items: center;
-  gap: 10px;
+.hiddenMenuCont .hiddenMenu .innerMenu .toggle label:active::after {
+  width: 20px;
 }
-.mobileNav .fixedLogin div .buttonCont {
-  grid-column: 1/3;
+.hiddenMenuCont.active {
+  transition: 150ms ease-in-out;
+  background: color-mix(in srgb, var(--shadow), transparent 80%);
+  pointer-events: all;
+}
+.hiddenMenuCont.active .hiddenMenu {
+  width: 50%;
+  max-width: 500px;
+  transition: 150ms ease-in-out;
+}
+
+#loginCont div {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
-.mobileNav .fixedLogin div .buttonCont button {
+#loginCont div label,
+#loginCont div input {
+  display: block;
+  flex-grow: 1;
+  text-align: left;
+}
+#loginCont div input {
+  margin-bottom: 10px;
+}
+#loginCont div button {
   width: 100%;
   margin: auto;
-}
-.mobileNav .fixedLogin.active {
-  bottom: 70px;
+  margin-bottom: 10px;
 }
 
 .toggleLogin {
@@ -203,23 +278,6 @@ nav .fixedLogin.active {
   text-align: left;
   padding-left: 5px;
   white-space: nowrap;
-}
-
-.nonFixedLogin div {
-  display: grid;
-  grid-template-columns: auto auto;
-  justify-content: center;
-  justify-items: end;
-  align-items: center;
-  gap: 10px;
-}
-.nonFixedLogin div .buttonCont {
-  grid-column: 1/3;
-  width: 100%;
-}
-.nonFixedLogin div .buttonCont button {
-  width: 100%;
-  margin: auto;
 }
 
 .dropdownCont .dropdownButton:hover, .dropdownCont .dropdownButton, .searchContainer .tagFilters input + span {
@@ -290,6 +348,7 @@ nav .fixedLogin.active {
   background: none;
   margin: 0;
   padding: 0;
+  box-shadow: none;
   height: 100%;
   padding: 0 12px;
   border-radius: 50%;
@@ -483,17 +542,6 @@ nav .fixedLogin.active {
   padding: 2px 4px;
 }
 
-.createRank .editButton, .template .editButton {
-  position: relative;
-  float: right;
-  padding-top: 10px;
-  width: 0;
-  right: 30px;
-}
-.createRank .editButton span, .template .editButton span {
-  font-size: 14pt;
-}
-
 .template {
   background-color: var(--secondary-color);
   margin-bottom: 25px;
@@ -526,7 +574,6 @@ nav .fixedLogin.active {
   position: relative;
   z-index: 3;
 }
-.template a,
 .template h2,
 .template h3 {
   display: block;
@@ -547,6 +594,7 @@ nav .fixedLogin.active {
 .template p.creator {
   font-size: 12pt;
 }
+
 .rank-container {
   background-color: var(--secondary-color);
   margin-bottom: 25px;
@@ -579,7 +627,6 @@ nav .fixedLogin.active {
   position: relative;
   z-index: 3;
 }
-.rank-container a,
 .rank-container h2,
 .rank-container h3 {
   display: block;
@@ -690,7 +737,7 @@ nav .fixedLogin.active {
 .addCont .toggle {
   position: relative;
   display: inline-block;
-  top: 8px;
+  top: 5px;
 }
 .addCont .toggle input[type=checkbox] {
   height: 0;
@@ -707,8 +754,8 @@ nav .fixedLogin.active {
 }
 .addCont .toggle label {
   cursor: pointer;
-  width: 40px;
-  height: 27px;
+  width: 36px;
+  height: 20px;
   background: var(--mid-color);
   display: block;
   border-radius: 30px;
@@ -719,14 +766,14 @@ nav .fixedLogin.active {
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 22px;
-  height: 22px;
+  width: 14px;
+  height: 14px;
   background: #fff;
   border-radius: 50%;
   transition: 0.3s;
 }
 .addCont .toggle label:active::after {
-  width: 28px;
+  width: 20px;
 }
 
 .coverImage {
@@ -815,9 +862,6 @@ nav .fixedLogin.active {
   font-size: 10pt;
 }
 
-.createRank .editButton {
-  top: -7px;
-}
 .resetButton,
 .backButton {
   border-radius: 5px;
@@ -947,6 +991,7 @@ nav .fixedLogin.active {
 }
 .newTemplate .dropdownElement .dropdownCont {
   flex-grow: 1;
+  z-index: 2;
 }
 .newTemplate .dropdownElement .dropdownCont button {
   margin-left: 0;
@@ -981,9 +1026,30 @@ nav .fixedLogin.active {
   opacity: 0.5;
 }
 
+.listLinks a {
+  font-family: "Viga", sans-serif;
+  font-size: 14pt;
+}
+.listLinks li {
+  padding: 15px;
+}
+.listLinks li:not(:last-child) {
+  border-bottom: 1px solid color-mix(in srgb, var(--shadow), transparent 80%);
+}
+
+.listPreview {
+  background-color: var(--secondary-color);
+  padding: 20px;
+  margin-bottom: 15px;
+}
+.listPreview h3 {
+  margin-top: 5px;
+}
+
 :root {
   background-color: var(--primary-color);
   color: var(--text-primary);
+  overflow-x: hidden;
 }
 
 .center {

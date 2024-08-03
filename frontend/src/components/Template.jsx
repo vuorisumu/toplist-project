@@ -4,7 +4,6 @@ import { isAdmin, isCreatorOfTemplate } from "../util/permissions";
 import { useEffect, useState } from "react";
 import { getCategoryById } from "../util/storage";
 import { deleteTemplate } from "../api/templates";
-import { Buffer } from "buffer";
 import { getImgUrl } from "../util/imageHandler";
 
 /**
@@ -15,7 +14,7 @@ import { getImgUrl } from "../util/imageHandler";
  * true by default
  * @returns {JSX.Element} Template preview component
  */
-function Template({ data, showCreator = true }) {
+function Template({ data, showCreator = true, allowEdit = false }) {
   const [canEdit, setCanEdit] = useState(false);
   const [category, setCategory] = useState("");
   const [imgUrl, setImgUrl] = useState("");
@@ -59,18 +58,7 @@ function Template({ data, showCreator = true }) {
 
   return (
     <>
-      {canEdit && (
-        <Link to={`/edit-template/${data.id}`} className="editButton">
-          <span
-            className="material-symbols-outlined"
-            aria-label="edit template"
-          >
-            edit_square
-          </span>
-        </Link>
-      )}
-
-      <Link to={`/createlist/${data.id}`}>
+      <Link to={`/templates/${data.id}`}>
         <h2>{data.name}</h2>{" "}
       </Link>
 
@@ -94,9 +82,12 @@ function Template({ data, showCreator = true }) {
 
       {data.description && <p className="description">{data.description}</p>}
 
-      {isAdmin() && (
+      {(isAdmin() || (canEdit && allowEdit)) && (
         <div>
-          <br />
+          <Link to={`/edit-template/${data.id}`} className="edit">
+            <button type="button">Edit template</button>
+          </Link>
+
           <ButtonPrompt
             buttonName="Delete template"
             confirm={() => handleDelete(data.id)}

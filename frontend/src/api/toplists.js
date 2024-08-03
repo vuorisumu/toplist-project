@@ -20,9 +20,9 @@ export const fetchToplists = (filters) => {
  * @returns data containing all fetched lists
  */
 export const fetchAllListsByUser = (userId) => {
-  return fetch(`${API_BASE_URL}/toplists?creatorId=${userId}`).then(
-    (response) => response.json()
-  );
+  return fetch(
+    `${API_BASE_URL}/toplists?creatorId=${userId}&sortBy=id&sortOrder=desc`
+  ).then((response) => response.json());
 };
 
 /**

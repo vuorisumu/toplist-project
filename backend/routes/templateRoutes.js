@@ -97,6 +97,7 @@ templateRouter.post("/", async (req, res) => {
     // validate data
     const { error } = templateSchema.validate(req.body);
     if (error) {
+      console.log(error);
       return res.status(400).json({ msg: error.details[0].message });
     }
 

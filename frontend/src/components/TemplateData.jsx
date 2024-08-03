@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { clearAll } from "../util/misc";
 import Dropdown from "./Dropdown";
 import { getCategories } from "../util/storage";
 import { blobToFile, getItemImages, resizeImage } from "../util/imageHandler";
 import { v4 as uuid } from "uuid";
 import { addNewImages } from "../api/images";
+import UserContext from "../util/UserContext";
 
-function TemplateData({ data, onSubmit, submitText }) {
+function TemplateData({ data, onSubmit, submitText, creating }) {
   const [templateName, setTemplateName] = useState(data?.name || "");
   const [description, setDescription] = useState(data?.description || "");
   const [items, setItems] = useState(data?.items || [{ item_name: "" }]);
@@ -18,6 +19,7 @@ function TemplateData({ data, onSubmit, submitText }) {
   const [coverImage, setCoverImage] = useState({});
   const [loading, setLoading] = useState(true);
   const imgRef = useRef();
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     // Gets the category list from the database
@@ -207,23 +209,28 @@ function TemplateData({ data, onSubmit, submitText }) {
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     if (!meetsRequirements()) {
       return;
     }
 
-    const addedImages = items
-      .filter((i) => i.item_name.trim() !== "" && i.img)
-      .map((i) => ({
-        id: i.img_id,
-        img: i.img,
-      }));
+    setLoading(true);
+    // setCreating(true);
+    const addedImages = hasImages
+      ? items
+          .filter((i) => i.item_name.trim() !== "" && i.img)
+          .map((i) => ({
+            id: i.img_id,
+            img: i.img,
+          }))
+      : [];
 
-    const nonEmptyItems = items
-      .filter((i) => i.item_name.trim() !== "")
-      .map((i) => ({
-        item_name: i.item_name,
-        img_id: i.img_id,
-      }));
+    const filteredItems = items.filter((i) => i.item_name.trim() !== "");
+
+    const nonEmptyItems = filteredItems.map((i) => ({
+      item_name: i.item_name,
+      ...(hasImages && { img_id: i.img_id }),
+    }));
 
     // mandatory data
     const templateData = {
@@ -232,7 +239,7 @@ function TemplateData({ data, onSubmit, submitText }) {
     };
 
     if (!data) {
-      templateData.creator_id = localStorage.getItem("userId");
+      templateData.creator_id = user.id;
     }
 
     // optional description
@@ -262,6 +269,7 @@ function TemplateData({ data, onSubmit, submitText }) {
     if (addedImages.length > 0) {
       const res = await addNewImages(addedImages);
     }
+    setLoading(false);
     onSubmit(templateData);
   };
 
@@ -372,7 +380,7 @@ function TemplateData({ data, onSubmit, submitText }) {
                 onChange={(e) => handleItemEdits(index, e.target.value)}
               />
 
-              {index !== items.length - 1 ? (
+              {items.length > 1 && (
                 <button
                   type="button"
                   onClick={() => deleteItem(index)}
@@ -380,13 +388,12 @@ function TemplateData({ data, onSubmit, submitText }) {
                 >
                   <span className="material-symbols-outlined">delete</span>
                 </button>
-              ) : (
-                <button type="button" onClick={addItem} className="addButton">
-                  <span className="material-symbols-outlined">add</span>
-                </button>
               )}
             </li>
           ))}
+          <button type="button" onClick={addItem} className="addButton">
+            <span className="material-symbols-outlined">add</span>
+          </button>
         </ul>
       </div>
 
@@ -398,7 +405,11 @@ function TemplateData({ data, onSubmit, submitText }) {
         </ul>
       )}
 
-      <button type="submit" className="createButton" disabled={loading}>
+      <button
+        type="submit"
+        className={`createButton ${loading || creating ? "disabled" : ""}`}
+        disabled={loading || creating}
+      >
         {submitText}
       </button>
 

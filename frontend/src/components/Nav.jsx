@@ -4,12 +4,70 @@ import { isLoggedIn } from "../util/permissions";
 import logo from "../assets/logo.svg";
 import Login from "./Login";
 import { isMobile } from "react-device-detect";
+import { useContext, useEffect, useState } from "react";
+import UserContext from "../util/UserContext";
+import HiddenMenu from "./HiddenMenu";
 
 function Nav() {
+  const { user } = useContext(UserContext);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    console.log("user data updated");
+  }, [user]);
+
   const toggleLogin = () => {
-    document.getElementById("loginCont").classList.toggle("active");
-    document.getElementById("navLogin").classList.toggle("active");
+    setMenuOpen(!menuOpen);
+    document.getElementById("hiddenMenu").classList.toggle("active");
+    // document.getElementById("loginCont").classList.toggle("active");
+    // document.getElementById("navLogin").classList.toggle("active");
   };
+
+  function Links() {
+    return (
+      <>
+        <li>
+          <NavLink to="/templates">
+            <span className="material-symbols-outlined icon">view_list</span>
+            <span className="linkName">Templates</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/toplists">
+            <span className="material-symbols-outlined icon">
+              format_list_numbered
+            </span>
+            <span className="linkName">Top lists</span>
+          </NavLink>
+        </li>
+        {user && (
+          <li>
+            <NavLink to="/new-template">
+              <span className="material-symbols-outlined icon">
+                list_alt_add
+              </span>
+              <span className="linkName">New template</span>
+            </NavLink>
+          </li>
+        )}
+
+        <li>
+          <div
+            className="toggleLogin loginIcon"
+            onClick={toggleLogin}
+            id="navLogin"
+          >
+            <span className="material-symbols-outlined icon loginIcon">
+              {user ? "lock_open" : "lock"}
+            </span>
+            <span className="linkName loginIcon">
+              {user ? "Logged in" : "Login"}
+            </span>
+          </div>
+        </li>
+      </>
+    );
+  }
 
   if (isMobile) {
     return (
@@ -26,110 +84,31 @@ function Nav() {
         </nav>
 
         <div className="mobileNav">
-          <Login isFixed={true} />
           <ul>
-            <li>
-              <NavLink to="/templates">
-                <span className="material-symbols-outlined icon">
-                  view_list
-                </span>
-                <span className="linkName">Templates</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/toplists">
-                <span className="material-symbols-outlined icon">
-                  format_list_numbered
-                </span>
-                <span className="linkName">Top lists</span>
-              </NavLink>
-            </li>
-            {isLoggedIn() && (
-              <li>
-                <NavLink to="/new-template">
-                  <span className="material-symbols-outlined icon">
-                    list_alt_add
-                  </span>
-                  <span className="linkName">New template</span>
-                </NavLink>
-              </li>
-            )}
-            <li>
-              <ThemeButton />
-            </li>
-            <li>
-              <div
-                className="toggleLogin loginIcon"
-                onClick={toggleLogin}
-                id="navLogin"
-              >
-                <span className="material-symbols-outlined icon loginIcon">
-                  {isLoggedIn() ? "lock_open" : "lock"}
-                </span>
-                <span className="linkName loginIcon">
-                  {isLoggedIn() ? "Logged in" : "Login"}
-                </span>
-              </div>
-            </li>
+            <Links />
           </ul>
         </div>
+
+        <HiddenMenu isOpen={menuOpen} toggleLogin={toggleLogin} />
       </>
     );
   }
 
   return (
-    <nav>
-      <ul>
-        <li>
-          <NavLink to="/" id="logoCont">
-            <img src={logo} id="logo" />
-            <span>Listmaker 9000</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/templates">
-            <span className="material-symbols-outlined icon">view_list</span>
-            <span className="linkName">Templates</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/toplists">
-            <span className="material-symbols-outlined icon">
-              format_list_numbered
-            </span>
-            <span className="linkName">Top lists</span>
-          </NavLink>
-        </li>
-        {isLoggedIn() && (
+    <>
+      <nav>
+        <ul>
           <li>
-            <NavLink to="/new-template">
-              <span className="material-symbols-outlined icon">
-                list_alt_add
-              </span>
-              <span className="linkName">New template</span>
+            <NavLink to="/" id="logoCont">
+              <img src={logo} id="logo" />
+              <span>Listmaker 9000</span>
             </NavLink>
           </li>
-        )}
-        <li>
-          <ThemeButton />
-        </li>
-        <li>
-          <div
-            className="toggleLogin loginIcon"
-            onClick={toggleLogin}
-            id="navLogin"
-          >
-            <span className="material-symbols-outlined icon loginIcon">
-              {isLoggedIn() ? "lock_open" : "lock"}
-            </span>
-            <span className="linkName loginIcon">
-              {isLoggedIn() ? "Logged in" : "Login"}
-            </span>
-          </div>
-        </li>
-      </ul>
-      <Login isFixed={true} />
-    </nav>
+          <Links />
+        </ul>
+      </nav>
+      <HiddenMenu isOpen={menuOpen} toggleLogin={toggleLogin} />
+    </>
   );
 }
 

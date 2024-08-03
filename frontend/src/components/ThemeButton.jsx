@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 /**
  * Theme change button that can be used anywhere
@@ -14,7 +15,7 @@ function ThemeButton() {
       setTheme(prevTheme);
     } else {
       const lightPref = window.matchMedia("(prefers-color-scheme: light)");
-      setTheme(lightPref.matches ? "dark" : "light");
+      setTheme(lightPref.matches ? "light" : "dark");
     }
   }, []);
 
@@ -37,14 +38,19 @@ function ThemeButton() {
   };
 
   return (
-    <div
-      type="button"
-      id="themeButton"
-      onClick={handleThemeToggle}
-      style={{ cursor: "pointer" }}
-    >
-      <span className="material-symbols-outlined icon">contrast</span>
-      <span className="linkName">Change theme</span>
+    <div>
+      <label>Dark theme</label>
+      <div className="toggle">
+        <input
+          type="checkbox"
+          name="toggleTheme"
+          id="toggleTheme"
+          className="menu"
+          checked={darkTheme}
+          onChange={handleThemeToggle}
+        />
+        <label htmlFor="toggleTheme"></label>
+      </div>
     </div>
   );
 }
