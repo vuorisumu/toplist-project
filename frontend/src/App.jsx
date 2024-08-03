@@ -22,6 +22,7 @@ import { auth, userLogin } from "./api/users.js";
 import UserContext from "./util/UserContext.js";
 import { isLoggedIn, loginInfo } from "./util/permissions.js";
 import TemplatePreview from "./components/TemplatePreview.jsx";
+import MyTemplates from "./components/MyTemplates.jsx";
 
 function App() {
   function RedirectToCreateList() {
@@ -84,6 +85,7 @@ function App() {
           <Route path="/toplists/:listId" element={<SingleList />} />
           <Route path="/register" element={<Register />} />
           <Route path="/user/:username" element={<User />} />
+          <Route path="/mytemplates" element={<MyTemplates />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         <footer className={`${isMobile ? "mobile" : ""}`}>
