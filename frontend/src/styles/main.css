@@ -234,9 +234,13 @@ nav ul li:first-child {
   flex-grow: 1;
   text-align: left;
 }
+#loginCont div input {
+  margin-bottom: 10px;
+}
 #loginCont div button {
   width: 100%;
   margin: auto;
+  margin-bottom: 10px;
 }
 
 .toggleLogin {

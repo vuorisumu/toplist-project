@@ -39,32 +39,38 @@ function HiddenMenu({ isOpen, toggleLogin }) {
           <button className="closeButton" onClick={toggleLogin}>
             x
           </button>
-          {!user ? (
-            <Login toggleLogin={toggleLogin} />
-          ) : (
-            <div className="menuItems">
-              <ul>
+          <div className="menuItems">
+            <ul>
+              {!user ? (
                 <li>
-                  Logged in as{" "}
-                  <Link to={`/user/${user.user_name}`} onClick={toggleLogin}>
-                    {user.user_name}
-                  </Link>
+                  <Login toggleLogin={toggleLogin} />
                 </li>
+              ) : (
+                <>
+                  <li>
+                    Logged in as{" "}
+                    <Link to={`/user/${user.user_name}`} onClick={toggleLogin}>
+                      {user.user_name}
+                    </Link>
+                  </li>
 
-                <li>
-                  <Link to="/mytemplates" onClick={toggleLogin}>
-                    My templates
-                  </Link>
-                </li>
-                <li>
-                  <ThemeButton />
-                </li>
+                  <li>
+                    <Link to="/mytemplates" onClick={toggleLogin}>
+                      My templates
+                    </Link>
+                  </li>
+                </>
+              )}
+              <li>
+                <ThemeButton />
+              </li>
+              {user && (
                 <li>
                   <Link onClick={logout}>Logout</Link>
                 </li>
-              </ul>
-            </div>
-          )}
+              )}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
