@@ -45,12 +45,10 @@ function HiddenMenu({ isOpen, toggleLogin }) {
             <div className="menuItems">
               <ul>
                 <li>
-                  <p>
-                    Logged in as{" "}
-                    <Link to={`/user/${user.user_name}`} onClick={toggleLogin}>
-                      {user.user_name}
-                    </Link>
-                  </p>
+                  Logged in as{" "}
+                  <Link to={`/user/${user.user_name}`} onClick={toggleLogin}>
+                    {user.user_name}
+                  </Link>
                 </li>
 
                 <li>

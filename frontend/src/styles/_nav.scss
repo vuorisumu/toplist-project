@@ -118,6 +118,21 @@ nav {
 
       .menuItems {
         padding-top: 10px;
+
+        ul li {
+          padding: 10px 0;
+          text-align: left;
+
+          &:not(:last-child) {
+            border-bottom: 1px solid
+              color-mix(in srgb, theme.$shadow, transparent 80%);
+          }
+
+          div {
+            display: flex;
+            justify-content: space-between;
+          }
+        }
       }
 
       .closeButton {

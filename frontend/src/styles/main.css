@@ -148,6 +148,17 @@ nav ul li:first-child {
 .hiddenMenuCont .hiddenMenu .innerMenu .menuItems {
   padding-top: 10px;
 }
+.hiddenMenuCont .hiddenMenu .innerMenu .menuItems ul li {
+  padding: 10px 0;
+  text-align: left;
+}
+.hiddenMenuCont .hiddenMenu .innerMenu .menuItems ul li:not(:last-child) {
+  border-bottom: 1px solid color-mix(in srgb, var(--shadow), transparent 80%);
+}
+.hiddenMenuCont .hiddenMenu .innerMenu .menuItems ul li div {
+  display: flex;
+  justify-content: space-between;
+}
 .hiddenMenuCont .hiddenMenu .innerMenu .closeButton {
   background: none;
   margin: 0;

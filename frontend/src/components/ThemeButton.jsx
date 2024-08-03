@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 /**
  * Theme change button that can be used anywhere
@@ -38,7 +39,7 @@ function ThemeButton() {
 
   return (
     <div>
-      <label>Dark theme: </label>
+      <label>Dark theme</label>
       <div className="toggle">
         <input
           type="checkbox"
