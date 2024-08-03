@@ -145,6 +145,9 @@ nav ul li:first-child {
 .hiddenMenuCont .hiddenMenu .innerMenu {
   padding: 10px 20px;
 }
+.hiddenMenuCont .hiddenMenu .innerMenu .menuItems {
+  padding-top: 10px;
+}
 .hiddenMenuCont .hiddenMenu .innerMenu .closeButton {
   background: none;
   margin: 0;
@@ -203,7 +206,7 @@ nav ul li:first-child {
   pointer-events: all;
 }
 .hiddenMenuCont.active .hiddenMenu {
-  width: 40%;
+  width: 50%;
   max-width: 500px;
   transition: 150ms ease-in-out;
 }

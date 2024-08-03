@@ -4,10 +4,9 @@ import Login from "./Login";
 import { Link } from "react-router-dom";
 import ThemeButton from "./ThemeButton";
 
-function HiddenMenu({ isOpen, toggleLogin, closeMenu }) {
+function HiddenMenu({ isOpen, toggleLogin }) {
   const menuRef = useRef(null);
   const { user, logout } = useContext(UserContext);
-  const [darkTheme, setDarkTheme] = useState(true);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "unset";
@@ -46,8 +45,14 @@ function HiddenMenu({ isOpen, toggleLogin, closeMenu }) {
             <div className="menuItems">
               <p>
                 Logged in as{" "}
-                <Link to={`/user/${user.user_name}`}>{user.user_name}</Link>
+                <Link to={`/user/${user.user_name}`} onClick={toggleLogin}>
+                  {user.user_name}
+                </Link>
               </p>
+
+              <Link to="/mytemplates" onClick={toggleLogin}>
+                My templates
+              </Link>
 
               <ThemeButton />
 

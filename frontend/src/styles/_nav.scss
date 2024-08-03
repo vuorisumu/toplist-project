@@ -116,6 +116,10 @@ nav {
     .innerMenu {
       padding: 10px 20px;
 
+      .menuItems {
+        padding-top: 10px;
+      }
+
       .closeButton {
         @include defaults.reset();
         user-select: none;
@@ -135,7 +139,7 @@ nav {
     pointer-events: all;
 
     .hiddenMenu {
-      width: 40%;
+      width: 50%;
       max-width: 500px;
       transition: 150ms ease-in-out;
     }
