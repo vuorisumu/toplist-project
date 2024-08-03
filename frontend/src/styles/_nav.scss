@@ -122,6 +122,10 @@ nav {
         color: theme.$accent;
         float: right;
       }
+
+      .toggle {
+        @include defaults.toggle();
+      }
     }
   }
 

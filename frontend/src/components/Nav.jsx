@@ -50,9 +50,7 @@ function Nav() {
             </NavLink>
           </li>
         )}
-        <li>
-          <ThemeButton />
-        </li>
+
         <li>
           <div
             className="toggleLogin loginIcon"

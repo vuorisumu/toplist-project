@@ -4,9 +4,10 @@ import Login from "./Login";
 import { Link } from "react-router-dom";
 import ThemeButton from "./ThemeButton";
 
-function HiddenMenu({ isOpen, toggleLogin }) {
+function HiddenMenu({ isOpen, toggleLogin, closeMenu }) {
   const menuRef = useRef(null);
   const { user, logout } = useContext(UserContext);
+  const [darkTheme, setDarkTheme] = useState(true);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "unset";
@@ -17,7 +18,8 @@ function HiddenMenu({ isOpen, toggleLogin }) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         if (
           document.getElementById("hiddenMenu").classList.contains("active") &&
-          !event.target.classList.contains("loginIcon")
+          !event.target.classList.contains("loginIcon") &&
+          !event.target.classList.contains("menu")
         ) {
           toggleLogin();
         }
@@ -29,7 +31,7 @@ function HiddenMenu({ isOpen, toggleLogin }) {
     return () => {
       document.removeEventListener("click", clickOutside);
     };
-  }, [menuRef]);
+  }, [menuRef, toggleLogin]);
 
   return (
     <div className="hiddenMenuCont" id="hiddenMenu">
