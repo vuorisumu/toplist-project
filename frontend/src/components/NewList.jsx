@@ -57,7 +57,6 @@ function NewList() {
   const [toplistDesc, setToplistDesc] = useState("");
   const [newEntry, setNewEntry] = useState("");
   const [errorMessages, setErrorMessages] = useState([]);
-  const [canEdit, setCanEdit] = useState(false);
   const [category, setCategory] = useState("");
   const [hasImages, setHasImages] = useState(false);
   const [newImage, setNewImage] = useState({});
@@ -65,25 +64,10 @@ function NewList() {
   const imgRef = useRef();
 
   /**
-   * Checks if the user is logged in as admin or is the creator of the
-   * currently chosen template.
-   */
-  const checkPermission = async () => {
-    try {
-      const isCreator = await isCreatorOfTemplate(templateId);
-      setCanEdit(isCreator);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  /**
    * On page load, fetch necessary template data from the database
    * and buiild the necessary containers for the items to be used in the ranking
    */
   useEffect(() => {
-    checkPermission();
-
     fetchTemplateById(templateId)
       .then((data) => {
         const formattedData = formatData(data)[0];
@@ -290,16 +274,6 @@ function NewList() {
     <div className="container">
       <div className="createRank">
         <h1>Create a Top List</h1>
-        {canEdit && (
-          <Link to={`/edit-template/${template.id}`} className="editButton">
-            <span
-              className="material-symbols-outlined"
-              aria-label="edit template"
-            >
-              edit_square
-            </span>
-          </Link>
-        )}
 
         {/* Template information */}
         <p className="templateInfo">
