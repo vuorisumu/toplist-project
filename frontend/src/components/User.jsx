@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { formatData } from "../util/dataHandler";
 import Template from "./Template";
 import Toplist from "./Toplist";
-import { fetchAllTemplatesFromUser } from "../api/templates";
+import {
+  fetchAllTemplateNamesFromUser,
+  fetchAllTemplatesFromUser,
+} from "../api/templates";
 import { fetchAllListsByUser } from "../api/toplists";
 import { fetchUserByName } from "../api/users";
 
@@ -36,7 +39,14 @@ function User() {
 
   useEffect(() => {
     if (userData !== null) {
+      /*
       fetchAllTemplatesFromUser(userData.user_id).then((data) => {
+        const formattedData = formatData(data);
+        setTemplates(formattedData);
+        setLoadingTemplates(false);
+      });*/
+
+      fetchAllTemplateNamesFromUser(userData.user_id).then((data) => {
         const formattedData = formatData(data);
         setTemplates(formattedData);
         setLoadingTemplates(false);
@@ -80,10 +90,10 @@ function User() {
         ) : (
           <>
             <p>Templates created by {userData.user_name}:</p>
-            <ul className="lists">
+            <ul className="listLinks">
               {templates.map((template) => (
-                <li key={template.id} className="template">
-                  <Template data={template} showCreator={false} />
+                <li key={template.id}>
+                  <Link to={`/templates/${template.id}`}>{template.name}</Link>
                 </li>
               ))}
             </ul>

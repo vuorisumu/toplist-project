@@ -21,10 +21,14 @@ function filteredTemplatesQuery(req) {
     return { filteredQuery, queryParams };
   }
 
-  // fetch just the names or all relevant information
-  filteredQuery = value.namesOnly
-    ? "SELECT DISTINCT t.name "
-    : "SELECT t.id, t.name, t.description, u.user_name, t.creator_id, t.category, t.cover_image ";
+  if (value.namesOnly) {
+    filteredQuery = "SELECT DISTINCT t.name ";
+  } else if (value.idsAndNames) {
+    filteredQuery = "SELECT t.name, t.id ";
+  } else {
+    filteredQuery =
+      "SELECT t.id, t.name, t.description, u.user_name, t.creator_id, t.category, t.cover_image ";
+  }
 
   // join relevant tables
   filteredQuery +=

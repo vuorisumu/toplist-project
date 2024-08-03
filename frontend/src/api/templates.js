@@ -26,6 +26,18 @@ export const fetchAllTemplatesFromUser = (userId) => {
 };
 
 /**
+ * Fetches all templates from a specified user from the database
+ *
+ * @param {number} userId - ID of the user
+ * @returns data containing all fetched templates
+ */
+export const fetchAllTemplateNamesFromUser = (userId) => {
+  return fetch(
+    `${API_BASE_URL}/templates?creatorId=${userId}&idsAndNames=true`
+  ).then((response) => response.json());
+};
+
+/**
  * Fetches template names by given input.
  *
  * @param {string} input - input string for searching templates by name
