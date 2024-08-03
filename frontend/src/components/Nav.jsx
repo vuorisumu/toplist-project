@@ -6,6 +6,7 @@ import Login from "./Login";
 import { isMobile } from "react-device-detect";
 import { useContext, useEffect } from "react";
 import UserContext from "../util/UserContext";
+import HiddenMenu from "./HiddenMenu";
 
 function Nav() {
   const { user } = useContext(UserContext);
@@ -14,6 +15,7 @@ function Nav() {
   }, [user]);
 
   const toggleLogin = () => {
+    document.getElementById("hiddenMenu").classList.toggle("active");
     document.getElementById("loginCont").classList.toggle("active");
     document.getElementById("navLogin").classList.toggle("active");
   };
@@ -91,18 +93,21 @@ function Nav() {
   }
 
   return (
-    <nav>
-      <ul>
-        <li>
-          <NavLink to="/" id="logoCont">
-            <img src={logo} id="logo" />
-            <span>Listmaker 9000</span>
-          </NavLink>
-        </li>
-        <Links />
-      </ul>
-      <Login isFixed={true} />
-    </nav>
+    <>
+      <nav>
+        <ul>
+          <li>
+            <NavLink to="/" id="logoCont">
+              <img src={logo} id="logo" />
+              <span>Listmaker 9000</span>
+            </NavLink>
+          </li>
+          <Links />
+        </ul>
+        <Login isFixed={true} />
+      </nav>
+      <HiddenMenu />
+    </>
   );
 }
 

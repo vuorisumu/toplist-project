@@ -168,6 +168,26 @@ nav .fixedLogin.active {
   bottom: 70px;
 }
 
+.hiddenMenuCont {
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background: color-mix(in srgb, var(--shadow), transparent 80%);
+  display: none;
+  justify-content: flex-end;
+}
+.hiddenMenuCont .hiddenMenu {
+  position: relative;
+  padding-top: 61px;
+  width: 40%;
+  max-width: 500px;
+  background-color: var(--primary-color);
+}
+.hiddenMenuCont.active {
+  display: flex;
+}
+
 .toggleLogin {
   cursor: pointer;
 }
@@ -984,6 +1004,7 @@ nav .fixedLogin.active {
 :root {
   background-color: var(--primary-color);
   color: var(--text-primary);
+  overflow-x: hidden;
 }
 
 .center {
