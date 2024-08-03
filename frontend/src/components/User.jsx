@@ -102,7 +102,7 @@ function User() {
             <p>Top lists created by {userData.user_name}:</p>
             <ul className="lists">
               {lists.map((list) => (
-                <li key={list.id}>
+                <li key={`list${list.toplist_id}`}>
                   <Toplist data={list} general={true} />
                 </li>
               ))}
