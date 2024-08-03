@@ -72,26 +72,6 @@ function User() {
       <h1>{userData.user_name}</h1>
 
       <div>
-        <h2>Templates</h2>
-        {loadingTemplates ? (
-          <p>Loading templates...</p>
-        ) : templates.length <= 0 ? (
-          <p>No templates created</p>
-        ) : (
-          <>
-            <p>Templates created by {userData.user_name}:</p>
-            <ul className="lists">
-              {templates.map((template) => (
-                <li key={template.id} className="template">
-                  <Template data={template} showCreator={false} />
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </div>
-
-      <div>
         <h2>Top lists</h2>
         {loadingLists ? (
           <p>Loading templates...</p>
@@ -117,6 +97,26 @@ function User() {
                       </Link>
                     </p>
                   </div>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
+
+      <div>
+        <h2>Templates</h2>
+        {loadingTemplates ? (
+          <p>Loading templates...</p>
+        ) : templates.length <= 0 ? (
+          <p>No templates created</p>
+        ) : (
+          <>
+            <p>Templates created by {userData.user_name}:</p>
+            <ul className="lists">
+              {templates.map((template) => (
+                <li key={template.id} className="template">
+                  <Template data={template} showCreator={false} />
                 </li>
               ))}
             </ul>
