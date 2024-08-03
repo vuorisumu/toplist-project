@@ -11,7 +11,7 @@ import UserContext from "../util/UserContext";
 function Login({ toggleLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { user, login, logout } = useContext(UserContext);
+  const { user, login } = useContext(UserContext);
 
   useEffect(() => {
     if (user) {
@@ -52,18 +52,11 @@ function Login({ toggleLogin }) {
     }
   };
 
-  /**
-   * Logs the user out, clears localStorage and refreshes the page.
-   */
-  const onLogout = () => {
-    logout();
-  };
-
   return (
     <>
       <div id="loginCont">
         <div>
-          {!user ? (
+          {!user && (
             <>
               <label>User: </label>
               <input
@@ -92,18 +85,6 @@ function Login({ toggleLogin }) {
               <Link to="/register" onClick={toggleLogin}>
                 Register
               </Link>
-            </>
-          ) : (
-            <>
-              <p>
-                {`Logged in as `}
-                <Link to={`/user/${user.user_name}`} onClick={toggleLogin}>
-                  {user.user_name}
-                </Link>
-              </p>
-              <button type="button" onClick={onLogout} className="logoutButton">
-                Logout
-              </button>
             </>
           )}
         </div>

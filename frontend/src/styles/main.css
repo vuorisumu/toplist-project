@@ -19,6 +19,12 @@
   --text-secondary: #50565e;
 }
 
+.material-symbols-outlined {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
 nav {
   width: 100%;
   position: absolute;
@@ -137,7 +143,18 @@ nav ul li:first-child {
   overflow: hidden;
 }
 .hiddenMenuCont .hiddenMenu .innerMenu {
-  padding: 20px;
+  padding: 10px 20px;
+}
+.hiddenMenuCont .hiddenMenu .innerMenu .closeButton {
+  background: none;
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  color: #6a9d23;
+  float: right;
 }
 .hiddenMenuCont.active {
   transition: 150ms ease-in-out;
@@ -272,6 +289,7 @@ nav ul li:first-child {
   background: none;
   margin: 0;
   padding: 0;
+  box-shadow: none;
   height: 100%;
   padding: 0 12px;
   border-radius: 50%;

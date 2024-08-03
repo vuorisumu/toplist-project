@@ -109,13 +109,19 @@ nav {
   .hiddenMenu {
     position: relative;
     transition: 0.2s;
-    // padding-top: 61px;
     width: 0;
     background-color: theme.$primary-color;
     overflow: hidden;
 
     .innerMenu {
-      padding: 20px;
+      padding: 10px 20px;
+
+      .closeButton {
+        @include defaults.reset();
+        user-select: none;
+        color: theme.$accent;
+        float: right;
+      }
     }
   }
 

@@ -23,6 +23,7 @@
   background: none;
   margin: 0;
   padding: 0;
+  box-shadow: none;
 }
 
 @mixin coverImage() {
@@ -134,4 +135,8 @@
       width: 28px;
     }
   }
+}
+
+.material-symbols-outlined {
+  user-select: none;
 }
