@@ -15,7 +15,6 @@ function HiddenMenu({ isOpen, toggleLogin }) {
   useEffect(() => {
     const clickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        console.log("click");
         if (
           document.getElementById("hiddenMenu").classList.contains("active") &&
           !event.target.classList.contains("loginIcon")
