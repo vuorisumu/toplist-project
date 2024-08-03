@@ -4,20 +4,23 @@ import { isLoggedIn } from "../util/permissions";
 import logo from "../assets/logo.svg";
 import Login from "./Login";
 import { isMobile } from "react-device-detect";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserContext from "../util/UserContext";
 import HiddenMenu from "./HiddenMenu";
 
 function Nav() {
   const { user } = useContext(UserContext);
+  const [menuOpen, setMenuOpen] = useState(false);
+
   useEffect(() => {
     console.log("user data updated");
   }, [user]);
 
   const toggleLogin = () => {
+    setMenuOpen(!menuOpen);
     document.getElementById("hiddenMenu").classList.toggle("active");
-    document.getElementById("loginCont").classList.toggle("active");
-    document.getElementById("navLogin").classList.toggle("active");
+    // document.getElementById("loginCont").classList.toggle("active");
+    // document.getElementById("navLogin").classList.toggle("active");
   };
 
   function Links() {
@@ -83,7 +86,7 @@ function Nav() {
         </nav>
 
         <div className="mobileNav">
-          <Login isFixed={true} />
+          <Login />
           <ul>
             <Links />
           </ul>
@@ -104,9 +107,8 @@ function Nav() {
           </li>
           <Links />
         </ul>
-        <Login isFixed={true} />
       </nav>
-      <HiddenMenu />
+      <HiddenMenu isOpen={menuOpen} toggleLogin={toggleLogin} />
     </>
   );
 }

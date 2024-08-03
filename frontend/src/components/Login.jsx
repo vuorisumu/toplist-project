@@ -1,5 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../util/UserContext";
 
@@ -7,15 +6,11 @@ import UserContext from "../util/UserContext";
  * Reusable login component that renders input fields for the
  * username and password, as well as a login button.
  *
- * @param {boolean} props.isFixed - Whether the position of the
- * component is fixed.
  * @returns {JSX.Element} Login component
  */
-function Login({ isFixed }) {
+function Login({ toggleLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const loginRef = useRef(null);
-
   const { user, login, logout } = useContext(UserContext);
 
   useEffect(() => {
@@ -26,30 +21,6 @@ function Login({ isFixed }) {
       setPassword("");
     }
   }, [user]);
-
-  useEffect(() => {
-    const clickOutside = (event) => {
-      if (loginRef.current && !loginRef.current.contains(event.target)) {
-        if (
-          document.getElementById("loginCont").classList.contains("active") &&
-          !event.target.classList.contains("loginIcon")
-        ) {
-          toggleLogin();
-        }
-      }
-    };
-
-    document.addEventListener("click", clickOutside);
-
-    return () => {
-      document.removeEventListener("click", clickOutside);
-    };
-  }, [loginRef]);
-
-  const toggleLogin = () => {
-    document.getElementById("loginCont").classList.toggle("active");
-    document.getElementById("navLogin").classList.toggle("active");
-  };
 
   /**
    * Handles login attempt, clears the password field on unsuccessful
@@ -64,6 +35,7 @@ function Login({ isFixed }) {
         password: password,
       };
       await login(loginData);
+      toggleLogin();
     } catch (err) {
       console.error("Error during login: " + err);
     }
@@ -89,11 +61,7 @@ function Login({ isFixed }) {
 
   return (
     <>
-      <div
-        ref={loginRef}
-        id="loginCont"
-        className={isFixed ? "fixedLogin" : "nonFixedLogin"}
-      >
+      <div id="loginCont">
         <div>
           {!user ? (
             <>
@@ -113,47 +81,23 @@ function Login({ isFixed }) {
                 onKeyDown={handleKeyDown}
               />
 
-              <div className="buttonCont">
-                <button
-                  type="button"
-                  onClick={handleLogin}
-                  className="loginButton"
-                >
-                  Login
-                </button>
-                <Link to="/register">
-                  <button
-                    type="button"
-                    className="loginButton"
-                    onClick={() => {
-                      document
-                        .getElementById("loginCont")
-                        .classList.toggle("active");
-                      document
-                        .getElementById("navLogin")
-                        .classList.toggle("active");
-                    }}
-                  >
-                    Register
-                  </button>
-                </Link>
-              </div>
+              <button
+                type="button"
+                onClick={handleLogin}
+                className="loginButton"
+              >
+                Login
+              </button>
+
+              <Link to="/register" onClick={toggleLogin}>
+                Register
+              </Link>
             </>
           ) : (
             <>
               <p>
                 {`Logged in as `}
-                <Link
-                  to={`/user/${user.user_name}`}
-                  onClick={() => {
-                    document
-                      .getElementById("loginCont")
-                      .classList.toggle("active");
-                    document
-                      .getElementById("navLogin")
-                      .classList.toggle("active");
-                  }}
-                >
+                <Link to={`/user/${user.user_name}`} onClick={toggleLogin}>
                   {user.user_name}
                 </Link>
               </p>
@@ -167,9 +111,5 @@ function Login({ isFixed }) {
     </>
   );
 }
-
-Login.propTypes = {
-  isFixed: PropTypes.bool.isRequired,
-};
 
 export default Login;
