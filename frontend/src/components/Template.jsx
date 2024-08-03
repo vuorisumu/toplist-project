@@ -84,7 +84,6 @@ function Template({ data, showCreator = true, allowEdit = false }) {
 
       {(isAdmin() || (canEdit && allowEdit)) && (
         <div>
-          <br />
           <Link to={`/edit-template/${data.id}`} className="edit">
             <button type="button">Edit template</button>
           </Link>

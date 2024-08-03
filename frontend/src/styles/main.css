@@ -538,17 +538,6 @@ nav ul li:first-child {
   padding: 2px 4px;
 }
 
-.createRank .editButton, .template .editButton {
-  position: relative;
-  float: right;
-  padding-top: 10px;
-  width: 0;
-  right: 30px;
-}
-.createRank .editButton span, .template .editButton span {
-  font-size: 14pt;
-}
-
 .template {
   background-color: var(--secondary-color);
   margin-bottom: 25px;
@@ -602,6 +591,7 @@ nav ul li:first-child {
 .template p.creator {
   font-size: 12pt;
 }
+
 .rank-container {
   background-color: var(--secondary-color);
   margin-bottom: 25px;
@@ -870,9 +860,6 @@ nav ul li:first-child {
   font-size: 10pt;
 }
 
-.createRank .editButton {
-  top: -7px;
-}
 .resetButton,
 .backButton {
   border-radius: 5px;
