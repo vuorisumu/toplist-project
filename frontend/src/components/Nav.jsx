@@ -86,11 +86,12 @@ function Nav() {
         </nav>
 
         <div className="mobileNav">
-          <Login />
           <ul>
             <Links />
           </ul>
         </div>
+
+        <HiddenMenu isOpen={menuOpen} toggleLogin={toggleLogin} />
       </>
     );
   }
