@@ -162,7 +162,7 @@ nav ul li:first-child {
 .hiddenMenuCont .hiddenMenu .innerMenu .toggle {
   position: relative;
   display: inline-block;
-  top: 8px;
+  top: 5px;
 }
 .hiddenMenuCont .hiddenMenu .innerMenu .toggle input[type=checkbox] {
   height: 0;
@@ -179,8 +179,8 @@ nav ul li:first-child {
 }
 .hiddenMenuCont .hiddenMenu .innerMenu .toggle label {
   cursor: pointer;
-  width: 40px;
-  height: 27px;
+  width: 36px;
+  height: 20px;
   background: var(--mid-color);
   display: block;
   border-radius: 30px;
@@ -191,14 +191,14 @@ nav ul li:first-child {
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 22px;
-  height: 22px;
+  width: 14px;
+  height: 14px;
   background: #fff;
   border-radius: 50%;
   transition: 0.3s;
 }
 .hiddenMenuCont .hiddenMenu .innerMenu .toggle label:active::after {
-  width: 28px;
+  width: 20px;
 }
 .hiddenMenuCont.active {
   transition: 150ms ease-in-out;
@@ -734,7 +734,7 @@ nav ul li:first-child {
 .addCont .toggle {
   position: relative;
   display: inline-block;
-  top: 8px;
+  top: 5px;
 }
 .addCont .toggle input[type=checkbox] {
   height: 0;
@@ -751,8 +751,8 @@ nav ul li:first-child {
 }
 .addCont .toggle label {
   cursor: pointer;
-  width: 40px;
-  height: 27px;
+  width: 36px;
+  height: 20px;
   background: var(--mid-color);
   display: block;
   border-radius: 30px;
@@ -763,14 +763,14 @@ nav ul li:first-child {
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 22px;
-  height: 22px;
+  width: 14px;
+  height: 14px;
   background: #fff;
   border-radius: 50%;
   transition: 0.3s;
 }
 .addCont .toggle label:active::after {
-  width: 28px;
+  width: 20px;
 }
 
 .coverImage {
