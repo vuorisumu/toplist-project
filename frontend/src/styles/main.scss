@@ -4,6 +4,7 @@
 @use "theme";
 @use "dnd";
 @use "search";
+@use "user";
 
 @mixin titles() {
   font-family: "Viga", sans-serif;

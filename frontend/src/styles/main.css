@@ -570,7 +570,6 @@ nav ul li:first-child {
   position: relative;
   z-index: 3;
 }
-.template a,
 .template h2,
 .template h3 {
   display: block;
@@ -624,7 +623,6 @@ nav ul li:first-child {
   position: relative;
   z-index: 3;
 }
-.rank-container a,
 .rank-container h2,
 .rank-container h3 {
   display: block;
@@ -1022,6 +1020,26 @@ nav ul li:first-child {
   margin: 0;
   inset: 0;
   opacity: 0.5;
+}
+
+.listLinks a {
+  font-family: "Viga", sans-serif;
+  font-size: 14pt;
+}
+.listLinks li {
+  padding: 15px;
+}
+.listLinks li:not(:last-child) {
+  border-bottom: 1px solid color-mix(in srgb, var(--shadow), transparent 80%);
+}
+
+.listPreview {
+  background-color: var(--secondary-color);
+  padding: 20px;
+  margin-bottom: 15px;
+}
+.listPreview h3 {
+  margin-top: 5px;
 }
 
 :root {

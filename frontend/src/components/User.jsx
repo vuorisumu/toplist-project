@@ -2,13 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { formatData } from "../util/dataHandler";
 import Template from "./Template";
-import Toplist from "./Toplist";
-import {
-  fetchAllTemplateNamesFromUser,
-  fetchAllTemplatesFromUser,
-} from "../api/templates";
+import { fetchAllTemplatesFromUser } from "../api/templates";
 import { fetchAllListsByUser } from "../api/toplists";
 import { fetchUserByName } from "../api/users";
+import { formatDate } from "../util/misc";
 
 function User() {
   const [userData, setUserData] = useState(null);
@@ -39,14 +36,7 @@ function User() {
 
   useEffect(() => {
     if (userData !== null) {
-      /*
       fetchAllTemplatesFromUser(userData.user_id).then((data) => {
-        const formattedData = formatData(data);
-        setTemplates(formattedData);
-        setLoadingTemplates(false);
-      });*/
-
-      fetchAllTemplateNamesFromUser(userData.user_id).then((data) => {
         const formattedData = formatData(data);
         setTemplates(formattedData);
         setLoadingTemplates(false);
@@ -79,10 +69,10 @@ function User() {
 
   return (
     <div className="container">
-      <h2>{userData.user_name}</h2>
+      <h1>{userData.user_name}</h1>
 
       <div>
-        <h3>Templates</h3>
+        <h2>Templates</h2>
         {loadingTemplates ? (
           <p>Loading templates...</p>
         ) : templates.length <= 0 ? (
@@ -90,10 +80,10 @@ function User() {
         ) : (
           <>
             <p>Templates created by {userData.user_name}:</p>
-            <ul className="listLinks">
+            <ul className="lists">
               {templates.map((template) => (
-                <li key={template.id}>
-                  <Link to={`/templates/${template.id}`}>{template.name}</Link>
+                <li key={template.id} className="template">
+                  <Template data={template} showCreator={false} />
                 </li>
               ))}
             </ul>
@@ -102,7 +92,7 @@ function User() {
       </div>
 
       <div>
-        <h3>Top lists</h3>
+        <h2>Top lists</h2>
         {loadingLists ? (
           <p>Loading templates...</p>
         ) : lists.length <= 0 ? (
@@ -112,9 +102,20 @@ function User() {
             <p>Top lists created by {userData.user_name}:</p>
             <ul className="lists">
               {lists.map((list) => (
-                <li key={`list${list.toplist_id}`} className="template">
-                  <div className="rank-container">
-                    <Toplist data={list} general={true} />
+                <li key={`list${list.toplist_id}`} className="listPreview">
+                  <div>
+                    <h3>
+                      <Link to={`/toplists/${list.toplist_id}`}>
+                        {list.toplist_name}
+                      </Link>
+                    </h3>
+                    <p>Ranked on {formatDate(list.creation_time)}</p>
+                    <p>
+                      From template:{" "}
+                      <Link to={`/templates/${list.template_id}`}>
+                        {list.name}
+                      </Link>
+                    </p>
                   </div>
                 </li>
               ))}
