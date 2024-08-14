@@ -82,7 +82,7 @@ function Login({ toggleLogin }) {
                 Login
               </button>
 
-              <Link to="/register" onClick={toggleLogin}>
+              <Link to="/register" onClick={toggleLogin} className="alt">
                 Register
               </Link>
             </>

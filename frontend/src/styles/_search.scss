@@ -4,7 +4,8 @@
 
 @mixin altButton($color) {
   @include defaults.defaultButton();
-  background-color: color-mix(in srgb, $color, theme.$primary-color 35%);
+  font-weight: 400;
+  background-color: color-mix(in srgb, $color, theme.$primary-color 20%);
 
   &:hover {
     background-color: color-mix(in srgb, $color, theme.$primary-color 50%);
@@ -148,7 +149,8 @@
 
     // checked category
     input:checked + span {
-      background-color: theme.$accent;
+      background-color: theme.$accent-secondary;
+      color: white;
       box-shadow: none;
     }
   }

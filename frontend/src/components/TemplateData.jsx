@@ -410,7 +410,7 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
         className={`createButton ${loading || creating ? "disabled" : ""}`}
         disabled={loading || creating}
       >
-        {submitText}
+        {loading || creating ? "Saving" : submitText}
       </button>
 
       <button type="button" onClick={clearAll} className="resetButton">

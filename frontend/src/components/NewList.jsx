@@ -276,32 +276,36 @@ function NewList() {
         <h1>Create a Top List</h1>
 
         {/* Template information */}
-        <p className="templateInfo">
-          Template:{" "}
-          <Link to={`/templates/${templateId}`}>
-            <span className="alt">{template.name}</span>
-          </Link>{" "}
-          by{" "}
-          {template.user_name ? (
-            <Link to={`/user/${template.user_name}`}>{template.user_name}</Link>
-          ) : (
-            "Unknown"
+        <div className="templateInfo">
+          <p>
+            Template:{" "}
+            <Link to={`/templates/${templateId}`}>
+              <span className="alt">{template.name}</span>
+            </Link>{" "}
+            by{" "}
+            {template.user_name ? (
+              <Link to={`/user/${template.user_name}`}>
+                {template.user_name}
+              </Link>
+            ) : (
+              "Unknown"
+            )}
+          </p>
+
+          {imgUrl && (
+            <div className="coverImage">
+              <img src={imgUrl} />
+            </div>
           )}
-        </p>
 
-        {imgUrl && (
-          <div className="coverImage">
-            <img src={imgUrl} />
-          </div>
-        )}
+          <p>Category: {category}</p>
 
-        <p className="templateInfo">Category: {category}</p>
-
-        <p className="templateInfo desc">
-          {template.description
-            ? `Template description: ${template.description}`
-            : `Create your own top list using this template`}
-        </p>
+          <p className="desc">
+            {template.description
+              ? `Template description: ${template.description}`
+              : `Create your own top list using this template`}
+          </p>
+        </div>
 
         {/* Ranking information */}
         <div className="rankInfo">
@@ -327,7 +331,17 @@ function NewList() {
 
         {/* Add new items */}
         <div className="newItemsCont" id="newItemsCont">
-          <label>New item: </label>
+          {hasImages && (
+            <div className="itemImage">
+              {newImage?.img ? (
+                <img src={URL.createObjectURL(newImage.img)} />
+              ) : (
+                <span className="material-symbols-outlined imagePlaceholder">
+                  image
+                </span>
+              )}
+            </div>
+          )}
           <input
             type="text"
             value={newEntry}
@@ -335,27 +349,16 @@ function NewList() {
             placeholder="New Item"
           />
           {hasImages && (
-            <>
-              <div className="itemImage">
-                {newImage?.img ? (
-                  <img src={URL.createObjectURL(newImage.img)} />
-                ) : (
-                  <span className="material-symbols-outlined imagePlaceholder">
-                    image
-                  </span>
-                )}
-              </div>
-              <label className="fileInput">
-                <input
-                  type="file"
-                  ref={imgRef}
-                  id={`newImage`}
-                  name={`newImage`}
-                  accept="image/png, image/gif, image/jpeg"
-                  onChange={handleAddItemImage}
-                />
-              </label>
-            </>
+            <label className="fileInput">
+              <input
+                type="file"
+                ref={imgRef}
+                id={`newImage`}
+                name={`newImage`}
+                accept="image/png, image/gif, image/jpeg"
+                onChange={handleAddItemImage}
+              />
+            </label>
           )}
           <button type="button" onClick={addEntry}>
             <span className="material-symbols-outlined">add</span>

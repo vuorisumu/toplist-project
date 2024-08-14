@@ -8,21 +8,32 @@
   --mid-color: #7f7b82;
   --text-primary: #f7f3f1;
   --text-secondary: #bfacb5;
+  --accent: #6a9d23;
+  --accent-secondary: #6a9d23;
+  --highlight: #d4af37;
 }
 
 [data-theme=light] {
-  --primary-color: #e1e4e9;
-  --secondary-color: #eeeff2;
-  --shadow: #000000;
+  --primary-color: #f2f4f7;
+  --secondary-color: #ffffff;
+  --shadow: #7c7c7c;
   --mid-color: #7f7b82;
   --text-primary: #474a4f;
   --text-secondary: #50565e;
+  --accent: #6f746a;
+  --accent-secondary: #559102;
+  --highlight: #559102;
 }
 
 .material-symbols-outlined {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
+}
+
+input,
+textarea {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 nav {
@@ -48,11 +59,11 @@ nav ul li {
 }
 nav ul li a,
 nav ul li div {
-  color: #6a9d23;
+  color: var(--accent);
 }
 nav ul li a.active,
 nav ul li div.active {
-  color: #d4af37;
+  color: var(--highlight);
 }
 nav ul li .icon {
   display: block;
@@ -99,11 +110,11 @@ nav ul li:first-child {
 }
 .mobileNav ul li a,
 .mobileNav ul li div {
-  color: #6a9d23;
+  color: var(--accent);
 }
 .mobileNav ul li a.active,
 .mobileNav ul li div.active {
-  color: #d4af37;
+  color: var(--highlight);
 }
 .mobileNav ul li .icon {
   display: block;
@@ -167,7 +178,7 @@ nav ul li:first-child {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
-  color: #6a9d23;
+  color: var(--accent);
   float: right;
 }
 .hiddenMenuCont .hiddenMenu .innerMenu .toggle {
@@ -182,7 +193,7 @@ nav ul li:first-child {
   position: absolute;
 }
 .hiddenMenuCont .hiddenMenu .innerMenu .toggle input[type=checkbox]:checked + label {
-  background: #6a9d23;
+  background: var(--accent);
 }
 .hiddenMenuCont .hiddenMenu .innerMenu .toggle input[type=checkbox]:checked + label::after {
   left: calc(100% - 3px);
@@ -217,8 +228,8 @@ nav ul li:first-child {
   pointer-events: all;
 }
 .hiddenMenuCont.active .hiddenMenu {
-  width: 50%;
-  max-width: 500px;
+  width: 75%;
+  max-width: 300px;
   transition: 150ms ease-in-out;
 }
 
@@ -248,21 +259,21 @@ nav ul li:first-child {
 }
 
 .loginButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
 }
 .loginButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
-  box-shadow: 0px 2px var(--shadow);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 
 #logoCont {
@@ -386,71 +397,74 @@ nav ul li:first-child {
   display: none;
 }
 .searchContainer .tagFilters input:checked + span {
-  background-color: #6a9d23;
+  background-color: var(--accent-secondary);
+  color: white;
   box-shadow: none;
 }
 .searchContainer .closeButton,
 .searchContainer .clearButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
-  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
+  font-weight: 400;
+  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 20%);
   font-size: 0.85em;
 }
 .searchContainer .closeButton:hover,
 .searchContainer .clearButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
-  box-shadow: 0px 2px var(--shadow);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 .searchContainer .closeButton:hover,
 .searchContainer .clearButton:hover {
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 50%);
 }
 .searchContainer .searchButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
   font-size: 0.85em;
 }
 .searchContainer .searchButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
-  box-shadow: 0px 2px var(--shadow);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 .searchContainer .showAdvancedButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
-  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
+  font-weight: 400;
+  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 20%);
   font-size: 0.85em;
   margin-top: 10px;
 }
 .searchContainer .showAdvancedButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
-  box-shadow: 0px 2px var(--shadow);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 .searchContainer .showAdvancedButton:hover {
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 50%);
@@ -486,7 +500,7 @@ nav ul li:first-child {
   top: 14px;
 }
 .dropdownCont .dropdownButton:active, .dropdownCont .dropdownButton:focus {
-  box-shadow: inset 0 0 0 2px #6a9d23;
+  box-shadow: inset 0 0 0 2px var(--accent);
 }
 .dropdownCont .dropdownButton:hover {
   background-color: transparent;
@@ -508,38 +522,6 @@ nav ul li:first-child {
 .dropdownItems ul li:hover {
   cursor: pointer;
   background-color: color-mix(in srgb, var(--mid-color), transparent 70%);
-}
-
-.createRank .rankInfo, .editkeyField, .info {
-  display: grid;
-  grid-template-columns: minmax(0, 40%) minmax(0, 60%);
-  gap: 10px;
-}
-.createRank .rankInfo label, .editkeyField label, .info label {
-  text-align: left;
-}
-.createRank .rankInfo textarea, .editkeyField textarea, .info textarea {
-  min-height: 50px;
-  resize: vertical;
-}
-
-.itemNote, .smallPrint, .rank-item p.rankedNote {
-  grid-column: 1/3;
-  font-size: 10pt;
-  color: var(--text-secondary);
-}
-
-.itemNote::before, .rank-item p.rankedNote::before {
-  content: "notes";
-  font-family: "Material Symbols Outlined";
-  position: absolute;
-  left: 0;
-  top: 1px;
-}
-
-.newItemsCont button, .rank-item button, .addCont ul li button {
-  margin: 0;
-  padding: 2px 4px;
 }
 
 .template {
@@ -569,8 +551,8 @@ nav ul li:first-child {
   color: var(--text-primary);
   font-weight: 600;
   background-color: var(--secondary-color);
-  -webkit-text-decoration: underline #6a9d23;
-          text-decoration: underline #6a9d23;
+  -webkit-text-decoration: underline var(--accent);
+          text-decoration: underline var(--accent);
   position: relative;
   z-index: 3;
 }
@@ -581,9 +563,6 @@ nav ul li:first-child {
   width: fit-content;
   margin: auto;
 }
-.template .confirmButton {
-  margin-bottom: 15px;
-}
 .template ul {
   padding: 15px 0;
 }
@@ -593,6 +572,10 @@ nav ul li:first-child {
 }
 .template p.creator {
   font-size: 12pt;
+}
+
+.lists {
+  margin-block-start: 1em;
 }
 
 .rank-container {
@@ -622,8 +605,8 @@ nav ul li:first-child {
   color: var(--text-primary);
   font-weight: 600;
   background-color: var(--secondary-color);
-  -webkit-text-decoration: underline #6a9d23;
-          text-decoration: underline #6a9d23;
+  -webkit-text-decoration: underline var(--accent);
+          text-decoration: underline var(--accent);
   position: relative;
   z-index: 3;
 }
@@ -634,15 +617,12 @@ nav ul li:first-child {
   width: fit-content;
   margin: auto;
 }
-.rank-container .confirmButton {
-  margin-bottom: 15px;
-}
 .rank-container ol li {
   padding: 10px;
   position: relative;
 }
 .rank-container ol li::marker {
-  color: #6a9d23;
+  color: var(--accent);
   font-size: 16pt;
   font-family: "Alfa Slab One", serif;
   padding-top: 2px;
@@ -681,7 +661,17 @@ nav ul li:first-child {
 }
 
 .info {
+  display: grid;
+  grid-template-columns: minmax(0, 40%) minmax(0, 60%);
+  gap: 10px;
   align-items: center;
+}
+.info label {
+  text-align: left;
+}
+.info textarea {
+  min-height: 50px;
+  resize: vertical;
 }
 .info h2,
 .info #imagePreview {
@@ -725,14 +715,9 @@ nav ul li:first-child {
 .addCont ul li input {
   flex-grow: 1;
 }
-.addCont ul li .suggestionCont {
-  position: relative;
-}
-.addCont ul li .suggestionCont .suggestions {
-  max-height: 120px;
-}
-.addCont ul li input[type=search] {
-  width: 100%;
+.addCont ul li button {
+  margin: 0;
+  padding: 2px 4px;
 }
 .addCont .toggle {
   position: relative;
@@ -746,7 +731,7 @@ nav ul li:first-child {
   position: absolute;
 }
 .addCont .toggle input[type=checkbox]:checked + label {
-  background: #6a9d23;
+  background: var(--accent);
 }
 .addCont .toggle input[type=checkbox]:checked + label::after {
   left: calc(100% - 3px);
@@ -790,59 +775,6 @@ nav ul li:first-child {
      object-fit: cover;
 }
 
-.rank-item {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  padding: 5px 5px 5px 10px;
-  min-height: 50px;
-  text-align: left;
-}
-.rank-item:nth-child(1) .rank-number {
-  color: #d4af37;
-}
-.rank-item:nth-child(2) .rank-number {
-  color: #c0c0c0;
-}
-.rank-item:nth-child(3) .rank-number {
-  color: #9f7a34;
-}
-.rank-item .rank-number {
-  color: #6a9d23;
-  font-size: 16pt;
-  font-family: "Alfa Slab One", serif;
-  font-weight: 800;
-  padding: 10px;
-  min-width: 20px;
-}
-.rank-item p {
-  flex: 1;
-}
-.rank-item p:nth-child(1) {
-  padding-left: 30px;
-}
-.rank-item p.rankedNote {
-  position: relative;
-  margin: -15px 0 0 45px;
-  padding: 0 20px 0 20px;
-  flex: 100%;
-}
-.rank-item p.rankedNote.img {
-  margin: -15px 0 0 85px;
-}
-.rank-item .noteArea {
-  resize: vertical;
-  flex: 100%;
-}
-.rank-item button {
-  margin: 10px;
-}
-
-.dndCont ~ .dndCont .rank-item {
-  min-height: 40px;
-}
-
 .newItemsCont {
   display: flex;
   align-items: center;
@@ -850,38 +782,67 @@ nav ul li:first-child {
   gap: 10px;
   margin: 10px;
 }
-.editkeyField {
-  padding: 10px 0;
+.newItemsCont button {
+  margin: 0;
+  padding: 2px 4px;
+}
+.newItemsCont input {
+  min-width: 70px;
 }
 
-.templateInfo .alt {
+.templateInfo {
+  max-width: 550px;
+  margin: auto;
+}
+.templateInfo p .alt {
   font-weight: 800;
 }
-.templateInfo.desc {
-  margin: -10px 0 30px 0;
+.templateInfo p.desc {
+  margin: -10px 0 20px 0;
   font-size: 10pt;
+}
+.templateInfo a h3 {
+  color: var(--accent-secondary);
+  padding: 15px;
+  border: 2px solid var(--accent-secondary);
+  border-radius: 40px;
+  margin: 40px 20px 120px 20px;
+}
+
+.createRank .rankInfo {
+  display: grid;
+  grid-template-columns: minmax(0, 40%) minmax(0, 60%);
+  gap: 10px;
+}
+.createRank .rankInfo label {
+  text-align: left;
+}
+.createRank .rankInfo textarea {
+  min-height: 50px;
+  resize: vertical;
 }
 
 .resetButton,
 .backButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
-  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
+  font-weight: 400;
+  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 20%);
   margin-top: 20px;
 }
 .resetButton:hover,
 .backButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
-  box-shadow: 0px 2px var(--shadow);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 .resetButton:hover,
 .backButton:hover {
@@ -889,44 +850,45 @@ nav ul li:first-child {
 }
 
 .loadMoreButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
   margin-top: 15px;
 }
 .loadMoreButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
-  box-shadow: 0px 2px var(--shadow);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 
 .cancelButton,
 .promptButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
-  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
+  font-weight: 400;
+  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 20%);
   margin-bottom: 10px;
 }
 .cancelButton:hover,
 .promptButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
-  box-shadow: 0px 2px var(--shadow);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 .cancelButton:hover,
 .promptButton:hover {
@@ -934,22 +896,23 @@ nav ul li:first-child {
 }
 
 .confirmButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
-  background-color: color-mix(in srgb, #5c0f0f, var(--primary-color) 35%);
+  font-weight: 400;
+  background-color: color-mix(in srgb, #5c0f0f, var(--primary-color) 20%);
 }
 .confirmButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
-  box-shadow: 0px 2px var(--shadow);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 .confirmButton:hover {
   background-color: color-mix(in srgb, #5c0f0f, var(--primary-color) 50%);
@@ -959,9 +922,25 @@ nav ul li:first-child {
   box-shadow: 0px 0px 5px 0px #ff0000;
 }
 
+.smallPrint {
+  grid-column: 1/3;
+  font-size: 10pt;
+  color: var(--text-secondary);
+}
+
 .itemNote {
+  grid-column: 1/3;
+  font-size: 10pt;
+  color: var(--text-secondary);
   padding-left: 20px;
   position: relative;
+}
+.itemNote::before {
+  content: "notes";
+  font-family: "Material Symbols Outlined";
+  position: absolute;
+  left: 0;
+  top: 1px;
 }
 
 .itemImage {
@@ -970,7 +949,7 @@ nav ul li:first-child {
   padding-right: 10px;
 }
 .itemImage img {
-  width: 100%;
+  width: inherit;
   height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
@@ -998,12 +977,47 @@ nav ul li:first-child {
   margin-right: 0;
 }
 
+.itemsPreview ul {
+  border: 1px solid var(--text-secondary);
+  margin: 0 20px;
+  padding: 10px 0;
+}
+.itemsPreview ul li {
+  display: inline-block;
+  padding: 2px 15px;
+}
+.itemsPreview h4 {
+  margin: auto;
+  margin-bottom: -9px;
+  padding: 0 7px;
+  width: -moz-fit-content;
+  width: fit-content;
+  color: var(--text-primary);
+  font-weight: 600;
+  background-color: var(--primary-color);
+  -webkit-text-decoration: underline var(--accent-secondary);
+          text-decoration: underline var(--accent-secondary);
+  position: relative;
+  z-index: 3;
+}
+
 .dndCont .droppable {
-  min-height: 50px;
+  min-height: 60px;
   position: relative;
 }
+.dndCont .placeholder {
+  height: 120px;
+  align-content: center;
+  opacity: 0.5;
+  transition: 0.2s;
+  border: 1px solid var(--accent-secondary);
+}
 .dndCont .dragOver {
-  background-color: color-mix(in srgb, #6a9d23, var(--secondary-color) 70%);
+  background-color: color-mix(in srgb, var(--accent), var(--secondary-color) 70%);
+}
+.dndCont .dragOver .placeholder {
+  height: 0px;
+  opacity: 0;
 }
 .dndCont .no-drag {
   background-color: var(--secondary-color);
@@ -1018,12 +1032,77 @@ nav ul li:first-child {
   scrollbar-width: thin;
   scrollbar-color: var(--mid-color) var(--secondary-color);
 }
-.dndCont .placeholder {
+.dndCont #unused .rank-item {
+  font-size: 10pt;
+  padding: 0;
+}
+.dndCont #unused .no-drag {
+  background-color: color-mix(in srgb, var(--secondary-color), var(--primary-color) 75%);
+}
+
+.rank-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 5px 5px 5px 10px;
+  min-height: 50px;
+  text-align: left;
+}
+.rank-item:nth-child(1) .rank-number {
+  color: #d4af37;
+}
+.rank-item:nth-child(2) .rank-number {
+  color: #c0c0c0;
+}
+.rank-item:nth-child(3) .rank-number {
+  color: #9f7a34;
+}
+.rank-item .rank-number {
+  color: var(--accent);
+  font-size: 16pt;
+  font-family: "Alfa Slab One", serif;
+  font-weight: 800;
+  padding: 10px;
+  min-width: 20px;
+}
+.rank-item p {
+  flex: 1;
+}
+.rank-item p:nth-child(1) {
+  padding-left: 30px;
+}
+.rank-item p.rankedNote {
+  grid-column: 1/3;
+  font-size: 10pt;
+  color: var(--text-secondary);
+  position: relative;
+  margin: -15px 0 0 45px;
+  padding: 0 20px 0 20px;
+  flex: 100%;
+}
+.rank-item p.rankedNote::before {
+  content: "notes";
+  font-family: "Material Symbols Outlined";
   position: absolute;
-  align-content: center;
+  left: 0;
+  top: 1px;
+}
+.rank-item p.rankedNote.img {
+  margin: -15px 0 0 85px;
+}
+.rank-item .noteArea {
+  resize: vertical;
+  flex: 100%;
+}
+.rank-item button {
   margin: 0;
-  inset: 0;
-  opacity: 0.5;
+  padding: 2px 4px;
+  margin: 10px;
+}
+
+.dndCont ~ .dndCont .rank-item {
+  min-height: 40px;
 }
 
 .listLinks a {
@@ -1074,19 +1153,24 @@ h2,
 h3,
 h4 {
   font-family: "Viga", sans-serif;
+  -webkit-hyphens: auto;
+          hyphens: auto;
 }
 h1 span,
 h2 span,
 h3 span,
 h4 span {
-  color: #6a9d23;
+  color: var(--accent);
 }
 
 a {
-  color: #6a9d23;
+  color: var(--accent);
 }
 a:hover {
-  color: color-mix(in srgb, #6a9d23, white 25%);
+  color: color-mix(in srgb, var(--accent), white 25%);
+}
+a.alt {
+  color: var(--accent-secondary);
 }
 
 input,
@@ -1096,21 +1180,21 @@ textarea {
 }
 
 button {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
 }
 button:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
-  box-shadow: 0px 2px var(--shadow);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 
 footer {
@@ -1146,6 +1230,29 @@ footer.mobile {
   .container {
     padding: 50px 10px;
   }
+  h1 {
+    font-size: 2.4em;
+  }
+  .fileInput {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .fileInput::before {
+    font-size: 20pt;
+  }
+  .newItemsCont button,
+  .newItemsCont .itemImage {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    padding: 0;
+  }
+  .newItemsCont button span,
+  .newItemsCont .itemImage span {
+    font-size: 20pt;
+    line-height: 30px;
+  }
   nav:not(.mobile) ul li {
     padding: 0 6px;
     line-height: 8px;
@@ -1161,6 +1268,9 @@ footer.mobile {
   }
 }
 @media only screen and (max-width: 330px) {
+  h1 {
+    font-size: 2em;
+  }
   nav:not(.mobile) ul li #logoCont span {
     display: none;
   }

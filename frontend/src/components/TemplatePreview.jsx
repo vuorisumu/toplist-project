@@ -1,19 +1,21 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ToplistContainer from "./ToplistContainer";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { fetchTemplateById } from "../api/templates";
 import { formatData } from "../util/dataHandler";
 import { getImgUrl } from "../util/imageHandler";
 import { getCategoryById } from "../util/storage";
+import UserContext from "../util/UserContext";
 
 function TemplatePreview() {
   const location = useLocation();
-  const navigate = useNavigate();
   const templateId = parseInt(location.pathname.replace("/templates/", ""));
   const [template, setTemplate] = useState(null);
   const [imgUrl, setImgUrl] = useState("");
   const [notFound, setNotFound] = useState(false);
   const [category, setCategory] = useState("");
+  const [canEdit, setCanEdit] = useState(false);
+  const { user } = useContext(UserContext);
 
   if (isNaN(templateId)) {
     console.error("Invalid templateId: ", templateId);
@@ -41,12 +43,13 @@ function TemplatePreview() {
       getCategoryById(template.category).then((data) => {
         setCategory(data);
       });
+
+      if (user) {
+        if (template.creator_id === user.id || user.isAdmin === true)
+          setCanEdit(true);
+      }
     }
   }, [template]);
-
-  const createList = () => {
-    navigate(`/createlist/${templateId}`);
-  };
 
   if (notFound) {
     return (
@@ -68,33 +71,55 @@ function TemplatePreview() {
 
   return (
     <div className="container">
-      <h1>{template.name}</h1>
-      {/* Template information */}
-      {imgUrl && (
-        <div className="coverImage">
-          <img src={imgUrl} />
-        </div>
-      )}
-
-      <p className="templateInfo">
-        Template by
-        {template.user_name ? (
-          <Link to={`/user/${template.user_name}`}> {template.user_name}</Link>
-        ) : (
-          "Unknown"
+      <div className="templateInfo">
+        <h1>{template.name}</h1>
+        {/* Template information */}
+        {imgUrl && (
+          <div className="coverImage">
+            <img src={imgUrl} />
+          </div>
         )}
-      </p>
-      <p className="templateInfo">Category: {category}</p>
 
-      <p className="templateInfo desc">
-        {template.description
-          ? `Template description: ${template.description}`
-          : `Create your own top list using this template`}
-      </p>
+        <p>
+          Template by
+          {template.user_name ? (
+            <Link to={`/user/${template.user_name}`}>
+              {" "}
+              {template.user_name}
+            </Link>
+          ) : (
+            "Unknown"
+          )}
+        </p>
+        <p>Category: {category}</p>
 
-      <button type="button" onClick={createList}>
-        Create a list using this template
-      </button>
+        <p className="desc">
+          {template.description
+            ? `Template description: ${template.description}`
+            : `Create your own top list using this template`}
+        </p>
+
+        <div className="itemsPreview">
+          <h4>Items in this template:</h4>
+          <ul>
+            {template.items.map((i) => (
+              <li key={i.item_name}>{i.item_name}</li>
+            ))}
+          </ul>
+        </div>
+
+        {canEdit && (
+          <p>
+            <Link to={`/edit-template/${templateId}`} className="alt">
+              Edit template
+            </Link>
+          </p>
+        )}
+
+        <Link to={`/createlist/${templateId}`}>
+          <h3>+ Use this template</h3>
+        </Link>
+      </div>
 
       <ToplistContainer templateId={templateId} />
     </div>

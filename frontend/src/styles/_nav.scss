@@ -49,7 +49,7 @@
         color: theme.$accent;
 
         &.active {
-          color: theme.$gold;
+          color: theme.$highlight;
         }
       }
 
@@ -159,8 +159,8 @@ nav {
     pointer-events: all;
 
     .hiddenMenu {
-      width: 50%;
-      max-width: 500px;
+      width: 75%;
+      max-width: 300px;
       transition: 150ms ease-in-out;
     }
   }
