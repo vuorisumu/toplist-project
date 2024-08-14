@@ -101,9 +101,9 @@ function TemplatePreview() {
         </ul>
       </div>
 
-      <button type="button" onClick={createList}>
-        Create a list using this template
-      </button>
+      <Link to={`/createlist/${templateId}`}>
+        <h3>Create a list using this template</h3>
+      </Link>
 
       <ToplistContainer templateId={templateId} />
     </div>
