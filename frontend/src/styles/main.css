@@ -16,7 +16,7 @@
 [data-theme=light] {
   --primary-color: #f2f4f7;
   --secondary-color: #ffffff;
-  --shadow: #000000;
+  --shadow: #7c7c7c;
   --mid-color: #7f7b82;
   --text-primary: #474a4f;
   --text-secondary: #50565e;
@@ -268,7 +268,7 @@ nav ul li:first-child {
 }
 .loginButton:hover {
   background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
-  box-shadow: 0px 2px var(--shadow);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 
 #logoCont {
@@ -415,7 +415,7 @@ nav ul li:first-child {
 .searchContainer .closeButton:hover,
 .searchContainer .clearButton:hover {
   background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
-  box-shadow: 0px 2px var(--shadow);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 .searchContainer .closeButton:hover,
 .searchContainer .clearButton:hover {
@@ -437,7 +437,7 @@ nav ul li:first-child {
 }
 .searchContainer .searchButton:hover {
   background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
-  box-shadow: 0px 2px var(--shadow);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 .searchContainer .showAdvancedButton {
   border-radius: 5px;
@@ -457,7 +457,7 @@ nav ul li:first-child {
 }
 .searchContainer .showAdvancedButton:hover {
   background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
-  box-shadow: 0px 2px var(--shadow);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 .searchContainer .showAdvancedButton:hover {
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 50%);
@@ -888,7 +888,7 @@ nav ul li:first-child {
 .resetButton:hover,
 .backButton:hover {
   background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
-  box-shadow: 0px 2px var(--shadow);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 .resetButton:hover,
 .backButton:hover {
@@ -911,7 +911,7 @@ nav ul li:first-child {
 }
 .loadMoreButton:hover {
   background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
-  box-shadow: 0px 2px var(--shadow);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 
 .cancelButton,
@@ -933,7 +933,7 @@ nav ul li:first-child {
 .cancelButton:hover,
 .promptButton:hover {
   background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
-  box-shadow: 0px 2px var(--shadow);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 .cancelButton:hover,
 .promptButton:hover {
@@ -956,7 +956,7 @@ nav ul li:first-child {
 }
 .confirmButton:hover {
   background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
-  box-shadow: 0px 2px var(--shadow);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 .confirmButton:hover {
   background-color: color-mix(in srgb, #5c0f0f, var(--primary-color) 50%);
@@ -1081,6 +1081,8 @@ h2,
 h3,
 h4 {
   font-family: "Viga", sans-serif;
+  -webkit-hyphens: auto;
+          hyphens: auto;
 }
 h1 span,
 h2 span,
@@ -1120,7 +1122,7 @@ button {
 }
 button:hover {
   background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
-  box-shadow: 0px 2px var(--shadow);
+  box-shadow: 0px 1px 2px var(--shadow);
 }
 
 footer {
@@ -1156,6 +1158,9 @@ footer.mobile {
   .container {
     padding: 50px 10px;
   }
+  h1 {
+    font-size: 2.4em;
+  }
   nav:not(.mobile) ul li {
     padding: 0 6px;
     line-height: 8px;
@@ -1171,6 +1176,9 @@ footer.mobile {
   }
 }
 @media only screen and (max-width: 330px) {
+  h1 {
+    font-size: 2em;
+  }
   nav:not(.mobile) ul li #logoCont span {
     display: none;
   }

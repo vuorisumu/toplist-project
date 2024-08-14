@@ -8,6 +8,7 @@
 
 @mixin titles() {
   font-family: "Viga", sans-serif;
+  hyphens: auto;
   span {
     color: theme.$accent;
   }
@@ -109,6 +110,10 @@ footer {
     padding: 50px 10px;
   }
 
+  h1 {
+    font-size: 2.4em;
+  }
+
   nav:not(.mobile) ul li {
     padding: 0 6px;
     line-height: 8px;
@@ -128,6 +133,9 @@ footer {
 
 // too small screens
 @media only screen and (max-width: 330px) {
+  h1 {
+    font-size: 2em;
+  }
   nav:not(.mobile) ul li {
     #logoCont span {
       display: none;

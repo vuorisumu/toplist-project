@@ -15,7 +15,7 @@
 
   &:hover {
     background-color: color-mix(in srgb, theme.$accent-secondary, white 10%);
-    box-shadow: 0px 2px theme.$shadow;
+    box-shadow: 0px 1px 2px theme.$shadow;
   }
 }
 
