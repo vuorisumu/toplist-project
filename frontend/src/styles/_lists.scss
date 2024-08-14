@@ -276,13 +276,26 @@
 }
 
 .templateInfo {
-  .alt {
-    font-weight: 800;
+  max-width: 550px;
+  margin: auto;
+
+  p {
+    .alt {
+      font-weight: 800;
+    }
+
+    &.desc {
+      margin: -10px 0 20px 0;
+      font-size: 10pt;
+    }
   }
 
-  &.desc {
-    margin: -10px 0 20px 0;
-    font-size: 10pt;
+  a h3 {
+    color: theme.$accent-secondary;
+    padding: 15px;
+    border: 2px solid theme.$accent-secondary;
+    border-radius: 40px;
+    margin: 40px 20px 120px 20px;
   }
 }
 

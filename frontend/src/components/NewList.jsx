@@ -276,32 +276,36 @@ function NewList() {
         <h1>Create a Top List</h1>
 
         {/* Template information */}
-        <p className="templateInfo">
-          Template:{" "}
-          <Link to={`/templates/${templateId}`}>
-            <span className="alt">{template.name}</span>
-          </Link>{" "}
-          by{" "}
-          {template.user_name ? (
-            <Link to={`/user/${template.user_name}`}>{template.user_name}</Link>
-          ) : (
-            "Unknown"
+        <div className="templateInfo">
+          <p>
+            Template:{" "}
+            <Link to={`/templates/${templateId}`}>
+              <span className="alt">{template.name}</span>
+            </Link>{" "}
+            by{" "}
+            {template.user_name ? (
+              <Link to={`/user/${template.user_name}`}>
+                {template.user_name}
+              </Link>
+            ) : (
+              "Unknown"
+            )}
+          </p>
+
+          {imgUrl && (
+            <div className="coverImage">
+              <img src={imgUrl} />
+            </div>
           )}
-        </p>
 
-        {imgUrl && (
-          <div className="coverImage">
-            <img src={imgUrl} />
-          </div>
-        )}
+          <p>Category: {category}</p>
 
-        <p className="templateInfo">Category: {category}</p>
-
-        <p className="templateInfo desc">
-          {template.description
-            ? `Template description: ${template.description}`
-            : `Create your own top list using this template`}
-        </p>
+          <p className="desc">
+            {template.description
+              ? `Template description: ${template.description}`
+              : `Create your own top list using this template`}
+          </p>
+        </div>
 
         {/* Ranking information */}
         <div className="rankInfo">

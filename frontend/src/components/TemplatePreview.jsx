@@ -68,42 +68,47 @@ function TemplatePreview() {
 
   return (
     <div className="container">
-      <h1>{template.name}</h1>
-      {/* Template information */}
-      {imgUrl && (
-        <div className="coverImage">
-          <img src={imgUrl} />
-        </div>
-      )}
-
-      <p className="templateInfo">
-        Template by
-        {template.user_name ? (
-          <Link to={`/user/${template.user_name}`}> {template.user_name}</Link>
-        ) : (
-          "Unknown"
+      <div className="templateInfo">
+        <h1>{template.name}</h1>
+        {/* Template information */}
+        {imgUrl && (
+          <div className="coverImage">
+            <img src={imgUrl} />
+          </div>
         )}
-      </p>
-      <p className="templateInfo">Category: {category}</p>
 
-      <p className="templateInfo desc">
-        {template.description
-          ? `Template description: ${template.description}`
-          : `Create your own top list using this template`}
-      </p>
+        <p>
+          Template by
+          {template.user_name ? (
+            <Link to={`/user/${template.user_name}`}>
+              {" "}
+              {template.user_name}
+            </Link>
+          ) : (
+            "Unknown"
+          )}
+        </p>
+        <p>Category: {category}</p>
 
-      <div className="itemsPreview">
-        <h4>Items in this template:</h4>
-        <ul>
-          {template.items.map((i) => (
-            <li key={i.item_name}>{i.item_name}</li>
-          ))}
-        </ul>
+        <p className="desc">
+          {template.description
+            ? `Template description: ${template.description}`
+            : `Create your own top list using this template`}
+        </p>
+
+        <div className="itemsPreview">
+          <h4>Items in this template:</h4>
+          <ul>
+            {template.items.map((i) => (
+              <li key={i.item_name}>{i.item_name}</li>
+            ))}
+          </ul>
+        </div>
+
+        <Link to={`/createlist/${templateId}`}>
+          <h3>Use this template</h3>
+        </Link>
       </div>
-
-      <Link to={`/createlist/${templateId}`}>
-        <h3>Create a list using this template</h3>
-      </Link>
 
       <ToplistContainer templateId={templateId} />
     </div>
