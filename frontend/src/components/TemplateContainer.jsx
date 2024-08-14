@@ -96,17 +96,19 @@ function TemplateContainer() {
 
         {!loading && templates.length < 1 && <p>No templates found</p>}
 
-        {loading ? (
-          <p>Loading</p>
-        ) : (
-          <ul className="lists">
-            {templates.map((template) => (
+        <ul className="lists">
+          {loading ? (
+            <li className="template">
+              <p>Loading</p>
+            </li>
+          ) : (
+            templates.map((template) => (
               <li key={template.id} className="template">
                 <Template data={template} />
               </li>
-            ))}
-          </ul>
-        )}
+            ))
+          )}
+        </ul>
 
         {/* Load more button */}
         {templates.length > 0 && loadedCount < templateCount && (

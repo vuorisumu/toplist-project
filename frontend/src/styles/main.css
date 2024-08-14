@@ -604,6 +604,10 @@ nav ul li:first-child {
   font-size: 12pt;
 }
 
+.lists {
+  margin-block-start: 1em;
+}
+
 .rank-container {
   background-color: var(--secondary-color);
   margin-bottom: 25px;

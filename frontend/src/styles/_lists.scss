@@ -59,6 +59,10 @@
   }
 }
 
+.lists {
+  margin-block-start: 1em;
+}
+
 // displaying top lists
 .rank-container {
   @include defaults.template();
