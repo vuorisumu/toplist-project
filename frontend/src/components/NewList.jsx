@@ -327,7 +327,17 @@ function NewList() {
 
         {/* Add new items */}
         <div className="newItemsCont" id="newItemsCont">
-          <label>New item: </label>
+          {hasImages && (
+            <div className="itemImage">
+              {newImage?.img ? (
+                <img src={URL.createObjectURL(newImage.img)} />
+              ) : (
+                <span className="material-symbols-outlined imagePlaceholder">
+                  image
+                </span>
+              )}
+            </div>
+          )}
           <input
             type="text"
             value={newEntry}
@@ -335,27 +345,16 @@ function NewList() {
             placeholder="New Item"
           />
           {hasImages && (
-            <>
-              <div className="itemImage">
-                {newImage?.img ? (
-                  <img src={URL.createObjectURL(newImage.img)} />
-                ) : (
-                  <span className="material-symbols-outlined imagePlaceholder">
-                    image
-                  </span>
-                )}
-              </div>
-              <label className="fileInput">
-                <input
-                  type="file"
-                  ref={imgRef}
-                  id={`newImage`}
-                  name={`newImage`}
-                  accept="image/png, image/gif, image/jpeg"
-                  onChange={handleAddItemImage}
-                />
-              </label>
-            </>
+            <label className="fileInput">
+              <input
+                type="file"
+                ref={imgRef}
+                id={`newImage`}
+                name={`newImage`}
+                accept="image/png, image/gif, image/jpeg"
+                onChange={handleAddItemImage}
+              />
+            </label>
           )}
           <button type="button" onClick={addEntry}>
             <span className="material-symbols-outlined">add</span>

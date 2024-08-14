@@ -114,6 +114,30 @@ footer {
     font-size: 2.4em;
   }
 
+  .fileInput {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+
+    &::before {
+      font-size: 18pt;
+    }
+  }
+
+  .newItemsCont {
+    button,
+    .itemImage {
+      width: 25px;
+      height: 25px;
+      line-height: 25px;
+      padding: 0;
+      span {
+        font-size: 18pt;
+        line-height: 25px;
+      }
+    }
+  }
+
   nav:not(.mobile) ul li {
     padding: 0 6px;
     line-height: 8px;
