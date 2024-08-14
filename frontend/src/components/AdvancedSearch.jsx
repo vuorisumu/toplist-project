@@ -274,7 +274,7 @@ function AdvancedSearch({ searchLists, onSearch, onClear, templateId }) {
             onClick={toggleFilterMenu}
             className="closeButton"
           >
-            Close filters
+            Hide filters
           </button>
 
           <button type="button" onClick={handleSearch} className="searchButton">

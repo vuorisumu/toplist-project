@@ -254,8 +254,8 @@ nav ul li:first-child {
 }
 
 .loginButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
@@ -398,8 +398,8 @@ nav ul li:first-child {
 }
 .searchContainer .closeButton,
 .searchContainer .clearButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
@@ -409,7 +409,8 @@ nav ul li:first-child {
   color: white;
   border: none;
   cursor: pointer;
-  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
+  font-weight: 400;
+  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 20%);
   font-size: 0.85em;
 }
 .searchContainer .closeButton:hover,
@@ -422,8 +423,8 @@ nav ul li:first-child {
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 50%);
 }
 .searchContainer .searchButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
@@ -440,8 +441,8 @@ nav ul li:first-child {
   box-shadow: 0px 1px 2px var(--shadow);
 }
 .searchContainer .showAdvancedButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
@@ -451,7 +452,8 @@ nav ul li:first-child {
   color: white;
   border: none;
   cursor: pointer;
-  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
+  font-weight: 400;
+  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 20%);
   font-size: 0.85em;
   margin-top: 10px;
 }
@@ -886,8 +888,8 @@ nav ul li:first-child {
 
 .resetButton,
 .backButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
@@ -897,7 +899,8 @@ nav ul li:first-child {
   color: white;
   border: none;
   cursor: pointer;
-  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
+  font-weight: 400;
+  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 20%);
   margin-top: 20px;
 }
 .resetButton:hover,
@@ -911,8 +914,8 @@ nav ul li:first-child {
 }
 
 .loadMoreButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
@@ -931,8 +934,8 @@ nav ul li:first-child {
 
 .cancelButton,
 .promptButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
@@ -942,7 +945,8 @@ nav ul li:first-child {
   color: white;
   border: none;
   cursor: pointer;
-  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
+  font-weight: 400;
+  background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 20%);
   margin-bottom: 10px;
 }
 .cancelButton:hover,
@@ -956,8 +960,8 @@ nav ul li:first-child {
 }
 
 .confirmButton {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
@@ -967,7 +971,8 @@ nav ul li:first-child {
   color: white;
   border: none;
   cursor: pointer;
-  background-color: color-mix(in srgb, #5c0f0f, var(--primary-color) 35%);
+  font-weight: 400;
+  background-color: color-mix(in srgb, #5c0f0f, var(--primary-color) 20%);
 }
 .confirmButton:hover {
   background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
@@ -1147,8 +1152,8 @@ textarea {
 }
 
 button {
-  border-radius: 5px;
-  padding: 0.3em 0.9em;
+  border-radius: 20px;
+  padding: 0.5em 1em;
   margin: 5px;
   font-size: 1em;
   font-weight: 500;
