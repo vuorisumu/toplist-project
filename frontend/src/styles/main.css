@@ -8,15 +8,21 @@
   --mid-color: #7f7b82;
   --text-primary: #f7f3f1;
   --text-secondary: #bfacb5;
+  --accent: #6a9d23;
+  --accent-secondary: #6a9d23;
+  --highlight: #d4af37;
 }
 
 [data-theme=light] {
-  --primary-color: #e1e4e9;
-  --secondary-color: #eeeff2;
+  --primary-color: #f2f4f7;
+  --secondary-color: #ffffff;
   --shadow: #000000;
   --mid-color: #7f7b82;
   --text-primary: #474a4f;
   --text-secondary: #50565e;
+  --accent: #6f746a;
+  --accent-secondary: #559102;
+  --highlight: #559102;
 }
 
 .material-symbols-outlined {
@@ -48,11 +54,11 @@ nav ul li {
 }
 nav ul li a,
 nav ul li div {
-  color: #6a9d23;
+  color: var(--accent);
 }
 nav ul li a.active,
 nav ul li div.active {
-  color: #d4af37;
+  color: var(--highlight);
 }
 nav ul li .icon {
   display: block;
@@ -99,11 +105,11 @@ nav ul li:first-child {
 }
 .mobileNav ul li a,
 .mobileNav ul li div {
-  color: #6a9d23;
+  color: var(--accent);
 }
 .mobileNav ul li a.active,
 .mobileNav ul li div.active {
-  color: #d4af37;
+  color: var(--highlight);
 }
 .mobileNav ul li .icon {
   display: block;
@@ -167,7 +173,7 @@ nav ul li:first-child {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
-  color: #6a9d23;
+  color: var(--accent);
   float: right;
 }
 .hiddenMenuCont .hiddenMenu .innerMenu .toggle {
@@ -182,7 +188,7 @@ nav ul li:first-child {
   position: absolute;
 }
 .hiddenMenuCont .hiddenMenu .innerMenu .toggle input[type=checkbox]:checked + label {
-  background: #6a9d23;
+  background: var(--accent);
 }
 .hiddenMenuCont .hiddenMenu .innerMenu .toggle input[type=checkbox]:checked + label::after {
   left: calc(100% - 3px);
@@ -254,14 +260,14 @@ nav ul li:first-child {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
 }
 .loginButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
   box-shadow: 0px 2px var(--shadow);
 }
 
@@ -386,7 +392,8 @@ nav ul li:first-child {
   display: none;
 }
 .searchContainer .tagFilters input:checked + span {
-  background-color: #6a9d23;
+  background-color: var(--accent-secondary);
+  color: white;
   box-shadow: none;
 }
 .searchContainer .closeButton,
@@ -397,9 +404,9 @@ nav ul li:first-child {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
@@ -407,7 +414,7 @@ nav ul li:first-child {
 }
 .searchContainer .closeButton:hover,
 .searchContainer .clearButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
   box-shadow: 0px 2px var(--shadow);
 }
 .searchContainer .closeButton:hover,
@@ -421,15 +428,15 @@ nav ul li:first-child {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
   font-size: 0.85em;
 }
 .searchContainer .searchButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
   box-shadow: 0px 2px var(--shadow);
 }
 .searchContainer .showAdvancedButton {
@@ -439,9 +446,9 @@ nav ul li:first-child {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
@@ -449,7 +456,7 @@ nav ul li:first-child {
   margin-top: 10px;
 }
 .searchContainer .showAdvancedButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
   box-shadow: 0px 2px var(--shadow);
 }
 .searchContainer .showAdvancedButton:hover {
@@ -486,7 +493,7 @@ nav ul li:first-child {
   top: 14px;
 }
 .dropdownCont .dropdownButton:active, .dropdownCont .dropdownButton:focus {
-  box-shadow: inset 0 0 0 2px #6a9d23;
+  box-shadow: inset 0 0 0 2px var(--accent);
 }
 .dropdownCont .dropdownButton:hover {
   background-color: transparent;
@@ -569,8 +576,8 @@ nav ul li:first-child {
   color: var(--text-primary);
   font-weight: 600;
   background-color: var(--secondary-color);
-  -webkit-text-decoration: underline #6a9d23;
-          text-decoration: underline #6a9d23;
+  -webkit-text-decoration: underline var(--accent);
+          text-decoration: underline var(--accent);
   position: relative;
   z-index: 3;
 }
@@ -622,8 +629,8 @@ nav ul li:first-child {
   color: var(--text-primary);
   font-weight: 600;
   background-color: var(--secondary-color);
-  -webkit-text-decoration: underline #6a9d23;
-          text-decoration: underline #6a9d23;
+  -webkit-text-decoration: underline var(--accent);
+          text-decoration: underline var(--accent);
   position: relative;
   z-index: 3;
 }
@@ -642,7 +649,7 @@ nav ul li:first-child {
   position: relative;
 }
 .rank-container ol li::marker {
-  color: #6a9d23;
+  color: var(--accent);
   font-size: 16pt;
   font-family: "Alfa Slab One", serif;
   padding-top: 2px;
@@ -746,7 +753,7 @@ nav ul li:first-child {
   position: absolute;
 }
 .addCont .toggle input[type=checkbox]:checked + label {
-  background: #6a9d23;
+  background: var(--accent);
 }
 .addCont .toggle input[type=checkbox]:checked + label::after {
   left: calc(100% - 3px);
@@ -809,7 +816,7 @@ nav ul li:first-child {
   color: #9f7a34;
 }
 .rank-item .rank-number {
-  color: #6a9d23;
+  color: var(--accent);
   font-size: 16pt;
   font-family: "Alfa Slab One", serif;
   font-weight: 800;
@@ -870,9 +877,9 @@ nav ul li:first-child {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
@@ -880,7 +887,7 @@ nav ul li:first-child {
 }
 .resetButton:hover,
 .backButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
   box-shadow: 0px 2px var(--shadow);
 }
 .resetButton:hover,
@@ -895,15 +902,15 @@ nav ul li:first-child {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
   margin-top: 15px;
 }
 .loadMoreButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
   box-shadow: 0px 2px var(--shadow);
 }
 
@@ -915,9 +922,9 @@ nav ul li:first-child {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 35%);
@@ -925,7 +932,7 @@ nav ul li:first-child {
 }
 .cancelButton:hover,
 .promptButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
   box-shadow: 0px 2px var(--shadow);
 }
 .cancelButton:hover,
@@ -940,15 +947,15 @@ nav ul li:first-child {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
   background-color: color-mix(in srgb, #5c0f0f, var(--primary-color) 35%);
 }
 .confirmButton:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
   box-shadow: 0px 2px var(--shadow);
 }
 .confirmButton:hover {
@@ -1003,7 +1010,7 @@ nav ul li:first-child {
   position: relative;
 }
 .dndCont .dragOver {
-  background-color: color-mix(in srgb, #6a9d23, var(--secondary-color) 70%);
+  background-color: color-mix(in srgb, var(--accent), var(--secondary-color) 70%);
 }
 .dndCont .no-drag {
   background-color: var(--secondary-color);
@@ -1079,14 +1086,17 @@ h1 span,
 h2 span,
 h3 span,
 h4 span {
-  color: #6a9d23;
+  color: var(--accent);
 }
 
 a {
-  color: #6a9d23;
+  color: var(--accent);
 }
 a:hover {
-  color: color-mix(in srgb, #6a9d23, white 25%);
+  color: color-mix(in srgb, var(--accent), white 25%);
+}
+a.alt {
+  color: var(--accent-secondary);
 }
 
 input,
@@ -1102,14 +1112,14 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, #6a9d23, var(--primary-color) 10%);
+  background-color: var(--accent-secondary);
   transition: 0.2s;
-  color: var(--text-primary);
+  color: white;
   border: none;
   cursor: pointer;
 }
 button:hover {
-  background-color: color-mix(in srgb, #6a9d23, white 5%);
+  background-color: color-mix(in srgb, var(--accent-secondary), white 10%);
   box-shadow: 0px 2px var(--shadow);
 }
 

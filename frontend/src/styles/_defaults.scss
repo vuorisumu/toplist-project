@@ -7,14 +7,14 @@
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: color-mix(in srgb, theme.$accent, theme.$primary-color 10%);
+  background-color: theme.$accent-secondary;
   transition: 0.2s;
-  color: theme.$text-primary;
+  color: white;
   border: none;
   cursor: pointer;
 
   &:hover {
-    background-color: color-mix(in srgb, theme.$accent, white 5%);
+    background-color: color-mix(in srgb, theme.$accent-secondary, white 10%);
     box-shadow: 0px 2px theme.$shadow;
   }
 }

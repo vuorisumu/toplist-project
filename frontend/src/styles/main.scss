@@ -52,6 +52,10 @@ a {
   &:hover {
     color: color-mix(in srgb, theme.$accent, white 25%);
   }
+
+  &.alt {
+    color: theme.$accent-secondary;
+  }
 }
 
 input,

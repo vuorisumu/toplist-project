@@ -4,7 +4,9 @@ $shadow: var(--shadow);
 $mid-color: var(--mid-color);
 $text-primary: var(--text-primary);
 $text-secondary: var(--text-secondary);
-$accent: #6a9d23;
+$accent: var(--accent);
+$accent-secondary: var(--accent-secondary);
+$highlight: var(--highlight);
 $warning: #5c0f0f;
 $gold: #d4af37;
 $silver: #c0c0c0;
@@ -17,13 +19,19 @@ $bronze: #9f7a34;
   --mid-color: #7f7b82;
   --text-primary: #f7f3f1;
   --text-secondary: #bfacb5;
+  --accent: #6a9d23;
+  --accent-secondary: #6a9d23;
+  --highlight: #d4af37;
 }
 
 [data-theme="light"] {
-  --primary-color: #e1e4e9;
-  --secondary-color: #eeeff2;
+  --primary-color: #f2f4f7;
+  --secondary-color: #ffffff;
   --shadow: #000000;
   --mid-color: #7f7b82;
   --text-primary: #474a4f;
   --text-secondary: #50565e;
+  --accent: #6f746a;
+  --accent-secondary: #559102;
+  --highlight: #559102;
 }
