@@ -2,8 +2,16 @@
 
 .dndCont {
   .droppable {
-    min-height: 50px;
+    min-height: 60px;
     position: relative;
+  }
+
+  .placeholder {
+    height: 120px;
+    align-content: center;
+    opacity: 0.5;
+    transition: 0.2s;
+    border: 1px solid theme.$accent-secondary;
   }
 
   .dragOver {
@@ -12,6 +20,11 @@
       theme.$accent,
       theme.$secondary-color 70%
     );
+
+    .placeholder {
+      height: 0px;
+      opacity: 0;
+    }
   }
 
   .no-drag {
@@ -32,13 +45,18 @@
     overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: theme.$mid-color theme.$secondary-color;
-  }
 
-  .placeholder {
-    position: absolute;
-    align-content: center;
-    margin: 0;
-    inset: 0;
-    opacity: 0.5;
+    .rank-item {
+      font-size: 10pt;
+      padding: 0;
+    }
+
+    .no-drag {
+      background-color: color-mix(
+        in srgb,
+        theme.$secondary-color,
+        theme.$primary-color 75%
+      );
+    }
   }
 }

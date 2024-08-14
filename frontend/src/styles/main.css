@@ -1054,11 +1054,22 @@ nav ul li:first-child {
 }
 
 .dndCont .droppable {
-  min-height: 50px;
+  min-height: 60px;
   position: relative;
+}
+.dndCont .placeholder {
+  height: 120px;
+  align-content: center;
+  opacity: 0.5;
+  transition: 0.2s;
+  border: 1px solid var(--accent-secondary);
 }
 .dndCont .dragOver {
   background-color: color-mix(in srgb, var(--accent), var(--secondary-color) 70%);
+}
+.dndCont .dragOver .placeholder {
+  height: 0px;
+  opacity: 0;
 }
 .dndCont .no-drag {
   background-color: var(--secondary-color);
@@ -1073,12 +1084,12 @@ nav ul li:first-child {
   scrollbar-width: thin;
   scrollbar-color: var(--mid-color) var(--secondary-color);
 }
-.dndCont .placeholder {
-  position: absolute;
-  align-content: center;
-  margin: 0;
-  inset: 0;
-  opacity: 0.5;
+.dndCont #unused .rank-item {
+  font-size: 10pt;
+  padding: 0;
+}
+.dndCont #unused .no-drag {
+  background-color: color-mix(in srgb, var(--secondary-color), var(--primary-color) 75%);
 }
 
 .listLinks a {
