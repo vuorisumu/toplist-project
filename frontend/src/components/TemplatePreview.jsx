@@ -92,6 +92,15 @@ function TemplatePreview() {
           : `Create your own top list using this template`}
       </p>
 
+      <div className="itemsPreview">
+        <h4>Items in this template:</h4>
+        <ul>
+          {template.items.map((i) => (
+            <li key={i.item_name}>{i.item_name}</li>
+          ))}
+        </ul>
+      </div>
+
       <button type="button" onClick={createList}>
         Create a list using this template
       </button>
