@@ -223,8 +223,8 @@ nav ul li:first-child {
   pointer-events: all;
 }
 .hiddenMenuCont.active .hiddenMenu {
-  width: 50%;
-  max-width: 500px;
+  width: 75%;
+  max-width: 300px;
   transition: 150ms ease-in-out;
 }
 
