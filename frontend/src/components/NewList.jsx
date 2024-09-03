@@ -6,7 +6,7 @@ import { formatData } from "../util/dataHandler";
 import ToplistContainer from "./ToplistContainer";
 import { isCreatorOfTemplate } from "../util/permissions";
 import { getCategoryById } from "../util/storage";
-import { fetchTemplateById } from "../api/templates";
+import { addNewTemplate, fetchTemplateById } from "../api/templates";
 import { addNewToplist } from "../api/toplists";
 import { getImgUrl, getItemImages, resizeImage } from "../util/imageHandler";
 import { addNewImages } from "../api/images";
@@ -66,6 +66,8 @@ function NewList() {
   const [copyTemplate, setCopyTemplate] = useState(false);
   const [newTemplateName, setNewTemplateName] = useState("");
   const [newTemplateDesc, setNewTemplateDesc] = useState("");
+  const [loadingNewTemplate, setLoadingNewTemplate] = useState(false);
+  const newTemplateId = useRef(templateId);
 
   /**
    * On page load, fetch necessary template data from the database
@@ -210,6 +212,36 @@ function NewList() {
     }
   };
 
+  const addTemplateCopy = async () => {
+    try {
+      setLoadingNewTemplate(true);
+      const tempItems = [];
+      for (let key in containers) {
+        containers[key].items.map((i) => {
+          tempItems.push({ item_name: i.item_name });
+        });
+      }
+
+      const templateData = {
+        name: newTemplateName || template.name,
+        items: tempItems,
+        category: template.category,
+        creator_id: user.id,
+      };
+
+      if (newTemplateDesc.trim() !== "") {
+        templateData.description = newTemplateDesc;
+      } else if (template.description) {
+        templateData.description = template.description;
+      }
+
+      const res = await addNewTemplate(templateData);
+      newTemplateId.current = res.id;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   /**
    * Saves the ranking data to database if the minimum requirements are met.
    * Minimum requirements are: at least one item ranked
@@ -244,6 +276,12 @@ function NewList() {
       return;
     }
 
+    if (copyTemplate) {
+      console.log("Copying template", templateId);
+      await addTemplateCopy();
+      console.log("New id", newTemplateId.current);
+    }
+
     try {
       const listName =
         toplistName.trim() !== ""
@@ -253,7 +291,7 @@ function NewList() {
       // store toplist data
       const toplistData = {
         toplist_name: listName,
-        template_id: templateId,
+        template_id: newTemplateId.current,
         ranked_items: nonEmptyRanked,
         creation_time: new Date(),
       };
@@ -395,7 +433,7 @@ function NewList() {
 
         {/* Save changes */}
         <div>
-          {addedItemCount > 0 && (
+          {addedItemCount > 0 && user && (
             <div>
               <div>
                 <label>Save as new template: </label>
