@@ -719,25 +719,26 @@ nav ul li:first-child {
   margin: 0;
   padding: 2px 4px;
 }
-.addCont .toggle {
+
+.toggle {
   position: relative;
   display: inline-block;
   top: 5px;
 }
-.addCont .toggle input[type=checkbox] {
+.toggle input[type=checkbox] {
   height: 0;
   width: 0;
   visibility: hidden;
   position: absolute;
 }
-.addCont .toggle input[type=checkbox]:checked + label {
+.toggle input[type=checkbox]:checked + label {
   background: var(--accent);
 }
-.addCont .toggle input[type=checkbox]:checked + label::after {
+.toggle input[type=checkbox]:checked + label::after {
   left: calc(100% - 3px);
   transform: translateX(-100%);
 }
-.addCont .toggle label {
+.toggle label {
   cursor: pointer;
   width: 36px;
   height: 20px;
@@ -746,7 +747,7 @@ nav ul li:first-child {
   border-radius: 30px;
   position: relative;
 }
-.addCont .toggle label::after {
+.toggle label::after {
   content: "";
   position: absolute;
   top: 3px;
@@ -757,7 +758,7 @@ nav ul li:first-child {
   border-radius: 50%;
   transition: 0.3s;
 }
-.addCont .toggle label:active::after {
+.toggle label:active::after {
   width: 20px;
 }
 

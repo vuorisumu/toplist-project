@@ -62,6 +62,7 @@ function NewList() {
   const [newImage, setNewImage] = useState({});
   const [addedImages, setAddedImages] = useState([]);
   const imgRef = useRef();
+  const [addedItemCount, setAddedItemCount] = useState(0);
 
   /**
    * On page load, fetch necessary template data from the database
@@ -112,6 +113,19 @@ function NewList() {
       });
     }
   }, [template]);
+
+  useEffect(() => {
+    let count = 0;
+    for (let key in containers) {
+      containers[key].items.map((i) => {
+        if (i.deletable === true) {
+          count++;
+        }
+      });
+    }
+
+    setAddedItemCount(count);
+  }, [containers]);
 
   /**
    * Adds a new item to be used in the ranking. Will not save the item to the actual template,
@@ -367,6 +381,22 @@ function NewList() {
 
         {/* Save changes */}
         <div>
+          {addedItemCount > 0 && (
+            <div>
+              <label>New template: </label>
+              <div className="toggle">
+                <input
+                  type="checkbox"
+                  name="toggleNewTemplate"
+                  id="toggleNewTemplate"
+                  className="menu"
+                  onChange={() => console.log("change")}
+                />
+                <label htmlFor="toggleNewTemplate"></label>
+              </div>
+            </div>
+          )}
+
           {errorMessages.length > 0 && (
             <ul>
               {errorMessages.map((err, index) => (

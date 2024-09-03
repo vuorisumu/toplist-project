@@ -133,10 +133,10 @@
       @include defaults.smallButton();
     }
   }
+}
 
-  .toggle {
-    @include defaults.toggle();
-  }
+.toggle {
+  @include defaults.toggle();
 }
 
 .coverImage {
