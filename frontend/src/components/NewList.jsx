@@ -63,6 +63,9 @@ function NewList() {
   const [addedImages, setAddedImages] = useState([]);
   const imgRef = useRef();
   const [addedItemCount, setAddedItemCount] = useState(0);
+  const [copyTemplate, setCopyTemplate] = useState(false);
+  const [newTemplateName, setNewTemplateName] = useState("");
+  const [newTemplateDesc, setNewTemplateDesc] = useState("");
 
   /**
    * On page load, fetch necessary template data from the database
@@ -125,7 +128,18 @@ function NewList() {
     }
 
     setAddedItemCount(count);
+
+    if (count <= 0) {
+      setCopyTemplate(false);
+    }
   }, [containers]);
+
+  /**
+   * Toggles the copy template setting.
+   */
+  const toggleCopyTemplate = () => {
+    setCopyTemplate(!copyTemplate);
+  };
 
   /**
    * Adds a new item to be used in the ranking. Will not save the item to the actual template,
@@ -383,17 +397,46 @@ function NewList() {
         <div>
           {addedItemCount > 0 && (
             <div>
-              <label>New template: </label>
-              <div className="toggle">
-                <input
-                  type="checkbox"
-                  name="toggleNewTemplate"
-                  id="toggleNewTemplate"
-                  className="menu"
-                  onChange={() => console.log("change")}
-                />
-                <label htmlFor="toggleNewTemplate"></label>
+              <div>
+                <label>Save as new template: </label>
+                <div className="toggle">
+                  <input
+                    type="checkbox"
+                    name="toggleNewTemplate"
+                    id="toggleNewTemplate"
+                    className="menu"
+                    checked={copyTemplate}
+                    onChange={toggleCopyTemplate}
+                  />
+                  <label htmlFor="toggleNewTemplate"></label>
+                </div>
               </div>
+
+              {copyTemplate && (
+                <>
+                  <p>
+                    Makes a copy of the original template and saves it with your
+                    additions.
+                  </p>
+                  <div className="rankInfo">
+                    <label>New template name:</label>
+                    <input
+                      type="text"
+                      id="newTemplateName"
+                      value={newTemplateName}
+                      onChange={(e) => setNewTemplateName(e.target.value)}
+                      placeholder={template.name}
+                    />
+
+                    <label>New template description: </label>
+                    <textarea
+                      value={newTemplateDesc}
+                      onChange={(e) => setNewTemplateDesc(e.target.value)}
+                      placeholder={template.description}
+                    />
+                  </div>
+                </>
+              )}
             </div>
           )}
 
