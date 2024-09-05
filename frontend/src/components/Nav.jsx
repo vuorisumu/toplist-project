@@ -7,10 +7,12 @@ import { isMobile } from "react-device-detect";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../util/UserContext";
 import HiddenMenu from "./HiddenMenu";
+import SearchBar from "./SearchBar";
 
 function Nav() {
   const { user } = useContext(UserContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     console.log("user data updated");
@@ -21,6 +23,12 @@ function Nav() {
     document.getElementById("hiddenMenu").classList.toggle("active");
     // document.getElementById("loginCont").classList.toggle("active");
     // document.getElementById("navLogin").classList.toggle("active");
+  };
+
+  const toggleSearch = () => {
+    console.log("toggle");
+    setSearchOpen(!searchOpen);
+    document.getElementById("searchBar").classList.toggle("active");
   };
 
   function Links() {
@@ -103,6 +111,9 @@ function Nav() {
               <img src={logo} id="logo" />
               <span>Listmaker 9000</span>
             </NavLink>
+          </li>
+          <li id="searchBar">
+            <SearchBar isOpen={searchOpen} toggleSearch={toggleSearch} />
           </li>
           <Links />
         </ul>
