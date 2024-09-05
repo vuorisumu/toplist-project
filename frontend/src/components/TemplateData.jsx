@@ -242,6 +242,12 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
       templateData.creator_id = user.id;
     }
 
+    const settings = {
+      hasImages: hasImages,
+    };
+
+    templateData.settings = settings;
+
     // optional description
     if (description.trim() !== "") {
       templateData.description = description;
