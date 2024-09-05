@@ -343,6 +343,7 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
       <div className="addCont addItems">
         <h2>Template items</h2>
         <div>
+          {/* Toggle for blank template */}
           <label>Make a blank template: </label>
           <div className="toggle">
             <input
@@ -355,72 +356,82 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
             <label htmlFor="toggleBlank"></label>
           </div>
         </div>
-        <div>
-          <label>Add images: </label>
-          <div className="toggle">
-            <input
-              type="checkbox"
-              name="toggleImages"
-              id="toggleImages"
-              checked={hasImages}
-              onChange={() => setHasImages(!hasImages)}
-            />
-            <label htmlFor="toggleImages"></label>
-          </div>
-        </div>
-        <ul id="tempItems">
-          {items.map((i, index) => (
-            <li key={"item" + index}>
-              {hasImages === true && (
-                <>
-                  <div className="itemImage">
-                    {itemImages[index]?.name ? (
-                      <img src={URL.createObjectURL(itemImages[index])} />
-                    ) : itemImages[index]?.img_url ? (
-                      <img src={itemImages[index].img_url} />
-                    ) : loading ? (
-                      <span className="material-symbols-outlined imagePlaceholder">
-                        pending
-                      </span>
-                    ) : (
-                      <span className="material-symbols-outlined imagePlaceholder">
-                        image
-                      </span>
-                    )}
-                  </div>
-                  <label className="fileInput">
-                    <input
-                      type="file"
-                      id={`item${index}`}
-                      name={`item${index}`}
-                      accept="image/png, image/gif, image/jpeg"
-                      onChange={(e) => handleAddItemImage(e, index)}
-                    />
-                  </label>
-                </>
-              )}
-              <input
-                type="text"
-                placeholder="List item"
-                value={i.item_name}
-                onChange={(e) => handleItemEdits(index, e.target.value)}
-              />
 
-              {items.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => deleteItem(index)}
-                  className="deleteButton"
-                >
-                  <span className="material-symbols-outlined">delete</span>
-                </button>
-              )}
-            </li>
-          ))}
-          <button type="button" onClick={addItem} className="addButton">
-            <span className="material-symbols-outlined">add</span>
-          </button>
-        </ul>
+        {isBlank ? (
+          <div>
+            <p>Blank template means that everyone will add their own items.</p>
+          </div>
+        ) : (
+          <>
+            <div>
+              <label>Add images: </label>
+              <div className="toggle">
+                <input
+                  type="checkbox"
+                  name="toggleImages"
+                  id="toggleImages"
+                  checked={hasImages}
+                  onChange={() => setHasImages(!hasImages)}
+                />
+                <label htmlFor="toggleImages"></label>
+              </div>
+            </div>
+
+            <ul id="tempItems">
+              {items.map((i, index) => (
+                <li key={"item" + index}>
+                  {hasImages === true && (
+                    <>
+                      <div className="itemImage">
+                        {itemImages[index]?.name ? (
+                          <img src={URL.createObjectURL(itemImages[index])} />
+                        ) : itemImages[index]?.img_url ? (
+                          <img src={itemImages[index].img_url} />
+                        ) : loading ? (
+                          <span className="material-symbols-outlined imagePlaceholder">
+                            pending
+                          </span>
+                        ) : (
+                          <span className="material-symbols-outlined imagePlaceholder">
+                            image
+                          </span>
+                        )}
+                      </div>
+                      <label className="fileInput">
+                        <input
+                          type="file"
+                          id={`item${index}`}
+                          name={`item${index}`}
+                          accept="image/png, image/gif, image/jpeg"
+                          onChange={(e) => handleAddItemImage(e, index)}
+                        />
+                      </label>
+                    </>
+                  )}
+                  <input
+                    type="text"
+                    placeholder="List item"
+                    value={i.item_name}
+                    onChange={(e) => handleItemEdits(index, e.target.value)}
+                  />
+
+                  {items.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => deleteItem(index)}
+                      className="deleteButton"
+                    >
+                      <span className="material-symbols-outlined">delete</span>
+                    </button>
+                  )}
+                </li>
+              ))}
+              <button type="button" onClick={addItem} className="addButton">
+                <span className="material-symbols-outlined">add</span>
+              </button>
+            </ul>
+          </>
+        )}
       </div>
 
       {errors.length > 0 && (
