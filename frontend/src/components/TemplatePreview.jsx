@@ -102,9 +102,13 @@ function TemplatePreview() {
         <div className="itemsPreview">
           <h4>Items in this template:</h4>
           <ul>
-            {template.items.map((i) => (
-              <li key={i.item_name}>{i.item_name}</li>
-            ))}
+            {template.items.length <= 1 ? (
+              <li key="placeholderitem">This is a blank template.</li>
+            ) : (
+              template.items.map((i) => (
+                <li key={i.item_name}>{i.item_name}</li>
+              ))
+            )}
           </ul>
         </div>
 
