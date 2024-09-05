@@ -962,18 +962,22 @@ nav ul li:first-child {
   color: var(--mid-color);
 }
 
-.newTemplate .dropdownElement {
+.newTemplate .dropdownElement,
+.editTemplate .dropdownElement {
   margin: 5px 0;
 }
-.newTemplate .dropdownElement label {
+.newTemplate .dropdownElement label,
+.editTemplate .dropdownElement label {
   flex-grow: 1;
   text-align: start;
 }
-.newTemplate .dropdownElement .dropdownCont {
+.newTemplate .dropdownElement .dropdownCont,
+.editTemplate .dropdownElement .dropdownCont {
   flex-grow: 1;
   z-index: 2;
 }
-.newTemplate .dropdownElement .dropdownCont button {
+.newTemplate .dropdownElement .dropdownCont button,
+.editTemplate .dropdownElement .dropdownCont button {
   margin-left: 0;
   margin-right: 0;
 }
