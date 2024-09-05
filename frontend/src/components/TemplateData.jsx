@@ -255,6 +255,11 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
 
     templateData.settings = settings;
 
+    // set images to false on blank lists
+    if (isBlank) {
+      templateData.settings.hasImages = false;
+    }
+
     // optional description
     if (description.trim() !== "") {
       templateData.description = description;
