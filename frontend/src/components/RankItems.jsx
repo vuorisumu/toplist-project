@@ -149,6 +149,15 @@ function RankItems({ containers, setContainers }) {
                       </p>
                     )}
 
+                  {container.keyName === UNRANKED &&
+                    container.isBlank === true &&
+                    container.items.length === 0 && (
+                      <p className="placeholder blank">
+                        This is a blank template. Add your own items below to
+                        rank them.
+                      </p>
+                    )}
+
                   {provided.placeholder}
                 </div>
               )}

@@ -1013,6 +1013,11 @@ nav ul li:first-child {
   transition: 0.2s;
   border: 1px solid var(--accent-secondary);
 }
+.dndCont .placeholder.blank {
+  height: 60px;
+  border: none;
+  font-size: 10pt;
+}
 .dndCont .dragOver {
   background-color: color-mix(in srgb, var(--accent), var(--secondary-color) 70%);
 }

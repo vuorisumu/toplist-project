@@ -15,6 +15,12 @@
     opacity: 0.5;
     transition: 0.2s;
     border: 1px solid theme.$accent-secondary;
+
+    &.blank {
+      height: 60px;
+      border: none;
+      font-size: 10pt;
+    }
   }
 
   // droppable section when dragging over it
