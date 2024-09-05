@@ -34,8 +34,13 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
         setCoverImage(img);
       }
 
+      // template is blank
+      if (data.settings?.isBlank === true) {
+        setIsBlank(true);
+      }
+
       // List has existing images
-      if (data.items[0].img_id) {
+      if (data.settings?.hasImages === true) {
         setHasImages(true);
         const imageIds = [];
         data.items.map((i) => {
@@ -298,7 +303,7 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
       const res = await addNewImages(addedImages);
     }
 
-    setLoading(false);
+    // setLoading(false);
     onSubmit(templateData);
   };
 
