@@ -166,6 +166,8 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
    */
   const meetsRequirements = () => {
     const tempErrors = [];
+
+    // check template name
     const hasName = templateName.trim() !== "";
     if (!hasName) {
       tempErrors.push("Template must have a name");
@@ -174,6 +176,7 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
       document.getElementById("tempName").classList.remove("error");
     }
 
+    // check item count
     const enoughItems =
       isBlank || items.filter((i) => i.item_name.trim() !== "").length >= 5;
 
@@ -181,6 +184,7 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
       tempErrors.push("Non-blank templates must have at least 5 items");
     }
 
+    // check correct amount of images
     const imagesOkay =
       !isBlank && hasImages
         ? itemImages.length ===
@@ -217,42 +221,47 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
     }
 
     setLoading(true);
-    // setCreating(true);
+
     // mandatory data
     const templateData = {
       name: templateName,
     };
 
-    const addedImages = hasImages
-      ? items
-          .filter((i) => i.item_name.trim() !== "" && i.img)
-          .map((i) => ({
-            id: i.img_id,
-            img: i.img,
-          }))
-      : [];
+    // create image array
+    const addedImages =
+      hasImages && !isBlank
+        ? items
+            .filter((i) => i.item_name.trim() !== "" && i.img)
+            .map((i) => ({
+              id: i.img_id,
+              img: i.img,
+            }))
+        : [];
 
     if (isBlank) {
+      // placeholder item
       templateData.items = [{ item_name: "" }];
     } else {
+      // create item array with relevant information
       const filteredItems = items.filter((i) => i.item_name.trim() !== "");
-
       const nonEmptyItems = filteredItems.map((i) => ({
         item_name: i.item_name,
         ...(hasImages && { img_id: i.img_id }),
       }));
+
       templateData.items = nonEmptyItems;
     }
 
+    // add creator id when creating a new template
     if (!data) {
       templateData.creator_id = user.id;
     }
 
+    // template settings
     const settings = {
       hasImages: hasImages,
       isBlank: isBlank,
     };
-
     templateData.settings = settings;
 
     // set images to false on blank lists
@@ -284,9 +293,11 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
       templateData.category = categoryId[0];
     }
 
+    // add images to database
     if (addedImages.length > 0) {
       const res = await addNewImages(addedImages);
     }
+
     setLoading(false);
     onSubmit(templateData);
   };
@@ -450,9 +461,9 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
       <button
         type="submit"
         className={`createButton ${loading || creating ? "disabled" : ""}`}
-        disabled={loading || creating}
+        disabled={loading}
       >
-        {loading || creating ? "Saving" : submitText}
+        {loading ? "Loading" : submitText}
       </button>
 
       <button type="button" onClick={clearAll} className="resetButton">
