@@ -27,7 +27,7 @@ function filteredTemplatesQuery(req) {
     filteredQuery = "SELECT t.name, t.id ";
   } else {
     filteredQuery =
-      "SELECT t.id, t.name, t.description, u.user_name, t.creator_id, t.category, t.cover_image ";
+      "SELECT t.id, t.name, t.description, u.user_name, t.creator_id, t.category, t.cover_image, t.settings ";
   }
 
   // join relevant tables
