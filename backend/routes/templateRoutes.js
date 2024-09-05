@@ -35,7 +35,7 @@ templateRouter.get("/", async (req, res) => {
       }
     } else {
       // query does not have filters
-      const query = `SELECT t.id, t.name, t.description, u.user_name 
+      const query = `SELECT t.id, t.name, t.description, u.user_name, t.settings  
       FROM templates t 
       LEFT JOIN users u ON t.creator_id = u.user_id`;
       results = await database.query(query);
@@ -71,7 +71,7 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
     } else {
       // default query
       result = await database.query(
-        `SELECT t.id, t.name, t.description, t.items, u.user_name, t.creator_id, t.category, t.cover_image 
+        `SELECT t.id, t.name, t.description, t.items, u.user_name, t.creator_id, t.category, t.cover_image, t.settings 
         FROM templates t 
         LEFT JOIN users u ON t.creator_id = u.user_id 
         WHERE id = :id`,
@@ -127,6 +127,12 @@ templateRouter.post("/", async (req, res) => {
     if (req.body.category) {
       placeholders.push("category");
       values["category"] = req.body.category;
+    }
+
+    //optional settings
+    if (req.body.settings) {
+      placeholders.push("settings");
+      values["settings"] = req.body.settings;
     }
 
     // optional cover image
@@ -211,6 +217,12 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
     if (req.body.category) {
       fields.push("category = :category");
       values["category"] = req.body.category;
+    }
+
+    //optional settings
+    if (req.body.settings) {
+      fields.push("settings = :settings");
+      values["settings"] = req.body.settings;
     }
 
     // optional cover image

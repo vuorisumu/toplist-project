@@ -27,7 +27,7 @@ rankRouter.get("/", async (req, res) => {
       // query does not have filters
       const query = `SELECT top.toplist_id, top.toplist_name, top.ranked_items, 
       top.toplist_desc, top.creation_time, top.creator_id, u.user_name, t.name, 
-      top.template_id, t.category 
+      top.template_id, t.category, t.settings 
       FROM toplists top 
       LEFT JOIN users u ON top.creator_id = u.user_id 
       LEFT JOIN templates t ON top.template_id = t.id`;
@@ -52,7 +52,7 @@ rankRouter.get("/:id([0-9]+)", async (req, res) => {
     const id = parseInt(req.params.id);
     const result = await database.query(
       `SELECT top.toplist_id, top.toplist_name, top.ranked_items, top.toplist_desc, 
-      top.creation_time, top.creator_id, u.user_name, t.name, top.template_id, t.category 
+      top.creation_time, top.creator_id, u.user_name, t.name, top.template_id, t.category, t.settings  
       FROM toplists top
       LEFT JOIN users u ON top.creator_id = u.user_id
       LEFT JOIN templates t ON top.template_id = t.id
