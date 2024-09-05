@@ -13,6 +13,7 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
   const [items, setItems] = useState(data?.items || [{ item_name: "" }]);
   const [itemImages, setItemImages] = useState([]);
   const [hasImages, setHasImages] = useState(false);
+  const [isBlank, setIsBlank] = useState(false);
   const [errors, setErrors] = useState([]);
   const [categories, setCategories] = useState(null);
   const [chosenCategory, setChosenCategory] = useState("Choose category");
@@ -174,16 +175,17 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
     }
 
     const enoughItems =
-      items.filter((i) => i.item_name.trim() !== "").length >= 5;
+      isBlank || items.filter((i) => i.item_name.trim() !== "").length >= 5;
 
     if (!enoughItems) {
-      tempErrors.push("Template must have at least 5 items");
+      tempErrors.push("Non-blank templates must have at least 5 items");
     }
 
-    const imagesOkay = hasImages
-      ? itemImages.length ===
-        items.filter((i) => i.item_name.trim() !== "").length
-      : true;
+    const imagesOkay =
+      !isBlank && hasImages
+        ? itemImages.length ===
+          items.filter((i) => i.item_name.trim() !== "").length
+        : true;
 
     if (!imagesOkay) {
       tempErrors.push(
@@ -216,6 +218,11 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
 
     setLoading(true);
     // setCreating(true);
+    // mandatory data
+    const templateData = {
+      name: templateName,
+    };
+
     const addedImages = hasImages
       ? items
           .filter((i) => i.item_name.trim() !== "" && i.img)
@@ -225,18 +232,17 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
           }))
       : [];
 
-    const filteredItems = items.filter((i) => i.item_name.trim() !== "");
+    if (isBlank) {
+      templateData.items = [{ item_name: "" }];
+    } else {
+      const filteredItems = items.filter((i) => i.item_name.trim() !== "");
 
-    const nonEmptyItems = filteredItems.map((i) => ({
-      item_name: i.item_name,
-      ...(hasImages && { img_id: i.img_id }),
-    }));
-
-    // mandatory data
-    const templateData = {
-      name: templateName,
-      items: nonEmptyItems,
-    };
+      const nonEmptyItems = filteredItems.map((i) => ({
+        item_name: i.item_name,
+        ...(hasImages && { img_id: i.img_id }),
+      }));
+      templateData.items = nonEmptyItems;
+    }
 
     if (!data) {
       templateData.creator_id = user.id;
@@ -244,6 +250,7 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
 
     const settings = {
       hasImages: hasImages,
+      isBlank: isBlank,
     };
 
     templateData.settings = settings;
@@ -335,6 +342,19 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
 
       <div className="addCont addItems">
         <h2>Template items</h2>
+        <div>
+          <label>Make a blank template: </label>
+          <div className="toggle">
+            <input
+              type="checkbox"
+              name="toggleBlank"
+              id="toggleBlank"
+              checked={isBlank}
+              onChange={() => setIsBlank(!isBlank)}
+            />
+            <label htmlFor="toggleBlank"></label>
+          </div>
+        </div>
         <div>
           <label>Add images: </label>
           <div className="toggle">
