@@ -86,6 +86,7 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
     // all good
     res.status(200).json(result);
   } catch (err) {
+    console.log(err);
     res.status(500).send(databaseError);
   }
 });
