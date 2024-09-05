@@ -143,6 +143,7 @@ function Search({
               onClick={() => {
                 userInputRef.current = false;
                 setValue(item);
+                onEnterKey(item);
                 setHideSuggestions(true);
               }}
             >

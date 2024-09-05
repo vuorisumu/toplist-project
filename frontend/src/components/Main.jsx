@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
+import SearchBar from "./SearchBar";
 import TemplateContainer from "./TemplateContainer";
 
 /**
@@ -23,6 +24,7 @@ function Main() {
           is missing an item, you can always add your own items too!
         </p>
       </div>
+      <SearchBar />
       <TemplateContainer />
     </div>
   );
