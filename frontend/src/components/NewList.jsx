@@ -59,6 +59,7 @@ function NewList() {
   const [errorMessages, setErrorMessages] = useState([]);
   const [category, setCategory] = useState("");
   const [hasImages, setHasImages] = useState(false);
+  const [isBlank, setIsBlank] = useState(false);
   const [newImage, setNewImage] = useState({});
   const [addedImages, setAddedImages] = useState([]);
   const imgRef = useRef();
@@ -84,15 +85,21 @@ function NewList() {
           setImgUrl(url);
         }
 
-        if (formattedData.items[0].img_id) {
+        if (formattedData.settings?.hasImages === true) {
           setHasImages(true);
         }
 
+        if (formattedData.settings?.isBlank === true) {
+          setIsBlank(true);
+        }
+
         // Add uuid() to each item
-        const setIds = formattedData.items.map((item) => ({
-          ...item,
-          id: uuid(),
-        }));
+        const setIds = isBlank
+          ? []
+          : formattedData.items.map((item) => ({
+              ...item,
+              id: uuid(),
+            }));
 
         // set initial containers
         setContainers((cont) => ({

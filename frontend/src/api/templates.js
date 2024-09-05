@@ -77,6 +77,7 @@ export const addNewTemplate = (templateData) => {
   const formData = new FormData();
   formData.append("name", templateData.name);
   formData.append("items", JSON.stringify(templateData.items));
+  formData.append("settings", JSON.stringify(templateData.settings));
   formData.append("creator_id", templateData.creator_id);
 
   if (templateData.cover_image) {
@@ -114,6 +115,7 @@ export const updateTemplate = (id, templateData) => {
   const formData = new FormData();
   formData.append("name", templateData.name);
   formData.append("items", JSON.stringify(templateData.items));
+  formData.append("settings", JSON.stringify(templateData.settings));
 
   if (templateData.cover_image) {
     formData.append("cover_image", templateData.cover_image);
