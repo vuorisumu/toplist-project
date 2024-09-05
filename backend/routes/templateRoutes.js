@@ -69,7 +69,7 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
     } else {
       // default query
       result = await database.query(
-        `SELECT t.id, t.name, t.description, t.items, t.tags, u.user_name, t.creator_id, t.category, t.cover_image 
+        `SELECT t.id, t.name, t.description, t.items, u.user_name, t.creator_id, t.category, t.cover_image 
         FROM templates t 
         LEFT JOIN users u ON t.creator_id = u.user_id 
         WHERE id = :id`,
