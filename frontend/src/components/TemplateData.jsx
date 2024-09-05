@@ -198,9 +198,9 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
     }
 
     if (!enoughItems || !imagesOkay) {
-      document.getElementById("tempItems").classList.add("error");
+      document.getElementById("tempItems")?.classList.add("error");
     } else {
-      document.getElementById("tempItems").classList.remove("error");
+      document.getElementById("tempItems")?.classList.remove("error");
     }
 
     setErrors(tempErrors);
