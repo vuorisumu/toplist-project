@@ -33,6 +33,7 @@ function Search({
   const [suggestions, setSuggestions] = useState([]);
   const suggRef = useRef(null);
   const userInputRef = useRef(true);
+  const [active, setActive] = useState(false);
 
   // Clears the input field
   useEffect(() => {
@@ -115,7 +116,7 @@ function Search({
   };
 
   return (
-    <div ref={suggRef} className="suggestionCont">
+    <div ref={suggRef} className="suggestionCont searchElement">
       <div className="searchWrapper">
         <input
           type="search"
@@ -135,10 +136,15 @@ function Search({
         )}
       </div>
 
-      <div className={`suggestions ${hideSuggestions ? "" : "active"}`}>
+      <div
+        className={`suggestions searchElement ${
+          hideSuggestions ? "" : "active"
+        }`}
+      >
         {suggestions.length > 0 &&
           suggestions.map((item, index) => (
             <div
+              className="searchElement"
               key={"" + item + index}
               onClick={() => {
                 userInputRef.current = false;

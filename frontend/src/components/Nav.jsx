@@ -26,7 +26,6 @@ function Nav() {
   };
 
   const toggleSearch = () => {
-    console.log("toggle");
     setSearchOpen(!searchOpen);
     document.getElementById("searchBar").classList.toggle("active");
   };
@@ -112,7 +111,7 @@ function Nav() {
               <span>Listmaker 9000</span>
             </NavLink>
           </li>
-          <li id="searchBar">
+          <li id="searchBar" className={searchOpen ? "active" : ""}>
             <SearchBar isOpen={searchOpen} toggleSearch={toggleSearch} />
           </li>
           <Links />

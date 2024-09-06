@@ -9,7 +9,12 @@ function SearchBar({ isOpen, toggleSearch }) {
 
   useEffect(() => {
     const clickOutside = (event) => {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target) &&
+        document.getElementById("searchBar").classList.contains("active") &&
+        !event.target.classList.contains("searchElement")
+      ) {
         toggleSearch();
       }
     };
@@ -27,9 +32,14 @@ function SearchBar({ isOpen, toggleSearch }) {
    * @param {string} val - the current value of the input field
    */
   const onEnter = (val) => {
-    toggleSearch();
-    setSearch(val);
-    console.log(val);
+    // toggleSearch();
+    if (isOpen) {
+      setSearch(val);
+      console.log(val);
+    } else {
+      console.log("was not open");
+      toggleSearch();
+    }
   };
 
   return (
