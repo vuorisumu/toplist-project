@@ -2,10 +2,14 @@ const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
   const token = req.headers["authorization"];
-  console.log(req.headers);
 
   if (!token) {
     return res.status(403).json({ error: "No token provided" });
+  }
+
+  const parts = token.split(".");
+  if (parts.length !== 3) {
+    return res.status(401).json({ error: "Invalid token structure" });
   }
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
