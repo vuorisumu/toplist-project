@@ -27,8 +27,10 @@ templateRouter.get("/", async (req, res) => {
         const { filteredQuery, queryParams } = filteredTemplatesQuery(
           req.query
         );
+        console.log(filteredQuery);
         results = await database.query(filteredQuery, queryParams);
       } catch (err) {
+        console.log(err);
         res.status(400).send(err.message);
       }
     } else {
