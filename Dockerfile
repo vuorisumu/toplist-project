@@ -12,7 +12,13 @@ COPY frontend .
 RUN npm run build
 
 ## Backend
-FROM node:20.9.0-alpine
+FROM oraclelinux:8
+
+RUN curl -sL https://rpm.nodesource.com/setup_20.x | bash - && \
+    yum install -y nodejs && \
+    yum install -y oracle-release-el8 oracle-instantclient-release-el8 && \
+    yum install -y oracle-instantclient-basic && \
+    yum clean all
 
 WORKDIR /app/backend
 
