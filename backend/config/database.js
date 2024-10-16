@@ -37,19 +37,24 @@ async function init() {
  * @returns a promise containing query response
  */
 async function query(sql, args = {}) {
-  const connection = await oracledb.getPool().getConnection();
-
-  return new Promise((resolve, reject) => {
-    connection.execute(sql, args, (err, rows) => {
-      if (err) {
-        return reject(err);
+  let connection;
+  try {
+    connection = await oracledb.getPool().getConnection();
+    const result = await connection.execute(sql, args);
+    await connection.commit();
+    return result;
+  } catch (err) {
+    console.log("Error executing query:", err);
+    throw err;
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.log("Error closing connection:", err);
       }
-
-      resolve(rows);
-      connection.commit();
-      connection.close();
-    });
-  });
+    }
+  }
 }
 
 /**
