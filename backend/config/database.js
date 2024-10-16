@@ -10,9 +10,12 @@ let pool;
  * Initializes the connection pool with credentials found in .env file.
  */
 async function init() {
+  oracledb.initOracleClient({
+    libDir: process.env.LD_LIBRARY_PATH,
+  });
   try {
     if (!pool) {
-      await oracledb.createPool({
+      pool = await oracledb.createPool({
         user: process.env.ORACLE_USER,
         password: process.env.ORACLE_PASSWORD,
         connectString: process.env.ORACLE_CONNSTR,
@@ -34,7 +37,7 @@ async function init() {
  * @returns a promise containing query response
  */
 async function query(sql, args = {}) {
-  const connection = await oracledb.getConnection();
+  const connection = await oracledb.getPool().getConnection();
 
   return new Promise((resolve, reject) => {
     connection.execute(sql, args, (err, rows) => {
