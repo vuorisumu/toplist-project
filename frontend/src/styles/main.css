@@ -1023,6 +1023,9 @@ nav ul li:first-child {
   opacity: 0.5;
   transition: 0.2s;
   border: 1px solid var(--accent-secondary);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .dndCont .placeholder.blank {
   height: 60px;
