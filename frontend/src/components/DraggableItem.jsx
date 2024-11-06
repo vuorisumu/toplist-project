@@ -94,7 +94,7 @@ function DraggableItem({
    * Handles the item deletion.
    */
   const handleDelete = () => {
-    deleteItem(index, blank);
+    deleteItem(index, isRanked);
   };
 
   return (

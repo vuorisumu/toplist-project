@@ -77,37 +77,22 @@ function RankItems({ containers, setContainers }) {
   };
 
   const updateItemName = (id, newName, ranked) => {
-    if (ranked) {
-      const updatedItems = containers[RANKED].items.map((i) => {
-        if (i.id === id) {
-          return { ...i, item_name: newName };
-        }
-        return i;
-      });
+    const contName = ranked ? RANKED : UNRANKED;
 
-      setContainers((prev) => ({
-        ...prev,
-        [RANKED]: {
-          ...prev[RANKED],
-          items: updatedItems,
-        },
-      }));
-    } else {
-      const updatedItems = containers[UNRANKED].items.map((i) => {
-        if (i.id === id) {
-          return { ...i, item_name: newName };
-        }
-        return i;
-      });
+    const updatedItems = containers[contName].items.map((i) => {
+      if (i.id === id) {
+        return { ...i, item_name: newName };
+      }
+      return i;
+    });
 
-      setContainers((prev) => ({
-        ...prev,
-        [UNRANKED]: {
-          ...prev[UNRANKED],
-          items: updatedItems,
-        },
-      }));
-    }
+    setContainers((prev) => ({
+      ...prev,
+      [contName]: {
+        ...prev[contName],
+        items: updatedItems,
+      },
+    }));
   };
 
   /**
@@ -140,23 +125,15 @@ function RankItems({ containers, setContainers }) {
    *
    * @param {number} index - The index of the item
    */
-  const deleteItem = (index, blank = false) => {
-    if (blank) {
-      setContainers((prev) => ({
-        [RANKED]: {
-          ...prev[RANKED],
-          items: prev[RANKED].items.filter((_, i) => i !== index),
-        },
-      }));
-    } else {
-      setContainers((prev) => ({
-        ...prev,
-        [UNRANKED]: {
-          ...prev[UNRANKED],
-          items: prev[UNRANKED].items.filter((_, i) => i !== index),
-        },
-      }));
-    }
+  const deleteItem = (index, ranked) => {
+    const contName = ranked ? RANKED : UNRANKED;
+    setContainers((prev) => ({
+      ...prev,
+      [contName]: {
+        ...prev[contName],
+        items: prev[contName].items.filter((_, i) => i !== index),
+      },
+    }));
   };
 
   return (
