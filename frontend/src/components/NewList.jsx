@@ -98,18 +98,26 @@ function NewList() {
               }));
 
         // set initial containers
-        setContainers((cont) => ({
-          [ITEMS_RANKED]: {
-            ...cont[ITEMS_RANKED],
-            items: [],
-            isBlank: formattedData.settings?.isBlank === true,
-          },
-          [ITEMS_REMAINING]: {
-            ...cont[ITEMS_REMAINING],
-            items: setIds || [],
-            isBlank: formattedData.settings?.isBlank === true,
-          },
-        }));
+        setContainers((cont) => {
+          const containers = {
+            [ITEMS_RANKED]: {
+              ...cont[ITEMS_RANKED],
+              items: [],
+              isBlank: formattedData.settings?.isBlank === true,
+            },
+          };
+
+          // add unranked container only if template is not blank
+          if (!formattedData.settings?.isBlank) {
+            containers[ITEMS_REMAINING] = {
+              ...cont[ITEMS_REMAINING],
+              items: setIds || [],
+              isBlank: false,
+            };
+          }
+
+          return containers;
+        });
       })
       .catch((err) => {
         setNotFound(true);
