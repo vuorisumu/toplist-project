@@ -1108,6 +1108,9 @@ nav ul li:first-child {
 .rank-item p.rankedNote.img {
   margin: -15px 0 0 85px;
 }
+.rank-item input[type=text] {
+  flex: 1;
+}
 .rank-item .noteArea {
   resize: vertical;
   flex: 100%;

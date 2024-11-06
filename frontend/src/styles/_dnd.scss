@@ -126,6 +126,10 @@
     }
   }
 
+  input[type="text"] {
+    flex: 1;
+  }
+
   .noteArea {
     resize: vertical;
     flex: 100%;
