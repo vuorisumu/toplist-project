@@ -176,23 +176,20 @@ function NewList() {
         setAddedImages((prevImages) => [...prevImages, newImage]);
       }
 
-      if (template.settings?.isBlank) {
-        // add new entry straight to ranked container when template is blank
-        setContainers((prevContainers) => ({
-          [ITEMS_RANKED]: {
-            ...prevContainers[ITEMS_RANKED],
-            items: [...prevContainers[ITEMS_RANKED].items, addedEntry],
-          },
-        }));
-      } else {
-        setContainers((prevContainers) => ({
-          ...prevContainers,
-          [ITEMS_REMAINING]: {
-            ...prevContainers[ITEMS_REMAINING],
-            items: [...prevContainers[ITEMS_REMAINING].items, addedEntry],
-          },
-        }));
+      // add new entry straight to ranked container when template is blank
+      const contName =
+        template.settings?.isBlank === true ? ITEMS_RANKED : ITEMS_REMAINING;
+      if (template.settings?.isBlank === true) {
+        addedEntry.rank_number = containers[ITEMS_RANKED].items.length + 1;
       }
+
+      setContainers((prevContainers) => ({
+        ...prevContainers,
+        [contName]: {
+          ...prevContainers[contName],
+          items: [...prevContainers[contName].items, addedEntry],
+        },
+      }));
 
       // reset entry
       setNewEntry("");
@@ -413,6 +410,22 @@ function NewList() {
 
         {/* Ranking builder */}
         <RankItems containers={containers} setContainers={setContainers} />
+
+        {template.settings?.isBlank === true && addedItemCount <= 0 && (
+          <div>
+            <label>Add images: </label>
+            <div className="toggle">
+              <input
+                type="checkbox"
+                name="toggleImages"
+                id="toggleImages"
+                checked={hasImages}
+                onChange={() => setHasImages(!hasImages)}
+              />
+              <label htmlFor="toggleImages"></label>
+            </div>
+          </div>
+        )}
 
         {/* Add new items */}
         <div className="newItemsCont" id="newItemsCont">
