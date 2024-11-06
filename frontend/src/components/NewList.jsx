@@ -102,6 +102,7 @@ function NewList() {
           [ITEMS_RANKED]: {
             ...cont[ITEMS_RANKED],
             items: [],
+            isBlank: formattedData.settings?.isBlank === true,
           },
           [ITEMS_REMAINING]: {
             ...cont[ITEMS_REMAINING],

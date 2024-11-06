@@ -106,14 +106,23 @@ function RankItems({ containers, setContainers }) {
    *
    * @param {number} index - The index of the item
    */
-  const deleteItem = (index) => {
-    setContainers((prev) => ({
-      ...prev,
-      [UNRANKED]: {
-        ...prev[UNRANKED],
-        items: prev[UNRANKED].items.filter((_, i) => i !== index),
-      },
-    }));
+  const deleteItem = (index, blank = false) => {
+    if (blank) {
+      setContainers((prev) => ({
+        [RANKED]: {
+          ...prev[RANKED],
+          items: prev[RANKED].items.filter((_, i) => i !== index),
+        },
+      }));
+    } else {
+      setContainers((prev) => ({
+        ...prev,
+        [UNRANKED]: {
+          ...prev[UNRANKED],
+          items: prev[UNRANKED].items.filter((_, i) => i !== index),
+        },
+      }));
+    }
   };
 
   return (
@@ -135,6 +144,7 @@ function RankItems({ containers, setContainers }) {
                     <DraggableItem
                       item={item}
                       index={index}
+                      blank={container.isBlank === true}
                       isRanked={container.keyName === RANKED}
                       updateNote={updateNote}
                       deleteItem={deleteItem}

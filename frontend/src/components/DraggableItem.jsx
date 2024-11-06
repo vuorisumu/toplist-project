@@ -9,12 +9,20 @@ import { getImgUrl } from "../util/imageHandler";
  *
  * @param {object} props.item - The item data to be displayed
  * @param {number} props.index - The index of the item
+ * @param {boolean} props.blank - Whether the template is blank
  * @param {boolean} props.isRanked - Whether this item is in the ranked container or not
  * @param {function} props.updateNote - Callback function for updating the note on the item
  * @param {function} props.deleteItem - Callback function for deleting the item
  * @returns {JSX.Element} Draggable Item to be used inside a Droppable
  */
-function DraggableItem({ item, index, isRanked, updateNote, deleteItem }) {
+function DraggableItem({
+  item,
+  index,
+  blank = false,
+  isRanked,
+  updateNote,
+  deleteItem,
+}) {
   const [showNote, setShowNote] = useState(false);
   const [imgUrl, setImgUrl] = useState(item.img_url ? item.img_url : "");
 
@@ -42,7 +50,7 @@ function DraggableItem({ item, index, isRanked, updateNote, deleteItem }) {
    * Handles the item deletion.
    */
   const handleDelete = () => {
-    deleteItem(index);
+    deleteItem(index, blank);
   };
 
   return (
@@ -105,7 +113,7 @@ function DraggableItem({ item, index, isRanked, updateNote, deleteItem }) {
             ))}
 
           {/* Delete button only on unranked container */}
-          {item.deletable && !isRanked && (
+          {((item.deletable && !isRanked) || blank) && (
             <button type="button" onClick={handleDelete}>
               <span className="material-symbols-outlined">delete</span>
             </button>
