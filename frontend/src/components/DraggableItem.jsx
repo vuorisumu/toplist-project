@@ -108,15 +108,19 @@ function DraggableItem({
               </span>
             ))}
 
-          {editName ? (
-            <input
-              type="text"
-              value={item.item_name}
-              onChange={handleNameUpdate}
-              ref={itemRef}
-            />
+          {item.deletable ? (
+            editName ? (
+              <input
+                type="text"
+                value={item.item_name}
+                onChange={handleNameUpdate}
+                ref={itemRef}
+              />
+            ) : (
+              <p onClick={() => setEditName(true)}>{item.item_name}</p>
+            )
           ) : (
-            <p onClick={() => setEditName(true)}>{item.item_name}</p>
+            <p>{item.item_name}</p>
           )}
 
           {isRanked &&
