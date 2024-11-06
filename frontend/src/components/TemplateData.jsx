@@ -417,16 +417,16 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
                             image
                           </span>
                         )}
+                        <label className="fileInput">
+                          <input
+                            type="file"
+                            id={`item${index}`}
+                            name={`item${index}`}
+                            accept="image/png, image/gif, image/jpeg"
+                            onChange={(e) => handleAddItemImage(e, index)}
+                          />
+                        </label>
                       </div>
-                      <label className="fileInput">
-                        <input
-                          type="file"
-                          id={`item${index}`}
-                          name={`item${index}`}
-                          accept="image/png, image/gif, image/jpeg"
-                          onChange={(e) => handleAddItemImage(e, index)}
-                        />
-                      </label>
                     </>
                   )}
                   <input

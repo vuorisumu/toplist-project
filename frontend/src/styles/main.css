@@ -955,6 +955,12 @@ nav ul li:first-child {
   width: 40px;
   height: 40px;
   padding-right: 10px;
+  position: relative;
+}
+.itemImage .fileInput {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
 }
 .itemImage img {
   width: inherit;
