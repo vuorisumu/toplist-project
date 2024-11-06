@@ -41,6 +41,10 @@ function DraggableItem({
   }, [item.img_id]);
 
   useEffect(() => {
+    if (!editName && item.item_name === "") {
+      handleDelete();
+    }
+
     const clickOutside = (event) => {
       if (
         editName &&
