@@ -76,6 +76,13 @@ function RankItems({ containers, setContainers }) {
     }
   };
 
+  /**
+   * Updates the item name according to user input.
+   *
+   * @param {string} id - the ID of the item
+   * @param {string} newName - new name for the item
+   * @param {boolean} ranked - whether the item is in the ranked container
+   */
   const updateItemName = (id, newName, ranked) => {
     const contName = ranked ? RANKED : UNRANKED;
 
@@ -121,9 +128,10 @@ function RankItems({ containers, setContainers }) {
   };
 
   /**
-   * Deletes an item from the unranked container from the given index.
+   * Deletes an item from the specified container with the given index.
    *
    * @param {number} index - The index of the item
+   * @param {boolean} ranked - Whether the item is in the ranked container
    */
   const deleteItem = (index, ranked) => {
     const contName = ranked ? RANKED : UNRANKED;
