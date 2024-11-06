@@ -76,8 +76,8 @@ function RankItems({ containers, setContainers }) {
     }
   };
 
-  const updateItemName = (id, newName, blank) => {
-    if (blank) {
+  const updateItemName = (id, newName, ranked) => {
+    if (ranked) {
       const updatedItems = containers[RANKED].items.map((i) => {
         if (i.id === id) {
           return { ...i, item_name: newName };

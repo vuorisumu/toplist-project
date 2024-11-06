@@ -78,7 +78,7 @@ function DraggableItem({
    * @param {Event} e - Event data containing information about the current value
    */
   const handleNameUpdate = (e) => {
-    updateName(item.id, e.target.value, blank);
+    updateName(item.id, e.target.value, isRanked);
   };
 
   /**
