@@ -231,6 +231,10 @@ function NewList() {
         items: tempItems,
         category: template.category,
         creator_id: user.id,
+        settings: {
+          hasImages: hasImages,
+          isBlank: false,
+        },
       };
 
       if (newTemplateDesc.trim() !== "") {
@@ -437,7 +441,7 @@ function NewList() {
 
         {/* Save changes */}
         <div>
-          {addedItemCount > 0 && user && (
+          {addedItemCount > 0 && user && !template.settings?.isBlank && (
             <div>
               <div>
                 <label>Save as new template: </label>
