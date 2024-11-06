@@ -175,13 +175,23 @@ function NewList() {
         setAddedImages((prevImages) => [...prevImages, newImage]);
       }
 
-      setContainers((prevContainers) => ({
-        ...prevContainers,
-        [ITEMS_REMAINING]: {
-          ...prevContainers[ITEMS_REMAINING],
-          items: [...prevContainers[ITEMS_REMAINING].items, addedEntry],
-        },
-      }));
+      if (template.settings?.isBlank) {
+        // add new entry straight to ranked container when template is blank
+        setContainers((prevContainers) => ({
+          [ITEMS_RANKED]: {
+            ...prevContainers[ITEMS_RANKED],
+            items: [...prevContainers[ITEMS_RANKED].items, addedEntry],
+          },
+        }));
+      } else {
+        setContainers((prevContainers) => ({
+          ...prevContainers,
+          [ITEMS_REMAINING]: {
+            ...prevContainers[ITEMS_REMAINING],
+            items: [...prevContainers[ITEMS_REMAINING].items, addedEntry],
+          },
+        }));
+      }
 
       // reset entry
       setNewEntry("");
