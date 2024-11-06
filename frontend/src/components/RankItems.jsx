@@ -76,6 +76,40 @@ function RankItems({ containers, setContainers }) {
     }
   };
 
+  const updateItemName = (id, newName, blank) => {
+    if (blank) {
+      const updatedItems = containers[RANKED].items.map((i) => {
+        if (i.id === id) {
+          return { ...i, item_name: newName };
+        }
+        return i;
+      });
+
+      setContainers((prev) => ({
+        ...prev,
+        [RANKED]: {
+          ...prev[RANKED],
+          items: updatedItems,
+        },
+      }));
+    } else {
+      const updatedItems = containers[UNRANKED].items.map((i) => {
+        if (i.id === id) {
+          return { ...i, item_name: newName };
+        }
+        return i;
+      });
+
+      setContainers((prev) => ({
+        ...prev,
+        [UNRANKED]: {
+          ...prev[UNRANKED],
+          items: updatedItems,
+        },
+      }));
+    }
+  };
+
   /**
    * Updates an item with the given ID with the new note.
    *
@@ -146,6 +180,7 @@ function RankItems({ containers, setContainers }) {
                       index={index}
                       blank={container.isBlank === true}
                       isRanked={container.keyName === RANKED}
+                      updateName={updateItemName}
                       updateNote={updateNote}
                       deleteItem={deleteItem}
                       key={item.id}

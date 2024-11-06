@@ -1,5 +1,5 @@
 import { Draggable } from "@hello-pangea/dnd";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchImage } from "../api/images";
 import { formatData } from "../util/dataHandler";
 import { getImgUrl } from "../util/imageHandler";
@@ -11,6 +11,7 @@ import { getImgUrl } from "../util/imageHandler";
  * @param {number} props.index - The index of the item
  * @param {boolean} props.blank - Whether the template is blank
  * @param {boolean} props.isRanked - Whether this item is in the ranked container or not
+ * @param {function} props.updateName - Callback function for updating item name
  * @param {function} props.updateNote - Callback function for updating the note on the item
  * @param {function} props.deleteItem - Callback function for deleting the item
  * @returns {JSX.Element} Draggable Item to be used inside a Droppable
@@ -20,12 +21,14 @@ function DraggableItem({
   index,
   blank = false,
   isRanked,
+  updateName,
   updateNote,
   deleteItem,
 }) {
   const [showNote, setShowNote] = useState(false);
+  const [editName, setEditName] = useState(false);
   const [imgUrl, setImgUrl] = useState(item.img_url ? item.img_url : "");
-
+  const itemRef = useRef(null);
   useEffect(() => {
     if (item.img_id && !item.img_url) {
       fetchImage(item.img_id).then((data) => {
@@ -36,6 +39,32 @@ function DraggableItem({
       });
     }
   }, [item.img_id]);
+
+  useEffect(() => {
+    const clickOutside = (event) => {
+      if (
+        editName &&
+        itemRef.current &&
+        !itemRef.current.contains(event.target)
+      ) {
+        setEditName(false);
+      }
+    };
+
+    if (editName && itemRef.current) {
+      itemRef.current.focus();
+    }
+
+    document.addEventListener("pointerdown", clickOutside);
+
+    return () => {
+      document.removeEventListener("pointerdown", clickOutside);
+    };
+  }, [itemRef, editName]);
+
+  const handleNameUpdate = (e) => {
+    updateName(item.id, e.target.value, blank);
+  };
 
   /**
    * Handles the note update.
@@ -79,7 +108,16 @@ function DraggableItem({
               </span>
             ))}
 
-          <p>{item.item_name}</p>
+          {editName ? (
+            <input
+              type="text"
+              value={item.item_name}
+              onChange={handleNameUpdate}
+              ref={itemRef}
+            />
+          ) : (
+            <p onClick={() => setEditName(true)}>{item.item_name}</p>
+          )}
 
           {isRanked &&
             (showNote ? (
