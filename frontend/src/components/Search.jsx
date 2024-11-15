@@ -26,9 +26,9 @@ function Search({
   onClear,
   templateId,
   onEnterKey,
+  placeholder = "",
 }) {
-  const placeholder = "";
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(placeholder);
   const [hideSuggestions, setHideSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const suggRef = useRef(null);
@@ -41,6 +41,12 @@ function Search({
       setValue("");
     }
   }, [onClear]);
+
+  useEffect(() => {
+    if (placeholder !== "") {
+      setValue(placeholder);
+    }
+  }, [placeholder]);
 
   // Only send the value to callback after the user has stopped typing
   useEffect(() => {
@@ -120,7 +126,6 @@ function Search({
       <div className="searchWrapper">
         <input
           type="search"
-          placeholder={placeholder}
           value={value}
           onChange={handleChange}
           onKeyDown={checkKey}

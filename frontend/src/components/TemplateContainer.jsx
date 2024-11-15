@@ -11,7 +11,7 @@ import { fetchTemplates, fetchTemplateCount } from "../api/templates";
  * @returns {JSX.Element} Template container component with a
  * search component attached
  */
-function TemplateContainer() {
+function TemplateContainer({ searchInput = "" }) {
   const [templates, setTemplates] = useState([]);
   const defaultQuery = "sortBy=id&sortOrder=desc";
   const [filters, setFilters] = useState(defaultQuery);
@@ -19,6 +19,12 @@ function TemplateContainer() {
   const [loadedCount, setLoadedCount] = useState(0);
   const loadMoreAmount = 5;
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (searchInput !== "") {
+      handleSearch(searchInput);
+    }
+  }, [searchInput]);
 
   useEffect(() => {
     getTemplateCount();
@@ -65,6 +71,16 @@ function TemplateContainer() {
         setLoadedCount(loaded + loadMoreAmount);
       })
       .catch((err) => console.log(err));
+  };
+
+  /**
+   * Handles the search functionality
+   * @param {string} val - search input
+   */
+  const handleSearch = (val) => {
+    setFilters(
+      val === "" ? defaultQuery : `search=${val}&sortBy=id&sortOrder=desc`
+    );
   };
 
   /**

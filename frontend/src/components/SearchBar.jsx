@@ -38,7 +38,6 @@ function SearchBar({ isOpen, toggleSearch }) {
       setSearch(val);
       navigate(`/search/${val}`);
     } else {
-      console.log("was not open");
       toggleSearch();
     }
   };
@@ -52,6 +51,7 @@ function SearchBar({ isOpen, toggleSearch }) {
           combinedSearch={true}
           onClear={() => setSearch("")}
           onEnterKey={onEnter}
+          placeholder={searchInput.current}
         />
       </div>
     </div>

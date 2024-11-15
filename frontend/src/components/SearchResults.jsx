@@ -7,7 +7,7 @@ function SearchResults() {
   return (
     <div className="container">
       <h1>Search results</h1>
-      <TemplateContainer />
+      <TemplateContainer searchInput={search} />
     </div>
   );
 }
