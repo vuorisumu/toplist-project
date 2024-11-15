@@ -10,6 +10,7 @@ import Dropdown from "./Dropdown";
  * Handles the displaying and loading of the templates.
  *
  * @param {string} props.searchInput - String to be used in searching
+ * @param {number} props.categoryId - Category ID for filtering, default 0 fetches all categories
  * @returns {JSX.Element} Template container component with a
  * search component attached
  */
@@ -22,7 +23,6 @@ function TemplateContainer({ searchInput = "", categoryId = 0 }) {
   const [loadedCount, setLoadedCount] = useState(0);
   const loadMoreAmount = 5;
   const [loading, setLoading] = useState(true);
-
   const options = {
     LIST_NAME: "Template name",
     OLDEST_FIRST: "Oldest first",
@@ -31,14 +31,14 @@ function TemplateContainer({ searchInput = "", categoryId = 0 }) {
   };
 
   useEffect(() => {
+    getTemplateCount();
+  }, []);
+
+  useEffect(() => {
     if (searchInput !== "") {
       handleSearch(searchInput);
     }
   }, [searchInput]);
-
-  useEffect(() => {
-    getTemplateCount();
-  }, []);
 
   useEffect(() => {
     let q = [];
@@ -55,7 +55,6 @@ function TemplateContainer({ searchInput = "", categoryId = 0 }) {
 
   useEffect(() => {
     if (templateCount > 0) {
-      console.log(filters);
       loadTemplates();
     }
   }, [templateCount, filters]);
