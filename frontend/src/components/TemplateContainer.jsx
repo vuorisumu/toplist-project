@@ -21,7 +21,7 @@ function TemplateContainer({ searchInput = "", categoryId = 0 }) {
   const [search, setSearch] = useState("");
   const [templateCount, setTemplateCount] = useState(0);
   const [loadedCount, setLoadedCount] = useState(0);
-  const loadMoreAmount = 2;
+  const loadMoreAmount = 5;
   const [loading, setLoading] = useState(true);
   const options = {
     LIST_NAME: "Template name",
