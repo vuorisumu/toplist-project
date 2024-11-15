@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
 import Search from "./Search";
 import { fetchAllNamesByInput } from "../util/dataHandler";
+import { useNavigate } from "react-router-dom";
 
 function SearchBar({ isOpen, toggleSearch }) {
   const searchInput = useRef("");
   const setSearch = (val) => (searchInput.current = val);
   const searchRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const clickOutside = (event) => {
@@ -32,10 +34,9 @@ function SearchBar({ isOpen, toggleSearch }) {
    * @param {string} val - the current value of the input field
    */
   const onEnter = (val) => {
-    // toggleSearch();
     if (isOpen) {
       setSearch(val);
-      console.log(val);
+      navigate(`/search/${val}`);
     } else {
       console.log("was not open");
       toggleSearch();

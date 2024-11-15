@@ -23,6 +23,7 @@ import UserContext from "./util/UserContext.js";
 import { isLoggedIn, loginInfo } from "./util/permissions.js";
 import TemplatePreview from "./components/TemplatePreview.jsx";
 import MyTemplates from "./components/MyTemplates.jsx";
+import SearchResults from "./components/SearchResults.jsx";
 
 function App() {
   function RedirectToCreateList() {
@@ -75,6 +76,7 @@ function App() {
           <Route path="/templates" element={<BrowseTemplates />} />
           <Route path="/templates/:templateId" element={<TemplatePreview />} />
           <Route path="/createlist" element={<Main />} />
+          <Route path="/search/:searchInput" element={<SearchResults />} />
           <Route path="/toplists" element={<BrowseToplists />} />
           <Route path="/new-template" element={<NewTemplate />} />
           <Route
