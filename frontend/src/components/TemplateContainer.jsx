@@ -103,17 +103,10 @@ function TemplateContainer({ searchInput = "" }) {
 
   return (
     <>
-      {/* Search container */}
-      <AdvancedSearch
-        searchLists={false}
-        onSearch={handleFilteredSearch}
-        onClear={handleClear}
-      />
-
       <UserSearch searchInput={search} />
 
       <div>
-        <h2>Recent templates</h2>
+        <h2>Templates</h2>
 
         {!loading && templates.length < 1 && <p>No templates found</p>}
 
