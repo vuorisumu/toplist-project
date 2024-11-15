@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getCategories } from "../util/storage";
+import { Link } from "react-router-dom";
 
 function Categories() {
   const [categories, setCategories] = useState(null);
@@ -25,7 +26,9 @@ function Categories() {
         categories && (
           <ul>
             {categories.map((c) => (
-              <li key={`c${c.id}`}>{c.name}</li>
+              <li key={`c${c.id}`}>
+                <Link to={`/category/${c.name}`}>{c.name}</Link>
+              </li>
             ))}
           </ul>
         )
