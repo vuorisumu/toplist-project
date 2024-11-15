@@ -11,8 +11,28 @@ console.log("Category router accessed");
  */
 categoryRouter.get("/", async (req, res) => {
   try {
-    const query = `SELECT * FROM categories ORDER BY CASE WHEN name = 'Uncategorized' THEN 1 ELSE 0 END, name ASC`;
-    const results = await database.query(query);
+    let results;
+    if (Object.keys(req.query).length !== 0) {
+      const { name } = req.query;
+      if (!name) {
+        return res.status(400).send({ msg: "No name provided" });
+      }
+
+      results = await database.query(
+        `SELECT * FROM categories WHERE lower(name) = lower(:name)`,
+        {
+          name: name,
+        }
+      );
+      console.log(results);
+    } else {
+      const query = `SELECT * FROM categories ORDER BY CASE WHEN name = 'Uncategorized' THEN 1 ELSE 0 END, name ASC`;
+      results = await database.query(query);
+    }
+
+    if (results.length === 0) {
+      return res.status(404).send(notfoundError);
+    }
 
     res.status(200).json(results);
   } catch (err) {
