@@ -3,6 +3,7 @@ import { formatData, getCountFromData } from "../util/dataHandler";
 import Template from "./Template";
 import AdvancedSearch from "./AdvancedSearch";
 import { fetchTemplates, fetchTemplateCount } from "../api/templates";
+import UserSearch from "./UserSearch";
 
 /**
  * Container for displaying templates and the search bar.
@@ -15,6 +16,7 @@ function TemplateContainer({ searchInput = "" }) {
   const [templates, setTemplates] = useState([]);
   const defaultQuery = "sortBy=id&sortOrder=desc";
   const [filters, setFilters] = useState(defaultQuery);
+  const [search, setSearch] = useState("");
   const [templateCount, setTemplateCount] = useState(0);
   const [loadedCount, setLoadedCount] = useState(0);
   const loadMoreAmount = 5;
@@ -78,6 +80,7 @@ function TemplateContainer({ searchInput = "" }) {
    * @param {string} val - search input
    */
   const handleSearch = (val) => {
+    setSearch(val);
     setFilters(
       val === "" ? defaultQuery : `search=${val}&sortBy=id&sortOrder=desc`
     );
@@ -106,6 +109,8 @@ function TemplateContainer({ searchInput = "" }) {
         onSearch={handleFilteredSearch}
         onClear={handleClear}
       />
+
+      <UserSearch searchInput={search} />
 
       <div>
         <h2>Recent templates</h2>
