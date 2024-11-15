@@ -13,15 +13,16 @@ categoryRouter.get("/", async (req, res) => {
   try {
     let results;
     if (Object.keys(req.query).length !== 0) {
-      const { name } = req.query;
-      if (!name) {
-        return res.status(400).send({ msg: "No name provided" });
+      const { label } = req.query;
+      if (!label) {
+        return res.status(400).send({ msg: "No label provided" });
       }
 
+      console.log(label);
       results = await database.query(
-        `SELECT * FROM categories WHERE lower(name) = lower(:name)`,
+        `SELECT * FROM categories WHERE lower(label) = lower(:label)`,
         {
-          name: name,
+          label: label,
         }
       );
       console.log(results);
