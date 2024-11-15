@@ -63,13 +63,26 @@ function App() {
     }
   };
 
+  const updateUser = (userData) => {
+    const newData = user;
+    if (userData.user_name) {
+      newData.user_name = userData.user_name;
+    }
+
+    if (userData.email) {
+      newData.email = userData.email;
+    }
+
+    setUser(newData);
+  };
+
   const logout = () => {
     localStorage.clear();
     setUser(null);
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, login, logout, updateUser }}>
       <Router>
         <Nav />
         <Routes>

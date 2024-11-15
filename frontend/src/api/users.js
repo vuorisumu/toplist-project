@@ -116,8 +116,8 @@ export const addNewUser = (userData) => {
  */
 export const updateuser = (id, userData) => {
   const formData = new FormData();
-  if (userData.name) {
-    formData.append("user_name", userData.name);
+  if (userData.user_name) {
+    formData.append("user_name", userData.user_name);
   }
 
   if (userData.email) {
@@ -128,6 +128,7 @@ export const updateuser = (id, userData) => {
     formData.append("password", userData.password);
   }
 
+  console.log(formData);
   return fetch(`${API_BASE_URL}/users/${id}`, {
     method: "PATCH",
     body: formData,

@@ -1,7 +1,7 @@
 const oracledb = require("oracledb");
 const database = require("../config/database");
 const { filteredUserQuery } = require("../filteredQueries/userQueries");
-const { userSchema } = require("../schemas/userSchemas");
+const { userSchema, editUserSchema } = require("../schemas/userSchemas");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const express = require("express");
@@ -160,24 +160,25 @@ userRouter.patch("/:id([0-9]+)", async (req, res) => {
     const id = parseInt(req.params.id);
     const exists = await database.query(
       "SELECT user_name FROM users WHERE user_id = :id",
-      { user_id: id }
+      { id: id }
     );
     if (exists.length === 0) {
       return res.status(404).json({ msg: "User not found" });
     }
 
     // validate data
-    const { error } = userSchema.validate(req.body, { abortEarly: false });
+    const { error } = editUserSchema.validate(req.body, { abortEarly: false });
     if (error) {
       return res.status(400).json({ msg: error.details });
     }
 
+    console.log(req.body);
     const values = {};
     const fields = [];
 
     if (req.body.user_name) {
       fields.push("user_name = :user_name");
-      values["user_name"] = req.body._user_name;
+      values["user_name"] = req.body.user_name;
     }
 
     if (req.body.email) {
@@ -196,6 +197,7 @@ userRouter.patch("/:id([0-9]+)", async (req, res) => {
     const query = `UPDATE users SET ${updateString} WHERE user_id = :id`;
     values["id"] = req.params.id;
 
+    console.log(query, values);
     const result = await database.query(query, values);
 
     if (result.affectedRows === 0) {
@@ -205,7 +207,7 @@ userRouter.patch("/:id([0-9]+)", async (req, res) => {
     // successful insert
     res.status(201).json({
       msg: "user updated",
-      id: req.params.user_id,
+      id: req.params.id,
     });
   } catch (err) {
     console.log(err);

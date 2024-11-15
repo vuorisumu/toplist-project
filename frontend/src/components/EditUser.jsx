@@ -1,12 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../util/UserContext";
 import { useNavigate } from "react-router-dom";
-import { fetchUserByEmail, fetchUserByName } from "../api/users";
+import {
+  fetchUserByEmail,
+  fetchUserByName,
+  updateuser,
+  userLogin,
+} from "../api/users";
 import { formatData } from "../util/dataHandler";
 import Joi from "joi";
 
 function EditUser() {
-  const { user } = useContext(UserContext);
+  const { user, updateUser } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [editName, setEditName] = useState(false);
   const [nameError, setNameError] = useState([]);
@@ -19,6 +24,7 @@ function EditUser() {
   const [oldPassword, setOldPassword] = useState("");
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [saved, setSaved] = useState(false);
   const navigate = useNavigate();
 
   const userNameValidator = Joi.string()
@@ -40,25 +46,7 @@ function EditUser() {
       return err;
     });
 
-  const userSchema = Joi.object({
-    user_name: Joi.string()
-      .regex(RegExp("^[\u00C0-\u017Fa-zA-Z0-9-' .()]*$"))
-      .max(50)
-      .required()
-      .label("username")
-      .messages({
-        "string.empty": "Username must not be blank",
-        "string.max": "Username must not be more than 50 characters",
-        "string.pattern.base": "Username contains unallowed special characters",
-      }),
-    email: Joi.string()
-      .email({ tlds: false })
-      .required()
-      .label("email")
-      .error((err) => {
-        err[0].message = "Email must be a valid email";
-        return err;
-      }),
+  const passwordSchema = Joi.object({
     password: Joi.string()
       .min(6)
       .required()
@@ -150,8 +138,63 @@ function EditUser() {
     setChangePassword(!changePassword);
   };
 
-  const saveChanges = () => {
-    console.log("save");
+  const saveChanges = async () => {
+    if (changePassword) {
+      const newPass = {
+        password: password,
+        repeatPassword: repeatPassword,
+      };
+      const { error } = passwordSchema.validate(newPass, { abortEarly: false });
+      if (error) {
+        setErrors(error.details);
+        return;
+      }
+    } else {
+      setErrors([]);
+    }
+
+    if (oldPassword === "") {
+      setErrors([{ message: "No password given" }]);
+      return;
+    }
+
+    const newData = {};
+    if (username !== user.user_name) {
+      newData.user_name = username;
+    }
+
+    if (email !== user.email) {
+      newData.email = email;
+    }
+
+    if (changePassword) {
+      newData.password = password;
+    }
+
+    if (!newData.user_name && !newData.email && !newData.password) {
+      console.log("nothing to change");
+      return;
+    }
+
+    const userData = {
+      user: user.user_name,
+      password: oldPassword,
+    };
+    const res = await userLogin(userData);
+    if (!res.error) {
+      setLoading(true);
+      const updateRes = await updateuser(user.id, newData);
+      setLoading(false);
+      if (!updateRes.error) {
+        updateUser(newData);
+        setSaved(true);
+        setPassword("");
+        setRepeatPassword("");
+        setOldPassword("");
+      }
+    } else {
+      setErrors([{ message: res.error }]);
+    }
   };
 
   const nameAvailable = async () => {
@@ -285,7 +328,18 @@ function EditUser() {
               />
             </li>
           </ul>
-          <button onClick={saveChanges}>Save changes</button>
+          {errors.length > 0 && (
+            <ul>
+              {errors.map((err, index) => (
+                <li key={index}>{err.message}</li>
+              ))}
+            </ul>
+          )}
+
+          {saved && <p>Account information updated!</p>}
+          <button onClick={saveChanges} disabled={loading}>
+            Save changes
+          </button>
         </>
       )}
     </div>
