@@ -13,10 +13,9 @@ import Dropdown from "./Dropdown";
  * @returns {JSX.Element} Template container component with a
  * search component attached
  */
-function TemplateContainer({ searchInput = "" }) {
+function TemplateContainer({ searchInput = "", categoryId = 0 }) {
   const [templates, setTemplates] = useState([]);
-  const defaultQuery = "sortBy=id&sortOrder=desc";
-  const [filters, setFilters] = useState(defaultQuery);
+  const [filters, setFilters] = useState("");
   const [sortBy, setSortBy] = useState("id&sortOrder=desc");
   const [search, setSearch] = useState("");
   const [templateCount, setTemplateCount] = useState(0);
@@ -45,6 +44,9 @@ function TemplateContainer({ searchInput = "" }) {
     let q = [];
     if (search !== "") {
       q.push(`search=${search}`);
+    }
+    if (categoryId > 0) {
+      q.push(`category=${categoryId}`);
     }
     q.push(`sortBy=${sortBy}`);
 
@@ -127,7 +129,7 @@ function TemplateContainer({ searchInput = "" }) {
 
   return (
     <>
-      <UserSearch searchInput={search} />
+      {categoryId === 0 && <UserSearch searchInput={search} />}
 
       <Dropdown
         label={"Sort by"}

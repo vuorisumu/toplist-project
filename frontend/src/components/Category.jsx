@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchCategoryByName } from "../api/categories";
 import { formatData } from "../util/dataHandler";
 import { useLocation } from "react-router-dom";
+import TemplateContainer from "./TemplateContainer";
 
 function Category() {
   const location = useLocation();
@@ -30,6 +31,7 @@ function Category() {
   return (
     <div className="container">
       <h1>{category.name}</h1>
+      <TemplateContainer categoryId={category.id} />
     </div>
   );
 }
