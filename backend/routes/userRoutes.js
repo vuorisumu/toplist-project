@@ -223,4 +223,26 @@ userRouter.get("/auth/", verifyToken, async (req, res) => {
   res.status(200).json({ id: req.user_id, admin: req.isAdmin });
 });
 
+userRouter.delete("/:id([0-9]+)", verifyToken, async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    if (req.user_id !== id && req.isAdmin === false) {
+      return res.status(403).send({ msg: "Unauthorized action" });
+    }
+
+    const result = await database.query(
+      "DELETE FROM users WHERE user_id = :id",
+      { id: id }
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).send(notfoundError);
+    }
+
+    res.status(200).json({ msg: `Deleted user ${id} successfully` });
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
 module.exports = userRouter;

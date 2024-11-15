@@ -172,3 +172,16 @@ export const auth = () => {
     .then((response) => response.json())
     .catch((error) => console.log(error));
 };
+
+export const deleteUser = (id) => {
+  const token = localStorage.getItem("token");
+  return fetch(`${API_BASE_URL}/users/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};

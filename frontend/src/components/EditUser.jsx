@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import UserContext from "../util/UserContext";
 import { useNavigate } from "react-router-dom";
 import {
+  deleteUser,
   fetchUserByEmail,
   fetchUserByName,
   updateuser,
@@ -14,7 +15,7 @@ import { deleteTemplatesFromUser } from "../api/templates";
 import { deleteToplistFromUser } from "../api/toplists";
 
 function EditUser() {
-  const { user, updateUser } = useContext(UserContext);
+  const { user, updateUser, logout } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [editName, setEditName] = useState(false);
   const [nameError, setNameError] = useState([]);
@@ -271,7 +272,9 @@ function EditUser() {
       console.log(lres);
     }
 
-    console.log("Deleting account");
+    const res = await deleteUser(user.id);
+    console.log(res);
+    logout();
   };
 
   return (
