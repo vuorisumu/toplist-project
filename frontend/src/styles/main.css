@@ -476,6 +476,9 @@ nav ul li:first-child {
   width: 200px;
   transform-origin: right;
 }
+#searchBar .searchContainer input[type=search] {
+  transition: all 0.2s ease;
+}
 
 #searchBar:not(.active) {
   width: 30px;

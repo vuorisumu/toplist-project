@@ -178,6 +178,10 @@
   transition: all 0.2s ease;
   width: 200px;
   transform-origin: right;
+
+  .searchContainer input[type="search"] {
+    transition: all 0.2s ease;
+  }
 }
 
 #searchBar:not(.active) {
