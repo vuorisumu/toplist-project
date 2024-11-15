@@ -24,6 +24,7 @@ import MyTemplates from "./components/MyTemplates.jsx";
 import SearchResults from "./components/SearchResults.jsx";
 import Categories from "./components/Categories.jsx";
 import Category from "./components/Category.jsx";
+import EditUser from "./components/EditUser.jsx";
 
 function App() {
   function RedirectToCreateList() {
@@ -87,6 +88,7 @@ function App() {
           <Route path="/toplists/:listId" element={<SingleList />} />
           <Route path="/register" element={<Register />} />
           <Route path="/user/:username" element={<User />} />
+          <Route path="/account" element={<EditUser />} />
           <Route path="/mytemplates" element={<MyTemplates />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

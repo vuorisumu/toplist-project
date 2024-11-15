@@ -96,6 +96,35 @@ export const addNewUser = (userData) => {
 };
 
 /**
+ * Updates data of an user with given ID
+ *
+ * @param {number} id - ID of the user to be edited
+ * @param {object} userData - user data
+ * @returns the ID of the edited user on successful edit
+ */
+export const updateuser = (id, userData) => {
+  const formData = new FormData();
+  if (userData.name) {
+    formData.append("user_name", userData.name);
+  }
+
+  if (userData.email) {
+    formData.append("email", userData.email);
+  }
+
+  if (userData.password) {
+    formData.append("password", userData.password);
+  }
+
+  return fetch(`${API_BASE_URL}/users/${id}`, {
+    method: "PATCH",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
+/**
  * Sends login credentials to database to check if the login information was
  * correct.
  *
