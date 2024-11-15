@@ -104,7 +104,7 @@ userRouter.post("/login/", async (req, res) => {
   try {
     const { user, password } = req.body;
     const userData = await database.query(
-      `SELECT * FROM users WHERE user_name = lower(:1) OR email = lower(:2)`,
+      `SELECT * FROM users WHERE lower(user_name) = lower(:1) OR lower(email) = lower(:2)`,
       [user, user]
     );
 
@@ -151,6 +151,64 @@ userRouter.post("/login/", async (req, res) => {
       res.status(404).json({ error: "User not found" });
     }
   } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
+userRouter.patch("/:id([0-9]+)", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const exists = await database.query(
+      "SELECT user_name FROM users WHERE user_id = :id",
+      { user_id: id }
+    );
+    if (exists.length === 0) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // validate data
+    const { error } = userSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+      return res.status(400).json({ msg: error.details });
+    }
+
+    const values = {};
+    const fields = [];
+
+    if (req.body.user_name) {
+      fields.push("user_name = :user_name");
+      values["user_name"] = req.body._user_name;
+    }
+
+    if (req.body.email) {
+      fields.push("email = :email");
+      values["email"] = req.body.email;
+    }
+
+    if (req.body.password) {
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      fields.push("password = :password");
+      values["password"] = hashedPassword;
+    }
+
+    // build the string
+    const updateString = fields.join(", ");
+    const query = `UPDATE users SET ${updateString} WHERE user_id = :id`;
+    values["id"] = req.params.id;
+
+    const result = await database.query(query, values);
+
+    if (result.affectedRows === 0) {
+      return res.status(500).json({ msg: "Failed to update user" });
+    }
+
+    // successful insert
+    res.status(201).json({
+      msg: "user updated",
+      id: req.params.user_id,
+    });
+  } catch (err) {
+    console.log(err);
     res.status(500).send(databaseError);
   }
 });
