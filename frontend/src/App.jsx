@@ -23,6 +23,7 @@ import TemplatePreview from "./components/TemplatePreview.jsx";
 import MyTemplates from "./components/MyTemplates.jsx";
 import SearchResults from "./components/SearchResults.jsx";
 import Categories from "./components/Categories.jsx";
+import Category from "./components/Category.jsx";
 
 function App() {
   function RedirectToCreateList() {
@@ -73,6 +74,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/categories" element={<Categories />} />
+          <Route path="/category/:id" element={<Category />} />
           <Route path="/templates/:templateId" element={<TemplatePreview />} />
           <Route path="/createlist" element={<Main />} />
           <Route path="/search/:searchInput" element={<SearchResults />} />

@@ -23,3 +23,15 @@ export const fetchCategoryById = (id) => {
     response.json()
   );
 };
+
+/**
+ * Fetches a category from the database by the given name
+ *
+ * @param {string} name - The name of the category
+ * @returns a response containing the fetched catehory
+ */
+export const fetchCategoryByName = (name) => {
+  return fetch(`${API_BASE_URL}/categories?name=${name}`).then((response) =>
+    response.json()
+  );
+};
