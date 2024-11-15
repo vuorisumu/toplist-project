@@ -66,6 +66,18 @@ export const fetchUserByName = (name) => {
 };
 
 /**
+ * Fetches a user with a specified email from the database
+ *
+ * @param {string} email - email of the user
+ * @returns data of the fetched user
+ */
+export const fetchUserByEmail = (email) => {
+  return fetch(`${API_BASE_URL}/users?email=${email}`).then((response) =>
+    response.json()
+  );
+};
+
+/**
  * Fetches a user with a specified name from the database
  *
  * @param {string} name - name of the user
