@@ -4,6 +4,7 @@ import Template from "./Template";
 import AdvancedSearch from "./AdvancedSearch";
 import { fetchTemplates, fetchTemplateCount } from "../api/templates";
 import UserSearch from "./UserSearch";
+import Dropdown from "./Dropdown";
 
 /**
  * Container for displaying templates and the search bar.
@@ -16,11 +17,20 @@ function TemplateContainer({ searchInput = "" }) {
   const [templates, setTemplates] = useState([]);
   const defaultQuery = "sortBy=id&sortOrder=desc";
   const [filters, setFilters] = useState(defaultQuery);
+  const [sortBy, setSortBy] = useState("id&sortOrder=desc");
   const [search, setSearch] = useState("");
   const [templateCount, setTemplateCount] = useState(0);
   const [loadedCount, setLoadedCount] = useState(0);
   const loadMoreAmount = 5;
   const [loading, setLoading] = useState(true);
+
+  const options = {
+    LIST_NAME: "Template name",
+    OLDEST_FIRST: "Oldest first",
+    NEWEST_FIRST: "Newest first",
+    CREATOR_NAME: "Creator name",
+  };
+  // const selectFromDropdown = (val) => setSortBy(val);
 
   useEffect(() => {
     if (searchInput !== "") {
@@ -33,10 +43,40 @@ function TemplateContainer({ searchInput = "" }) {
   }, []);
 
   useEffect(() => {
+    let q = [];
+    if (search !== "") {
+      q.push(`search=${search}`);
+    }
+    q.push(`sortBy=${sortBy}`);
+
+    setFilters(q.join("&"));
+  }, [search, sortBy]);
+
+  useEffect(() => {
     if (templateCount > 0) {
+      console.log(filters);
       loadTemplates();
     }
   }, [templateCount, filters]);
+
+  /**
+   * Sets the sort by value to state
+   *
+   * @param {string} val - Value selected from dropdown
+   */
+  const selectFromDropdown = (val) => {
+    if (val !== "") {
+      if (val === options.LIST_NAME) {
+        setSortBy(`name`);
+      } else if (val === options.CREATOR_NAME) {
+        setSortBy(`creatorname`);
+      } else if (val === options.NEWEST_FIRST) {
+        setSortBy(`id&sortOrder=desc`);
+      } else {
+        setSortBy(`id&sortOrder=asc`);
+      }
+    }
+  };
 
   /**
    * Fetches the full count of templates in the database and sets it to state.
@@ -86,23 +126,14 @@ function TemplateContainer({ searchInput = "" }) {
     );
   };
 
-  /**
-   * Sets the specified filters and calls for a new search
-   * @param {string} val - filtered query text
-   */
-  const handleFilteredSearch = (val) => {
-    setFilters(val === "" ? defaultQuery : val);
-  };
-
-  /**
-   * Sets the filters bacn to default.
-   */
-  const handleClear = () => {
-    setFilters(defaultQuery);
-  };
-
   return (
     <>
+      <Dropdown
+        label={"Sort by"}
+        placeholder={options.LIST_NAME}
+        items={Object.values(options)}
+        onSelect={selectFromDropdown}
+      />
       <UserSearch searchInput={search} />
 
       <div>
