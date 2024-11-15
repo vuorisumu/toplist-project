@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { formatData, getCountFromData } from "../util/dataHandler";
 import Toplist from "./Toplist";
-import AdvancedSearch from "./AdvancedSearch";
 import { fetchToplistCount, fetchToplists } from "../api/toplists";
 
 /**
@@ -72,32 +71,9 @@ function ToplistContainer({ templateId = 0 }) {
       .catch((err) => console.log(err));
   };
 
-  /**
-   * Sets the specified filters and calls for a new search
-   * @param {string} val - filtered query text
-   */
-  const handleFilteredSearch = (val) => {
-    setFilters(val === "" ? defaultQuery : val);
-  };
-
-  /**
-   * Sets the filters bacn to default.
-   */
-  const handleClear = () => {
-    setFilters(defaultQuery);
-  };
-
   return (
     <div className="rankingsCont">
       {templateId > 0 && <h2>Lists using this template</h2>}
-
-      {/* Search container */}
-      <AdvancedSearch
-        searchLists={true}
-        onSearch={handleFilteredSearch}
-        onClear={handleClear}
-        templateId={templateId}
-      />
 
       {!loading && listCount < 1 && <p>No templates found</p>}
       {loading ? (

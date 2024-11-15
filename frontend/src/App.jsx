@@ -77,7 +77,6 @@ function App() {
           <Route path="/templates/:templateId" element={<TemplatePreview />} />
           <Route path="/createlist" element={<Main />} />
           <Route path="/search/:searchInput" element={<SearchResults />} />
-          <Route path="/toplists" element={<BrowseToplists />} />
           <Route path="/new-template" element={<NewTemplate />} />
           <Route
             path="/createlist/:templateId"
