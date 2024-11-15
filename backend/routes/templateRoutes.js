@@ -8,6 +8,7 @@ const {
   specifiedIdSchema,
 } = require("../schemas/templateSchemas");
 const express = require("express");
+const verifyToken = require("../config/verifyToken");
 const templateRouter = express.Router();
 
 const databaseError = { msg: "Error retrieving data from database" };
@@ -285,5 +286,36 @@ templateRouter.delete("/:id([0-9]+)", async (req, res) => {
     res.status(500).send(databaseError);
   }
 });
+
+/**
+ * Deletes a template with given ID from the database
+ */
+templateRouter.delete(
+  "/fromuser/:id([0-9]+)",
+  verifyToken,
+  async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (req.user_id !== id && req.isAdmin === false) {
+        return res.status(403).send({ msg: "Unauthorized action" });
+      }
+
+      const result = await database.query(
+        "DELETE FROM templates WHERE creator_id = :id",
+        { id: id }
+      );
+
+      if (result.affectedRows === 0) {
+        return res.status(404).send(notfoundError);
+      }
+
+      res
+        .status(200)
+        .json({ msg: `Deleted template from user ${id} successfully` });
+    } catch (err) {
+      res.status(500).send(databaseError);
+    }
+  }
+);
 
 module.exports = templateRouter;

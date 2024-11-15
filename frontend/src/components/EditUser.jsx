@@ -10,6 +10,7 @@ import {
 import { formatData } from "../util/dataHandler";
 import Joi from "joi";
 import ButtonPrompt from "./ButtonPrompt";
+import { deleteTemplatesFromUser } from "../api/templates";
 
 function EditUser() {
   const { user, updateUser } = useContext(UserContext);
@@ -256,8 +257,18 @@ function EditUser() {
     }
   };
 
-  const handleDelete = () => {
-    console.log("delete");
+  const handleDelete = async () => {
+    if (deleteTemplates) {
+      console.log("Deleting templates");
+      const tres = await deleteTemplatesFromUser(user.id);
+      console.log(tres);
+    }
+
+    if (deleteLists) {
+      console.log("Deleting lists");
+    }
+
+    console.log("Deleting account");
   };
 
   return (

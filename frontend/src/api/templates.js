@@ -158,6 +158,19 @@ export const deleteTemplate = (id) => {
     .catch((error) => console.error("Error:", error));
 };
 
+export const deleteTemplatesFromUser = (user_id) => {
+  const token = localStorage.getItem("token");
+  return fetch(`${API_BASE_URL}/templates/fromuser/${user_id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
 /**
  * Fetches the count of templates from the database
  *
