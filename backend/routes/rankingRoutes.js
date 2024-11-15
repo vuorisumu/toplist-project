@@ -3,6 +3,7 @@ const database = require("../config/database");
 const { filteredRankingQuery } = require("../filteredQueries/toplistQueries");
 const { rankingSchema } = require("../schemas/toplistSchemas");
 const express = require("express");
+const verifyToken = require("../config/verifyToken");
 const rankRouter = express.Router();
 
 const databaseError = { msg: "Error retrieving data from database" };
@@ -148,6 +149,30 @@ rankRouter.delete("/:id([0-9]+)", async (req, res) => {
     }
 
     res.status(200).json({ msg: `Deleted toplist ${id} successfully` });
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
+rankRouter.delete("/fromuser/:id([0-9]+)", verifyToken, async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    if (req.user_id !== id && req.isAdmin === false) {
+      return res.status(403).send({ msg: "Unauthorized action" });
+    }
+
+    const result = await database.query(
+      "DELETE FROM toplists WHERE creator_id = :id",
+      { id: id }
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).send(notfoundError);
+    }
+
+    res
+      .status(200)
+      .json({ msg: `Deleted toplist from user ${id} successfully` });
   } catch (err) {
     res.status(500).send(databaseError);
   }

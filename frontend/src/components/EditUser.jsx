@@ -11,6 +11,7 @@ import { formatData } from "../util/dataHandler";
 import Joi from "joi";
 import ButtonPrompt from "./ButtonPrompt";
 import { deleteTemplatesFromUser } from "../api/templates";
+import { deleteToplistFromUser } from "../api/toplists";
 
 function EditUser() {
   const { user, updateUser } = useContext(UserContext);
@@ -266,6 +267,8 @@ function EditUser() {
 
     if (deleteLists) {
       console.log("Deleting lists");
+      const lres = await deleteToplistFromUser(user.id);
+      console.log(lres);
     }
 
     console.log("Deleting account");

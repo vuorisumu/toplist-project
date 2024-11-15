@@ -98,3 +98,16 @@ export const deleteToplist = (id) => {
     .then((response) => response.json())
     .catch((error) => console.error("Error:", error));
 };
+
+export const deleteToplistFromUser = (user_id) => {
+  const token = localStorage.getItem("token");
+  return fetch(`${API_BASE_URL}/toplists/fromuser/${user_id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
