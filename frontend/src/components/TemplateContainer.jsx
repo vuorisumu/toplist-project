@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { formatData, getCountFromData } from "../util/dataHandler";
 import Template from "./Template";
-import AdvancedSearch from "./AdvancedSearch";
 import { fetchTemplates, fetchTemplateCount } from "../api/templates";
 import UserSearch from "./UserSearch";
 import Dropdown from "./Dropdown";
