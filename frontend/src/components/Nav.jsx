@@ -39,14 +39,6 @@ function Nav() {
             <span className="linkName">Templates</span>
           </NavLink>
         </li>
-        <li>
-          <NavLink to="/toplists">
-            <span className="material-symbols-outlined icon">
-              format_list_numbered
-            </span>
-            <span className="linkName">Top lists</span>
-          </NavLink>
-        </li>
         {user && (
           <li>
             <NavLink to="/new-template">
@@ -86,6 +78,9 @@ function Nav() {
                 <img src={logo} id="logo" />
                 <span>Listmaker 9000</span>
               </NavLink>
+            </li>
+            <li id="searchBar" className={searchOpen ? "active" : ""}>
+              <SearchBar isOpen={searchOpen} toggleSearch={toggleSearch} />
             </li>
           </ul>
         </nav>
