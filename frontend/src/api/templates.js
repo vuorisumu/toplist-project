@@ -161,10 +161,11 @@ export const deleteTemplate = (id) => {
 /**
  * Fetches the count of templates from the database
  *
+ * @param {string} filters - optional search filters
  * @returns data containing the count of templates
  */
-export const fetchTemplateCount = () => {
-  return fetch(`${API_BASE_URL}/templates?count=true`).then((response) =>
-    response.json()
-  );
+export const fetchTemplateCount = (filters = "") => {
+  return fetch(
+    `${API_BASE_URL}/templates?count=true${filters === "" ? "" : `&${filters}`}`
+  ).then((response) => response.json());
 };
