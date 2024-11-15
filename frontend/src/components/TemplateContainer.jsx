@@ -127,13 +127,14 @@ function TemplateContainer({ searchInput = "" }) {
 
   return (
     <>
+      <UserSearch searchInput={search} />
+
       <Dropdown
         label={"Sort by"}
         placeholder={options.LIST_NAME}
         items={Object.values(options)}
         onSelect={selectFromDropdown}
       />
-      <UserSearch searchInput={search} />
 
       <div>
         <h2>Templates</h2>
