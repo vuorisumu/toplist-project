@@ -9,6 +9,7 @@ import {
 } from "../api/users";
 import { formatData } from "../util/dataHandler";
 import Joi from "joi";
+import ButtonPrompt from "./ButtonPrompt";
 
 function EditUser() {
   const { user, updateUser } = useContext(UserContext);
@@ -25,6 +26,11 @@ function EditUser() {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteTemplates, setDeleteTemplates] = useState(false);
+  const [deleteLists, setDeleteLists] = useState(false);
+  const [delPassword, setDelPassword] = useState("");
+
   const navigate = useNavigate();
 
   const userNameValidator = Joi.string()
@@ -123,6 +129,27 @@ function EditUser() {
 
     return () => clearTimeout(delayedUpdate);
   }, [email]);
+
+  useEffect(() => {
+    const delayedUpdate = setTimeout(async () => {
+      if (delPassword !== "") {
+        const userData = {
+          user: user.user_name,
+          password: delPassword,
+        };
+        const res = await userLogin(userData);
+        if (!res.error) {
+          setIsDeleting(true);
+        } else {
+          setIsDeleting(false);
+        }
+      } else {
+        setIsDeleting(false);
+      }
+    }, 1000);
+
+    return () => clearTimeout(delayedUpdate);
+  }, [delPassword]);
 
   const toggleEditName = () => {
     setUsername(user.user_name);
@@ -227,6 +254,10 @@ function EditUser() {
       console.log(err);
       return false;
     }
+  };
+
+  const handleDelete = () => {
+    console.log("delete");
   };
 
   return (
@@ -340,6 +371,53 @@ function EditUser() {
           <button onClick={saveChanges} disabled={loading}>
             Save changes
           </button>
+
+          <div>
+            <p>Delete user</p>
+            <p>Type your password</p>
+            <input
+              type="password"
+              value={delPassword}
+              onChange={(e) => setDelPassword(e.target.value)}
+            />
+
+            {isDeleting && (
+              <>
+                <div>
+                  <label>Delete all templates: </label>
+                  <div className="toggle">
+                    <input
+                      type="checkbox"
+                      name="toggleTemp"
+                      id="toggleTemp"
+                      checked={deleteTemplates}
+                      onChange={() => setDeleteTemplates(!deleteTemplates)}
+                    />
+                    <label htmlFor="toggleTemp"></label>
+                  </div>
+                </div>
+
+                <div>
+                  <label>Delete all lists: </label>
+                  <div className="toggle">
+                    <input
+                      type="checkbox"
+                      name="toggleList"
+                      id="toggleList"
+                      checked={deleteLists}
+                      onChange={() => setDeleteLists(!deleteLists)}
+                    />
+                    <label htmlFor="toggleList"></label>
+                  </div>
+                </div>
+
+                <ButtonPrompt
+                  buttonName="Delete account"
+                  confirm={handleDelete}
+                />
+              </>
+            )}
+          </div>
         </>
       )}
     </div>
