@@ -182,6 +182,10 @@
   .searchContainer input[type="search"] {
     transition: all 0.2s ease;
   }
+
+  .suggestions div {
+    padding: 7px 10px;
+  }
 }
 
 #searchBar:not(.active) {
