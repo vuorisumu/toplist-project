@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchCategoryByName } from "../api/categories";
+import { fetchCategoryByLabel } from "../api/categories";
 import { formatData } from "../util/dataHandler";
 import { useLocation } from "react-router-dom";
 import TemplateContainer from "./TemplateContainer";
@@ -11,9 +11,10 @@ function Category() {
 
   useEffect(() => {
     if (c !== "") {
-      fetchCategoryByName(c)
+      fetchCategoryByLabel(c)
         .then((data) => {
           const formattedData = formatData(data);
+          console.log(formattedData);
           setCategory(formattedData[0]);
         })
         .catch((err) => console.log(err));

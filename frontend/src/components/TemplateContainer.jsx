@@ -21,7 +21,7 @@ function TemplateContainer({ searchInput = "", categoryId = 0 }) {
   const [search, setSearch] = useState("");
   const [templateCount, setTemplateCount] = useState(0);
   const [loadedCount, setLoadedCount] = useState(0);
-  const loadMoreAmount = 5;
+  const loadMoreAmount = 2;
   const [loading, setLoading] = useState(true);
   const options = {
     LIST_NAME: "Template name",
@@ -29,10 +29,6 @@ function TemplateContainer({ searchInput = "", categoryId = 0 }) {
     NEWEST_FIRST: "Newest first",
     CREATOR_NAME: "Creator name",
   };
-
-  useEffect(() => {
-    getTemplateCount();
-  }, []);
 
   useEffect(() => {
     if (searchInput !== "") {
@@ -52,6 +48,19 @@ function TemplateContainer({ searchInput = "", categoryId = 0 }) {
 
     setFilters(q.join("&"));
   }, [search, sortBy]);
+
+  useEffect(() => {
+    if (filters !== "") {
+      let q = [];
+      if (search !== "") {
+        q.push(`search=${search}`);
+      }
+      if (categoryId > 0) {
+        q.push(`category=${categoryId}`);
+      }
+      getTemplateCount(q.join("&"));
+    }
+  }, [filters]);
 
   useEffect(() => {
     if (templateCount > 0) {
@@ -81,10 +90,13 @@ function TemplateContainer({ searchInput = "", categoryId = 0 }) {
   /**
    * Fetches the full count of templates in the database and sets it to state.
    */
-  const getTemplateCount = async () => {
-    fetchTemplateCount()
+  const getTemplateCount = async (f = "") => {
+    fetchTemplateCount(f)
       .then((data) => {
         setTemplateCount(getCountFromData(data));
+        if (getCountFromData(data) < 1) {
+          setLoading(false);
+        }
       })
       .catch((err) => console.log(err));
   };
