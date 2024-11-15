@@ -10,6 +10,7 @@ import Dropdown from "./Dropdown";
  * Container for displaying templates and the search bar.
  * Handles the displaying and loading of the templates.
  *
+ * @param {string} props.searchInput - String to be used in searching
  * @returns {JSX.Element} Template container component with a
  * search component attached
  */
@@ -30,7 +31,6 @@ function TemplateContainer({ searchInput = "" }) {
     NEWEST_FIRST: "Newest first",
     CREATOR_NAME: "Creator name",
   };
-  // const selectFromDropdown = (val) => setSortBy(val);
 
   useEffect(() => {
     if (searchInput !== "") {
