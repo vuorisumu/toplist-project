@@ -34,9 +34,9 @@ function Nav() {
     return (
       <>
         <li>
-          <NavLink to="/templates">
+          <NavLink to="/categories">
             <span className="material-symbols-outlined icon">view_list</span>
-            <span className="linkName">Templates</span>
+            <span className="linkName">Categories</span>
           </NavLink>
         </li>
         {user && (

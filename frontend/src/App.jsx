@@ -10,8 +10,6 @@ import "./App.css";
 import Main from "./components/Main.jsx";
 import NewTemplate from "./components/NewTemplate.jsx";
 import EditTemplate from "./components/EditTemplate.jsx";
-import BrowseToplists from "./components/BrowseToplists.jsx";
-import BrowseTemplates from "./components/BrowseTemplates.jsx";
 import NewList from "./components/NewList.jsx";
 import SingleList from "./components/SingleList.jsx";
 import Register from "./components/Register.jsx";
@@ -24,6 +22,7 @@ import { isLoggedIn, loginInfo } from "./util/permissions.js";
 import TemplatePreview from "./components/TemplatePreview.jsx";
 import MyTemplates from "./components/MyTemplates.jsx";
 import SearchResults from "./components/SearchResults.jsx";
+import Categories from "./components/Categories.jsx";
 
 function App() {
   function RedirectToCreateList() {
@@ -73,7 +72,7 @@ function App() {
         <Nav />
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/templates" element={<BrowseTemplates />} />
+          <Route path="/categories" element={<Categories />} />
           <Route path="/templates/:templateId" element={<TemplatePreview />} />
           <Route path="/createlist" element={<Main />} />
           <Route path="/search/:searchInput" element={<SearchResults />} />
