@@ -27,11 +27,6 @@ import Category from "./components/Category.jsx";
 import EditUser from "./components/EditUser.jsx";
 
 function App() {
-  function RedirectToCreateList() {
-    const { templateId } = useParams();
-    return <Navigate to={`/createlist/${templateId}`} />;
-  }
-
   const [user, setUser] = useState(null);
 
   useEffect(() => {
