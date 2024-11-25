@@ -34,7 +34,7 @@ function SearchBar({ isOpen, toggleSearch }) {
    * @param {string} val - the current value of the input field
    */
   const onEnter = (val) => {
-    if (isOpen) {
+    if (isOpen && val.trim() !== "") {
       setSearch(val);
       navigate(`/search/${val}`);
     } else {
