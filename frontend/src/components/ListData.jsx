@@ -42,7 +42,7 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
   const [copyTemplate, setCopyTemplate] = useState(false);
   const [newTemplateName, setNewTemplateName] = useState("");
   const [newTemplateDesc, setNewTemplateDesc] = useState("");
-  const [loadingNewTemplate, setLoadingNewTemplate] = useState(false);
+  const [loading, setLoading] = useState(false);
   const newTemplateId = useRef(templateId);
 
   useEffect(() => {
@@ -140,7 +140,6 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
 
   const addTemplateCopy = async () => {
     try {
-      setLoadingNewTemplate(true);
       const tempItems = [];
       for (let key in containers) {
         containers[key].items.map((i) => {
@@ -201,6 +200,7 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
       return;
     }
 
+    setLoading(true);
     if (copyTemplate && addedItemCount > 0) {
       console.log("Copying template");
       await addTemplateCopy();
@@ -309,7 +309,7 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
           </ul>
         )}
 
-        <button type="button" onClick={handleSave}>
+        <button type="button" onClick={handleSave} disabled={loading}>
           Save List
         </button>
 
