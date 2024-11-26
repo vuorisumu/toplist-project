@@ -1,22 +1,41 @@
 @use "theme";
 
 .popup {
+  $paddingValue: 30px;
+
   position: fixed;
   inset: 0;
   background: color-mix(in srgb, black, transparent 50%);
   z-index: 99;
-  padding: 30px;
+  padding: $paddingValue;
 
-  button {
-    position: absolute;
-    right: 30px;
-  }
-
-  .content {
-    background: theme.$primary-color;
-    overflow-y: auto;
+  .popup-window {
     height: 100%;
-    padding: 0 30px;
-    text-align: left;
+    box-sizing: border-box;
+    background: theme.$primary-color;
+    display: flex;
+    flex-direction: column;
+
+    button {
+      align-self: end;
+      background: transparent;
+      color: theme.$accent;
+      padding: 0.3em 0.7em;
+      margin: 0;
+
+      &:hover {
+        box-shadow: none;
+      }
+    }
+
+    .content {
+      overflow-y: auto;
+      height: 100%;
+      padding: 0 $paddingValue;
+      text-align: left;
+      box-sizing: border-box;
+      scrollbar-width: thin;
+      scrollbar-color: theme.$mid-color theme.$primary-color;
+    }
   }
 }
