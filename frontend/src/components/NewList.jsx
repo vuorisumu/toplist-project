@@ -1,17 +1,5 @@
-import { useState, useEffect, useRef, useContext } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import { v4 as uuid } from "uuid";
-import { clearAll } from "../util/misc";
-import { formatData } from "../util/dataHandler";
-import ToplistContainer from "./ToplistContainer";
-import { isCreatorOfTemplate } from "../util/permissions";
-import { getCategoryById } from "../util/storage";
-import { addNewTemplate, fetchTemplateById } from "../api/templates";
 import { addNewToplist } from "../api/toplists";
-import { getImgUrl, getItemImages, resizeImage } from "../util/imageHandler";
-import { addNewImages } from "../api/images";
-import RankItems from "./RankItems";
-import UserContext from "../util/UserContext";
 import ListData from "./ListData";
 
 /**
@@ -28,22 +16,10 @@ function NewList() {
   const location = useLocation();
   const navigate = useNavigate();
   const templateId = parseInt(location.pathname.replace("/createlist/", ""));
-  const { user } = useContext(UserContext);
 
   if (isNaN(templateId)) {
     console.error("Invalid templateId: ", templateId);
   }
-
-  const [notFound, setNotFound] = useState(false);
-  const [template, setTemplate] = useState(null);
-  const [newEntry, setNewEntry] = useState("");
-  const [hasImages, setHasImages] = useState(false);
-  const [newImage, setNewImage] = useState({});
-  const imgRef = useRef();
-  const [copyTemplate, setCopyTemplate] = useState(false);
-  const [newTemplateName, setNewTemplateName] = useState("");
-  const [newTemplateDesc, setNewTemplateDesc] = useState("");
-  const newTemplateId = useRef(templateId);
 
   /**
    * Saves the ranking data to database if the minimum requirements are met.
