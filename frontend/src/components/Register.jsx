@@ -219,7 +219,10 @@ function Register() {
           </button>
         </form>
 
-        <Popup content={<Terms file={"terms.txt"} />} />
+        <Popup
+          content={<Terms file={"terms.txt"} />}
+          close={() => console.log("close")}
+        />
       </div>
     </div>
   );
