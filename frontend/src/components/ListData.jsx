@@ -42,6 +42,7 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
   const [newTemplateName, setNewTemplateName] = useState("");
   const [newTemplateDesc, setNewTemplateDesc] = useState("");
   const [loadingNewTemplate, setLoadingNewTemplate] = useState(false);
+  const newTemplateId = useRef(templateId);
 
   useEffect(() => {
     fetchTemplateById(templateId)
@@ -136,8 +137,68 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
     console.log(err);
   };
 
-  const handleSave = () => {
-    console.log("save");
+  const handleSave = async () => {
+    const errors = [];
+    const nonEmptyRanked = containers[ITEMS_RANKED].items
+      .filter((i) => i.item_name.trim() !== "")
+      .map((i) => {
+        const { img_url: _, ...rest } = i;
+        return rest;
+      });
+
+    const userAdded = containers[ITEMS_RANKED].items
+      .filter((i) => i.deletable === true)
+      .map((i) => {
+        return addedImages.find((img) => img.id === i.img_id);
+      })
+      .filter((img) => img !== undefined);
+    console.log(userAdded);
+
+    if (nonEmptyRanked.length === 0) {
+      errors.push("Top list container must have at least one item");
+      document.getElementById("ranked").classList.add("error");
+    } else {
+      document.getElementById("ranked").classList.remove("error");
+    }
+
+    if (errors.length > 0) {
+      setErrorMessages(errors);
+      return;
+    }
+
+    if (copyTemplate && addedItemCount > 0) {
+      console.log("Copying template");
+      console.log(newTemplateName, newTemplateDesc);
+    }
+
+    try {
+      const newListName =
+        listName.trim() !== ""
+          ? listName
+          : `${template.name} ranked by ${user ? user.name : "Anonymous"}`;
+
+      const toplistData = {
+        toplist_name: newListName,
+        template_id: newTemplateId.current,
+        ranked_items: nonEmptyRanked,
+      };
+
+      if (user && !data) toplistData.creator_id = user.id;
+      if (desc !== "") toplistData.toplist_desc = desc;
+
+      if (data) {
+        toplistData.edited = new Date();
+      } else {
+        toplistData.creation_time = new Date();
+      }
+
+      console.log(toplistData);
+      if (userAdded.length > 0) {
+        console.log("images added");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -192,7 +253,7 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
       />
 
       <div>
-        {addedItemCount > 0 && user && !template.settings?.isBlank && (
+        {addedItemCount > 0 && user && !data && !template.settings?.isBlank && (
           <SaveList
             template={template}
             setCopyTemplate={setCopyTemplate}
