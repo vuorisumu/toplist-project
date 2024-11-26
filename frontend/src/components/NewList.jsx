@@ -40,7 +40,7 @@ function NewList() {
       <ListData
         templateId={templateId}
         onSubmit={saveToplist}
-        submitText={"Save Changes"}
+        submitText={"Save List"}
       />
     </div>
   );

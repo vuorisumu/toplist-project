@@ -9,12 +9,9 @@ import SaveList from "./SaveList";
 import UserContext from "../util/UserContext";
 import { clearAll } from "../util/misc";
 import { addNewImages } from "../api/images";
-import { addNewToplist } from "../api/toplists";
-import { useNavigate } from "react-router-dom";
 
-function ListData({ data, templateId, onSubmit, submitText, creating }) {
+function ListData({ data, templateId, onSubmit, submitText }) {
   const { user } = useContext(UserContext);
-  const navigate = useNavigate();
 
   const ITEMS_RANKED = "ranked";
   const ITEMS_REMAINING = "unused";
@@ -320,7 +317,7 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
         )}
 
         <button type="button" onClick={handleSave} disabled={loading}>
-          Save List
+          {submitText}
         </button>
 
         <button type="button" onClick={clearAll}>
