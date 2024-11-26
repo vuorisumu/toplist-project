@@ -1172,6 +1172,21 @@ nav ul li:first-child {
   margin-top: 5px;
 }
 
+.terms {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, black, transparent 50%);
+  z-index: 99;
+  padding: 30px;
+}
+.terms div {
+  background: var(--primary-color);
+  overflow-y: auto;
+  height: 100%;
+  padding: 0 30px;
+  text-align: left;
+}
+
 :root {
   background-color: var(--primary-color);
   color: var(--text-primary);

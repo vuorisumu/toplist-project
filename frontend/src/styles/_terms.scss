@@ -1,0 +1,17 @@
+@use "theme";
+
+.terms {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, black, transparent 50%);
+  z-index: 99;
+  padding: 30px;
+
+  div {
+    background: theme.$primary-color;
+    overflow-y: auto;
+    height: 100%;
+    padding: 0 30px;
+    text-align: left;
+  }
+}
