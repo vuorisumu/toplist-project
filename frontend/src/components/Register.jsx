@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { formatData } from "../util/dataHandler";
 import Joi from "joi";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +22,7 @@ function Register() {
   const { login } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const [agree, setAgree] = useState(false);
+  const [showPopup, setShowPopup] = useState("");
 
   /**
    * Validation schema for new account creation.
@@ -195,7 +196,11 @@ function Register() {
               onChange={() => setAgree(!agree)}
             />
             <label>
-              I have read and agree to the Terms of Use and Privacy Policy
+              I have read and agree to the{" "}
+              <a onClick={() => setShowPopup("terms.txt")}>Terms of Use</a> and{" "}
+              <a onClick={() => setShowPopup("privacypolicy.txt")}>
+                Privacy Policy
+              </a>
             </label>
           </div>
 
@@ -219,10 +224,12 @@ function Register() {
           </button>
         </form>
 
-        <Popup
-          content={<Terms file={"terms.txt"} />}
-          close={() => console.log("close")}
-        />
+        {showPopup !== "" && (
+          <Popup
+            content={<Terms file={showPopup} />}
+            close={() => setShowPopup("")}
+          />
+        )}
       </div>
     </div>
   );
