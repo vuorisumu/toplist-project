@@ -21,6 +21,7 @@ export const isLoggedIn = () => {
 
   try {
     const decodedToken = jwtDecode(token);
+    console.log(decodedToken.exp);
     return !isNaN(decodedToken.id);
   } catch (error) {
     console.log(error);

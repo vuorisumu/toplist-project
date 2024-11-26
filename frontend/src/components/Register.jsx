@@ -19,6 +19,7 @@ function Register() {
   const navigate = useNavigate();
   const { login } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
+  const [agree, setAgree] = useState(false);
 
   /**
    * Validation schema for new account creation.
@@ -70,6 +71,15 @@ function Register() {
   const onSubmit = async (event) => {
     event.preventDefault();
     if (loading) return;
+
+    if (!agree) {
+      setErrors([
+        {
+          message: "Must read and agree to the Terms of Use and Privacy Policy",
+        },
+      ]);
+      return;
+    }
 
     const userData = {
       user_name: username,
@@ -174,6 +184,17 @@ function Register() {
               value={repeatPassword}
               onChange={(e) => setRepeatPassword(e.target.value)}
             />
+          </div>
+
+          <div>
+            <input
+              type="checkbox"
+              checked={agree}
+              onChange={() => setAgree(!agree)}
+            />
+            <label>
+              I have read and agree to the Terms of Use and Privacy Policy
+            </label>
           </div>
 
           {errors.length > 0 && (
