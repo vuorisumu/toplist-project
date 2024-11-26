@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { fetchTemplateById } from "../api/templates";
 import { formatData } from "../util/dataHandler";
 import { getImgUrl } from "../util/imageHandler";
@@ -6,8 +6,12 @@ import { v4 as uuid } from "uuid";
 import TemplateInfo from "./TemplateInfo";
 import RankItems from "./RankItems";
 import AddItems from "./AddItems";
+import SaveList from "./SaveList";
+import UserContext from "../util/UserContext";
+import { clearAll } from "../util/misc";
 
 function ListData({ data, templateId, onSubmit, submitText, creating }) {
+  const { user } = useContext(UserContext);
   const ITEMS_RANKED = "ranked";
   const ITEMS_REMAINING = "unused";
   const itemContainers = {
@@ -53,10 +57,14 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
         let setIds = [];
         if (!formatted.settings?.isBlank) {
           setIds = data
-            ? formatted.items.filter(
-                (item) =>
-                  !data.items.some((i) => i.item_name === item.item_name)
-              )
+            ? formatted.items
+                .filter(
+                  (item) =>
+                    !data.ranked_items.some(
+                      (i) => i.item_name === item.item_name
+                    )
+                )
+                .map((i) => ({ ...i, id: uuid() }))
             : formatted.items.map((item) => ({ ...item, id: uuid() }));
         }
 
@@ -128,6 +136,10 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
     console.log(err);
   };
 
+  const handleSave = () => {
+    console.log("save");
+  };
+
   return (
     <div className="createRank">
       <h2>{data ? "Edit Top List" : "Create a Top List"}</h2>
@@ -178,6 +190,33 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
         addEntry={handleAddEntry}
         sendError={handleError}
       />
+
+      <div>
+        {addedItemCount > 0 && user && !template.settings?.isBlank && (
+          <SaveList
+            template={template}
+            setCopyTemplate={setCopyTemplate}
+            setNewTempName={setNewTemplateName}
+            setNewTempDesc={setNewTemplateDesc}
+          />
+        )}
+
+        {errorMessages.length > 0 && (
+          <ul>
+            {errorMessages.map((err, i) => (
+              <li key={`error${i}`}>{err}</li>
+            ))}
+          </ul>
+        )}
+
+        <button type="button" onClick={handleSave}>
+          Save List
+        </button>
+
+        <button type="button" onClick={clearAll}>
+          Reset
+        </button>
+      </div>
     </div>
   );
 }
