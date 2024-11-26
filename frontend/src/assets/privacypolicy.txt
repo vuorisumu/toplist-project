@@ -1,0 +1,80 @@
+## Listmaker 9000 Privacy Policy
+
+Our Privacy Policy was last updated on 25.11.2024.
+
+This Privacy Policy explains what data we collect, how we use it, and your rights concerning your information. By using Listmaker 9000, you agree to the collection and use of information in accordance with this privacy policy.
+
+
+## 1. Information we collect
+
+We collect personally identifiable information that you voluntarily provide to us when registering an account on Listmaker 9000. When registering on our service, we ask you to provide us with the following information: 
+- Username
+- Email address
+- Password
+
+
+## 2. How we use your information
+
+We use the collected information for the following purposes:
+- Account management. Your username, email and password are used to create and manage your account. 
+- Login authentication. Your login credentials are used to authenticate your login.
+- Future password recovery. We may use your email address for password recovery and reset requests in the future.
+- Contact via email in case of a critical data breach. We will only send emails to the users when it's absolutely necessary.
+
+
+### Sharing your information
+
+Your username is visible to all visitors of Listmaker 9000 and will be displayed on all templates and lists you create while logged in. 
+We will not share any of your personal information to any third parties.
+
+
+## 3. How we store your data
+
+Your personal information is stored securely in our database provided by Oracle. All passwords are encrypted and stored securely, ensuring they can't be seen or accessed by anyone. We have implemented appropriate security measures designed to protect any personal data we process. 
+
+When logged in, the login token will remain on the local storage of your personal device until you log out or the token expires. Logging out will clear all information stored in the local storage. Additional information stored in the local storage include preferences like the color theme of the website, designed to make your experience of using the site more enjoyable.
+
+
+## 4. How long we keep your data
+
+We will keep your information for as long as is necessary for the purposes outlined in this privacy policy unless otherwise required by law. 
+
+Upon the termination of your account, all of your personal information will be deleted. Additionally, you have an option to delete all templates and top lists you have made along with your account. Keep in mind that deleting a template will not delete the top lists made by using said template.
+
+
+## 5. Your rights
+
+We want to make sure you are fully aware of your data protection rights. Every user is entitled to the following:
+- Request access to Your Personal Data. The right to access, update or delete the information we have on you. Whenever made possible, you can access, update or request deletion of your
+personal data directly within your account settings section. If you are unable to perform these actions yourself, please contact us to assist you. This also enables you to receive a copy of the
+personal data we hold about you.
+- Request correction of the personal data that we hold about you. You have the right to have any incomplete or inaccurate information we hold about you corrected.
+- Object to processing of your personal data. You have the right to object to our processing of your personal data.
+- Request erasure of your personal data. You have the right to ask us to delete any personal data when there is no good reason for us to continue processing it.
+- Request the transfer of your personal data. You have the right to request that we transfer the data that we have collected to another organization, or directly to you.
+- Withdraw your consent. You have the right to withdraw your consent on using your personal data. If you withdraw you consent, we may not be able to provide you the access to certain functionalities of Listmaker 9000.
+
+You may exercise any of these rights by contacting us. Please note that we may ask you to verify your identity before responding to such requests. Contact us at our email: vuori.sumu@gmail.com
+
+
+## 6. Information from minors
+
+We do not knowingly collect personally identifiable information from anyone under the age of 18. By using Listmaker 9000, you represent that you are at least 18 years old or that you are the parent or guardian of such a minor and consent to their use of Listmaker 9000. If we learn that any personal information from users under 18 years of age has been collected, we will terminate the account and delete such data from our records. 
+
+
+## 7. In case of data breach
+
+In the case of a privacy data breach, you will be notified when we believe you are likely to be at risk of serious harm. If we become aware of a security breach that has resulted or may result in unauthorized access, use or disclosure of personal information we will contact the authorities in less than 72 hours after becoming aware of said breach, unless it is unlikely to result in a risk to the rights and freedoms of the users.
+
+
+## 8. Changes to our privacy policy
+
+We keep the privacy policy under regular review and place any updates on this page. This privacy policy was last updated on 25.11.2024
+
+
+## 9. Contact us
+
+If you have any questions about our privacy policy, the data we hold on you, or you would like to exercise any of your data protection rights, please contact us.
+
+Email: vuori.sumu@gmail.com
+
