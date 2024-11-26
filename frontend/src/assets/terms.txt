@@ -1,0 +1,98 @@
+## Terms of use
+
+This document governs the use of our website and any other agreement or legal relationship with us in a legally binding way. Please read this document carefully.
+
+By using our website, you confirm that you are at least 18 years old or that you are the parent or guardian of such a minor and consent to their use of Listmaker 9000.
+
+The information provided on Listmaker 9000 is not intended for anyone in any jurisdiction or country where the distribution or use of such information would be contrary to law or regulation, or which would subject us to any registration requirement within such jurisdiction or country. Those who choose to use our website from other locations do so on their own initiative and are solely responsible for compliance with local laws.
+
+
+## Account registration
+
+To get access to certain functionalities of our website, you can create an account by providing us with an username of your choice and your email address. By registering, you confirm that the provided information is complete and truthful, and that you are not a bot.
+
+You are responsible for keeping your login credentials confidential and must choose passwords that meet the highest standards of strength as allowed by our website. Never share your password with anyone.
+
+By registering, you agree to take full responsibility for all activities under your username, email and password. 
+
+You must inform us immediately if you believe your personal information, account or login details have been violated, disclosed or stolen.
+
+
+## Account termination
+
+You may choose to delete your account at any point by accessing your account settings.
+
+We reserve the right to delete your account at any time without notice if we find it inappropriate, offensive, or in violation of these terms.
+
+
+## Using Listmaker 9000 without an account
+
+You can also use our website without an account. As a guest user you will be able to create your own top lists using any of the public templates available. Keep in mind that without logging in, any top lists you choose to publish will be anonymous and you cannot directly edit or delete them afterwards.
+
+If you published an anonymous top list that you now want to delete, please contact us by email.
+
+
+## Prohibited activities
+
+Our website and service may only be used within the scope of what is provided for, under these terms and applicable law. You are solely responsible for ensuring your use of our website does not violate any laws, regulations, or rights.
+
+As a user of our website, you agree not to:
+- Make any unauthorized use of the site
+- Use the site for advertisement purposes
+- Circumvent, disable or interfere with security features on the website
+- Engage in any automated use of the website
+- Attempt to impersonate another user
+- Use any information obtained from the website in order to harras, abuse or harm another person
+- Upload or attempt to upload or transmit any viruses or otherwise harmful content
+
+We reserve the right to modify or delete any content, including user made templates and top lists, at any time without notice if we find it inappropriate, offensive, or in violation of these terms.
+
+
+## Intellectual property 
+
+MIT License
+
+Copyright (c) 2024 Sumu Vuori
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+## Contribution license
+
+By posting your contributions to any part of our website, you automatically grant, and you represent and warrant that you have the right to grant, to us and other users a royalty-free, non-exclusive, irrevocable right and license to use, copy, modify, display, distribute, broadcast and create derivative works based on such contributions. If you delete your contribution, the license for pre-existing copies of derivatives by other users continues indefinitely.
+
+You retain full ownership or all of your contributions and any intellectual property rights or other rights associated with your contributions. We are not liable for any statements or representations in your contributions. You are solely responsible for your contributions. By posting your contributions, you agree to exonerate us from all responsibility and to refrain from any legal action against us regarding your contributions.
+
+We have the right to edit, redact, recategorize, and otherwise modify any contributions to make them more appropriate for our website. We also have the right to delete any contributions at any time for any reason, without notice.
+
+
+## Applicable law
+
+By using our website, you agree that the laws of Finland, without regard to principles of conflict laws, will govern these terms and conditions, or any dispute of any sort that might come between Listmaker 9000 and you.
+
+
+## Dispute resolution
+
+The European Commission has set up an online platform for alternative dispute resolution, providing an out-of-court solution for resolving disputes arising from online sale and service contracts.
+
+Therefore, European consumers or consumers based in Norway, Iceland, or Liechtenstein can use this platform to settle disputes arising from online contracts. You can access the platform [here.](https://ec.europa.eu/consumers/odr/main/index.cfm?event=main.home.chooseLanguage)
+
+## Contact
+
+If you have any issues or questions regarding the terms of use, please contact us by email: vuori.sumu@gmail.com
