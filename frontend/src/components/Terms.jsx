@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
-import t from "../assets/terms.txt";
 import ReactMarkdown from "react-markdown";
 
-function Terms() {
+function Terms({ file }) {
+  const t = `/${file}`;
   const [text, setText] = useState("");
   useEffect(() => {
     fetch(t)
       .then((r) => r.text())
       .then((text) => {
         setText(text);
+      })
+      .catch((err) => {
+        console.error("Error loading text file:", err);
+        setText(`Error loading ${file}`);
       });
   });
 
