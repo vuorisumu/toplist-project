@@ -43,6 +43,7 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
   const [newTemplateName, setNewTemplateName] = useState("");
   const [newTemplateDesc, setNewTemplateDesc] = useState("");
   const [loading, setLoading] = useState(false);
+  const [dataError, setDataError] = useState(false);
   const newTemplateId = useRef(templateId);
 
   useEffect(() => {
@@ -94,6 +95,7 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
       })
       .catch((err) => {
         console.log(err);
+        setDataError(true);
       });
   }, [templateId]);
 
@@ -239,6 +241,15 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
       console.log(err);
     }
   };
+
+  if (dataError) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>No template found with the id {templateId}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="createRank">
