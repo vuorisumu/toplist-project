@@ -88,7 +88,20 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
   }, [templateId]);
 
   useEffect(() => {
-    console.log(containers);
+    let count = 0;
+    for (let key in containers) {
+      containers[key].items.map((i) => {
+        if (i.deletable === true) {
+          count++;
+        }
+      });
+    }
+
+    setAddedItemCount(count);
+
+    if (count <= 0) {
+      setCopyTemplate(false);
+    }
   }, [containers]);
 
   const handleAddEntry = (entry, image) => {
