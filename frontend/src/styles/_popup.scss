@@ -1,13 +1,18 @@
 @use "theme";
 
-.terms {
+.popup {
   position: fixed;
   inset: 0;
   background: color-mix(in srgb, black, transparent 50%);
   z-index: 99;
   padding: 30px;
 
-  div {
+  button {
+    position: absolute;
+    right: 30px;
+  }
+
+  .content {
     background: theme.$primary-color;
     overflow-y: auto;
     height: 100%;

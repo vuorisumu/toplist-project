@@ -16,11 +16,7 @@ function Terms({ file }) {
       });
   });
 
-  return (
-    <div className="terms">
-      <ReactMarkdown>{text}</ReactMarkdown>
-    </div>
-  );
+  return <ReactMarkdown>{text}</ReactMarkdown>;
 }
 
 export default Terms;

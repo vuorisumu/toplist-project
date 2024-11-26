@@ -4,6 +4,8 @@ import Joi from "joi";
 import { useNavigate } from "react-router-dom";
 import { fetchUserByNameOrEmail, addNewUser } from "../api/users";
 import UserContext from "../util/UserContext";
+import Terms from "./Terms";
+import Popup from "./Popup";
 
 /**
  * View for new user registration. Renders a form for account creation.
@@ -216,6 +218,8 @@ function Register() {
             Submit
           </button>
         </form>
+
+        <Popup content={<Terms file={"terms.txt"} />} />
       </div>
     </div>
   );

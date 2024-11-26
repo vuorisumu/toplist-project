@@ -1172,14 +1172,18 @@ nav ul li:first-child {
   margin-top: 5px;
 }
 
-.terms {
+.popup {
   position: fixed;
   inset: 0;
   background: color-mix(in srgb, black, transparent 50%);
   z-index: 99;
   padding: 30px;
 }
-.terms div {
+.popup button {
+  position: absolute;
+  right: 30px;
+}
+.popup .content {
   background: var(--primary-color);
   overflow-y: auto;
   height: 100%;
