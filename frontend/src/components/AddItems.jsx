@@ -35,6 +35,7 @@ function AddItems({ hasImages, addEntry, sendError }) {
       sendError("New item must have an image");
       document.getElementById("newItemsCont").classList.add("error");
     } else {
+      sendError("");
       document.getElementById("newItemsCont").classList.remove("error");
     }
 

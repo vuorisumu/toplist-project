@@ -137,7 +137,7 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
   };
 
   const handleError = (err) => {
-    console.log(err);
+    setErrorMessages([err]);
   };
 
   const addTemplateCopy = async () => {
@@ -188,7 +188,6 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
         return addedImages.find((img) => img.id === i.img_id);
       })
       .filter((img) => img !== undefined);
-    console.log(userAdded);
 
     if (nonEmptyRanked.length === 0) {
       errors.push("Top list container must have at least one item");
