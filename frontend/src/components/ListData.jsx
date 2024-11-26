@@ -1,7 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { fetchTemplateById } from "../api/templates";
+import { addNewTemplate, fetchTemplateById } from "../api/templates";
 import { formatData } from "../util/dataHandler";
-import { getImgUrl } from "../util/imageHandler";
 import { v4 as uuid } from "uuid";
 import TemplateInfo from "./TemplateInfo";
 import RankItems from "./RankItems";
@@ -9,9 +8,14 @@ import AddItems from "./AddItems";
 import SaveList from "./SaveList";
 import UserContext from "../util/UserContext";
 import { clearAll } from "../util/misc";
+import { addNewImages } from "../api/images";
+import { addNewToplist } from "../api/toplists";
+import { useNavigate } from "react-router-dom";
 
 function ListData({ data, templateId, onSubmit, submitText, creating }) {
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+
   const ITEMS_RANKED = "ranked";
   const ITEMS_REMAINING = "unused";
   const itemContainers = {
@@ -31,12 +35,9 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
   const [listName, setListName] = useState(data?.toplist_name || "");
   const [desc, setDesc] = useState(data?.toplist_desc || "");
   const [containers, setContainers] = useState(itemContainers);
-  const [newEntry, setNewEntry] = useState("");
   const [errorMessages, setErrorMessages] = useState([]);
   const [hasImages, setHasImages] = useState(false);
-  const [newImage, setNewImage] = useState({});
   const [addedImages, setAddedImages] = useState([]);
-  const imgRef = useRef();
   const [addedItemCount, setAddedItemCount] = useState(0);
   const [copyTemplate, setCopyTemplate] = useState(false);
   const [newTemplateName, setNewTemplateName] = useState("");
@@ -137,6 +138,40 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
     console.log(err);
   };
 
+  const addTemplateCopy = async () => {
+    try {
+      setLoadingNewTemplate(true);
+      const tempItems = [];
+      for (let key in containers) {
+        containers[key].items.map((i) => {
+          tempItems.push({ item_name: i.item_name });
+        });
+      }
+
+      const templateData = {
+        name: newTemplateName !== "" ? newTemplateName : template.name,
+        items: tempItems,
+        category: template.category,
+        creator_id: user.id,
+        settings: {
+          hasImages: hasImages,
+          isBlank: false,
+        },
+      };
+
+      if (newTemplateDesc.trim() !== "") {
+        templateData.description = newTemplateDesc;
+      } else if (template.description) {
+        templateData.description = template.description;
+      }
+
+      const res = await addNewTemplate(templateData);
+      newTemplateId.current = res.id;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleSave = async () => {
     const errors = [];
     const nonEmptyRanked = containers[ITEMS_RANKED].items
@@ -168,7 +203,8 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
 
     if (copyTemplate && addedItemCount > 0) {
       console.log("Copying template");
-      console.log(newTemplateName, newTemplateDesc);
+      await addTemplateCopy();
+      console.log("New id", newTemplateId.current);
     }
 
     try {
@@ -194,8 +230,11 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
 
       console.log(toplistData);
       if (userAdded.length > 0) {
-        console.log("images added");
+        const imgRes = await addNewImages(userAdded);
+        console.log(imgRes);
       }
+
+      onSubmit(toplistData);
     } catch (err) {
       console.log(err);
     }
