@@ -242,7 +242,7 @@ function ListData({ data, templateId, onSubmit, submitText, creating }) {
 
   return (
     <div className="createRank">
-      <h2>{data ? "Edit Top List" : "Create a Top List"}</h2>
+      <h1>{data ? "Edit Top List" : "Create a Top List"}</h1>
       {/* Template info */}
       <TemplateInfo data={template} />
 
