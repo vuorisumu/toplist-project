@@ -3,8 +3,9 @@ import { formatDate } from "../util/misc";
 import ButtonPrompt from "./ButtonPrompt";
 import { isAdmin } from "../util/permissions";
 import { deleteToplist } from "../api/toplists";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getItemImages } from "../util/imageHandler";
+import UserContext from "../util/UserContext";
 
 /**
  * Reusable component displaying top list data.
@@ -17,6 +18,7 @@ import { getItemImages } from "../util/imageHandler";
  * @returns {JSX.Element} Top list preview component
  */
 function ToplistData({ data, showTemplate, showCreator }) {
+  const { user } = useContext(UserContext);
   const [itemImages, setItemImages] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -101,11 +103,14 @@ function ToplistData({ data, showTemplate, showCreator }) {
         ))}
       </ol>
 
-      {isAdmin() && (
-        <ButtonPrompt
-          buttonName="Delete top list"
-          confirm={() => handleDelete(data.toplist_id)}
-        />
+      {(user.isAdmin || user.id === data.creator_id) && (
+        <>
+          <Link to={`/edit-list/${data.toplist_id}`}>Edit top list</Link>
+          <ButtonPrompt
+            buttonName="Delete top list"
+            confirm={() => handleDelete(data.toplist_id)}
+          />
+        </>
       )}
     </>
   );

@@ -64,6 +64,12 @@ export const fetchToplistById = (id) => {
   );
 };
 
+export const fetchListCreatorId = (id) => {
+  return fetch(`${API_BASE_URL}/toplists/${id}?getCreatorId=true`).then((res) =>
+    res.json()
+  );
+};
+
 /**
  * Adds a new top list to database
  *
@@ -82,6 +88,18 @@ export const addNewToplist = (toplist) => {
     .catch((error) => console.error("Error:", error));
 };
 
+export const updateToplist = (id, toplistData) => {
+  return fetch(`${API_BASE_URL}/toplists/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(toplistData),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
 /**
  * Deletes a top list with specified ID
  *
@@ -92,6 +110,19 @@ export const deleteToplist = (id) => {
   return fetch(`${API_BASE_URL}/toplists/${id}`, {
     method: "DELETE",
     headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
+export const deleteToplistFromUser = (user_id) => {
+  const token = localStorage.getItem("token");
+  return fetch(`${API_BASE_URL}/toplists/fromuser/${user_id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `${token}`,
       "Content-Type": "application/json",
     },
   })

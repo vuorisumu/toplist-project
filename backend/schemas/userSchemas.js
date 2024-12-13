@@ -18,7 +18,14 @@ const userSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const editUserSchema = Joi.object({
+  user_name: Joi.string().optional(),
+  email: Joi.string().email({ tlds: false }).optional(),
+  password: Joi.string().min(6).optional(),
+});
+
 module.exports = {
   userQuerySchema,
   userSchema,
+  editUserSchema,
 };

@@ -6,6 +6,7 @@ import { formatData } from "../util/dataHandler";
 import { isAdmin } from "../util/permissions";
 import { deleteToplist, fetchToplistById } from "../api/toplists";
 import ToplistData from "./ToplistData";
+import ListData from "./ListData";
 
 /**
  * View of a single ranking rendering all information related to the top list

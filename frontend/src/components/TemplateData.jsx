@@ -13,6 +13,7 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
   const [items, setItems] = useState(data?.items || [{ item_name: "" }]);
   const [itemImages, setItemImages] = useState([]);
   const [hasImages, setHasImages] = useState(false);
+  const [isBlank, setIsBlank] = useState(false);
   const [errors, setErrors] = useState([]);
   const [categories, setCategories] = useState(null);
   const [chosenCategory, setChosenCategory] = useState("Choose category");
@@ -33,8 +34,13 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
         setCoverImage(img);
       }
 
+      // template is blank
+      if (data.settings?.isBlank === true) {
+        setIsBlank(true);
+      }
+
       // List has existing images
-      if (data.items[0].img_id) {
+      if (data.settings?.hasImages === true) {
         setHasImages(true);
         const imageIds = [];
         data.items.map((i) => {
@@ -165,6 +171,8 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
    */
   const meetsRequirements = () => {
     const tempErrors = [];
+
+    // check template name
     const hasName = templateName.trim() !== "";
     if (!hasName) {
       tempErrors.push("Template must have a name");
@@ -173,17 +181,20 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
       document.getElementById("tempName").classList.remove("error");
     }
 
+    // check item count
     const enoughItems =
-      items.filter((i) => i.item_name.trim() !== "").length >= 5;
+      isBlank || items.filter((i) => i.item_name.trim() !== "").length >= 5;
 
     if (!enoughItems) {
-      tempErrors.push("Template must have at least 5 items");
+      tempErrors.push("Non-blank templates must have at least 5 items");
     }
 
-    const imagesOkay = hasImages
-      ? itemImages.length ===
-        items.filter((i) => i.item_name.trim() !== "").length
-      : true;
+    // check correct amount of images
+    const imagesOkay =
+      !isBlank && hasImages
+        ? itemImages.length ===
+          items.filter((i) => i.item_name.trim() !== "").length
+        : true;
 
     if (!imagesOkay) {
       tempErrors.push(
@@ -192,9 +203,9 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
     }
 
     if (!enoughItems || !imagesOkay) {
-      document.getElementById("tempItems").classList.add("error");
+      document.getElementById("tempItems")?.classList.add("error");
     } else {
-      document.getElementById("tempItems").classList.remove("error");
+      document.getElementById("tempItems")?.classList.remove("error");
     }
 
     setErrors(tempErrors);
@@ -215,31 +226,52 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
     }
 
     setLoading(true);
-    // setCreating(true);
-    const addedImages = hasImages
-      ? items
-          .filter((i) => i.item_name.trim() !== "" && i.img)
-          .map((i) => ({
-            id: i.img_id,
-            img: i.img,
-          }))
-      : [];
-
-    const filteredItems = items.filter((i) => i.item_name.trim() !== "");
-
-    const nonEmptyItems = filteredItems.map((i) => ({
-      item_name: i.item_name,
-      ...(hasImages && { img_id: i.img_id }),
-    }));
 
     // mandatory data
     const templateData = {
       name: templateName,
-      items: nonEmptyItems,
     };
 
+    // create image array
+    const addedImages =
+      hasImages && !isBlank
+        ? items
+            .filter((i) => i.item_name.trim() !== "" && i.img)
+            .map((i) => ({
+              id: i.img_id,
+              img: i.img,
+            }))
+        : [];
+
+    if (isBlank) {
+      // placeholder item
+      templateData.items = [{ item_name: "" }];
+    } else {
+      // create item array with relevant information
+      const filteredItems = items.filter((i) => i.item_name.trim() !== "");
+      const nonEmptyItems = filteredItems.map((i) => ({
+        item_name: i.item_name,
+        ...(hasImages && { img_id: i.img_id }),
+      }));
+
+      templateData.items = nonEmptyItems;
+    }
+
+    // add creator id when creating a new template
     if (!data) {
       templateData.creator_id = user.id;
+    }
+
+    // template settings
+    const settings = {
+      hasImages: hasImages,
+      isBlank: isBlank,
+    };
+    templateData.settings = settings;
+
+    // set images to false on blank lists
+    if (isBlank) {
+      templateData.settings.hasImages = false;
     }
 
     // optional description
@@ -266,10 +298,12 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
       templateData.category = categoryId[0];
     }
 
+    // add images to database
     if (addedImages.length > 0) {
       const res = await addNewImages(addedImages);
     }
-    setLoading(false);
+
+    // setLoading(false);
     onSubmit(templateData);
   };
 
@@ -330,71 +364,95 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
       <div className="addCont addItems">
         <h2>Template items</h2>
         <div>
-          <label>Add images: </label>
+          {/* Toggle for blank template */}
+          <label>Make a blank template: </label>
           <div className="toggle">
             <input
               type="checkbox"
-              name="toggleImages"
-              id="toggleImages"
-              checked={hasImages}
-              onChange={() => setHasImages(!hasImages)}
+              name="toggleBlank"
+              id="toggleBlank"
+              checked={isBlank}
+              onChange={() => setIsBlank(!isBlank)}
             />
-            <label htmlFor="toggleImages"></label>
+            <label htmlFor="toggleBlank"></label>
           </div>
         </div>
-        <ul id="tempItems">
-          {items.map((i, index) => (
-            <li key={"item" + index}>
-              {hasImages === true && (
-                <>
-                  <div className="itemImage">
-                    {itemImages[index]?.name ? (
-                      <img src={URL.createObjectURL(itemImages[index])} />
-                    ) : itemImages[index]?.img_url ? (
-                      <img src={itemImages[index].img_url} />
-                    ) : loading ? (
-                      <span className="material-symbols-outlined imagePlaceholder">
-                        pending
-                      </span>
-                    ) : (
-                      <span className="material-symbols-outlined imagePlaceholder">
-                        image
-                      </span>
-                    )}
-                  </div>
-                  <label className="fileInput">
-                    <input
-                      type="file"
-                      id={`item${index}`}
-                      name={`item${index}`}
-                      accept="image/png, image/gif, image/jpeg"
-                      onChange={(e) => handleAddItemImage(e, index)}
-                    />
-                  </label>
-                </>
-              )}
-              <input
-                type="text"
-                placeholder="List item"
-                value={i.item_name}
-                onChange={(e) => handleItemEdits(index, e.target.value)}
-              />
 
-              {items.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => deleteItem(index)}
-                  className="deleteButton"
-                >
-                  <span className="material-symbols-outlined">delete</span>
-                </button>
-              )}
-            </li>
-          ))}
-          <button type="button" onClick={addItem} className="addButton">
-            <span className="material-symbols-outlined">add</span>
-          </button>
-        </ul>
+        {isBlank ? (
+          <div>
+            <p>Blank template means that everyone will add their own items.</p>
+          </div>
+        ) : (
+          <>
+            <div>
+              <label>Add images: </label>
+              <div className="toggle">
+                <input
+                  type="checkbox"
+                  name="toggleImages"
+                  id="toggleImages"
+                  checked={hasImages}
+                  onChange={() => setHasImages(!hasImages)}
+                />
+                <label htmlFor="toggleImages"></label>
+              </div>
+            </div>
+
+            <ul id="tempItems">
+              {items.map((i, index) => (
+                <li key={"item" + index}>
+                  {hasImages === true && (
+                    <>
+                      <div className="itemImage">
+                        {itemImages[index]?.name ? (
+                          <img src={URL.createObjectURL(itemImages[index])} />
+                        ) : itemImages[index]?.img_url ? (
+                          <img src={itemImages[index].img_url} />
+                        ) : loading ? (
+                          <span className="material-symbols-outlined imagePlaceholder">
+                            pending
+                          </span>
+                        ) : (
+                          <span className="material-symbols-outlined imagePlaceholder">
+                            image
+                          </span>
+                        )}
+                        <label className="fileInput">
+                          <input
+                            type="file"
+                            id={`item${index}`}
+                            name={`item${index}`}
+                            accept="image/png, image/gif, image/jpeg"
+                            onChange={(e) => handleAddItemImage(e, index)}
+                          />
+                        </label>
+                      </div>
+                    </>
+                  )}
+                  <input
+                    type="text"
+                    placeholder="List item"
+                    value={i.item_name}
+                    onChange={(e) => handleItemEdits(index, e.target.value)}
+                  />
+
+                  {items.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => deleteItem(index)}
+                      className="deleteButton"
+                    >
+                      <span className="material-symbols-outlined">delete</span>
+                    </button>
+                  )}
+                </li>
+              ))}
+              <button type="button" onClick={addItem} className="addButton">
+                <span className="material-symbols-outlined">add</span>
+              </button>
+            </ul>
+          </>
+        )}
       </div>
 
       {errors.length > 0 && (
@@ -408,9 +466,9 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
       <button
         type="submit"
         className={`createButton ${loading || creating ? "disabled" : ""}`}
-        disabled={loading || creating}
+        disabled={loading}
       >
-        {loading || creating ? "Saving" : submitText}
+        {loading ? "Loading" : submitText}
       </button>
 
       <button type="button" onClick={clearAll} className="resetButton">

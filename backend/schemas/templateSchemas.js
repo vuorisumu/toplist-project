@@ -30,6 +30,7 @@ const templateSchema = Joi.object({
   category: Joi.number().optional(),
   items: Joi.string().required(),
   cover_image: Joi.string().optional(),
+  settings: Joi.string().optional(),
 });
 
 module.exports = {

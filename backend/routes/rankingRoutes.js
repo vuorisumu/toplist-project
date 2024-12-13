@@ -3,6 +3,8 @@ const database = require("../config/database");
 const { filteredRankingQuery } = require("../filteredQueries/toplistQueries");
 const { rankingSchema } = require("../schemas/toplistSchemas");
 const express = require("express");
+const verifyToken = require("../config/verifyToken");
+const { specifiedIdSchema } = require("../schemas/templateSchemas");
 const rankRouter = express.Router();
 
 const databaseError = { msg: "Error retrieving data from database" };
@@ -27,7 +29,7 @@ rankRouter.get("/", async (req, res) => {
       // query does not have filters
       const query = `SELECT top.toplist_id, top.toplist_name, top.ranked_items, 
       top.toplist_desc, top.creation_time, top.creator_id, u.user_name, t.name, 
-      top.template_id, t.category 
+      top.template_id, t.category, t.settings 
       FROM toplists top 
       LEFT JOIN users u ON top.creator_id = u.user_id 
       LEFT JOIN templates t ON top.template_id = t.id`;
@@ -50,15 +52,31 @@ rankRouter.get("/", async (req, res) => {
 rankRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const result = await database.query(
-      `SELECT top.toplist_id, top.toplist_name, top.ranked_items, top.toplist_desc, 
-      top.creation_time, top.creator_id, u.user_name, t.name, top.template_id, t.category 
+    let result;
+    if (Object.keys(req.query).length !== 0) {
+      const { error, value } = specifiedIdSchema.validate(req.query);
+      if (error) {
+        res.status(400).send(error.message);
+      }
+
+      // get list from a specified creator
+      if (value.getCreatorId) {
+        result = await database.query(
+          `SELECT creator_id FROM toplists WHERE toplist_id = :id`,
+          { id: id }
+        );
+      }
+    } else {
+      result = await database.query(
+        `SELECT top.toplist_id, top.toplist_name, top.ranked_items, top.toplist_desc, 
+      top.creation_time, top.creator_id, u.user_name, t.name, top.template_id, t.category, t.settings  
       FROM toplists top
       LEFT JOIN users u ON top.creator_id = u.user_id
       LEFT JOIN templates t ON top.template_id = t.id
       WHERE top.toplist_id = :id`,
-      { id: id }
-    );
+        { id: id }
+      );
+    }
 
     // id not found
     if (result.length === 0) {
@@ -132,6 +150,72 @@ rankRouter.post("/", async (req, res) => {
   }
 });
 
+rankRouter.patch("/:id([0-9]+)", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const exists = await database.query(
+      "SELECT toplist_name FROM toplists WHERE toplist_id = :id",
+      { id: id }
+    );
+    if (exists.length === 0) {
+      return res.status(404).json({ msg: "Top list not found" });
+    }
+
+    const { error } = rankingSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ msg: error.details[0].message });
+    }
+
+    console.log(req.body);
+
+    const values = {};
+    const fields = [];
+
+    if (req.body.toplist_name) {
+      fields.push("toplist_name = :toplist_name");
+      values.toplist_name = req.body.toplist_name;
+    }
+
+    if (req.body.template_id) {
+      fields.push("template_id = :template_id");
+      values.template_id = req.body.template_id;
+    }
+
+    if (req.body.ranked_items) {
+      fields.push("ranked_items = :ranked_items");
+      values.ranked_items = JSON.stringify(req.body.ranked_items);
+    }
+
+    if (req.body.toplist_desc) {
+      fields.push("toplist_desc = :toplist_desc");
+      values.toplist_desc = req.body.toplist_desc;
+    }
+
+    if (req.body.edited) {
+      const edited = new Date(req.body.edited);
+      fields.push("edited = :edited");
+      values.edited = edited;
+    }
+
+    const updateString = fields.join(", ");
+    const query = `UPDATE toplists SET ${updateString} WHERE toplist_id = :id`;
+    values.id = id;
+    const result = await database.query(query, values);
+
+    if (result.affectedRows === 0) {
+      return res.status(500).json({ msg: "Failed to update top list" });
+    }
+
+    // successful insert
+    res.status(201).json({
+      msg: "Top list updated",
+      toplist_id: id,
+    });
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
 /**
  * Deletes a ranking from database with a given ID
  */
@@ -148,6 +232,30 @@ rankRouter.delete("/:id([0-9]+)", async (req, res) => {
     }
 
     res.status(200).json({ msg: `Deleted toplist ${id} successfully` });
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
+rankRouter.delete("/fromuser/:id([0-9]+)", verifyToken, async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    if (req.user_id !== id && req.isAdmin === false) {
+      return res.status(403).send({ msg: "Unauthorized action" });
+    }
+
+    const result = await database.query(
+      "DELETE FROM toplists WHERE creator_id = :id",
+      { id: id }
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).send(notfoundError);
+    }
+
+    res
+      .status(200)
+      .json({ msg: `Deleted toplist from user ${id} successfully` });
   } catch (err) {
     res.status(500).send(databaseError);
   }

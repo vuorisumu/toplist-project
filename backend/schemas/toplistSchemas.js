@@ -41,6 +41,7 @@ const rankingSchema = Joi.object({
     )
     .required(),
   creation_time: Joi.date().optional() /*.format("YYYY-MM-DD HH:mm:ss"),*/,
+  edited: Joi.date().optional(),
 });
 
 module.exports = {

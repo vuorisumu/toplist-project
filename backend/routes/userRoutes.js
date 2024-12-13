@@ -1,7 +1,7 @@
 const oracledb = require("oracledb");
 const database = require("../config/database");
 const { filteredUserQuery } = require("../filteredQueries/userQueries");
-const { userSchema } = require("../schemas/userSchemas");
+const { userSchema, editUserSchema } = require("../schemas/userSchemas");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const express = require("express");
@@ -104,7 +104,7 @@ userRouter.post("/login/", async (req, res) => {
   try {
     const { user, password } = req.body;
     const userData = await database.query(
-      `SELECT * FROM users WHERE user_name = lower(:1) OR email = lower(:2)`,
+      `SELECT * FROM users WHERE lower(user_name) = lower(:1) OR lower(email) = lower(:2)`,
       [user, user]
     );
 
@@ -155,12 +155,94 @@ userRouter.post("/login/", async (req, res) => {
   }
 });
 
+userRouter.patch("/:id([0-9]+)", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const exists = await database.query(
+      "SELECT user_name FROM users WHERE user_id = :id",
+      { id: id }
+    );
+    if (exists.length === 0) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // validate data
+    const { error } = editUserSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+      return res.status(400).json({ msg: error.details });
+    }
+
+    console.log(req.body);
+    const values = {};
+    const fields = [];
+
+    if (req.body.user_name) {
+      fields.push("user_name = :user_name");
+      values["user_name"] = req.body.user_name;
+    }
+
+    if (req.body.email) {
+      fields.push("email = :email");
+      values["email"] = req.body.email;
+    }
+
+    if (req.body.password) {
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      fields.push("password = :password");
+      values["password"] = hashedPassword;
+    }
+
+    // build the string
+    const updateString = fields.join(", ");
+    const query = `UPDATE users SET ${updateString} WHERE user_id = :id`;
+    values["id"] = req.params.id;
+
+    console.log(query, values);
+    const result = await database.query(query, values);
+
+    if (result.affectedRows === 0) {
+      return res.status(500).json({ msg: "Failed to update user" });
+    }
+
+    // successful insert
+    res.status(201).json({
+      msg: "user updated",
+      id: req.params.id,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(databaseError);
+  }
+});
+
 /**
  * Checks authorization using the given token, returns the user id and the
  * admin status of currently logged in user
  */
 userRouter.get("/auth/", verifyToken, async (req, res) => {
   res.status(200).json({ id: req.user_id, admin: req.isAdmin });
+});
+
+userRouter.delete("/:id([0-9]+)", verifyToken, async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    if (req.user_id !== id && req.isAdmin === false) {
+      return res.status(403).send({ msg: "Unauthorized action" });
+    }
+
+    const result = await database.query(
+      "DELETE FROM users WHERE user_id = :id",
+      { id: id }
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).send(notfoundError);
+    }
+
+    res.status(200).json({ msg: `Deleted user ${id} successfully` });
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
 });
 
 module.exports = userRouter;

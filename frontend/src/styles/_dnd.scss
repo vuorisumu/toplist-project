@@ -15,6 +15,13 @@
     opacity: 0.5;
     transition: 0.2s;
     border: 1px solid theme.$accent-secondary;
+    user-select: none;
+
+    &.blank {
+      height: 60px;
+      border: none;
+      font-size: 10pt;
+    }
   }
 
   // droppable section when dragging over it
@@ -118,6 +125,10 @@
         margin: -15px 0 0 85px;
       }
     }
+  }
+
+  input[type="text"] {
+    flex: 1;
   }
 
   .noteArea {

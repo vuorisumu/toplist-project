@@ -173,6 +173,35 @@
     margin-top: 10px;
   }
 }
+
+#searchBar {
+  transition: all 0.2s ease;
+  width: 200px;
+  transform-origin: right;
+
+  .searchContainer input[type="search"] {
+    transition: all 0.2s ease;
+  }
+
+  .suggestions div {
+    padding: 7px 10px;
+  }
+}
+
+#searchBar:not(.active) {
+  width: 30px;
+}
+
+#searchBar:not(.active) .searchContainer {
+  input[type="search"] {
+    padding: 0;
+  }
+
+  .searchIcon {
+    padding: 0 5px;
+  }
+}
+
 .dropdownElement {
   display: flex;
   gap: 10px;

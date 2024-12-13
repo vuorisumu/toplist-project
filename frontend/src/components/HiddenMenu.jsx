@@ -55,6 +55,12 @@ function HiddenMenu({ isOpen, toggleLogin }) {
                   </li>
 
                   <li>
+                    <Link to="/account" onClick={toggleLogin}>
+                      Account
+                    </Link>
+                  </li>
+
+                  <li>
                     <Link to="/mytemplates" onClick={toggleLogin}>
                       My templates
                     </Link>

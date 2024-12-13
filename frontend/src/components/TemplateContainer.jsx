@@ -1,28 +1,67 @@
 import { useState, useEffect } from "react";
 import { formatData, getCountFromData } from "../util/dataHandler";
 import Template from "./Template";
-import AdvancedSearch from "./AdvancedSearch";
 import { fetchTemplates, fetchTemplateCount } from "../api/templates";
+import UserSearch from "./UserSearch";
+import Dropdown from "./Dropdown";
 
 /**
  * Container for displaying templates and the search bar.
  * Handles the displaying and loading of the templates.
  *
+ * @param {string} props.searchInput - String to be used in searching
+ * @param {number} props.categoryId - Category ID for filtering, default 0 fetches all categories
  * @returns {JSX.Element} Template container component with a
  * search component attached
  */
-function TemplateContainer() {
+function TemplateContainer({ searchInput = "", categoryId = 0 }) {
   const [templates, setTemplates] = useState([]);
-  const defaultQuery = "sortBy=id&sortOrder=desc";
-  const [filters, setFilters] = useState(defaultQuery);
+  const [filters, setFilters] = useState("");
+  const [sortBy, setSortBy] = useState("id&sortOrder=desc");
+  const [search, setSearch] = useState("");
   const [templateCount, setTemplateCount] = useState(0);
   const [loadedCount, setLoadedCount] = useState(0);
   const loadMoreAmount = 5;
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const options = {
+    LIST_NAME: "Template name",
+    OLDEST_FIRST: "Oldest first",
+    NEWEST_FIRST: "Newest first",
+    CREATOR_NAME: "Creator name",
+  };
 
   useEffect(() => {
-    getTemplateCount();
-  }, []);
+    if (searchInput !== "") {
+      handleSearch(searchInput);
+    }
+  }, [searchInput]);
+
+  useEffect(() => {
+    let q = [];
+    if (search !== "") {
+      q.push(`search=${search}`);
+    }
+    if (categoryId > 0) {
+      q.push(`category=${categoryId}`);
+    }
+    q.push(`sortBy=${sortBy}`);
+
+    setFilters(q.join("&"));
+  }, [search, sortBy]);
+
+  useEffect(() => {
+    if (filters !== "") {
+      let q = [];
+      if (search !== "") {
+        q.push(`search=${search}`);
+      }
+      if (categoryId > 0) {
+        q.push(`category=${categoryId}`);
+      }
+      getTemplateCount(q.join("&"));
+    }
+  }, [filters]);
 
   useEffect(() => {
     if (templateCount > 0) {
@@ -31,14 +70,36 @@ function TemplateContainer() {
   }, [templateCount, filters]);
 
   /**
+   * Sets the sort by value to state
+   *
+   * @param {string} val - Value selected from dropdown
+   */
+  const selectFromDropdown = (val) => {
+    if (val !== "") {
+      if (val === options.LIST_NAME) {
+        setSortBy(`name`);
+      } else if (val === options.CREATOR_NAME) {
+        setSortBy(`creatorname`);
+      } else if (val === options.NEWEST_FIRST) {
+        setSortBy(`id&sortOrder=desc`);
+      } else {
+        setSortBy(`id&sortOrder=asc`);
+      }
+    }
+  };
+
+  /**
    * Fetches the full count of templates in the database and sets it to state.
    */
-  const getTemplateCount = async () => {
-    fetchTemplateCount()
+  const getTemplateCount = async (f = "") => {
+    fetchTemplateCount(f)
       .then((data) => {
         setTemplateCount(getCountFromData(data));
+        if (getCountFromData(data) < 1) {
+          setLoading(false);
+        }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setError(true));
   };
 
   /**
@@ -68,38 +129,36 @@ function TemplateContainer() {
   };
 
   /**
-   * Sets the specified filters and calls for a new search
-   * @param {string} val - filtered query text
+   * Handles the search functionality
+   * @param {string} val - search input
    */
-  const handleFilteredSearch = (val) => {
-    setFilters(val === "" ? defaultQuery : val);
-  };
-
-  /**
-   * Sets the filters bacn to default.
-   */
-  const handleClear = () => {
-    setFilters(defaultQuery);
+  const handleSearch = (val) => {
+    setSearch(val);
+    setFilters(
+      val === "" ? defaultQuery : `search=${val}&sortBy=id&sortOrder=desc`
+    );
   };
 
   return (
     <>
-      {/* Search container */}
-      <AdvancedSearch
-        searchLists={false}
-        onSearch={handleFilteredSearch}
-        onClear={handleClear}
+      {categoryId === 0 && <UserSearch searchInput={search} />}
+
+      <Dropdown
+        label={"Sort by"}
+        placeholder={options.LIST_NAME}
+        items={Object.values(options)}
+        onSelect={selectFromDropdown}
       />
 
       <div>
-        <h2>Recent templates</h2>
+        <h2>Templates</h2>
 
         {!loading && templates.length < 1 && <p>No templates found</p>}
 
         <ul className="lists">
-          {loading ? (
+          {loading || error ? (
             <li className="template">
-              <p>Loading</p>
+              <p>{error ? "Database error" : "Loading"}</p>
             </li>
           ) : (
             templates.map((template) => (

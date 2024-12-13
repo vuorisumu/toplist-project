@@ -2,7 +2,10 @@ import { fetchAllCategories } from "../api/categories";
 import { formatData } from "./dataHandler";
 
 export const getCategories = async () => {
-  if (localStorage.getItem("categories") !== null) {
+  if (
+    localStorage.getItem("categories") !== null &&
+    localStorage.getItem("categories") !== "undefined"
+  ) {
     return JSON.parse(localStorage.getItem("categories"));
   } else {
     console.log("no session storage, adding..");

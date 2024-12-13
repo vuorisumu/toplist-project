@@ -8,6 +8,7 @@ const {
   specifiedIdSchema,
 } = require("../schemas/templateSchemas");
 const express = require("express");
+const verifyToken = require("../config/verifyToken");
 const templateRouter = express.Router();
 
 const databaseError = { msg: "Error retrieving data from database" };
@@ -35,7 +36,7 @@ templateRouter.get("/", async (req, res) => {
       }
     } else {
       // query does not have filters
-      const query = `SELECT t.id, t.name, t.description, u.user_name 
+      const query = `SELECT t.id, t.name, t.description, u.user_name, t.settings  
       FROM templates t 
       LEFT JOIN users u ON t.creator_id = u.user_id`;
       results = await database.query(query);
@@ -71,7 +72,7 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
     } else {
       // default query
       result = await database.query(
-        `SELECT t.id, t.name, t.description, t.items, u.user_name, t.creator_id, t.category, t.cover_image 
+        `SELECT t.id, t.name, t.description, t.items, u.user_name, t.creator_id, t.category, t.cover_image, t.settings 
         FROM templates t 
         LEFT JOIN users u ON t.creator_id = u.user_id 
         WHERE id = :id`,
@@ -86,6 +87,7 @@ templateRouter.get("/:id([0-9]+)", async (req, res) => {
     // all good
     res.status(200).json(result);
   } catch (err) {
+    console.log(err);
     res.status(500).send(databaseError);
   }
 });
@@ -127,6 +129,12 @@ templateRouter.post("/", async (req, res) => {
     if (req.body.category) {
       placeholders.push("category");
       values["category"] = req.body.category;
+    }
+
+    //optional settings
+    if (req.body.settings) {
+      placeholders.push("settings");
+      values["settings"] = req.body.settings;
     }
 
     // optional cover image
@@ -213,6 +221,12 @@ templateRouter.patch("/:id([0-9]+)", async (req, res) => {
       values["category"] = req.body.category;
     }
 
+    //optional settings
+    if (req.body.settings) {
+      fields.push("settings = :settings");
+      values["settings"] = req.body.settings;
+    }
+
     // optional cover image
     if (req.files?.cover_image) {
       fields.push("cover_image = :cover_image");
@@ -272,5 +286,36 @@ templateRouter.delete("/:id([0-9]+)", async (req, res) => {
     res.status(500).send(databaseError);
   }
 });
+
+/**
+ * Deletes a template with given ID from the database
+ */
+templateRouter.delete(
+  "/fromuser/:id([0-9]+)",
+  verifyToken,
+  async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (req.user_id !== id && req.isAdmin === false) {
+        return res.status(403).send({ msg: "Unauthorized action" });
+      }
+
+      const result = await database.query(
+        "DELETE FROM templates WHERE creator_id = :id",
+        { id: id }
+      );
+
+      if (result.affectedRows === 0) {
+        return res.status(404).send(notfoundError);
+      }
+
+      res
+        .status(200)
+        .json({ msg: `Deleted template from user ${id} successfully` });
+    } catch (err) {
+      res.status(500).send(databaseError);
+    }
+  }
+);
 
 module.exports = templateRouter;

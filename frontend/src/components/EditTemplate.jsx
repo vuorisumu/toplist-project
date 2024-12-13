@@ -157,7 +157,7 @@ function EditTemplate() {
   return (
     <div className="container">
       <h1>Edit template</h1>
-      <div className="no-stretch">
+      <div className="no-stretch editTemplate">
         <TemplateData
           data={template}
           onSubmit={saveChanges}

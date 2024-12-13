@@ -46,8 +46,8 @@ nav ul {
   list-style: none;
   padding: 0;
   display: flex;
-  justify-content: space-evenly;
-  align-items: flex-start;
+  justify-content: end;
+  align-items: center;
   margin: 0;
   position: relative;
   z-index: 3;
@@ -81,10 +81,10 @@ nav ul #logoCont span {
   line-height: 20pt;
 }
 nav ul {
-  padding: 15px 10px 5px 10px;
+  padding: 5px 10px 5px 10px;
 }
 nav ul li:first-child {
-  flex-grow: 1;
+  margin-right: auto;
 }
 
 .mobileNav {
@@ -97,8 +97,8 @@ nav ul li:first-child {
   list-style: none;
   padding: 0;
   display: flex;
-  justify-content: space-evenly;
-  align-items: flex-start;
+  justify-content: end;
+  align-items: center;
   margin: 0;
   position: relative;
   z-index: 3;
@@ -132,7 +132,9 @@ nav ul li:first-child {
   line-height: 20pt;
 }
 .mobileNav ul {
-  padding: 15px 10px 15px 10px;
+  padding: 7px 10px 15px 10px;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 .hiddenMenuCont {
@@ -470,6 +472,29 @@ nav ul li:first-child {
   background-color: color-mix(in srgb, var(--mid-color), var(--primary-color) 50%);
 }
 
+#searchBar {
+  transition: all 0.2s ease;
+  width: 200px;
+  transform-origin: right;
+}
+#searchBar .searchContainer input[type=search] {
+  transition: all 0.2s ease;
+}
+#searchBar .suggestions div {
+  padding: 7px 10px;
+}
+
+#searchBar:not(.active) {
+  width: 30px;
+}
+
+#searchBar:not(.active) .searchContainer input[type=search] {
+  padding: 0;
+}
+#searchBar:not(.active) .searchContainer .searchIcon {
+  padding: 0 5px;
+}
+
 .dropdownElement {
   display: flex;
   gap: 10px;
@@ -719,25 +744,26 @@ nav ul li:first-child {
   margin: 0;
   padding: 2px 4px;
 }
-.addCont .toggle {
+
+.toggle {
   position: relative;
   display: inline-block;
   top: 5px;
 }
-.addCont .toggle input[type=checkbox] {
+.toggle input[type=checkbox] {
   height: 0;
   width: 0;
   visibility: hidden;
   position: absolute;
 }
-.addCont .toggle input[type=checkbox]:checked + label {
+.toggle input[type=checkbox]:checked + label {
   background: var(--accent);
 }
-.addCont .toggle input[type=checkbox]:checked + label::after {
+.toggle input[type=checkbox]:checked + label::after {
   left: calc(100% - 3px);
   transform: translateX(-100%);
 }
-.addCont .toggle label {
+.toggle label {
   cursor: pointer;
   width: 36px;
   height: 20px;
@@ -746,7 +772,7 @@ nav ul li:first-child {
   border-radius: 30px;
   position: relative;
 }
-.addCont .toggle label::after {
+.toggle label::after {
   content: "";
   position: absolute;
   top: 3px;
@@ -757,7 +783,7 @@ nav ul li:first-child {
   border-radius: 50%;
   transition: 0.3s;
 }
-.addCont .toggle label:active::after {
+.toggle label:active::after {
   width: 20px;
 }
 
@@ -947,6 +973,12 @@ nav ul li:first-child {
   width: 40px;
   height: 40px;
   padding-right: 10px;
+  position: relative;
+}
+.itemImage .fileInput {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
 }
 .itemImage img {
   width: inherit;
@@ -961,18 +993,22 @@ nav ul li:first-child {
   color: var(--mid-color);
 }
 
-.newTemplate .dropdownElement {
+.newTemplate .dropdownElement,
+.editTemplate .dropdownElement {
   margin: 5px 0;
 }
-.newTemplate .dropdownElement label {
+.newTemplate .dropdownElement label,
+.editTemplate .dropdownElement label {
   flex-grow: 1;
   text-align: start;
 }
-.newTemplate .dropdownElement .dropdownCont {
+.newTemplate .dropdownElement .dropdownCont,
+.editTemplate .dropdownElement .dropdownCont {
   flex-grow: 1;
   z-index: 2;
 }
-.newTemplate .dropdownElement .dropdownCont button {
+.newTemplate .dropdownElement .dropdownCont button,
+.editTemplate .dropdownElement .dropdownCont button {
   margin-left: 0;
   margin-right: 0;
 }
@@ -1011,6 +1047,14 @@ nav ul li:first-child {
   opacity: 0.5;
   transition: 0.2s;
   border: 1px solid var(--accent-secondary);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.dndCont .placeholder.blank {
+  height: 60px;
+  border: none;
+  font-size: 10pt;
 }
 .dndCont .dragOver {
   background-color: color-mix(in srgb, var(--accent), var(--secondary-color) 70%);
@@ -1091,6 +1135,9 @@ nav ul li:first-child {
 .rank-item p.rankedNote.img {
   margin: -15px 0 0 85px;
 }
+.rank-item input[type=text] {
+  flex: 1;
+}
 .rank-item .noteArea {
   resize: vertical;
   flex: 100%;
@@ -1123,6 +1170,40 @@ nav ul li:first-child {
 }
 .listPreview h3 {
   margin-top: 5px;
+}
+
+.popup {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, black, transparent 50%);
+  z-index: 99;
+  padding: 30px;
+}
+.popup .popup-window {
+  height: 100%;
+  box-sizing: border-box;
+  background: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+}
+.popup .popup-window button {
+  align-self: end;
+  background: transparent;
+  color: var(--accent);
+  padding: 0.3em 0.7em;
+  margin: 0;
+}
+.popup .popup-window button:hover {
+  box-shadow: none;
+}
+.popup .popup-window .content {
+  overflow-y: auto;
+  height: 100%;
+  padding: 0 30px;
+  text-align: left;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--mid-color) var(--primary-color);
 }
 
 :root {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -10,8 +10,6 @@ import "./App.css";
 import Main from "./components/Main.jsx";
 import NewTemplate from "./components/NewTemplate.jsx";
 import EditTemplate from "./components/EditTemplate.jsx";
-import BrowseToplists from "./components/BrowseToplists.jsx";
-import BrowseTemplates from "./components/BrowseTemplates.jsx";
 import NewList from "./components/NewList.jsx";
 import SingleList from "./components/SingleList.jsx";
 import Register from "./components/Register.jsx";
@@ -23,13 +21,13 @@ import UserContext from "./util/UserContext.js";
 import { isLoggedIn, loginInfo } from "./util/permissions.js";
 import TemplatePreview from "./components/TemplatePreview.jsx";
 import MyTemplates from "./components/MyTemplates.jsx";
+import SearchResults from "./components/SearchResults.jsx";
+import Categories from "./components/Categories.jsx";
+import Category from "./components/Category.jsx";
+import EditUser from "./components/EditUser.jsx";
+import EditToplist from "./components/EditToplist.jsx";
 
 function App() {
-  function RedirectToCreateList() {
-    const { templateId } = useParams();
-    return <Navigate to={`/createlist/${templateId}`} />;
-  }
-
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -61,30 +59,46 @@ function App() {
     }
   };
 
+  const updateUser = (userData) => {
+    const newData = user;
+    if (userData.user_name) {
+      newData.user_name = userData.user_name;
+    }
+
+    if (userData.email) {
+      newData.email = userData.email;
+    }
+
+    setUser(newData);
+  };
+
   const logout = () => {
     localStorage.clear();
     setUser(null);
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, login, logout, updateUser }}>
       <Router>
         <Nav />
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/templates" element={<BrowseTemplates />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/category/:id" element={<Category />} />
           <Route path="/templates/:templateId" element={<TemplatePreview />} />
           <Route path="/createlist" element={<Main />} />
-          <Route path="/toplists" element={<BrowseToplists />} />
+          <Route path="/search/:searchInput" element={<SearchResults />} />
           <Route path="/new-template" element={<NewTemplate />} />
           <Route
             path="/createlist/:templateId"
             element={<NewList key={Math.random()} />}
           />
+          <Route path="/edit-list/:listId" element={<EditToplist />} />
           <Route path="/edit-template/:templateid" element={<EditTemplate />} />
           <Route path="/toplists/:listId" element={<SingleList />} />
           <Route path="/register" element={<Register />} />
           <Route path="/user/:username" element={<User />} />
+          <Route path="/account" element={<EditUser />} />
           <Route path="/mytemplates" element={<MyTemplates />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

@@ -16,23 +16,29 @@ function filteredTemplatesQuery(req) {
   let filteredQuery;
 
   // fetch just the count of the templates and return immediately
-  if (value.count) {
+  /*if (value.count) {
     filteredQuery = "SELECT COUNT(id) AS count FROM templates";
     return { filteredQuery, queryParams };
   }
-
+*/
   if (value.namesOnly) {
     filteredQuery = "SELECT DISTINCT t.name ";
   } else if (value.idsAndNames) {
     filteredQuery = "SELECT t.name, t.id ";
+  } else if (value.count) {
+    filteredQuery = "SELECT COUNT(t.id) AS count ";
   } else {
     filteredQuery =
-      "SELECT t.id, t.name, t.description, u.user_name, t.creator_id, t.category, t.cover_image ";
+      "SELECT t.id, t.name, t.description, u.user_name, t.creator_id, t.category, t.cover_image, t.settings ";
   }
 
   // join relevant tables
-  filteredQuery +=
-    "FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id";
+  if (value.search || value.tname || value.uname || value.sortBy) {
+    filteredQuery +=
+      "FROM templates t LEFT JOIN users u ON t.creator_id = u.user_id";
+  } else {
+    filteredQuery += "FROM templates t";
+  }
 
   // general search
   if (value.search) {

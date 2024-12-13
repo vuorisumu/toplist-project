@@ -77,6 +77,7 @@ export const addNewTemplate = (templateData) => {
   const formData = new FormData();
   formData.append("name", templateData.name);
   formData.append("items", JSON.stringify(templateData.items));
+  formData.append("settings", JSON.stringify(templateData.settings));
   formData.append("creator_id", templateData.creator_id);
 
   if (templateData.cover_image) {
@@ -114,6 +115,7 @@ export const updateTemplate = (id, templateData) => {
   const formData = new FormData();
   formData.append("name", templateData.name);
   formData.append("items", JSON.stringify(templateData.items));
+  formData.append("settings", JSON.stringify(templateData.settings));
 
   if (templateData.cover_image) {
     formData.append("cover_image", templateData.cover_image);
@@ -156,13 +158,27 @@ export const deleteTemplate = (id) => {
     .catch((error) => console.error("Error:", error));
 };
 
+export const deleteTemplatesFromUser = (user_id) => {
+  const token = localStorage.getItem("token");
+  return fetch(`${API_BASE_URL}/templates/fromuser/${user_id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
 /**
  * Fetches the count of templates from the database
  *
+ * @param {string} filters - optional search filters
  * @returns data containing the count of templates
  */
-export const fetchTemplateCount = () => {
-  return fetch(`${API_BASE_URL}/templates?count=true`).then((response) =>
-    response.json()
-  );
+export const fetchTemplateCount = (filters = "") => {
+  return fetch(
+    `${API_BASE_URL}/templates?count=true${filters === "" ? "" : `&${filters}`}`
+  ).then((response) => response.json());
 };

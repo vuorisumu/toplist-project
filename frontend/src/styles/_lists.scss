@@ -133,10 +133,10 @@
       @include defaults.smallButton();
     }
   }
+}
 
-  .toggle {
-    @include defaults.toggle();
-  }
+.toggle {
+  @include defaults.toggle();
 }
 
 .coverImage {
@@ -237,6 +237,13 @@
   width: 40px;
   height: 40px;
   padding-right: 10px;
+  position: relative;
+
+  .fileInput {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
 
   img {
     width: inherit;
@@ -253,7 +260,8 @@
 }
 
 // category dropdown
-.newTemplate {
+.newTemplate,
+.editTemplate {
   .dropdownElement {
     margin: 5px 0;
     label {

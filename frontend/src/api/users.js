@@ -66,6 +66,18 @@ export const fetchUserByName = (name) => {
 };
 
 /**
+ * Fetches a user with a specified email from the database
+ *
+ * @param {string} email - email of the user
+ * @returns data of the fetched user
+ */
+export const fetchUserByEmail = (email) => {
+  return fetch(`${API_BASE_URL}/users?email=${email}`).then((response) =>
+    response.json()
+  );
+};
+
+/**
  * Fetches a user with a specified name from the database
  *
  * @param {string} name - name of the user
@@ -90,6 +102,36 @@ export const addNewUser = (userData) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(userData),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
+/**
+ * Updates data of an user with given ID
+ *
+ * @param {number} id - ID of the user to be edited
+ * @param {object} userData - user data
+ * @returns the ID of the edited user on successful edit
+ */
+export const updateuser = (id, userData) => {
+  const formData = new FormData();
+  if (userData.user_name) {
+    formData.append("user_name", userData.user_name);
+  }
+
+  if (userData.email) {
+    formData.append("email", userData.email);
+  }
+
+  if (userData.password) {
+    formData.append("password", userData.password);
+  }
+
+  console.log(formData);
+  return fetch(`${API_BASE_URL}/users/${id}`, {
+    method: "PATCH",
+    body: formData,
   })
     .then((response) => response.json())
     .catch((error) => console.error("Error:", error));
@@ -129,4 +171,17 @@ export const auth = () => {
   })
     .then((response) => response.json())
     .catch((error) => console.log(error));
+};
+
+export const deleteUser = (id) => {
+  const token = localStorage.getItem("token");
+  return fetch(`${API_BASE_URL}/users/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
 };

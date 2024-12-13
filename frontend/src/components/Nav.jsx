@@ -7,10 +7,12 @@ import { isMobile } from "react-device-detect";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../util/UserContext";
 import HiddenMenu from "./HiddenMenu";
+import SearchBar from "./SearchBar";
 
 function Nav() {
   const { user } = useContext(UserContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     console.log("user data updated");
@@ -23,21 +25,18 @@ function Nav() {
     // document.getElementById("navLogin").classList.toggle("active");
   };
 
+  const toggleSearch = () => {
+    setSearchOpen(!searchOpen);
+    document.getElementById("searchBar").classList.toggle("active");
+  };
+
   function Links() {
     return (
       <>
         <li>
-          <NavLink to="/templates">
+          <NavLink to="/categories">
             <span className="material-symbols-outlined icon">view_list</span>
-            <span className="linkName">Templates</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/toplists">
-            <span className="material-symbols-outlined icon">
-              format_list_numbered
-            </span>
-            <span className="linkName">Top lists</span>
+            <span className="linkName">Categories</span>
           </NavLink>
         </li>
         {user && (
@@ -80,6 +79,9 @@ function Nav() {
                 <span>Listmaker 9000</span>
               </NavLink>
             </li>
+            <li id="searchBar" className={searchOpen ? "active" : ""}>
+              <SearchBar isOpen={searchOpen} toggleSearch={toggleSearch} />
+            </li>
           </ul>
         </nav>
 
@@ -103,6 +105,9 @@ function Nav() {
               <img src={logo} id="logo" />
               <span>Listmaker 9000</span>
             </NavLink>
+          </li>
+          <li id="searchBar" className={searchOpen ? "active" : ""}>
+            <SearchBar isOpen={searchOpen} toggleSearch={toggleSearch} />
           </li>
           <Links />
         </ul>

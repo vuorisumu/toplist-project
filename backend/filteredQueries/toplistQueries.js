@@ -39,7 +39,7 @@ function filteredRankingQuery(req) {
   } else {
     // fetch all relevant information
     filteredQuery += ` top.toplist_id, top.toplist_name, top.ranked_items, top.toplist_desc, 
-    top.creation_time, top.creator_id, u.user_name, t.name, top.template_id, t.category 
+    top.creation_time, top.creator_id, u.user_name, t.name, top.template_id, t.category, t.settings  
     FROM toplists top 
     LEFT JOIN users u ON top.creator_id = u.user_id 
     LEFT JOIN templates t ON top.template_id = t.id`;

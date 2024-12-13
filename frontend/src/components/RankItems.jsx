@@ -77,6 +77,32 @@ function RankItems({ containers, setContainers }) {
   };
 
   /**
+   * Updates the item name according to user input.
+   *
+   * @param {string} id - the ID of the item
+   * @param {string} newName - new name for the item
+   * @param {boolean} ranked - whether the item is in the ranked container
+   */
+  const updateItemName = (id, newName, ranked) => {
+    const contName = ranked ? RANKED : UNRANKED;
+
+    const updatedItems = containers[contName].items.map((i) => {
+      if (i.id === id) {
+        return { ...i, item_name: newName };
+      }
+      return i;
+    });
+
+    setContainers((prev) => ({
+      ...prev,
+      [contName]: {
+        ...prev[contName],
+        items: updatedItems,
+      },
+    }));
+  };
+
+  /**
    * Updates an item with the given ID with the new note.
    *
    * @param {string} id - The ID of the item
@@ -102,16 +128,18 @@ function RankItems({ containers, setContainers }) {
   };
 
   /**
-   * Deletes an item from the unranked container from the given index.
+   * Deletes an item from the specified container with the given index.
    *
    * @param {number} index - The index of the item
+   * @param {boolean} ranked - Whether the item is in the ranked container
    */
-  const deleteItem = (index) => {
+  const deleteItem = (index, ranked) => {
+    const contName = ranked ? RANKED : UNRANKED;
     setContainers((prev) => ({
       ...prev,
-      [UNRANKED]: {
-        ...prev[UNRANKED],
-        items: prev[UNRANKED].items.filter((_, i) => i !== index),
+      [contName]: {
+        ...prev[contName],
+        items: prev[contName].items.filter((_, i) => i !== index),
       },
     }));
   };
@@ -135,7 +163,9 @@ function RankItems({ containers, setContainers }) {
                     <DraggableItem
                       item={item}
                       index={index}
+                      blank={container.isBlank === true}
                       isRanked={container.keyName === RANKED}
+                      updateName={updateItemName}
                       updateNote={updateNote}
                       deleteItem={deleteItem}
                       key={item.id}
@@ -145,7 +175,9 @@ function RankItems({ containers, setContainers }) {
                   {container.keyName === RANKED &&
                     container.items.length === 0 && (
                       <p className="placeholder">
-                        Drag and drop items here to rank them
+                        {container.isBlank === true
+                          ? "This is a blank template. Add your own items below to rank them."
+                          : "Drag and drop items here to rank them"}
                       </p>
                     )}
 
