@@ -4,6 +4,7 @@ const { filteredRankingQuery } = require("../filteredQueries/toplistQueries");
 const { rankingSchema } = require("../schemas/toplistSchemas");
 const express = require("express");
 const verifyToken = require("../config/verifyToken");
+const { specifiedIdSchema } = require("../schemas/templateSchemas");
 const rankRouter = express.Router();
 
 const databaseError = { msg: "Error retrieving data from database" };
@@ -51,15 +52,31 @@ rankRouter.get("/", async (req, res) => {
 rankRouter.get("/:id([0-9]+)", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const result = await database.query(
-      `SELECT top.toplist_id, top.toplist_name, top.ranked_items, top.toplist_desc, 
+    let result;
+    if (Object.keys(req.query).length !== 0) {
+      const { error, value } = specifiedIdSchema.validate(req.query);
+      if (error) {
+        res.status(400).send(error.message);
+      }
+
+      // get list from a specified creator
+      if (value.getCreatorId) {
+        result = await database.query(
+          `SELECT creator_id FROM toplists WHERE toplist_id = :id`,
+          { id: id }
+        );
+      }
+    } else {
+      result = await database.query(
+        `SELECT top.toplist_id, top.toplist_name, top.ranked_items, top.toplist_desc, 
       top.creation_time, top.creator_id, u.user_name, t.name, top.template_id, t.category, t.settings  
       FROM toplists top
       LEFT JOIN users u ON top.creator_id = u.user_id
       LEFT JOIN templates t ON top.template_id = t.id
       WHERE top.toplist_id = :id`,
-      { id: id }
-    );
+        { id: id }
+      );
+    }
 
     // id not found
     if (result.length === 0) {

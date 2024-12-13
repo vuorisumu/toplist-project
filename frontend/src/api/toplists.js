@@ -64,6 +64,12 @@ export const fetchToplistById = (id) => {
   );
 };
 
+export const fetchListCreatorId = (id) => {
+  return fetch(`${API_BASE_URL}/toplists/${id}?getCreatorId=true`).then((res) =>
+    res.json()
+  );
+};
+
 /**
  * Adds a new top list to database
  *

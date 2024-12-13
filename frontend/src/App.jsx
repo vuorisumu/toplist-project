@@ -25,6 +25,7 @@ import SearchResults from "./components/SearchResults.jsx";
 import Categories from "./components/Categories.jsx";
 import Category from "./components/Category.jsx";
 import EditUser from "./components/EditUser.jsx";
+import EditToplist from "./components/EditToplist.jsx";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -92,6 +93,7 @@ function App() {
             path="/createlist/:templateId"
             element={<NewList key={Math.random()} />}
           />
+          <Route path="/edit-list/:listId" element={<EditToplist />} />
           <Route path="/edit-template/:templateid" element={<EditTemplate />} />
           <Route path="/toplists/:listId" element={<SingleList />} />
           <Route path="/register" element={<Register />} />
