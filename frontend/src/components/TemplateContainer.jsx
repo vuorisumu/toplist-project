@@ -23,6 +23,7 @@ function TemplateContainer({ searchInput = "", categoryId = 0 }) {
   const [loadedCount, setLoadedCount] = useState(0);
   const loadMoreAmount = 5;
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const options = {
     LIST_NAME: "Template name",
     OLDEST_FIRST: "Oldest first",
@@ -98,7 +99,7 @@ function TemplateContainer({ searchInput = "", categoryId = 0 }) {
           setLoading(false);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setError(true));
   };
 
   /**
@@ -155,9 +156,9 @@ function TemplateContainer({ searchInput = "", categoryId = 0 }) {
         {!loading && templates.length < 1 && <p>No templates found</p>}
 
         <ul className="lists">
-          {loading ? (
+          {loading || error ? (
             <li className="template">
-              <p>Loading</p>
+              <p>{error ? "Database error" : "Loading"}</p>
             </li>
           ) : (
             templates.map((template) => (
