@@ -29,6 +29,7 @@ function EditUser() {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteTemplates, setDeleteTemplates] = useState(false);
   const [deleteLists, setDeleteLists] = useState(false);
@@ -282,9 +283,9 @@ function EditUser() {
       <h1>Account information</h1>
       {user && (
         <>
-          <ul>
+          <ul className="userinfo">
             <li>
-              <p>Username</p>
+              <h3>Username</h3>
               {editName ? (
                 <>
                   <input
@@ -315,6 +316,7 @@ function EditUser() {
               )}
             </li>
             <li>
+              <h3>Email</h3>
               {editEmail ? (
                 <>
                   <input
@@ -344,29 +346,36 @@ function EditUser() {
                 </>
               )}
             </li>
-            <li>
-              {changePassword ? (
-                <>
+
+            {changePassword ? (
+              <>
+                <li>
+                  <h3>Change password</h3>
                   <label>New password</label>
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-
+                </li>
+                <li>
                   <label>Repeat new password</label>
                   <input
                     type="password"
                     value={repeatPassword}
                     onChange={(e) => setRepeatPassword(e.target.value)}
                   />
-
+                </li>
+                <li>
                   <button onClick={toggleChangePassword}>Cancel</button>
-                </>
-              ) : (
+                </li>
+              </>
+            ) : (
+              <li>
                 <button onClick={toggleChangePassword}>Change password</button>
-              )}
-            </li>
+              </li>
+            )}
+
             <li>
               {changePassword ? <p>Old password</p> : <p>Password</p>}
               <input
@@ -390,49 +399,55 @@ function EditUser() {
           </button>
 
           <div>
-            <p>Delete user</p>
-            <p>Type your password</p>
-            <input
-              type="password"
-              value={delPassword}
-              onChange={(e) => setDelPassword(e.target.value)}
-            />
-
-            {isDeleting && (
+            {openDelete ? (
               <>
-                <div>
-                  <label>Delete all templates: </label>
-                  <div className="toggle">
-                    <input
-                      type="checkbox"
-                      name="toggleTemp"
-                      id="toggleTemp"
-                      checked={deleteTemplates}
-                      onChange={() => setDeleteTemplates(!deleteTemplates)}
-                    />
-                    <label htmlFor="toggleTemp"></label>
-                  </div>
-                </div>
-
-                <div>
-                  <label>Delete all lists: </label>
-                  <div className="toggle">
-                    <input
-                      type="checkbox"
-                      name="toggleList"
-                      id="toggleList"
-                      checked={deleteLists}
-                      onChange={() => setDeleteLists(!deleteLists)}
-                    />
-                    <label htmlFor="toggleList"></label>
-                  </div>
-                </div>
-
-                <ButtonPrompt
-                  buttonName="Delete account"
-                  confirm={handleDelete}
+                <h3>Delete user</h3>
+                <p>Type your password</p>
+                <input
+                  type="password"
+                  value={delPassword}
+                  onChange={(e) => setDelPassword(e.target.value)}
                 />
+
+                {isDeleting && (
+                  <>
+                    <div>
+                      <label>Delete all templates: </label>
+                      <div className="toggle">
+                        <input
+                          type="checkbox"
+                          name="toggleTemp"
+                          id="toggleTemp"
+                          checked={deleteTemplates}
+                          onChange={() => setDeleteTemplates(!deleteTemplates)}
+                        />
+                        <label htmlFor="toggleTemp"></label>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label>Delete all lists: </label>
+                      <div className="toggle">
+                        <input
+                          type="checkbox"
+                          name="toggleList"
+                          id="toggleList"
+                          checked={deleteLists}
+                          onChange={() => setDeleteLists(!deleteLists)}
+                        />
+                        <label htmlFor="toggleList"></label>
+                      </div>
+                    </div>
+
+                    <ButtonPrompt
+                      buttonName="Delete account"
+                      confirm={handleDelete}
+                    />
+                  </>
+                )}
               </>
+            ) : (
+              <button onClick={() => setOpenDelete(true)}>Delete user</button>
             )}
           </div>
         </>
