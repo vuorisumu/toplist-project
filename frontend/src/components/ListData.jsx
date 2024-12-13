@@ -222,6 +222,7 @@ function ListData({ data, templateId, onSubmit, submitText }) {
 
       if (data) {
         toplistData.edited = new Date();
+        toplistData.toplist_id = data.toplist_id;
       } else {
         toplistData.creation_time = new Date();
       }

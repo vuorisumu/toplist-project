@@ -80,7 +80,11 @@ function SingleList() {
         </button>
       </div>
 
-      <ListData data={list} templateId={list.template_id} />
+      <ListData
+        data={list}
+        templateId={list.template_id}
+        submitText={"Update top list"}
+      />
     </div>
   );
 }
