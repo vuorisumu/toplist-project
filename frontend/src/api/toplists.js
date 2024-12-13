@@ -88,6 +88,18 @@ export const addNewToplist = (toplist) => {
     .catch((error) => console.error("Error:", error));
 };
 
+export const updateToplist = (id, toplistData) => {
+  return fetch(`${API_BASE_URL}/toplists/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(toplistData),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error("Error:", error));
+};
+
 /**
  * Deletes a top list with specified ID
  *

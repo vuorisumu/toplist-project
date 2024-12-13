@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ListData from "./ListData";
-import { fetchToplistById } from "../api/toplists";
+import { fetchToplistById, updateToplist } from "../api/toplists";
 import { isCreatorOfList } from "../util/permissions";
 import { formatData } from "../util/dataHandler";
 
@@ -52,6 +52,16 @@ function EditToplist() {
       });
   };
 
+  const saveChanges = async (toplistData) => {
+    try {
+      console.log(toplistData);
+      const res = await updateToplist(listId, toplistData);
+      navigate(`/toplists/${res.toplist_id}`);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   if (notFound) {
     return (
       <div className="container">
@@ -97,6 +107,7 @@ function EditToplist() {
         data={data}
         templateId={data.template_id}
         submitText={"Update top list"}
+        onSubmit={saveChanges}
       />
     </div>
   );

@@ -150,6 +150,72 @@ rankRouter.post("/", async (req, res) => {
   }
 });
 
+rankRouter.patch("/:id([0-9]+)", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const exists = await database.query(
+      "SELECT toplist_name FROM toplists WHERE toplist_id = :id",
+      { id: id }
+    );
+    if (exists.length === 0) {
+      return res.status(404).json({ msg: "Top list not found" });
+    }
+
+    const { error } = rankingSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ msg: error.details[0].message });
+    }
+
+    console.log(req.body);
+
+    const values = {};
+    const fields = [];
+
+    if (req.body.toplist_name) {
+      fields.push("toplist_name = :toplist_name");
+      values.toplist_name = req.body.toplist_name;
+    }
+
+    if (req.body.template_id) {
+      fields.push("template_id = :template_id");
+      values.template_id = req.body.template_id;
+    }
+
+    if (req.body.ranked_items) {
+      fields.push("ranked_items = :ranked_items");
+      values.ranked_items = JSON.stringify(req.body.ranked_items);
+    }
+
+    if (req.body.toplist_desc) {
+      fields.push("toplist_desc = :toplist_desc");
+      values.toplist_desc = req.body.toplist_desc;
+    }
+
+    if (req.body.edited) {
+      const edited = new Date(req.body.edited);
+      fields.push("edited = :edited");
+      values.edited = edited;
+    }
+
+    const updateString = fields.join(", ");
+    const query = `UPDATE toplists SET ${updateString} WHERE toplist_id = :id`;
+    values.id = id;
+    const result = await database.query(query, values);
+
+    if (result.affectedRows === 0) {
+      return res.status(500).json({ msg: "Failed to update top list" });
+    }
+
+    // successful insert
+    res.status(201).json({
+      msg: "Top list updated",
+      toplist_id: id,
+    });
+  } catch (err) {
+    res.status(500).send(databaseError);
+  }
+});
+
 /**
  * Deletes a ranking from database with a given ID
  */
