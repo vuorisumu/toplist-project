@@ -1,7 +1,8 @@
-import { BASE_URL, formatData } from "./apiutils";
+import { fetchAndFormat } from "./apiutils";
 
-export const fetchAllCategories = () => {
-    return fetch(`${BASE_URL}/categories`)
-        .then((response) => response.json())
-        .then((data) => formatData(data));
-};
+export const fetchAllCategories = () => fetchAndFormat(`/categories`);
+
+export const fetchCategoryById = (id) => fetchAndFormat(`/categories/${id}`);
+
+export const fetchCategoryByLabel = (label) =>
+    fetchAndFormat(`/categories?label=${encodeURIComponent(label)}`);

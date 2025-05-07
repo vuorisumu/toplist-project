@@ -14,3 +14,9 @@ export const formatData = (data) => {
     }
     return [];
 };
+
+export const fetchAndFormat = (endpoint) => {
+    return fetch(`${BASE_URL}${endpoint}`)
+        .then((response) => response.json())
+        .then((data) => formatData(data));
+};
