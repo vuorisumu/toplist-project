@@ -4,8 +4,17 @@ import { StyleSheet } from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { useEffect } from "react";
+import { fetchAllCategories } from "../../api/categories";
 
 export default function ExtraView() {
+    useEffect(() => {
+        fetchAllCategories()
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((e) => console.log(e));
+    }, []);
     return (
         <ParallaxScrollView
             headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
