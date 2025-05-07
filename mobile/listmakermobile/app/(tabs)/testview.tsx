@@ -6,6 +6,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useEffect } from "react";
 import { fetchAllCategories } from "../../api/categories";
+import { fetchTemplateNamesByInput } from "../../api/templates";
 
 export default function ExtraView() {
     useEffect(() => {
@@ -14,6 +15,14 @@ export default function ExtraView() {
                 console.log(res);
             })
             .catch((e) => console.log(e));
+
+        fetchTemplateNamesByInput("t")
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((e) => {
+                console.log(e);
+            });
     }, []);
     return (
         <ParallaxScrollView

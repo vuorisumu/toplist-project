@@ -15,8 +15,14 @@ export const formatData = (data) => {
     return [];
 };
 
-export const fetchAndFormat = (endpoint) => {
-    return fetch(`${BASE_URL}${endpoint}`)
+const getFilterQuery = (filters) => {
+    const query = new URLSearchParams(filters);
+    return `?${query.toString()}`;
+};
+
+export const fetchAndFormat = (endpoint, params = {}) => {
+    const query = Object.keys(params).length ? getFilterQuery(params) : "";
+    return fetch(`${BASE_URL}${endpoint}${query}`)
         .then((response) => response.json())
         .then((data) => formatData(data));
 };
