@@ -3,11 +3,14 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
+import { Colors } from "@/constants/Colors";
 import AppContext from "@/hooks/useAppContext";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
 export default function RootLayout() {
     const colorScheme = useColorScheme();
+    const colors = Colors[colorScheme ?? "light"];
+
     const [loaded] = useFonts({
         SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     });
@@ -18,7 +21,7 @@ export default function RootLayout() {
     }
 
     return (
-        <AppContext.Provider value={{ colorScheme }}>
+        <AppContext.Provider value={{ colors }}>
             <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen name="+not-found" />

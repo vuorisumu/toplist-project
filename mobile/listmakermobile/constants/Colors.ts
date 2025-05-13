@@ -6,22 +6,31 @@
 const tintColorLight = "#f2f4f7";
 const tintColorDark = "#24272b";
 
+const sharedColors = {
+    offBlack: "#141414",
+    offWhite: "#fafafa",
+};
+
 export const Colors = {
     light: {
+        ...sharedColors,
         text: "#474a4f",
         background: "#f2f4f7",
         tint: tintColorLight,
         icon: "#559102",
         tabIconDefault: "#559102",
         tabIconSelected: tintColorLight,
+        shadow: "#adadad",
     },
     dark: {
+        ...sharedColors,
         text: "#f7f3f1",
         background: "#24272b",
         tint: tintColorDark,
         icon: "#6a9d23",
         tabIconDefault: "#6a9d23",
         tabIconSelected: tintColorDark,
+        shadow: "#141414",
     },
 };
 
