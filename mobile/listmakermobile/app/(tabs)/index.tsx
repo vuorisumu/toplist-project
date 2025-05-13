@@ -7,7 +7,7 @@ export default function HomeScreen() {
     return (
         <ViewContainer>
             <View>
-                <Header title="Etusivu" />
+                <Header title="Etusivu" showLogo />
                 <Text>Etusivu</Text>
             </View>
         </ViewContainer>
