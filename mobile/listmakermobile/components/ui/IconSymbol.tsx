@@ -20,6 +20,7 @@ const MAPPING = {
     "house.fill": "home",
     "list.clipboard.fill": "list-alt",
     "person.bust": "person",
+    "list.bullet": "format-list-bulleted-add",
     "paperplane.fill": "send",
     "chevron.left.forwardslash.chevron.right": "code",
     "chevron.right": "chevron-right",
