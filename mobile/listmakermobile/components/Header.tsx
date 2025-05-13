@@ -1,5 +1,6 @@
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { StyleSheet, Text, View } from "react-native";
+import Logo from "../assets/images/logo.svg";
 
 type Props = {
     title: string;
@@ -10,6 +11,7 @@ export default function Header({ title }: Props) {
 
     return (
         <View style={styles.container}>
+            <Logo />
             <Text style={[styles.text, { color: titleColor }]}>{title}</Text>
         </View>
     );
