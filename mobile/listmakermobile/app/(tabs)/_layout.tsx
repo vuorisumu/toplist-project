@@ -64,13 +64,13 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="testview"
+                name="useroptions"
                 options={{
-                    title: "Extra",
+                    title: "User options",
                     tabBarIcon: ({ color }) => (
                         <IconSymbol
                             size={28}
-                            name="paperplane.fill"
+                            name="person.bust"
                             color={color}
                         />
                     ),
