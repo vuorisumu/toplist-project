@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import Header from "@/components/Header";
+import { Paragraph } from "@/components/Paragraph";
 import ViewContainer from "@/components/ViewContainer";
 
 export default function HomeScreen() {
@@ -8,7 +9,7 @@ export default function HomeScreen() {
         <ViewContainer>
             <View>
                 <Header title="Etusivu" showLogo />
-                <Text>Etusivu</Text>
+                <Paragraph>Etusivu</Paragraph>
             </View>
         </ViewContainer>
     );
