@@ -5,13 +5,14 @@ import { useAppContext } from "@/utils/AppContext";
 import { Button } from "react-native";
 
 export default function UserMenu() {
-    const { login } = useAppContext();
+    const { login, logout } = useAppContext();
 
     return (
         <ViewContainer>
             <Header title="Menu" />
             <Paragraph>User menu</Paragraph>
             <Button onPress={() => login({ name: "test" })} title="Login" />
+            <Button onPress={() => logout()} title="Logout" />
         </ViewContainer>
     );
 }
