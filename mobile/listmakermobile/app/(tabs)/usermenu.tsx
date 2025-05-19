@@ -1,8 +1,8 @@
+import ButtonStyled from "@/components/ButtonStyled";
 import Header from "@/components/Header";
 import { Paragraph } from "@/components/Paragraph";
 import ViewContainer from "@/components/ViewContainer";
 import { useAppContext } from "@/utils/AppContext";
-import { Button } from "react-native";
 
 export default function UserMenu() {
     const { login, logout } = useAppContext();
@@ -11,8 +11,11 @@ export default function UserMenu() {
         <ViewContainer>
             <Header title="Menu" />
             <Paragraph>User menu</Paragraph>
-            <Button onPress={() => login({ name: "test" })} title="Login" />
-            <Button onPress={() => logout()} title="Logout" />
+            <ButtonStyled
+                title="Login"
+                onPress={() => login({ name: "Test" })}
+            />
+            <ButtonStyled title="Logout" onPress={() => logout()} alt />
         </ViewContainer>
     );
 }
