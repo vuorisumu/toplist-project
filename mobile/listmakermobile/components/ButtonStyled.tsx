@@ -13,7 +13,10 @@ export default function ButtonStyled({ title, onPress, alt = false }: Props) {
     const background = alt ? Colors[theme].mid : Colors[theme].icon;
 
     return (
-        <Pressable style={[{ backgroundColor: background }, styles.button]}>
+        <Pressable
+            style={[{ backgroundColor: background }, styles.button]}
+            onPress={onPress}
+        >
             <Text style={[{ color: Colors[theme].white }, styles.text]}>
                 {title}
             </Text>
