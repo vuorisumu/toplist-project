@@ -38,6 +38,24 @@ export default function TabLayout() {
                     ),
                 }}
             />
+            <Tabs.Screen
+                name="newtemplate"
+                options={{
+                    title: "New Template",
+                    tabBarIcon: ({ color }) => (
+                        <FontAwesome size={28} name="cog" color={color} />
+                    ),
+                }}
+            />
+            <Tabs.Screen
+                name="usermenu"
+                options={{
+                    title: "User",
+                    tabBarIcon: ({ color }) => (
+                        <FontAwesome size={28} name="cog" color={color} />
+                    ),
+                }}
+            />
         </Tabs>
     );
 }
