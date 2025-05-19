@@ -4,7 +4,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Tabs } from "expo-router";
 
 export default function TabLayout() {
-    const { theme } = useAppContext();
+    const { theme, user } = useAppContext();
     const iconSize = 28;
 
     return (
@@ -58,6 +58,7 @@ export default function TabLayout() {
                             color={color}
                         />
                     ),
+                    href: user ? undefined : null,
                 }}
             />
             <Tabs.Screen
