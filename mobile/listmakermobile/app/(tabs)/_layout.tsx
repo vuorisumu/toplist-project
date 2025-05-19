@@ -64,10 +64,10 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="usermenu"
                 options={{
-                    title: "User",
+                    title: user ? "User" : "Log in",
                     tabBarIcon: ({ color }) => (
                         <MaterialIcons
-                            name="account-circle"
+                            name={user ? "account-circle" : "login"}
                             size={iconSize}
                             color={color}
                         />
