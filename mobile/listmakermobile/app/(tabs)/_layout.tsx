@@ -1,10 +1,10 @@
+import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
-import { useColorScheme } from "react-native";
 
 export default function TabLayout() {
-    const theme = useColorScheme() ?? "dark";
+    const { theme } = useAppContext();
 
     return (
         <Tabs

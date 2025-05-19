@@ -1,6 +1,7 @@
 import type { PropsWithChildren } from "react";
-import { ScrollView, StyleSheet, useColorScheme, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 
+import { useAppContext } from "@/utils/AppContext";
 import { ColorKey, Colors } from "@/utils/Colors";
 
 type Props = PropsWithChildren<{
@@ -8,7 +9,7 @@ type Props = PropsWithChildren<{
 }>;
 
 export default function ViewContainer({ children, background }: Props) {
-    const theme = useColorScheme() ?? "dark";
+    const { theme } = useAppContext();
     const backgroundColor = background || Colors[theme].background;
 
     return (

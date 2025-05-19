@@ -1,5 +1,6 @@
+import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
-import { StyleSheet, Text, useColorScheme, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import Logo from "../assets/images/logo.svg";
 
 type Props = {
@@ -8,7 +9,7 @@ type Props = {
 };
 
 export default function Header({ title, showLogo }: Props) {
-    const theme = useColorScheme() ?? "dark";
+    const { theme } = useAppContext();
     const titleColor = Colors[theme].icon;
 
     const logoSize = 40;

@@ -1,13 +1,21 @@
 import AppContext from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
 import { Stack } from "expo-router";
-import { useColorScheme } from "react-native";
+import { useState } from "react";
+import { ColorSchemeName, useColorScheme } from "react-native";
 
 export default function RootLayout() {
-    const theme = useColorScheme() ?? "dark";
+    const [theme, setTheme] = useState<"dark" | "light">(
+        useColorScheme() ?? "dark"
+    );
+
+    const applyTheme = (newTheme: ColorSchemeName) => {
+        if (newTheme === null || newTheme === undefined) return;
+        if (newTheme !== theme) setTheme(newTheme);
+    };
 
     return (
-        <AppContext.Provider value={theme}>
+        <AppContext.Provider value={{ theme, applyTheme }}>
             <Stack
                 screenOptions={{
                     contentStyle: {
