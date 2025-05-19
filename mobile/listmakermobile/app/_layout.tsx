@@ -1,5 +1,5 @@
-import SwipeTabs from "@/components/SwipeTabs";
 import AppContext from "@/utils/AppContext";
+import { Stack } from "expo-router";
 import { useColorScheme } from "react-native";
 
 export default function RootLayout() {
@@ -7,7 +7,9 @@ export default function RootLayout() {
 
     return (
         <AppContext.Provider value={theme}>
-            <SwipeTabs />
+            <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
         </AppContext.Provider>
     );
 }
