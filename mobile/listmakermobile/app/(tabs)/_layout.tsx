@@ -1,10 +1,11 @@
 import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Tabs } from "expo-router";
 
 export default function TabLayout() {
     const { theme } = useAppContext();
+    const iconSize = 28;
 
     return (
         <Tabs
@@ -25,7 +26,11 @@ export default function TabLayout() {
                 options={{
                     title: "Home",
                     tabBarIcon: ({ color }) => (
-                        <FontAwesome size={28} name="home" color={color} />
+                        <MaterialIcons
+                            name="home"
+                            size={iconSize}
+                            color={color}
+                        />
                     ),
                 }}
             />
@@ -34,7 +39,11 @@ export default function TabLayout() {
                 options={{
                     title: "Categories",
                     tabBarIcon: ({ color }) => (
-                        <FontAwesome size={28} name="cog" color={color} />
+                        <MaterialIcons
+                            name="list-alt"
+                            size={iconSize}
+                            color={color}
+                        />
                     ),
                 }}
             />
@@ -43,7 +52,11 @@ export default function TabLayout() {
                 options={{
                     title: "New Template",
                     tabBarIcon: ({ color }) => (
-                        <FontAwesome size={28} name="cog" color={color} />
+                        <MaterialIcons
+                            name="format-list-bulleted-add"
+                            size={iconSize}
+                            color={color}
+                        />
                     ),
                 }}
             />
@@ -52,7 +65,11 @@ export default function TabLayout() {
                 options={{
                     title: "User",
                     tabBarIcon: ({ color }) => (
-                        <FontAwesome size={28} name="cog" color={color} />
+                        <MaterialIcons
+                            name="account-circle"
+                            size={iconSize}
+                            color={color}
+                        />
                     ),
                 }}
             />
