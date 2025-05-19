@@ -1,15 +1,12 @@
-import { Text, View } from "react-native";
+import Header from "@/components/Header";
+import { Paragraph } from "@/components/Paragraph";
+import ViewContainer from "@/components/ViewContainer";
 
 export default function Index() {
     return (
-        <View
-            style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-        >
-            <Text>Edit app/index.tsx to edit this screen.</Text>
-        </View>
+        <ViewContainer>
+            <Header title="Etusivu" showLogo />
+            <Paragraph>Edit app/index.tsx to edit this screen.</Paragraph>
+        </ViewContainer>
     );
 }
