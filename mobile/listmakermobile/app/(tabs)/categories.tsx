@@ -1,15 +1,12 @@
-import { Text, View } from "react-native";
+import Header from "@/components/Header";
+import { Paragraph } from "@/components/Paragraph";
+import ViewContainer from "@/components/ViewContainer";
 
 export default function Categories() {
     return (
-        <View
-            style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-        >
-            <Text>Hewwo.</Text>
-        </View>
+        <ViewContainer>
+            <Header title="Categories" />
+            <Paragraph>Categories</Paragraph>
+        </ViewContainer>
     );
 }
