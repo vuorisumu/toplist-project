@@ -1,10 +1,10 @@
 import { Paragraph } from "@/components/Paragraph";
 import ViewContainer from "@/components/ViewContainer";
 
-export default function ViewTemplate() {
+export default function UserSettings() {
     return (
         <ViewContainer>
-            <Paragraph>Single template page</Paragraph>
+            <Paragraph>User settings</Paragraph>
         </ViewContainer>
     );
 }

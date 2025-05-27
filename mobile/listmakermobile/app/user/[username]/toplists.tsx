@@ -1,10 +1,10 @@
 import { Paragraph } from "@/components/Paragraph";
 import ViewContainer from "@/components/ViewContainer";
 
-export default function ViewTemplate() {
+export default function UserTopLists() {
     return (
         <ViewContainer>
-            <Paragraph>Single template page</Paragraph>
+            <Paragraph>User top lists</Paragraph>
         </ViewContainer>
     );
 }

@@ -32,14 +32,13 @@ export default function RootLayout() {
                     contentStyle: {
                         backgroundColor: Colors[theme].background,
                     },
+                    headerShown: false,
                 }}
             >
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen
-                    name="template"
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen name="toplist" options={{ headerShown: false }} />
+                <Stack.Screen name="(tabs)" />
+                <Stack.Screen name="template" />
+                <Stack.Screen name="toplist" />
+                <Stack.Screen name="user" />
             </Stack>
         </AppContext.Provider>
     );
