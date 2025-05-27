@@ -35,6 +35,11 @@ export default function RootLayout() {
                 }}
             >
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                    name="template"
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen name="toplist" options={{ headerShown: false }} />
             </Stack>
         </AppContext.Provider>
     );
