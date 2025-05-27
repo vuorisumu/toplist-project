@@ -2,6 +2,7 @@ import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Tabs } from "expo-router";
+import { View } from "react-native";
 
 export default function TabLayout() {
     const { theme, user } = useAppContext();
@@ -11,7 +12,7 @@ export default function TabLayout() {
         <Tabs
             screenOptions={{
                 tabBarActiveTintColor: Colors[theme].icon,
-                headerShown: false,
+                header: () => <View style={{ height: 42 }} />,
                 sceneStyle: {
                     backgroundColor: "transparent",
                 },
@@ -58,7 +59,7 @@ export default function TabLayout() {
                             color={color}
                         />
                     ),
-                    href: user ? undefined : null,
+                    href: user ? "/template/new" : null,
                 }}
             />
             <Tabs.Screen
