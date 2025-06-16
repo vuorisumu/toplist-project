@@ -49,7 +49,7 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="newtemplate"
+                name="template"
                 options={{
                     title: "New Template",
                     tabBarIcon: ({ color }) => (

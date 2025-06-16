@@ -1,6 +1,7 @@
 import AppContext from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
 import { Stack } from "expo-router";
+import * as SystemUI from "expo-system-ui";
 import { useState } from "react";
 import { ColorSchemeName, useColorScheme } from "react-native";
 
@@ -9,6 +10,7 @@ export default function RootLayout() {
     const [theme, setTheme] = useState<"dark" | "light">(
         useColorScheme() ?? "dark"
     );
+    SystemUI.setBackgroundColorAsync(Colors[theme].background);
 
     const applyTheme = (newTheme: ColorSchemeName) => {
         if (newTheme === null || newTheme === undefined) return;
