@@ -4,6 +4,7 @@ import { Stack } from "expo-router";
 import * as SystemUI from "expo-system-ui";
 import { useState } from "react";
 import { ColorSchemeName, useColorScheme } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function RootLayout() {
     const [user, setUser] = useState<any>(false);
@@ -28,20 +29,24 @@ export default function RootLayout() {
     };
 
     return (
-        <AppContext.Provider value={{ theme, applyTheme, user, login, logout }}>
-            <Stack
-                screenOptions={{
-                    contentStyle: {
-                        backgroundColor: Colors[theme].background,
-                    },
-                    headerShown: false,
-                }}
+        <GestureHandlerRootView>
+            <AppContext.Provider
+                value={{ theme, applyTheme, user, login, logout }}
             >
-                <Stack.Screen name="(tabs)" />
-                <Stack.Screen name="template" />
-                <Stack.Screen name="toplist" />
-                <Stack.Screen name="user" />
-            </Stack>
-        </AppContext.Provider>
+                <Stack
+                    screenOptions={{
+                        contentStyle: {
+                            backgroundColor: Colors[theme].background,
+                        },
+                        headerShown: false,
+                    }}
+                >
+                    <Stack.Screen name="(tabs)" />
+                    <Stack.Screen name="template" />
+                    <Stack.Screen name="toplist" />
+                    <Stack.Screen name="user" />
+                </Stack>
+            </AppContext.Provider>
+        </GestureHandlerRootView>
     );
 }
