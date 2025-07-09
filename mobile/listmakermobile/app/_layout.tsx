@@ -1,3 +1,4 @@
+import "@/i18n";
 import AppContext from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
 import { Stack } from "expo-router";
