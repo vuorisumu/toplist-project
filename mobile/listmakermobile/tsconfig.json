@@ -13,5 +13,5 @@
         ".expo/types/**/*.ts",
         "expo-env.d.ts",
         "metro.config.js"
-    ]
+, "i18n/createTypes.cjs"    ]
 }

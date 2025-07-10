@@ -7,6 +7,7 @@ type Props = {};
 export default function EditableTemplate({}: Props) {
     const { t } = useTranslation();
     const [title, setTitle] = useState("");
+
     return (
         <View>
             <EditableField title="Nimi" value={title} setValue={setTitle} />
