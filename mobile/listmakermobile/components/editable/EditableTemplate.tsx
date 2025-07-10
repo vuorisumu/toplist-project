@@ -10,7 +10,11 @@ export default function EditableTemplate({}: Props) {
 
     return (
         <View>
-            <EditableField title="Nimi" value={title} setValue={setTitle} />
+            <EditableField
+                title={t("templates.name")}
+                value={title}
+                setValue={setTitle}
+            />
         </View>
     );
 }
