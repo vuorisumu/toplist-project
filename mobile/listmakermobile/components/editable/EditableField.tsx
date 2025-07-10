@@ -33,7 +33,7 @@ export default function EditableField({ title, value, setValue }: Props) {
                 <TextInput
                     value={value}
                     onChangeText={setValue}
-                    style={textStyle}
+                    style={[textStyle, styles.inputText]}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                 />
@@ -47,9 +47,12 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
     },
     input: {
-        padding: 2,
+        paddingHorizontal: 4,
         borderRadius: 5,
-        borderWidth: 2,
+        borderWidth: 1,
+    },
+    inputText: {
+        lineHeight: 12,
     },
     title: {
         fontSize: 12,
