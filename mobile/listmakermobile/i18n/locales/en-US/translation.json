@@ -2,5 +2,12 @@
     "common": {
         "yes": "Yes",
         "no": "No"
+    },
+    "templates": {
+        "new": "New template",
+        "info": "Template info",
+        "name": "Template name",
+        "description": "Template description",
+        "category": "Category"
     }
 }
