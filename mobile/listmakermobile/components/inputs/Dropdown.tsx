@@ -1,18 +1,16 @@
 import { Picker } from "@react-native-picker/picker";
-import { useState } from "react";
 
-type Item = {
+export type DropdownItem = {
     label: string;
     value: any;
     [key: string]: any;
 };
 type Props = {
-    items: Item[];
-    value?: string | Item;
+    items: DropdownItem[];
+    value?: string | DropdownItem;
+    setValue: (value: string | DropdownItem) => void;
 };
-export default function Dropdown({ items, value }: Props) {
-    const [selected, setSelected] = useState(value);
-
+export default function Dropdown({ items, value, setValue }: Props) {
     const isPlaceholder = () => {
         if (!value) return false;
         const isFound = items.find((item) => item.value === value);
@@ -20,7 +18,7 @@ export default function Dropdown({ items, value }: Props) {
     };
 
     return (
-        <Picker selectedValue={selected} onValueChange={(v) => setSelected(v)}>
+        <Picker selectedValue={value} onValueChange={(v) => setValue(v)}>
             {value && isPlaceholder() && (
                 <Picker.Item
                     label={typeof value === "string" ? value : value.value}

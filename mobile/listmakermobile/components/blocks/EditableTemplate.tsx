@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
-import Dropdown from "../inputs/Dropdown";
+import CategorySelection from "../inputs/CategorySelection";
+import { DropdownItem } from "../inputs/Dropdown";
 import EditableField from "../inputs/EditableField";
 
 type Props = {};
@@ -9,6 +10,9 @@ export default function EditableTemplate({}: Props) {
     const { t } = useTranslation();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [category, setCategory] = useState<
+        string | DropdownItem | undefined
+    >();
 
     return (
         <View style={styles.infoblock}>
@@ -22,13 +26,7 @@ export default function EditableTemplate({}: Props) {
                 value={description}
                 setValue={setDescription}
             />
-            <Dropdown
-                items={[
-                    { label: "test", value: "test" },
-                    { label: "test 2", value: "test2" },
-                ]}
-                value={"Placeholder"}
-            />
+            <CategorySelection value={category} setValue={setCategory} />
         </View>
     );
 }
