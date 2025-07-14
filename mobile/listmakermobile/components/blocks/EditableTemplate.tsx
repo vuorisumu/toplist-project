@@ -1,6 +1,8 @@
+import { useAppContext } from "@/utils/AppContext";
+import { createCommonStyles } from "@/utils/styles";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import CategorySelection from "../inputs/CategorySelection";
 import { DropdownItem } from "../inputs/Dropdown";
 import EditableField from "../inputs/EditableField";
@@ -8,6 +10,8 @@ import EditableField from "../inputs/EditableField";
 type Props = {};
 export default function EditableTemplate({}: Props) {
     const { t } = useTranslation();
+    const { theme } = useAppContext();
+    const commonStyles = createCommonStyles(theme);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [category, setCategory] = useState<
@@ -26,7 +30,12 @@ export default function EditableTemplate({}: Props) {
                 value={description}
                 setValue={setDescription}
             />
-            <CategorySelection value={category} setValue={setCategory} />
+            <View style={styles.inputblock}>
+                <Text style={commonStyles.smallTitle}>
+                    {t("templates.category")}
+                </Text>
+                <CategorySelection value={category} setValue={setCategory} />
+            </View>
         </View>
     );
 }
@@ -34,5 +43,8 @@ export default function EditableTemplate({}: Props) {
 const styles = StyleSheet.create({
     infoblock: {
         gap: 10,
+    },
+    inputblock: {
+        gap: 5,
     },
 });
