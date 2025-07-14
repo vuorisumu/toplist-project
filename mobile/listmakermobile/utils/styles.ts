@@ -9,4 +9,8 @@ export const createCommonStyles = (theme: keyof typeof Colors) =>
             opacity: 0.8,
             color: Colors[theme].text,
         },
+        boldedText: {
+            fontWeight: 600,
+            color: Colors[theme].text,
+        },
     });

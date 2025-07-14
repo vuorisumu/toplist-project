@@ -1,5 +1,6 @@
 import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
+import { createCommonStyles } from "@/utils/styles";
 import { Picker } from "@react-native-picker/picker";
 import { StyleSheet, View } from "react-native";
 
@@ -16,6 +17,7 @@ type Props = {
 
 export default function Dropdown({ items, value, setValue }: Props) {
     const { theme } = useAppContext();
+    const commonStyles = createCommonStyles(theme);
 
     const isPlaceholder = () => {
         if (!value) return false;
@@ -28,7 +30,7 @@ export default function Dropdown({ items, value, setValue }: Props) {
             <Picker
                 selectedValue={value}
                 onValueChange={(v) => setValue(v)}
-                style={[styles.pickerStyles, { color: Colors[theme].text }]}
+                style={commonStyles.boldedText}
                 dropdownIconColor={Colors[theme].text}
             >
                 {value && isPlaceholder() && (
@@ -54,8 +56,5 @@ const styles = StyleSheet.create({
     container: {
         borderWidth: 2,
         borderRadius: 25,
-    },
-    pickerStyles: {
-        fontWeight: 600,
     },
 });
