@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
-import EditableField from "./EditableField";
+import EditableField from "../inputs/EditableField";
 
 type Props = {};
 export default function EditableTemplate({}: Props) {
