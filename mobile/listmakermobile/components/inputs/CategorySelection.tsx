@@ -1,6 +1,6 @@
 import { fetchAllCategories } from "@/api/categories";
 import { useAppContext } from "@/utils/AppContext";
-import { getData } from "@/utils/cache";
+import { getData, storeData } from "@/utils/cache";
 import { Colors } from "@/utils/Colors";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
@@ -29,6 +29,7 @@ export default function CategorySelection({ value, setValue }: Props) {
             } else {
                 console.log("Fetching categories");
                 const res = await fetchAllCategories();
+                await storeData("categories", res);
                 setCategories(res);
             }
         } catch (e) {
