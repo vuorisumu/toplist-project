@@ -1,0 +1,41 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const CACHE_TTL = 30 * 60 * 1000;
+
+export const storeData = async (key: string, value: any) => {
+    try {
+        const timestamp = Date.now();
+        const jsonValue = JSON.stringify({ data: value, timestamp: timestamp });
+        await AsyncStorage.setItem(key, jsonValue);
+    } catch (e) {
+        console.log("Error storing data to", key, e);
+    }
+};
+
+export const getData = async (key: string) => {
+    try {
+        const cached = await AsyncStorage.getItem(key);
+        if (!cached) return null;
+        const jsonValue = JSON.parse(cached);
+        const now = Date.now();
+
+        // Data found, not expired
+        if (now - jsonValue.timestamp < CACHE_TTL) {
+            return jsonValue.data;
+        }
+
+        // Data expired
+        await removeValue(key);
+        return null;
+    } catch (e) {
+        return null;
+    }
+};
+
+const removeValue = async (key: string) => {
+    try {
+        await AsyncStorage.removeItem(key);
+    } catch (e) {
+        console.log("Error removing value", e);
+    }
+};
