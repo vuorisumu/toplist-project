@@ -28,6 +28,7 @@ export const getData = async (key: string) => {
         await removeValue(key);
         return null;
     } catch (e) {
+        console.log("Error fetching data", e);
         return null;
     }
 };
