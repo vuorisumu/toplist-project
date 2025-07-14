@@ -1,6 +1,9 @@
 import { fetchAllCategories } from "@/api/categories";
+import { useAppContext } from "@/utils/AppContext";
 import { getData } from "@/utils/cache";
+import { Colors } from "@/utils/Colors";
 import { useEffect, useState } from "react";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import Dropdown, { DropdownItem } from "./Dropdown";
 
 type Props = {
@@ -8,6 +11,7 @@ type Props = {
     setValue: (value: string | DropdownItem) => void;
 };
 export default function CategorySelection({ value, setValue }: Props) {
+    const { theme } = useAppContext();
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -33,6 +37,16 @@ export default function CategorySelection({ value, setValue }: Props) {
         setLoading(false);
     };
 
+    if (loading) {
+        return (
+            <View
+                style={[styles.placeholder, { borderColor: Colors[theme].mid }]}
+            >
+                <ActivityIndicator size={"large"} color={Colors[theme].icon} />
+            </View>
+        );
+    }
+
     return (
         <Dropdown
             items={categories}
@@ -41,3 +55,11 @@ export default function CategorySelection({ value, setValue }: Props) {
         />
     );
 }
+
+const styles = StyleSheet.create({
+    placeholder: {
+        borderWidth: 2,
+        borderRadius: 25,
+        padding: 5,
+    },
+});
