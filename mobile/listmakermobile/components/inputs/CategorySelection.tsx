@@ -24,10 +24,8 @@ export default function CategorySelection({ value, setValue }: Props) {
         try {
             const cached = await getData("categories");
             if (cached) {
-                console.log("Setting cached categories");
                 setCategories(cached);
             } else {
-                console.log("Fetching categories");
                 const res = await fetchAllCategories();
                 await storeData("categories", res);
                 setCategories(res);
