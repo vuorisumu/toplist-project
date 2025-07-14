@@ -1,7 +1,10 @@
+import { useAppContext } from "@/utils/AppContext";
+import { Colors } from "@/utils/Colors";
 import { Picker } from "@react-native-picker/picker";
+import { StyleSheet, View } from "react-native";
 
 export type DropdownItem = {
-    label: string;
+    name: string;
     value: any;
     [key: string]: any;
 };
@@ -10,7 +13,10 @@ type Props = {
     value?: string | DropdownItem;
     setValue: (value: string | DropdownItem) => void;
 };
+
 export default function Dropdown({ items, value, setValue }: Props) {
+    const { theme } = useAppContext();
+
     const isPlaceholder = () => {
         if (!value) return false;
         const isFound = items.find((item) => item.value === value);
@@ -18,21 +24,38 @@ export default function Dropdown({ items, value, setValue }: Props) {
     };
 
     return (
-        <Picker selectedValue={value} onValueChange={(v) => setValue(v)}>
-            {value && isPlaceholder() && (
-                <Picker.Item
-                    label={typeof value === "string" ? value : value.value}
-                    value={null}
-                />
-            )}
+        <View style={[styles.container, { borderColor: Colors[theme].mid }]}>
+            <Picker
+                selectedValue={value}
+                onValueChange={(v) => setValue(v)}
+                style={[styles.pickerStyles, { color: Colors[theme].text }]}
+                dropdownIconColor={Colors[theme].text}
+            >
+                {value && isPlaceholder() && (
+                    <Picker.Item
+                        label={typeof value === "string" ? value : value.value}
+                        value={null}
+                    />
+                )}
 
-            {items.map((item) => (
-                <Picker.Item
-                    key={`item${item.value}`}
-                    label={item.label}
-                    value={item.value}
-                />
-            ))}
-        </Picker>
+                {items.map((item) => (
+                    <Picker.Item
+                        key={`item${item.value}`}
+                        label={item.name}
+                        value={item.value}
+                    />
+                ))}
+            </Picker>
+        </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        borderWidth: 2,
+        borderRadius: 25,
+    },
+    pickerStyles: {
+        fontWeight: 600,
+    },
+});
