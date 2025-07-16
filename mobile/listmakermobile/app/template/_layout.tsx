@@ -1,10 +1,15 @@
-import Header from "@/components/Header";
 import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
-import { Stack } from "expo-router";
+import { createCommonStyles } from "@/utils/styles";
+import { HeaderBackButton } from "@react-navigation/elements";
+import Constants from "expo-constants";
+import { Stack, useNavigation } from "expo-router";
+import { Text, View } from "react-native";
 
 export default function TemplateLayout() {
     const { theme } = useAppContext();
+    const commonStyles = createCommonStyles(theme);
+    const navigation = useNavigation();
     const tint = Colors[theme].icon;
 
     return (
@@ -12,7 +17,27 @@ export default function TemplateLayout() {
             screenOptions={{
                 headerShadowVisible: false,
                 headerStyle: { backgroundColor: "transparent" },
-                headerTitle: (props) => <Header title={props.children} />,
+                header: (props) => (
+                    <View
+                        style={[
+                            commonStyles.basicRow,
+                            {
+                                paddingTop: Constants.statusBarHeight,
+                                paddingHorizontal: 10,
+                                paddingBottom: 5,
+                                backgroundColor: Colors[theme].background,
+                            },
+                        ]}
+                    >
+                        <HeaderBackButton
+                            onPress={() => navigation.goBack()}
+                            tintColor={tint}
+                        />
+                        <Text style={commonStyles.titleText}>
+                            {props.options.title || props.route.name}
+                        </Text>
+                    </View>
+                ),
                 headerTintColor: tint,
             }}
         >
