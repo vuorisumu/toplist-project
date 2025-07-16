@@ -6,6 +6,7 @@ import { StyleSheet, Text, View } from "react-native";
 import CategorySelection from "../inputs/CategorySelection";
 import { DropdownItem } from "../inputs/Dropdown";
 import EditableField from "../inputs/EditableField";
+import ItemList from "../inputs/ItemList";
 
 type Props = {};
 export default function EditableTemplate({}: Props) {
@@ -19,23 +20,36 @@ export default function EditableTemplate({}: Props) {
     >();
 
     return (
-        <View style={styles.infoblock}>
-            <EditableField
-                title={t("templates.name")}
-                value={title}
-                setValue={setTitle}
-            />
-            <EditableField
-                title={t("templates.description")}
-                value={description}
-                setValue={setDescription}
-            />
-            <View style={styles.inputblock}>
-                <Text style={commonStyles.smallTitle}>
-                    {t("templates.category")}
-                </Text>
-                <CategorySelection value={category} setValue={setCategory} />
+        <View>
+            <View style={styles.infoblock}>
+                <EditableField
+                    title={t("templates.name")}
+                    value={title}
+                    setValue={setTitle}
+                />
+                <EditableField
+                    title={t("templates.description")}
+                    value={description}
+                    setValue={setDescription}
+                />
+                <View style={styles.inputblock}>
+                    <Text style={commonStyles.smallTitle}>
+                        {t("templates.category")}
+                    </Text>
+                    <CategorySelection
+                        value={category}
+                        setValue={setCategory}
+                    />
+                </View>
             </View>
+
+            <ItemList
+                initialItems={[
+                    { item_name: "testi", id: 1 },
+                    { item_name: "testi2", id: 2 },
+                ]}
+                onChange={(v) => console.log(v)}
+            />
         </View>
     );
 }
