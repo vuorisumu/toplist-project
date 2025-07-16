@@ -49,7 +49,8 @@ export default function CategorySelection({ value, setValue }: Props) {
     return (
         <Dropdown
             items={categories}
-            value={value || "Choose category"}
+            value={value}
+            placeholder="Choose category"
             setValue={setValue}
         />
     );

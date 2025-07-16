@@ -13,17 +13,21 @@ type Props = {
     items: DropdownItem[];
     value?: string | DropdownItem;
     setValue: (value: string | DropdownItem) => void;
+    placeholder?: string;
 };
 
-export default function Dropdown({ items, value, setValue }: Props) {
+export default function Dropdown({
+    items,
+    value,
+    setValue,
+    placeholder,
+}: Props) {
     const { theme } = useAppContext();
     const commonStyles = createCommonStyles(theme);
-
-    const isPlaceholder = () => {
-        if (!value) return false;
-        const isFound = items.find((item) => item.value === value);
-        return !isFound;
-    };
+    const pickerItems: any[] = [
+        placeholder && { value: "placeholder", name: placeholder },
+        ...items,
+    ];
 
     return (
         <View style={[styles.container, { borderColor: Colors[theme].mid }]}>
@@ -34,16 +38,10 @@ export default function Dropdown({ items, value, setValue }: Props) {
                     setValue(v);
                 }}
                 style={commonStyles.boldedText}
+                itemStyle={{ fontSize: 10 }}
                 dropdownIconColor={Colors[theme].text}
             >
-                {value && isPlaceholder() && (
-                    <Picker.Item
-                        label={typeof value === "string" ? value : value.value}
-                        value={null}
-                    />
-                )}
-
-                {items.map((item) => (
+                {pickerItems.map((item) => (
                     <Picker.Item
                         key={`item${item.value}`}
                         label={item.name}
