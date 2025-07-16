@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     inputText: {
-        lineHeight: 12,
+        padding: 7,
     },
     title: {
         fontSize: 12,
