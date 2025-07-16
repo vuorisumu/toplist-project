@@ -29,7 +29,10 @@ export default function Dropdown({ items, value, setValue }: Props) {
         <View style={[styles.container, { borderColor: Colors[theme].mid }]}>
             <Picker
                 selectedValue={value}
-                onValueChange={(v) => setValue(v)}
+                onValueChange={(v) => {
+                    console.log(v);
+                    setValue(v);
+                }}
                 style={commonStyles.boldedText}
                 dropdownIconColor={Colors[theme].text}
             >
@@ -44,7 +47,7 @@ export default function Dropdown({ items, value, setValue }: Props) {
                     <Picker.Item
                         key={`item${item.value}`}
                         label={item.name}
-                        value={item.value}
+                        value={item.value || item.id}
                     />
                 ))}
             </Picker>
