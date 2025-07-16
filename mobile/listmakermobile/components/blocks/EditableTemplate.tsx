@@ -1,12 +1,15 @@
 import { useAppContext } from "@/utils/AppContext";
+import { Colors } from "@/utils/Colors";
 import { createCommonStyles } from "@/utils/styles";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
+import { Switch } from "react-native-gesture-handler";
 import CategorySelection from "../inputs/CategorySelection";
 import { DropdownItem } from "../inputs/Dropdown";
 import EditableField from "../inputs/EditableField";
 import ItemList from "../inputs/ItemList";
+import { Paragraph } from "../Paragraph";
 
 type Props = {};
 export default function EditableTemplate({}: Props) {
@@ -19,6 +22,7 @@ export default function EditableTemplate({}: Props) {
         string | DropdownItem | undefined
     >();
     const [items, setItems] = useState([{ item_name: "" }]);
+    const [isBlank, setIsBlank] = useState(false);
 
     return (
         <View style={{ gap: 10 }}>
@@ -53,6 +57,15 @@ export default function EditableTemplate({}: Props) {
                 <Text style={commonStyles.subHeader}>
                     {t("templates.items")}
                 </Text>
+                <View style={commonStyles.basicRow}>
+                    <Switch
+                        value={isBlank}
+                        onChange={() => setIsBlank(!isBlank)}
+                        trackColor={{ true: Colors[theme].icon }}
+                        thumbColor={Colors[theme].text}
+                    />
+                    <Paragraph>Blank</Paragraph>
+                </View>
                 <ItemList initialItems={items} onChange={setItems} />
             </View>
         </View>
