@@ -18,6 +18,7 @@ export default function EditableTemplate({}: Props) {
     const [category, setCategory] = useState<
         string | DropdownItem | undefined
     >();
+    const [items, setItems] = useState([{ item_name: "" }]);
 
     return (
         <View style={{ gap: 10 }}>
@@ -52,13 +53,7 @@ export default function EditableTemplate({}: Props) {
                 <Text style={commonStyles.subHeader}>
                     {t("templates.items")}
                 </Text>
-                <ItemList
-                    initialItems={[
-                        { item_name: "testi" },
-                        { item_name: "testi2" },
-                    ]}
-                    onChange={(v) => console.log(v)}
-                />
+                <ItemList initialItems={items} onChange={setItems} />
             </View>
         </View>
     );

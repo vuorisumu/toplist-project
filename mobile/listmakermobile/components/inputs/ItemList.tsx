@@ -1,6 +1,5 @@
 import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
-import { createCommonStyles } from "@/utils/styles";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React, { useCallback, useEffect, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
@@ -14,13 +13,11 @@ type Props = {
 };
 export default function ItemList({ initialItems, onChange }: Props) {
     const { theme } = useAppContext();
-    const commonStyles = createCommonStyles(theme);
-    const [items, setItems] = useState([
-        ...initialItems.map((item) => {
-            item.id = uuid.v4();
-            return item;
-        }),
-    ]);
+    const [items, setItems] = useState(
+        [...initialItems].map((item) => {
+            return { id: uuid.v4(), ...item };
+        })
+    );
 
     useEffect(() => {
         onChange(items);
