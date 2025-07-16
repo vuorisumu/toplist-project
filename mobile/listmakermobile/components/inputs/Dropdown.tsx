@@ -38,7 +38,7 @@ export default function Dropdown({
                     setValue(v);
                 }}
                 style={commonStyles.boldedText}
-                itemStyle={{ fontSize: 10 }}
+                itemStyle={{ fontSize: 14 }}
                 dropdownIconColor={Colors[theme].text}
             >
                 {pickerItems.map((item) => (
