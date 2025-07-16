@@ -2,6 +2,7 @@ import { useAppContext } from "@/utils/AppContext";
 import { createCommonStyles } from "@/utils/styles";
 import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
+import uuid from "react-native-uuid";
 import EditableField from "./EditableField";
 
 type Props = {
@@ -11,7 +12,12 @@ type Props = {
 export default function ItemList({ initialItems, onChange }: Props) {
     const { theme } = useAppContext();
     const commonStyles = createCommonStyles(theme);
-    const [items, setItems] = useState([...initialItems]);
+    const [items, setItems] = useState([
+        ...initialItems.map((item) => {
+            item.id = uuid.v4();
+            return item;
+        }),
+    ]);
 
     useEffect(() => {
         onChange(items);

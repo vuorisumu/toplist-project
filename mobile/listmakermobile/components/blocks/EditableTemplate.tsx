@@ -44,10 +44,7 @@ export default function EditableTemplate({}: Props) {
             </View>
 
             <ItemList
-                initialItems={[
-                    { item_name: "testi", id: 1 },
-                    { item_name: "testi2", id: 2 },
-                ]}
+                initialItems={[{ item_name: "testi" }, { item_name: "testi2" }]}
                 onChange={(v) => console.log(v)}
             />
         </View>
