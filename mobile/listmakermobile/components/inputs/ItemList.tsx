@@ -5,6 +5,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React, { useCallback, useEffect, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import uuid from "react-native-uuid";
+import ButtonStyled from "../ButtonStyled";
 import EditableField from "./EditableField";
 
 type Props = {
@@ -35,6 +36,10 @@ export default function ItemList({ initialItems, onChange }: Props) {
         setItems((prev) => prev.filter((it) => it.id !== id));
     };
 
+    const addNewItem = () => {
+        setItems((prev) => [...prev, { item_name: "", id: uuid.v4() }]);
+    };
+
     return (
         <View>
             {items.map((item) => (
@@ -46,6 +51,7 @@ export default function ItemList({ initialItems, onChange }: Props) {
                     iconColor={Colors[theme].icon}
                 />
             ))}
+            <ButtonStyled title="Add new item" onPress={addNewItem} />
         </View>
     );
 }
