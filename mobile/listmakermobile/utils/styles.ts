@@ -18,6 +18,12 @@ export const createCommonStyles = (theme: keyof typeof Colors) =>
             fontSize: 24,
             color: Colors[theme].icon,
         },
+        subHeader: {
+            fontWeight: 800,
+            fontSize: 20,
+            color: Colors[theme].text,
+            paddingVertical: 10,
+        },
         basicRow: {
             flexDirection: "row",
             gap: 10,

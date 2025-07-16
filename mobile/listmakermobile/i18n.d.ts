@@ -14,6 +14,8 @@ declare module 'i18next' {
             name: string;
             description: string;
             category: string;
+            items: string;
+            add_items: string;
         };
       };
     };

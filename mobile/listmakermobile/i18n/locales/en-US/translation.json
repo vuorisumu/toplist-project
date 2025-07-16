@@ -8,6 +8,8 @@
         "info": "Template info",
         "name": "Template name",
         "description": "Template description",
-        "category": "Category"
+        "category": "Category",
+        "items": "Template items",
+        "add_items": "Add new item"
     }
 }

@@ -43,10 +43,18 @@ export default function EditableTemplate({}: Props) {
                 </View>
             </View>
 
-            <ItemList
-                initialItems={[{ item_name: "testi" }, { item_name: "testi2" }]}
-                onChange={(v) => console.log(v)}
-            />
+            <View>
+                <Text style={commonStyles.subHeader}>
+                    {t("templates.items")}
+                </Text>
+                <ItemList
+                    initialItems={[
+                        { item_name: "testi" },
+                        { item_name: "testi2" },
+                    ]}
+                    onChange={(v) => console.log(v)}
+                />
+            </View>
         </View>
     );
 }

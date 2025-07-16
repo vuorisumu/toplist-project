@@ -84,7 +84,6 @@ const MemoizedItem = React.memo(Item, (prev, next) => {
 const styles = StyleSheet.create({
     list: {
         gap: 10,
-        paddingVertical: 10,
     },
     row: {
         gap: 10,
