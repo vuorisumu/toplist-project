@@ -64,11 +64,11 @@ export default function EditableTemplate({}: Props) {
                         trackColor={{ true: Colors[theme].icon }}
                         thumbColor={Colors[theme].text}
                     />
-                    <Paragraph>Blank</Paragraph>
+                    <Paragraph>{t("templates.make_blank")}</Paragraph>
                 </View>
 
                 {isBlank ? (
-                    <Paragraph>Template is blank</Paragraph>
+                    <Paragraph>{t("templates.blank_desc")}</Paragraph>
                 ) : (
                     <ItemList initialItems={items} onChange={setItems} />
                 )}

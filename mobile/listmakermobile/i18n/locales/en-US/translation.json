@@ -10,6 +10,8 @@
         "description": "Template description",
         "category": "Category",
         "items": "Template items",
-        "add_items": "Add new item"
+        "add_items": "Add new item",
+        "make_blank": "Make a blank template",
+        "blank_desc": "The template is blank, meaning that the user will always add their own items"
     }
 }
