@@ -23,4 +23,10 @@ export const createCommonStyles = (theme: keyof typeof Colors) =>
             gap: 10,
             alignItems: "center",
         },
+        modalButtonText: {
+            fontWeight: 600,
+            color: Colors[theme].white,
+            fontSize: 16,
+            textAlign: "center",
+        },
     });
