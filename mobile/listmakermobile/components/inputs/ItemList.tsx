@@ -41,7 +41,7 @@ export default function ItemList({ initialItems, onChange }: Props) {
     };
 
     return (
-        <View>
+        <View style={styles.list}>
             {items.map((item) => (
                 <MemoizedItem
                     key={`item-${item.id}`}
@@ -82,6 +82,10 @@ const MemoizedItem = React.memo(Item, (prev, next) => {
 });
 
 const styles = StyleSheet.create({
+    list: {
+        gap: 10,
+        paddingVertical: 10,
+    },
     row: {
         gap: 10,
         flexDirection: "row",
