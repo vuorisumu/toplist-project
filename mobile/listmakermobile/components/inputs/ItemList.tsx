@@ -1,7 +1,7 @@
 import { useAppContext } from "@/utils/AppContext";
 import { createCommonStyles } from "@/utils/styles";
 import React, { useCallback, useEffect, useState } from "react";
-import { View } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 import uuid from "react-native-uuid";
 import EditableField from "./EditableField";
 
@@ -36,7 +36,7 @@ export default function ItemList({ initialItems, onChange }: Props) {
                     key={`item-${item.id}`}
                     item={item}
                     updateItemName={updateItemName}
-                    commonStyles={commonStyles}
+                    style={commonStyles.basicRow}
                 />
             ))}
         </View>
@@ -46,11 +46,11 @@ export default function ItemList({ initialItems, onChange }: Props) {
 type ItemProps = {
     item: any;
     updateItemName: (name: string, id: string) => void;
-    commonStyles: any;
+    style: ViewStyle;
 };
 
-const Item = ({ item, updateItemName, commonStyles }: ItemProps) => (
-    <View style={commonStyles.basicRow}>
+const Item = ({ item, updateItemName, style }: ItemProps) => (
+    <View style={style}>
         <EditableField
             value={item.item_name}
             setValue={(v) => updateItemName(v, item.id)}
@@ -61,3 +61,5 @@ const Item = ({ item, updateItemName, commonStyles }: ItemProps) => (
 const MemoizedItem = React.memo(Item, (prev, next) => {
     return prev.item.item_name === next.item.item_name;
 });
+
+const style = StyleSheet.create({});
