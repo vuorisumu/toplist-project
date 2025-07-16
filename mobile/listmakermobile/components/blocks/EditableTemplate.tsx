@@ -20,26 +20,31 @@ export default function EditableTemplate({}: Props) {
     >();
 
     return (
-        <View>
-            <View style={styles.infoblock}>
-                <EditableField
-                    title={t("templates.name")}
-                    value={title}
-                    setValue={setTitle}
-                />
-                <EditableField
-                    title={t("templates.description")}
-                    value={description}
-                    setValue={setDescription}
-                />
-                <View style={styles.inputblock}>
-                    <Text style={commonStyles.smallTitle}>
-                        {t("templates.category")}
-                    </Text>
-                    <CategorySelection
-                        value={category}
-                        setValue={setCategory}
+        <View style={{ gap: 10 }}>
+            <View>
+                <Text style={commonStyles.subHeader}>
+                    {t("templates.info")}
+                </Text>
+                <View style={styles.infoblock}>
+                    <EditableField
+                        title={t("templates.name")}
+                        value={title}
+                        setValue={setTitle}
                     />
+                    <EditableField
+                        title={t("templates.description")}
+                        value={description}
+                        setValue={setDescription}
+                    />
+                    <View style={styles.inputblock}>
+                        <Text style={commonStyles.smallTitle}>
+                            {t("templates.category")}
+                        </Text>
+                        <CategorySelection
+                            value={category}
+                            setValue={setCategory}
+                        />
+                    </View>
                 </View>
             </View>
 
