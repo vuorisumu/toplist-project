@@ -17,6 +17,7 @@ export default function EditableTemplate({}: Props) {
     const { t } = useTranslation();
     const { theme } = useAppContext();
     const commonStyles = createCommonStyles(theme);
+    const [cover, setCover] = useState<string | null>(null);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [category, setCategory] = useState<
@@ -31,8 +32,13 @@ export default function EditableTemplate({}: Props) {
                 <Text style={commonStyles.subHeader}>
                     {t("templates.info")}
                 </Text>
-                <ImagePicker />
                 <View style={styles.infoblock}>
+                    <View>
+                        <Text style={commonStyles.smallTitle}>
+                            {t("templates.cover_image")}
+                        </Text>
+                        <ImagePicker img={cover} setImg={setCover} />
+                    </View>
                     <EditableField
                         title={t("templates.name")}
                         value={title}

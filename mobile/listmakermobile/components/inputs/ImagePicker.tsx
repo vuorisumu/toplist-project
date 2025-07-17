@@ -9,9 +9,13 @@ import { useState } from "react";
 import { Image, Pressable, StyleSheet, View } from "react-native";
 import ImagePlaceholder from "../ImagePlaceholder";
 
-export default function ImagePicker() {
+type Props = {
+    img?: string | null;
+    setImg?: (uri: string) => void;
+};
+export default function ImagePicker({ img, setImg }: Props) {
     const { theme } = useAppContext();
-    const [image, setImage] = useState<string | null>(null);
+    const [image, setImage] = useState<string | null>(img || null);
     const [status, requestPermission] = useMediaLibraryPermissions();
 
     const pickImage = async () => {
@@ -34,6 +38,7 @@ export default function ImagePicker() {
 
         if (!result.canceled) {
             setImage(result.assets[0].uri);
+            if (setImg) setImg(result.assets[0].uri);
         }
     };
 
