@@ -1,6 +1,7 @@
 const sharedColors = {
     white: "#ffffff",
     mid: "#7f7b82",
+    red: "#af2016ff",
 };
 export const Colors = {
     light: {

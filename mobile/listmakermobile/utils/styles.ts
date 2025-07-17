@@ -35,4 +35,18 @@ export const createCommonStyles = (theme: keyof typeof Colors) =>
             fontSize: 16,
             textAlign: "center",
         },
+        imagePlaceholder: {
+            width: "100%",
+            height: 100,
+            backgroundColor: Colors[theme].secondary,
+            borderRadius: 20,
+            borderWidth: 2,
+            borderColor: Colors[theme].mid,
+            borderStyle: "dashed",
+            alignItems: "center",
+            justifyContent: "center",
+        },
+        imagePlaceholderText: {
+            color: Colors[theme].mid,
+        },
     });

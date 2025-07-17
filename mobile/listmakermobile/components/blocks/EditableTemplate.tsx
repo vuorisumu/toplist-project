@@ -8,6 +8,7 @@ import { Switch } from "react-native-gesture-handler";
 import CategorySelection from "../inputs/CategorySelection";
 import { DropdownItem } from "../inputs/Dropdown";
 import EditableField from "../inputs/EditableField";
+import ImagePicker from "../inputs/ImagePicker";
 import ItemList from "../inputs/ItemList";
 import { Paragraph } from "../Paragraph";
 
@@ -30,6 +31,7 @@ export default function EditableTemplate({}: Props) {
                 <Text style={commonStyles.subHeader}>
                     {t("templates.info")}
                 </Text>
+                <ImagePicker />
                 <View style={styles.infoblock}>
                     <EditableField
                         title={t("templates.name")}
