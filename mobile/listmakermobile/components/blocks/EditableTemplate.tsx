@@ -62,7 +62,7 @@ export default function EditableTemplate({}: Props) {
                 </View>
             </View>
 
-            <View style={styles.infoblock}>
+            <View style={{ gap: 5 }}>
                 <Text style={commonStyles.subHeader}>
                     {t("templates.items")}
                 </Text>
