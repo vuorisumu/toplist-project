@@ -20,6 +20,7 @@ declare module 'i18next' {
             add_items: string;
             make_blank: string;
             blank_desc: string;
+            has_images: string;
         };
       };
     };

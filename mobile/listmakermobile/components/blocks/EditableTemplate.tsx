@@ -25,6 +25,7 @@ export default function EditableTemplate({}: Props) {
     >();
     const [items, setItems] = useState([{ item_name: "" }]);
     const [isBlank, setIsBlank] = useState(false);
+    const [hasImages, setHasImages] = useState(false);
 
     return (
         <View style={{ gap: 10 }}>
@@ -73,6 +74,16 @@ export default function EditableTemplate({}: Props) {
                         thumbColor={Colors[theme].text}
                     />
                     <Paragraph>{t("templates.make_blank")}</Paragraph>
+                </View>
+
+                <View style={commonStyles.basicRow}>
+                    <Switch
+                        value={hasImages}
+                        onChange={() => setHasImages(!hasImages)}
+                        trackColor={{ true: Colors[theme].icon }}
+                        thumbColor={Colors[theme].text}
+                    />
+                    <Paragraph>{t("templates.has_images")}</Paragraph>
                 </View>
 
                 {isBlank ? (
