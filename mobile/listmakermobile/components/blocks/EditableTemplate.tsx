@@ -76,15 +76,17 @@ export default function EditableTemplate({}: Props) {
                     <Paragraph>{t("templates.make_blank")}</Paragraph>
                 </View>
 
-                <View style={commonStyles.basicRow}>
-                    <Switch
-                        value={hasImages}
-                        onChange={() => setHasImages(!hasImages)}
-                        trackColor={{ true: Colors[theme].icon }}
-                        thumbColor={Colors[theme].text}
-                    />
-                    <Paragraph>{t("templates.has_images")}</Paragraph>
-                </View>
+                {!isBlank && (
+                    <View style={commonStyles.basicRow}>
+                        <Switch
+                            value={hasImages}
+                            onChange={() => setHasImages(!hasImages)}
+                            trackColor={{ true: Colors[theme].icon }}
+                            thumbColor={Colors[theme].text}
+                        />
+                        <Paragraph>{t("templates.has_images")}</Paragraph>
+                    </View>
+                )}
 
                 {isBlank ? (
                     <Paragraph>{t("templates.blank_desc")}</Paragraph>
