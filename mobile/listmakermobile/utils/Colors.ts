@@ -9,6 +9,7 @@ export const Colors = {
         background: "#f2f4f7",
         secondary: "#ffffff",
         icon: "#559102",
+        fade: "#ffffff",
         ...sharedColors,
     },
     dark: {
@@ -16,6 +17,7 @@ export const Colors = {
         background: "#24272b",
         secondary: "#292e32",
         icon: "#6a9d23",
+        fade: "#000000",
         ...sharedColors,
     },
 };
