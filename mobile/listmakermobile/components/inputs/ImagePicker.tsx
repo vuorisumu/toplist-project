@@ -41,11 +41,7 @@ export default function ImagePicker() {
 
     return (
         <View style={styles.container}>
-            <ImagePlaceholder
-                onPress={pickImage}
-                text="Pick image from gallery"
-            />
-            {image && (
+            {image ? (
                 <View>
                     <Image source={{ uri: image }} style={styles.image} />
                     <Pressable
@@ -59,6 +55,11 @@ export default function ImagePicker() {
                         />
                     </Pressable>
                 </View>
+            ) : (
+                <ImagePlaceholder
+                    onPress={pickImage}
+                    text="Pick image from gallery"
+                />
             )}
         </View>
     );
