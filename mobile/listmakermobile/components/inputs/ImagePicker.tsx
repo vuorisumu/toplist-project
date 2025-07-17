@@ -28,7 +28,7 @@ export default function ImagePicker() {
         let result = await launchImageLibraryAsync({
             mediaTypes: ["images"],
             allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [5, 3],
             quality: 1,
         });
 
@@ -79,8 +79,10 @@ const styles = StyleSheet.create({
         borderWidth: 2,
     },
     image: {
-        width: 200,
-        height: 200,
+        aspectRatio: "5/3",
+        width: "100%",
+        resizeMode: "cover",
+        borderRadius: 5,
     },
     deleteButton: {
         position: "absolute",
