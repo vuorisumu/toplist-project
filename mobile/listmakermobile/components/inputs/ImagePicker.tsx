@@ -1,6 +1,5 @@
 import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
-import { createCommonStyles } from "@/utils/styles";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import {
     launchImageLibraryAsync,
@@ -12,7 +11,6 @@ import ImagePlaceholder from "../ImagePlaceholder";
 
 export default function ImagePicker() {
     const { theme } = useAppContext();
-    const commonStyles = createCommonStyles(theme);
     const [image, setImage] = useState<string | null>(null);
     const [status, requestPermission] = useMediaLibraryPermissions();
 
