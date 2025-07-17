@@ -12,6 +12,7 @@ declare module 'i18next' {
             new: string;
             info: string;
             cover_image: string;
+            pick_cover_img: string;
             name: string;
             description: string;
             category: string;

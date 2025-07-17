@@ -6,6 +6,7 @@ import {
     useMediaLibraryPermissions,
 } from "expo-image-picker";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Image, Pressable, StyleSheet, View } from "react-native";
 import ImagePlaceholder from "../ImagePlaceholder";
 
@@ -15,6 +16,7 @@ type Props = {
 };
 export default function ImagePicker({ img, setImg }: Props) {
     const { theme } = useAppContext();
+    const { t } = useTranslation();
     const [image, setImage] = useState<string | null>(img || null);
     const [status, requestPermission] = useMediaLibraryPermissions();
 
@@ -61,7 +63,7 @@ export default function ImagePicker({ img, setImg }: Props) {
             ) : (
                 <ImagePlaceholder
                     onPress={pickImage}
-                    text="Pick image from gallery"
+                    text={t("templates.pick_cover_img")}
                 />
             )}
         </View>
