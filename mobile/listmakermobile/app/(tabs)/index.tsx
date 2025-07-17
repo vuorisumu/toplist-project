@@ -1,4 +1,5 @@
 import { fetchTemplates } from "@/api/templates";
+import LoadingArea from "@/components/blocks/LoadingArea";
 import TemplateList from "@/components/blocks/TemplateList";
 import Header from "@/components/Header";
 import { Paragraph } from "@/components/Paragraph";
@@ -10,11 +11,11 @@ import { useEffect, useState } from "react";
 export default function Index() {
     const [loading, setLoading] = useState(false);
     const [refresh, setRefresh] = useState(false);
-    const [templateData, setTemplateData] = useState([]);
+    const [templateData, setTemplateData] = useState<any[]>([]);
 
     useEffect(() => {
-        console.log("Templates", templateData);
-    }, [templateData]);
+        loadTemplates();
+    }, []);
 
     const onRefresh = async () => {
         setRefresh(true);
@@ -34,7 +35,11 @@ export default function Index() {
             }
             const data = await fetchTemplates();
             if (data) {
-                const newData = templateData.concat(data);
+                const combined = templateData.concat(data);
+                const newData = Array.from(
+                    new Map(combined.map((t) => [t.id, t])).values()
+                );
+
                 setTemplateData(newData);
                 await storeData("templates", newData);
                 console.log("Stored", newData);
@@ -48,7 +53,9 @@ export default function Index() {
     return (
         <ViewContainer refreshing={refresh} onRefresh={onRefresh}>
             <Header title="Etusivu" showLogo />
-            <TemplateList templates={templateData} />
+            <LoadingArea loading={loading}>
+                <TemplateList templates={templateData} />
+            </LoadingArea>
             <Paragraph>
                 <Link href={"/template/123/edit"}>Testi</Link>
             </Paragraph>
