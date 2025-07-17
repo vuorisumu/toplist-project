@@ -7,14 +7,21 @@ import {
 } from "expo-image-picker";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Image, Pressable, StyleSheet, View } from "react-native";
+import {
+    Image,
+    Pressable,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import ImagePlaceholder from "../ImagePlaceholder";
 
 type Props = {
     img?: string | null;
     setImg?: (uri: string) => void;
+    small?: boolean;
 };
-export default function ImagePicker({ img, setImg }: Props) {
+export default function ImagePicker({ img, setImg, small }: Props) {
     const { theme } = useAppContext();
     const { t } = useTranslation();
     const [image, setImage] = useState<string | null>(img || null);
@@ -47,23 +54,36 @@ export default function ImagePicker({ img, setImg }: Props) {
     return (
         <View style={styles.container}>
             {image ? (
-                <View>
-                    <Image source={{ uri: image }} style={styles.image} />
-                    <Pressable
-                        onPress={() => setImage(null)}
-                        style={styles.deleteButton}
-                    >
-                        <MaterialIcons
-                            name={"delete"}
-                            size={24}
-                            color={Colors[theme].red}
-                        />
-                    </Pressable>
+                <View style={small && { width: 40 }}>
+                    {small ? (
+                        <TouchableOpacity onPress={pickImage}>
+                            <Image
+                                source={{ uri: image }}
+                                style={[styles.image, { aspectRatio: 1 }]}
+                            />
+                        </TouchableOpacity>
+                    ) : (
+                        <Image source={{ uri: image }} style={styles.image} />
+                    )}
+
+                    {!small && (
+                        <Pressable
+                            onPress={() => setImage(null)}
+                            style={styles.deleteButton}
+                        >
+                            <MaterialIcons
+                                name={"delete"}
+                                size={24}
+                                color={Colors[theme].red}
+                            />
+                        </Pressable>
+                    )}
                 </View>
             ) : (
                 <ImagePlaceholder
                     onPress={pickImage}
                     text={t("templates.pick_cover_img")}
+                    small={small}
                 />
             )}
         </View>

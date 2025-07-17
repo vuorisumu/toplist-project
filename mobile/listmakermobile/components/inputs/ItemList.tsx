@@ -6,12 +6,14 @@ import { Pressable, StyleSheet, View } from "react-native";
 import uuid from "react-native-uuid";
 import ButtonStyled from "../ButtonStyled";
 import EditableField from "./EditableField";
+import ImagePicker from "./ImagePicker";
 
 type Props = {
     initialItems: any[];
     onChange: (items: any[]) => void;
+    hasImages?: boolean;
 };
-export default function ItemList({ initialItems, onChange }: Props) {
+export default function ItemList({ initialItems, onChange, hasImages }: Props) {
     const { theme } = useAppContext();
     const [items, setItems] = useState(
         [...initialItems].map((item) => {
@@ -26,6 +28,12 @@ export default function ItemList({ initialItems, onChange }: Props) {
     const updateItemName = useCallback((name: string, id: string) => {
         setItems((prev) =>
             prev.map((it) => (it.id === id ? { ...it, item_name: name } : it))
+        );
+    }, []);
+
+    const updateItemImage = useCallback((uri: string, id: string) => {
+        setItems((prev) =>
+            prev.map((it) => (it.id === id ? { ...it, img_uri: uri } : it))
         );
     }, []);
 
@@ -44,8 +52,10 @@ export default function ItemList({ initialItems, onChange }: Props) {
                     key={`item-${item.id}`}
                     item={item}
                     updateItemName={updateItemName}
+                    updateItemImage={updateItemImage}
                     deleteItem={deleteItem}
                     iconColor={Colors[theme].icon}
+                    showImage={hasImages === true}
                 />
             ))}
             <ButtonStyled title="Add new item" onPress={addNewItem} />
@@ -56,12 +66,30 @@ export default function ItemList({ initialItems, onChange }: Props) {
 type ItemProps = {
     item: any;
     updateItemName: (name: string, id: string) => void;
+    updateItemImage: (uri: string, id: string) => void;
     deleteItem: (id: string) => void;
     iconColor: string;
+    showImage: boolean;
 };
 
-const Item = ({ item, updateItemName, deleteItem, iconColor }: ItemProps) => (
+const Item = ({
+    item,
+    updateItemName,
+    updateItemImage,
+    deleteItem,
+    iconColor,
+    showImage,
+}: ItemProps) => (
     <View style={styles.row}>
+        {showImage && (
+            <View>
+                <ImagePicker
+                    small
+                    img={item.img_uri}
+                    setImg={(uri) => updateItemImage(uri, item.id)}
+                />
+            </View>
+        )}
         <View style={{ flex: 1 }}>
             <EditableField
                 value={item.item_name}
@@ -75,7 +103,10 @@ const Item = ({ item, updateItemName, deleteItem, iconColor }: ItemProps) => (
 );
 
 const MemoizedItem = React.memo(Item, (prev, next) => {
-    return prev.item.item_name === next.item.item_name;
+    return (
+        prev.item.item_name === next.item.item_name &&
+        prev.showImage === next.showImage
+    );
 });
 
 const styles = StyleSheet.create({

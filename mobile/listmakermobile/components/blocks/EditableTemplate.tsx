@@ -89,7 +89,11 @@ export default function EditableTemplate({}: Props) {
                 {isBlank ? (
                     <Paragraph>{t("templates.blank_desc")}</Paragraph>
                 ) : (
-                    <ItemList initialItems={items} onChange={setItems} />
+                    <ItemList
+                        initialItems={items}
+                        onChange={setItems}
+                        hasImages={hasImages}
+                    />
                 )}
             </View>
         </View>
