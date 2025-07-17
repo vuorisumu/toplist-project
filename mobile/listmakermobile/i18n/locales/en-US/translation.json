@@ -6,6 +6,7 @@
     "templates": {
         "new": "New template",
         "info": "Template info",
+        "cover_image": "Cover image",
         "name": "Template name",
         "description": "Template description",
         "category": "Category",

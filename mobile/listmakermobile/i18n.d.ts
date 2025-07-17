@@ -11,6 +11,7 @@ declare module 'i18next' {
         templates: {
             new: string;
             info: string;
+            cover_image: string;
             name: string;
             description: string;
             category: string;
