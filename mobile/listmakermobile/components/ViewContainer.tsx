@@ -1,19 +1,26 @@
-import type { PropsWithChildren } from "react";
+import { type PropsWithChildren } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 import { useAppContext } from "@/utils/AppContext";
 import { ColorKey, Colors } from "@/utils/Colors";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+    GestureHandlerRootView,
+    RefreshControl,
+} from "react-native-gesture-handler";
 
 type Props = PropsWithChildren<{
     background?: ColorKey;
     noScroll?: boolean;
+    refreshing?: boolean;
+    onRefresh?: () => void;
 }>;
 
 export default function ViewContainer({
     children,
     background,
     noScroll,
+    refreshing,
+    onRefresh,
 }: Props) {
     const { theme } = useAppContext();
     const backgroundColor = background || Colors[theme].background;
@@ -32,7 +39,17 @@ export default function ViewContainer({
         <GestureHandlerRootView
             style={[styles.container, { backgroundColor: backgroundColor }]}
         >
-            <ScrollView scrollEventThrottle={16}>
+            <ScrollView
+                scrollEventThrottle={16}
+                refreshControl={
+                    refreshing !== undefined ? (
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                        />
+                    ) : undefined
+                }
+            >
                 <View style={styles.content}>{children}</View>
             </ScrollView>
         </GestureHandlerRootView>
