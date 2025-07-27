@@ -7,6 +7,7 @@ declare module 'i18next' {
         common: {
             yes: string;
             no: string;
+            save: string;
         };
         templates: {
             new: string;

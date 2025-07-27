@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 import { Switch } from "react-native-gesture-handler";
+import ButtonStyled from "../ButtonStyled";
 import CategorySelection from "../inputs/CategorySelection";
 import { DropdownItem } from "../inputs/Dropdown";
 import EditableField from "../inputs/EditableField";
@@ -97,6 +98,15 @@ export default function EditableTemplate({}: Props) {
                         hasImages={hasImages}
                     />
                 )}
+            </View>
+
+            <View>
+                <ButtonStyled
+                    title={t("common.save")}
+                    icon="save"
+                    size={26}
+                    onPress={() => console.log("Save")}
+                />
             </View>
         </View>
     );

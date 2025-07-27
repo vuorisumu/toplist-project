@@ -1,7 +1,8 @@
 {
     "common": {
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "save": "Save"
     },
     "templates": {
         "new": "New template",
