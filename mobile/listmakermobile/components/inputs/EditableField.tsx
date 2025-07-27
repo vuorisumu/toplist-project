@@ -9,12 +9,14 @@ type Props = {
     value: string;
     setValue: (v: string) => void;
     error?: boolean;
+    secure?: boolean;
 };
 export default function EditableField({
     title,
     value,
     setValue,
     error,
+    secure,
 }: Props) {
     const { theme } = useAppContext();
     const [isFocused, setIsFocused] = useState(false);
@@ -48,6 +50,7 @@ export default function EditableField({
                     style={[textStyle, styles.inputText]}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
+                    secureTextEntry={secure}
                 />
             </View>
         </View>
