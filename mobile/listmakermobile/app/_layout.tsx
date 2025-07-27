@@ -1,6 +1,8 @@
+import { userLogin } from "@/api/authentication";
 import "@/i18n";
 import AppContext from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Stack } from "expo-router";
 import * as SystemUI from "expo-system-ui";
 import { useState } from "react";
@@ -20,8 +22,16 @@ export default function RootLayout() {
     };
 
     const login = async (credentials: any) => {
-        console.log("Login here");
-        setUser(credentials);
+        try {
+            const res = await userLogin(credentials);
+            if (res.error) throw "Unsuccessful login attempt: " + res.error;
+
+            setUser(res);
+            await AsyncStorage.setItem("token", res.token);
+        } catch (e) {
+            console.log(e);
+            setUser(false);
+        }
     };
 
     const logout = () => {
