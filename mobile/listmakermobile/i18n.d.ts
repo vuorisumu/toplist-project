@@ -22,6 +22,10 @@ declare module 'i18next' {
             make_blank: string;
             blank_desc: string;
             has_images: string;
+            errors: {
+                no_title: string;
+                not_enough_items: string;
+            };
         };
       };
     };

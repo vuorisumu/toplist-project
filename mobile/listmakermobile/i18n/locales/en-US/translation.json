@@ -16,6 +16,10 @@
         "add_items": "Add new item",
         "make_blank": "Make a blank template",
         "blank_desc": "The template is blank, meaning that the user will always add their own items",
-        "has_images": "Add images to items"
+        "has_images": "Add images to items",
+        "errors": {
+            "no_title": "Template must have a title",
+            "not_enough_items": "Template must have at least 5 items"
+        }
     }
 }

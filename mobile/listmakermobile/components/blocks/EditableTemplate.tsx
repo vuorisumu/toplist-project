@@ -1,6 +1,7 @@
 import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
 import { createCommonStyles } from "@/utils/styles";
+import { meetsTemplateRequirements } from "@/utils/validation";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
@@ -27,6 +28,14 @@ export default function EditableTemplate({}: Props) {
     const [items, setItems] = useState([{ item_name: "" }]);
     const [isBlank, setIsBlank] = useState(false);
     const [hasImages, setHasImages] = useState(false);
+
+    const meetsRequirements = async () => {
+        try {
+            await meetsTemplateRequirements({ title: title, items: items });
+        } catch (e) {
+            console.log(e);
+        }
+    };
 
     return (
         <View style={{ gap: 10 }}>
@@ -105,7 +114,7 @@ export default function EditableTemplate({}: Props) {
                     title={t("common.save")}
                     icon="save"
                     size={26}
-                    onPress={() => console.log("Save")}
+                    onPress={() => meetsRequirements()}
                 />
             </View>
         </View>
