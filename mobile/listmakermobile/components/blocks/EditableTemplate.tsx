@@ -28,12 +28,14 @@ export default function EditableTemplate({}: Props) {
     const [items, setItems] = useState([{ item_name: "" }]);
     const [isBlank, setIsBlank] = useState(false);
     const [hasImages, setHasImages] = useState(false);
+    const [errors, setErrors] = useState<any>(null);
 
     const meetsRequirements = async () => {
         try {
             await meetsTemplateRequirements({ title: title, items: items });
-        } catch (e) {
-            console.log(e);
+            console.log("Requirements met");
+        } catch (e: any) {
+            setErrors(e.errors);
         }
     };
 
@@ -54,6 +56,7 @@ export default function EditableTemplate({}: Props) {
                         title={t("templates.name")}
                         value={title}
                         setValue={setTitle}
+                        error={errors?.title !== undefined && title.length < 1}
                     />
                     <EditableField
                         title={t("templates.description")}

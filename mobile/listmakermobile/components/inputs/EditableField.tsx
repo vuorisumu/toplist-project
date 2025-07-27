@@ -8,8 +8,14 @@ type Props = {
     title?: string;
     value: string;
     setValue: (v: string) => void;
+    error?: boolean;
 };
-export default function EditableField({ title, value, setValue }: Props) {
+export default function EditableField({
+    title,
+    value,
+    setValue,
+    error,
+}: Props) {
     const { theme } = useAppContext();
     const [isFocused, setIsFocused] = useState(false);
     const commonStyles = createCommonStyles(theme);
@@ -28,7 +34,11 @@ export default function EditableField({ title, value, setValue }: Props) {
                     styles.input,
                     {
                         backgroundColor: backgroundColor,
-                        borderColor: isFocused ? borderColor : "transparent",
+                        borderColor: error
+                            ? "red"
+                            : isFocused
+                              ? borderColor
+                              : "transparent",
                     },
                 ]}
             >
