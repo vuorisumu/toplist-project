@@ -1,4 +1,4 @@
-import { fetchTemplates } from "@/api/templates";
+import { fetchTemplateCount, fetchTemplates } from "@/api/templates";
 import LoadingArea from "@/components/blocks/LoadingArea";
 import TemplateList from "@/components/blocks/TemplateList";
 import ButtonStyled from "@/components/ButtonStyled";
@@ -12,9 +12,13 @@ export default function Index() {
     const [loadingMore, setLoadingMore] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const [templateData, setTemplateData] = useState<any[]>([]);
+    const [totalCount, setTotalCount] = useState(0);
 
     useEffect(() => {
         loadTemplates();
+        fetchTemplateCount()
+            .then((data) => setTotalCount(data[0].count))
+            .catch((e) => console.log(e));
     }, []);
 
     const onRefresh = async () => {
@@ -75,11 +79,13 @@ export default function Index() {
             <LoadingArea loading={loading}>
                 <TemplateList templates={templateData} />
             </LoadingArea>
-            <ButtonStyled
-                onPress={loadMore}
-                title="Load more"
-                loading={loadingMore}
-            />
+            {totalCount > templateData.length && (
+                <ButtonStyled
+                    onPress={loadMore}
+                    title="Load more"
+                    loading={loadingMore}
+                />
+            )}
         </ViewContainer>
     );
 }

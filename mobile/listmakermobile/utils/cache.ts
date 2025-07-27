@@ -1,3 +1,4 @@
+import { fetchAllCategories } from "@/api/categories";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CACHE_TTL = 30 * 60 * 1000;
@@ -38,5 +39,27 @@ const removeValue = async (key: string) => {
         await AsyncStorage.removeItem(key);
     } catch (e) {
         console.log("Error removing value", e);
+    }
+};
+
+export const getCategoryByID = async (id: number) => {
+    try {
+        if (!id || isNaN(id)) throw "ID error";
+        const cached = await AsyncStorage.getItem(`categories`);
+        if (cached) {
+            const categories = JSON.parse(cached);
+            console.log("Cached categories", categories);
+            const match = categories.data.find((c: any) => c.id === id);
+            if (match) return match.name;
+        }
+
+        const res = await fetchAllCategories();
+        console.log("fetched categories", res);
+        await storeData("categories", res);
+        const match = res.find((c: any) => c.id === id);
+        if (match) return match.name;
+    } catch (e) {
+        console.log(e);
+        return "Uncategorized";
     }
 };

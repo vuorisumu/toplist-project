@@ -3,6 +3,7 @@ import { Colors } from "@/utils/Colors";
 import { createCommonStyles } from "@/utils/styles";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
+import TemplateCategory from "./TemplateCategory";
 type Props = {
     templates?: any[];
 };
@@ -23,9 +24,7 @@ export default function TemplateList({ templates }: Props) {
                     <Text style={[styles.title, { color: Colors[theme].icon }]}>
                         {template.name}
                     </Text>
-                    <Text>
-                        {t("templates.category")}: {template.category}
-                    </Text>
+                    <TemplateCategory id={template.category} />
                 </View>
             ))}
         </View>
