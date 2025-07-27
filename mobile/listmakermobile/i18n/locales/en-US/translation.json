@@ -16,6 +16,7 @@
     "templates": {
         "new": "New template",
         "info": "Template info",
+        "creator": "Creator",
         "cover_image": "Cover image",
         "pick_cover_img": "Pick an image from the camera roll",
         "name": "Template name",

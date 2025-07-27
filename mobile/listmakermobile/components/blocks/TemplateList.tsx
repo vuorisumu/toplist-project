@@ -1,8 +1,10 @@
 import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
 import { createCommonStyles } from "@/utils/styles";
+import { Link } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
+import { Paragraph } from "../Paragraph";
 import TemplateCategory from "./TemplateCategory";
 type Props = {
     templates?: any[];
@@ -25,6 +27,18 @@ export default function TemplateList({ templates }: Props) {
                         {template.name}
                     </Text>
                     <TemplateCategory id={template.category} />
+                    <Paragraph>
+                        {t("templates.creator")}:{" "}
+                        <Link
+                            href={`/user/${template.user_name}`}
+                            style={{
+                                color: Colors[theme].icon,
+                                fontWeight: 400,
+                            }}
+                        >
+                            {template.user_name}
+                        </Link>
+                    </Paragraph>
                 </View>
             ))}
         </View>

@@ -21,6 +21,7 @@ declare module 'i18next' {
         templates: {
             new: string;
             info: string;
+            creator: string;
             cover_image: string;
             pick_cover_img: string;
             name: string;
