@@ -19,7 +19,9 @@
         "has_images": "Add images to items",
         "errors": {
             "no_title": "Template must have a title",
-            "not_enough_items": "Template must have at least 5 items"
+            "not_enough_items": "Template must have at least 5 items",
+            "missing_image": "All items must have an image when making templates with images",
+            "missing_item_name": "All items must have names"
         }
     }
 }

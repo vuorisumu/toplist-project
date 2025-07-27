@@ -32,7 +32,12 @@ export default function EditableTemplate({}: Props) {
 
     const meetsRequirements = async () => {
         try {
-            await meetsTemplateRequirements({ title: title, items: items });
+            await meetsTemplateRequirements({
+                title: title,
+                items: items,
+                hasImages: hasImages,
+                isBlank: isBlank,
+            });
             console.log("Requirements met");
         } catch (e: any) {
             setErrors(e.errors);

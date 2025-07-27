@@ -25,6 +25,7 @@ declare module 'i18next' {
             errors: {
                 no_title: string;
                 not_enough_items: string;
+                missing_image: string;
             };
         };
       };
