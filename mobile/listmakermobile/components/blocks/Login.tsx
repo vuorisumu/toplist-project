@@ -29,21 +29,23 @@ export default function Login() {
     };
 
     return (
-        <View>
-            <LoadingArea loading={loading}>
-                <EditableField
-                    title={t("user.username")}
-                    value={username}
-                    setValue={setUsername}
-                />
-                <EditableField
-                    title={t("user.password")}
-                    value={password}
-                    setValue={setPassword}
-                    secure
-                />
-                {error !== false && <Paragraph>{error}</Paragraph>}
-            </LoadingArea>
+        <View style={{ gap: 15 }}>
+            <View style={{ gap: 10 }}>
+                <LoadingArea loading={loading}>
+                    <EditableField
+                        title={t("user.username")}
+                        value={username}
+                        setValue={setUsername}
+                    />
+                    <EditableField
+                        title={t("user.password")}
+                        value={password}
+                        setValue={setPassword}
+                        secure
+                    />
+                    {error !== false && <Paragraph>{error}</Paragraph>}
+                </LoadingArea>
+            </View>
             <ButtonStyled
                 title={t("user.login")}
                 icon="login"
