@@ -4,6 +4,13 @@
         "no": "No",
         "save": "Save"
     },
+    "user": {
+        "username": "Username",
+        "password": "Password",
+        "login": "Login",
+        "logout": "Logout",
+        "login_error": "Could not log in with the given credentials."
+    },
     "templates": {
         "new": "New template",
         "info": "Template info",
