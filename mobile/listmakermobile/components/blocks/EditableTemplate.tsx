@@ -112,6 +112,22 @@ export default function EditableTemplate({}: Props) {
                 )}
             </View>
 
+            {errors && (
+                <View>
+                    {Object.entries(errors as Record<string, string[]>).map(
+                        ([field, value]) =>
+                            value.map((message, i) => (
+                                <Text
+                                    key={`${field}${i}`}
+                                    style={{ color: "red" }}
+                                >
+                                    {message}
+                                </Text>
+                            ))
+                    )}
+                </View>
+            )}
+
             <View>
                 <ButtonStyled
                     title={t("common.save")}
