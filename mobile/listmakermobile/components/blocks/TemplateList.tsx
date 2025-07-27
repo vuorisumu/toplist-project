@@ -1,9 +1,9 @@
 import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
 import { createCommonStyles } from "@/utils/styles";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Paragraph } from "../Paragraph";
 import TemplateCategory from "./TemplateCategory";
 type Props = {
@@ -12,6 +12,7 @@ type Props = {
 export default function TemplateList({ templates }: Props) {
     const { theme } = useAppContext();
     const { t } = useTranslation();
+    const router = useRouter();
     const commonStyles = createCommonStyles(theme);
     if (!templates || templates.length === 0)
         return (
@@ -22,7 +23,11 @@ export default function TemplateList({ templates }: Props) {
     return (
         <View style={styles.container}>
             {templates.map((template) => (
-                <View key={`template${template.id}`} style={commonStyles.card}>
+                <TouchableOpacity
+                    key={`template${template.id}`}
+                    style={commonStyles.card}
+                    onPress={() => router.push(`/template/${template.id}/`)}
+                >
                     <Text style={[styles.title, { color: Colors[theme].icon }]}>
                         {template.name}
                     </Text>
@@ -39,7 +44,7 @@ export default function TemplateList({ templates }: Props) {
                             {template.user_name}
                         </Link>
                     </Paragraph>
-                </View>
+                </TouchableOpacity>
             ))}
         </View>
     );
