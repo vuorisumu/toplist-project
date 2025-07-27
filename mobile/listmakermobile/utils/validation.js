@@ -5,8 +5,11 @@ const ITEMS = "items";
 const TITLE = "title";
 
 const itemSchema = yup.object({
-    img_name: yup.string().required({ key: "missing_item_name", title: ITEMS }),
-    img_uri: yup
+    item_name: yup
+        .string()
+        .required({ key: "missing_item_name", title: ITEMS }),
+    img_id: yup.string(),
+    img: yup
         .string()
         .when("$hasImages", ([images], schema) =>
             images === true

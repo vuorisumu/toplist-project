@@ -2,7 +2,7 @@ import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { ComponentProps } from "react";
-import { Pressable, StyleSheet, Text } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, Text } from "react-native";
 
 type Props = {
     title: string;
@@ -10,6 +10,7 @@ type Props = {
     icon?: ComponentProps<typeof MaterialIcons>["name"];
     alt?: boolean;
     size?: number;
+    loading?: boolean;
 };
 
 export default function ButtonStyled({
@@ -18,6 +19,7 @@ export default function ButtonStyled({
     icon,
     alt = false,
     size,
+    loading,
 }: Props) {
     const { theme } = useAppContext();
     const background = alt ? Colors[theme].mid : Colors[theme].icon;
@@ -31,12 +33,15 @@ export default function ButtonStyled({
             ]}
             onPress={onPress}
         >
-            {icon && (
+            {icon && !loading && (
                 <MaterialIcons
                     name={icon}
                     size={size || 20}
                     color={Colors[theme].white}
                 />
+            )}
+            {loading && (
+                <ActivityIndicator size="small" color={Colors[theme].white} />
             )}
             <Text
                 style={[

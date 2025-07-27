@@ -2,7 +2,7 @@ import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
 import { createCommonStyles } from "@/utils/styles";
 import { meetsTemplateRequirements } from "@/utils/validation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 import { Switch } from "react-native-gesture-handler";
@@ -14,10 +14,14 @@ import ImagePicker from "../inputs/ImagePicker";
 import ItemList from "../inputs/ItemList";
 import { Paragraph } from "../Paragraph";
 
-type Props = {};
-export default function EditableTemplate({}: Props) {
+type Props = {
+    data?: any;
+    onSubmit: (data: any) => void;
+    saving?: boolean;
+};
+export default function EditableTemplate({ data, onSubmit, saving }: Props) {
     const { t } = useTranslation();
-    const { theme } = useAppContext();
+    const { theme, user } = useAppContext();
     const commonStyles = createCommonStyles(theme);
     const [cover, setCover] = useState<string | null>(null);
     const [title, setTitle] = useState("");
@@ -25,10 +29,14 @@ export default function EditableTemplate({}: Props) {
     const [category, setCategory] = useState<
         string | DropdownItem | undefined
     >();
-    const [items, setItems] = useState([{ item_name: "" }]);
+    const [items, setItems] = useState<any>([{ item_name: "" }]);
     const [isBlank, setIsBlank] = useState(false);
     const [hasImages, setHasImages] = useState(false);
     const [errors, setErrors] = useState<any>(null);
+
+    useEffect(() => {
+        console.log(category);
+    }, [category]);
 
     const meetsRequirements = async () => {
         try {
@@ -39,9 +47,64 @@ export default function EditableTemplate({}: Props) {
                 isBlank: isBlank,
             });
             setErrors(null);
+            return true;
         } catch (e: any) {
             setErrors(e.errors);
+            return false;
         }
+    };
+
+    const handleSubmit = async () => {
+        const canSave = await meetsRequirements();
+        if (!canSave) return;
+
+        // const templateData: any = {
+        //     name: title,
+        // };
+
+        const removeCover = data && data.cover_image !== null && cover === null;
+        const templateData: any = {
+            name: title,
+            settings: {
+                hasImages: hasImages && !isBlank,
+                isBlank,
+            },
+            ...(description.trim() && { description }),
+            ...(cover !== null && { cover_image: cover }),
+            ...(removeCover && { cover_image: "NULL" }),
+            ...(category &&
+                category !== "placeholder" &&
+                (!data || data.category !== category) && { category }),
+            ...(!data && { creator_id: user.user_id }),
+        };
+
+        templateData.items = isBlank
+            ? [{ item_name: "" }]
+            : items.map((i: any) => ({
+                  item_name: i.item_name,
+                  ...(hasImages && { img_id: i.img_id }),
+              }));
+
+        // create image array
+        const addedImages =
+            hasImages && !isBlank
+                ? items
+                      .filter((i: any) => i.item_name.trim() !== "" && i.img)
+                      .map((i: any) => ({
+                          id: i.img_id,
+                          img: i.img,
+                      }))
+                : [];
+
+        // add images to database
+        if (addedImages.length > 0) {
+            console.log("Images:");
+            console.log(addedImages);
+            // const res = await addNewImages(addedImages);
+            // console.log(res);
+        }
+
+        onSubmit(templateData);
     };
 
     return (
@@ -135,7 +198,8 @@ export default function EditableTemplate({}: Props) {
                     title={t("common.save")}
                     icon="save"
                     size={26}
-                    onPress={() => meetsRequirements()}
+                    onPress={handleSubmit}
+                    loading={saving}
                 />
             </View>
         </View>

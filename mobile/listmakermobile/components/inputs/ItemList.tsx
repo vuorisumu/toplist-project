@@ -33,7 +33,9 @@ export default function ItemList({ initialItems, onChange, hasImages }: Props) {
 
     const updateItemImage = useCallback((uri: string, id: string) => {
         setItems((prev) =>
-            prev.map((it) => (it.id === id ? { ...it, img_uri: uri } : it))
+            prev.map((it) =>
+                it.id === id ? { ...it, img: uri, img_id: uuid.v4() } : it
+            )
         );
     }, []);
 
@@ -85,7 +87,7 @@ const Item = ({
             <View>
                 <ImagePicker
                     small
-                    img={item.img_uri}
+                    img={item.img}
                     setImg={(uri) => updateItemImage(uri, item.id)}
                 />
             </View>
