@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { fetchTemplates } from "@/api/templates";
 import LoadingArea from "@/components/blocks/LoadingArea";
 import TemplateList from "@/components/blocks/TemplateList";
