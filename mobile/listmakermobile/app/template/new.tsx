@@ -3,20 +3,24 @@ import EditableTemplate from "@/components/blocks/EditableTemplate";
 import ViewContainer from "@/components/ViewContainer";
 import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { KeyboardAvoidingView } from "react-native";
 
 export default function NewTemplate() {
     const { theme } = useAppContext();
+    const router = useRouter();
     const [saving, setSaving] = useState(false);
 
     const saveTemplate = async (templateData: any) => {
         setSaving(true);
         try {
             const res = await addNewTemplate(templateData);
-            console.log(res);
+            if (res.id) {
+                router.push(`/template/${res.id}/`);
+            }
         } catch (e) {
-            console.log("Error", e);
+            console.log("Error saving template", e);
         }
         setSaving(false);
     };

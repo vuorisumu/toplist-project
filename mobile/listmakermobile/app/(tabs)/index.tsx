@@ -1,16 +1,15 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { fetchTemplates } from "@/api/templates";
 import LoadingArea from "@/components/blocks/LoadingArea";
 import TemplateList from "@/components/blocks/TemplateList";
+import ButtonStyled from "@/components/ButtonStyled";
 import Header from "@/components/Header";
-import { Paragraph } from "@/components/Paragraph";
 import ViewContainer from "@/components/ViewContainer";
 import { getData, storeData } from "@/utils/cache";
-import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 
 export default function Index() {
     const [loading, setLoading] = useState(false);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const [templateData, setTemplateData] = useState<any[]>([]);
 
@@ -34,21 +33,40 @@ export default function Index() {
                 setLoading(false);
                 return;
             }
-            const data = await fetchTemplates();
+            const data = await fetchTemplates({
+                sortBy: "id",
+                sortOrder: "desc",
+                from: 0,
+                amount: 5,
+            });
             if (data) {
-                const combined = templateData.concat(data);
-                const newData = Array.from(
-                    new Map(combined.map((t) => [t.id, t])).values()
-                );
-
-                setTemplateData(newData);
-                await storeData("templates", newData);
-                console.log("Stored", newData);
+                setTemplateData(data);
+                await storeData("templates", data);
             }
         } catch (e) {
             console.log("Error fetching templates", e);
         }
         setLoading(false);
+    };
+
+    const loadMore = async () => {
+        setLoadingMore(true);
+        try {
+            const data = await fetchTemplates({
+                sortBy: "id",
+                sortOrder: "desc",
+                from: templateData.length,
+                amount: 5,
+            });
+            if (data) {
+                const newData = [...templateData, ...data];
+                setTemplateData(newData);
+                await storeData("templates", newData);
+            }
+        } catch (e) {
+            console.log("Error loading more", e);
+        }
+        setLoadingMore(false);
     };
 
     return (
@@ -57,9 +75,11 @@ export default function Index() {
             <LoadingArea loading={loading}>
                 <TemplateList templates={templateData} />
             </LoadingArea>
-            <Paragraph>
-                <Link href={"/template/123/edit"}>Testi</Link>
-            </Paragraph>
+            <ButtonStyled
+                onPress={loadMore}
+                title="Load more"
+                loading={loadingMore}
+            />
         </ViewContainer>
     );
 }

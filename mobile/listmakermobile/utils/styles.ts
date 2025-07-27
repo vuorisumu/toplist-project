@@ -49,4 +49,8 @@ export const createCommonStyles = (theme: keyof typeof Colors) =>
         imagePlaceholderText: {
             color: Colors[theme].mid,
         },
+        card: {
+            backgroundColor: Colors[theme].secondary,
+            padding: 10,
+        },
     });
