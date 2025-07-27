@@ -35,7 +35,7 @@ export default function EditableField({
                     {
                         backgroundColor: backgroundColor,
                         borderColor: error
-                            ? "red"
+                            ? Colors[theme].red
                             : isFocused
                               ? borderColor
                               : "transparent",
