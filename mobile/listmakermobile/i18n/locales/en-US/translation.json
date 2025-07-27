@@ -2,14 +2,16 @@
     "common": {
         "yes": "Yes",
         "no": "No",
-        "save": "Save"
+        "save": "Save",
+        "menu": "Menu"
     },
     "user": {
         "username": "Username",
         "password": "Password",
         "login": "Login",
         "logout": "Logout",
-        "login_error": "Could not log in with the given credentials."
+        "login_error": "Could not log in with the given credentials.",
+        "logged_in_as": "Logged in as"
     },
     "templates": {
         "new": "New template",

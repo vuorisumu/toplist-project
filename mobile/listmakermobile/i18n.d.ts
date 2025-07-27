@@ -8,6 +8,7 @@ declare module 'i18next' {
             yes: string;
             no: string;
             save: string;
+            menu: string;
         };
         user: {
             username: string;
@@ -15,6 +16,7 @@ declare module 'i18next' {
             login: string;
             logout: string;
             login_error: string;
+            logged_in_as: string;
         };
         templates: {
             new: string;
