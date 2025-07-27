@@ -38,7 +38,7 @@ export default function EditableTemplate({}: Props) {
                 hasImages: hasImages,
                 isBlank: isBlank,
             });
-            console.log("Requirements met");
+            setErrors(null);
         } catch (e: any) {
             setErrors(e.errors);
         }
