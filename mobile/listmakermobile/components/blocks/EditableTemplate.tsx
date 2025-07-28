@@ -34,6 +34,7 @@ export default function EditableTemplate({ data, onSubmit, saving }: Props) {
     const [isBlank, setIsBlank] = useState(false);
     const [hasImages, setHasImages] = useState(false);
     const [errors, setErrors] = useState<any>(null);
+    const [savingImages, setSavingImages] = useState(false);
 
     useEffect(() => {
         console.log(category);
@@ -104,10 +105,10 @@ export default function EditableTemplate({ data, onSubmit, saving }: Props) {
 
         // add images to database
         if (addedImages.length > 0) {
-            console.log("Images:");
-            console.log(addedImages);
+            setSavingImages(true);
             const res = await addNewImages(addedImages);
             console.log(res);
+            setSavingImages(false);
         }
 
         onSubmit(templateData);
@@ -205,7 +206,7 @@ export default function EditableTemplate({ data, onSubmit, saving }: Props) {
                     icon="save"
                     size={26}
                     onPress={handleSubmit}
-                    loading={saving}
+                    loading={saving || savingImages}
                 />
             </View>
         </View>
