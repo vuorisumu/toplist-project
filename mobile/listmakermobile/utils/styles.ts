@@ -53,4 +53,8 @@ export const createCommonStyles = (theme: keyof typeof Colors) =>
             backgroundColor: Colors[theme].secondary,
             padding: 10,
         },
+        basicLink: {
+            fontWeight: 600,
+            color: Colors[theme].icon,
+        },
     });

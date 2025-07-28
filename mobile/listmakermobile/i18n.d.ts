@@ -13,6 +13,7 @@ declare module 'i18next' {
         settings: {
             title: string;
             dark_theme: string;
+            account_settings: string;
         };
         user: {
             username: string;
@@ -21,6 +22,7 @@ declare module 'i18next' {
             logout: string;
             login_error: string;
             logged_in_as: string;
+            own_templates: string;
         };
         templates: {
             new: string;
