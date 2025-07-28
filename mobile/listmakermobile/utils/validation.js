@@ -10,7 +10,7 @@ const itemSchema = yup.object({
         .required({ key: "missing_item_name", title: ITEMS }),
     img_id: yup.string(),
     img: yup
-        .string()
+        .mixed()
         .when("$hasImages", ([images], schema) =>
             images === true
                 ? schema.required({ key: "missing_image", title: ITEMS })
@@ -43,6 +43,7 @@ export const meetsTemplateRequirements = async (data) => {
             }
         );
     } catch (err) {
+        console.log(err);
         const errors = {};
         err.errors.map((e) => {
             if (!errors[e.title]) {

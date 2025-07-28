@@ -31,10 +31,10 @@ export default function ItemList({ initialItems, onChange, hasImages }: Props) {
         );
     }, []);
 
-    const updateItemImage = useCallback((uri: string, id: string) => {
+    const updateItemImage = useCallback((img: any, id: string) => {
         setItems((prev) =>
             prev.map((it) =>
-                it.id === id ? { ...it, img: uri, img_id: uuid.v4() } : it
+                it.id === id ? { ...it, img: img, img_id: uuid.v4() } : it
             )
         );
     }, []);
@@ -68,7 +68,7 @@ export default function ItemList({ initialItems, onChange, hasImages }: Props) {
 type ItemProps = {
     item: any;
     updateItemName: (name: string, id: string) => void;
-    updateItemImage: (uri: string, id: string) => void;
+    updateItemImage: (img: any, id: string) => void;
     deleteItem: (id: string) => void;
     iconColor: string;
     showImage: boolean;
@@ -88,7 +88,7 @@ const Item = ({
                 <ImagePicker
                     small
                     img={item.img}
-                    setImg={(uri) => updateItemImage(uri, item.id)}
+                    setImg={(img) => updateItemImage(img, item.id)}
                 />
             </View>
         )}

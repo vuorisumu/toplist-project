@@ -15,6 +15,7 @@ export default function NewTemplate() {
     const saveTemplate = async (templateData: any) => {
         setSaving(true);
         try {
+            console.log("Adding template with data", templateData);
             const res = await addNewTemplate(templateData);
             if (res.id) {
                 router.push(`/template/${res.id}/`);

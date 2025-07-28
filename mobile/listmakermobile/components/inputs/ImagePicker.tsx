@@ -1,6 +1,7 @@
 import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { ImageManipulator, SaveFormat } from "expo-image-manipulator";
 import {
     launchImageLibraryAsync,
     useMediaLibraryPermissions,
@@ -18,13 +19,13 @@ import ImagePlaceholder from "../ImagePlaceholder";
 
 type Props = {
     img?: string | null;
-    setImg?: (uri: string) => void;
+    setImg?: (img: any) => void;
     small?: boolean;
 };
 export default function ImagePicker({ img, setImg, small }: Props) {
     const { theme } = useAppContext();
     const { t } = useTranslation();
-    const [image, setImage] = useState<string | null>(img || null);
+    const [image, setImage] = useState<any>(img || null);
     const [status, requestPermission] = useMediaLibraryPermissions();
 
     const pickImage = async () => {
@@ -46,8 +47,14 @@ export default function ImagePicker({ img, setImg, small }: Props) {
         console.log(result);
 
         if (!result.canceled) {
-            setImage(result.assets[0].uri);
-            if (setImg) setImg(result.assets[0].uri);
+            const context = ImageManipulator.manipulate(result.assets[0].uri);
+            context.resize({ width: small ? 100 : 600 });
+            const image = await context.renderAsync();
+            const resized = await image.saveAsync({
+                format: SaveFormat.JPEG,
+            });
+            setImage(resized);
+            if (setImg) setImg(resized);
         }
     };
 
@@ -58,12 +65,15 @@ export default function ImagePicker({ img, setImg, small }: Props) {
                     {small ? (
                         <TouchableOpacity onPress={pickImage}>
                             <Image
-                                source={{ uri: image }}
+                                source={{ uri: image.uri }}
                                 style={[styles.image, { aspectRatio: 1 }]}
                             />
                         </TouchableOpacity>
                     ) : (
-                        <Image source={{ uri: image }} style={styles.image} />
+                        <Image
+                            source={{ uri: image.uri }}
+                            style={styles.image}
+                        />
                     )}
 
                     {!small && (

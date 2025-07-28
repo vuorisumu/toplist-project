@@ -1,3 +1,4 @@
+import { addNewImages } from "@/api/images";
 import { useAppContext } from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
 import { createCommonStyles } from "@/utils/styles";
@@ -23,7 +24,7 @@ export default function EditableTemplate({ data, onSubmit, saving }: Props) {
     const { t } = useTranslation();
     const { theme, user } = useAppContext();
     const commonStyles = createCommonStyles(theme);
-    const [cover, setCover] = useState<string | null>(null);
+    const [cover, setCover] = useState<any>(null);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [category, setCategory] = useState<
@@ -58,10 +59,6 @@ export default function EditableTemplate({ data, onSubmit, saving }: Props) {
         const canSave = await meetsRequirements();
         if (!canSave) return;
 
-        // const templateData: any = {
-        //     name: title,
-        // };
-
         const removeCover = data && data.cover_image !== null && cover === null;
         const templateData: any = {
             name: title,
@@ -70,13 +67,22 @@ export default function EditableTemplate({ data, onSubmit, saving }: Props) {
                 isBlank,
             },
             ...(description.trim() && { description }),
-            ...(cover !== null && { cover_image: cover }),
             ...(removeCover && { cover_image: "NULL" }),
             ...(category &&
                 category !== "placeholder" &&
                 (!data || data.category !== category) && { category }),
             ...(!data && { creator_id: user.user_id }),
         };
+
+        if (cover !== null) {
+            const fileName = cover.fileName || "image.jpg";
+            const fileToUpload = {
+                uri: cover.uri,
+                name: fileName,
+                type: `${cover.type || "image"}/${fileName.split(".").pop()}`,
+            };
+            templateData.cover_image = fileToUpload;
+        }
 
         templateData.items = isBlank
             ? [{ item_name: "" }]
@@ -100,8 +106,8 @@ export default function EditableTemplate({ data, onSubmit, saving }: Props) {
         if (addedImages.length > 0) {
             console.log("Images:");
             console.log(addedImages);
-            // const res = await addNewImages(addedImages);
-            // console.log(res);
+            const res = await addNewImages(addedImages);
+            console.log(res);
         }
 
         onSubmit(templateData);
