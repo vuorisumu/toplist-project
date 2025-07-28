@@ -1,4 +1,5 @@
 import Login from "@/components/blocks/Login";
+import ThemeSwitch from "@/components/blocks/ThemeSwitch";
 import ButtonStyled from "@/components/ButtonStyled";
 import Header from "@/components/Header";
 import { Paragraph } from "@/components/Paragraph";
@@ -31,6 +32,8 @@ export default function UserMenu() {
                 icon={"logout"}
                 alt
             />
+
+            <ThemeSwitch />
         </ViewContainer>
     );
 }
