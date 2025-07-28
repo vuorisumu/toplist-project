@@ -32,10 +32,12 @@ export default function Index() {
         try {
             if (!fresh) {
                 const cached = await getData("templates");
-                console.log("Cache found:", cached);
-                if (cached) setTemplateData(cached);
-                setLoading(false);
-                return;
+                if (cached) {
+                    console.log("Cache found:", cached);
+                    setTemplateData(cached);
+                    setLoading(false);
+                    return;
+                }
             }
             const data = await fetchTemplates({
                 sortBy: "id",
