@@ -10,6 +10,10 @@ declare module 'i18next' {
             save: string;
             menu: string;
         };
+        settings: {
+            title: string;
+            dark_theme: string;
+        };
         user: {
             username: string;
             password: string;

@@ -5,6 +5,10 @@
         "save": "Save",
         "menu": "Menu"
     },
+    "settings": {
+        "title": "Settings",
+        "dark_theme": "Dark theme"
+    },
     "user": {
         "username": "Username",
         "password": "Password",
