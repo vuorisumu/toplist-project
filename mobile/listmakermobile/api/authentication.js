@@ -23,7 +23,7 @@ export const userLogin = (loginData) => {
 export const auth = async () => {
     try {
         const token = await AsyncStorage.getItem("token");
-        const res = fetch(`${BASE_URL}/users/auth/`, {
+        const res = await fetch(`${BASE_URL}/users/auth/`, {
             headers: {
                 Authorization: `${token}`,
                 "Content-Type": "application/json",
@@ -32,5 +32,6 @@ export const auth = async () => {
         return res.json();
     } catch (e) {
         console.log("Error authenticating", e);
+        return false;
     }
 };

@@ -1,11 +1,12 @@
-import { userLogin } from "@/api/authentication";
+import { auth, userLogin } from "@/api/authentication";
+import { fetchUserById } from "@/api/users";
 import "@/i18n";
 import AppContext from "@/utils/AppContext";
 import { Colors } from "@/utils/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Stack } from "expo-router";
 import * as SystemUI from "expo-system-ui";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ColorSchemeName, useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -15,6 +16,13 @@ export default function RootLayout() {
         useColorScheme() ?? "dark"
     );
     SystemUI.setBackgroundColorAsync(Colors[theme].background);
+
+    useEffect(() => {
+        auth()
+            .then((res) => fetchUserById(res.id))
+            .then((userdata) => setUser(userdata[0]))
+            .catch((e) => console.log("Error setting user data", e));
+    }, []);
 
     const applyTheme = (newTheme: ColorSchemeName) => {
         if (newTheme === null || newTheme === undefined) return;
