@@ -1,5 +1,5 @@
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "https://toplistmaker.onrender.com/api";
+    import.meta.env.VITE_API_URL || "https://toplistmaker.onrender.com/api";
 
 /**
  * Fetches an image from the database by the given ID
@@ -8,9 +8,13 @@ const API_BASE_URL =
  * @returns a response containing the fetched image
  */
 export const fetchImage = (id) => {
-  return fetch(`${API_BASE_URL}/images/${id}`).then((response) =>
-    response.json()
-  );
+    return fetch(`${API_BASE_URL}/images/${id}`).then((response) =>
+        response.json()
+    );
+};
+
+export const fetchImgUrl = (img_id) => {
+    return `${API_BASE_URL}/images/img/${img_id}`;
 };
 
 /**
@@ -20,20 +24,20 @@ export const fetchImage = (id) => {
  * @returns the ID of the newly added template on successful insert
  */
 export const addNewImages = (images) => {
-  const formData = new FormData();
-  images.forEach((image, index) => {
-    formData.append(`imageId[${index}]`, image.id);
-    formData.append(`image[${index}]`, image.img);
-  });
+    const formData = new FormData();
+    images.forEach((image, index) => {
+        formData.append(`imageId[${index}]`, image.id);
+        formData.append(`image[${index}]`, image.img);
+    });
 
-  for (let [key, value] of formData.entries()) {
-    console.log(key, value);
-  }
+    for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+    }
 
-  return fetch(`${API_BASE_URL}/images/`, {
-    method: "POST",
-    body: formData,
-  })
-    .then((response) => response.json())
-    .catch((error) => console.error("Error:", error));
+    return fetch(`${API_BASE_URL}/images/`, {
+        method: "POST",
+        body: formData,
+    })
+        .then((response) => response.json())
+        .catch((error) => console.error("Error:", error));
 };
