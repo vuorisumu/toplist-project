@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { addNewImages } from "../api/images";
-import { blobToFile, getItemImages, resizeImage } from "../util/imageHandler";
+import { getItemImages, resizeImage } from "../util/imageHandler";
 import { clearAll } from "../util/misc";
 import { getCategories } from "../util/storage";
 import UserContext from "../util/UserContext";
@@ -17,7 +17,7 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
     const [errors, setErrors] = useState([]);
     const [categories, setCategories] = useState(null);
     const [chosenCategory, setChosenCategory] = useState("Choose category");
-    const [coverImage, setCoverImage] = useState({});
+    const [coverImage, setCoverImage] = useState(false);
     const [loading, setLoading] = useState(true);
     const imgRef = useRef();
     const { user } = useContext(UserContext);
@@ -29,9 +29,9 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
         // Sets the existing data when in edit mode
         if (data) {
             // Cover image
-            if (data.cover_image) {
-                const img = blobToFile(data.cover_image);
-                setCoverImage(img);
+            if (data.cover_image_url) {
+                // const img = blobToFile(data.cover_image);
+                setCoverImage(data.cover_image_url);
             }
 
             // template is blank
@@ -98,7 +98,7 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
      */
     const removeImage = () => {
         imgRef.current.value = "";
-        setCoverImage({});
+        setCoverImage(false);
     };
 
     /**
@@ -283,10 +283,10 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
         }
 
         // cover image
-        if (coverImage.name) {
+        if (coverImage) {
             templateData.cover_image = coverImage;
         } else {
-            if (data && data.cover_image) {
+            if (data && data.cover_image_url) {
                 templateData.cover_image = "NULL";
             }
         }
@@ -314,9 +314,15 @@ function TemplateData({ data, onSubmit, submitText, creating }) {
         <form encType="multipart/form-data" onSubmit={handleSubmit}>
             <div className="info">
                 <h2>Template info</h2>
-                {coverImage.name && (
+                {coverImage && (
                     <div id="imagePreview">
-                        <img src={URL.createObjectURL(coverImage)} />
+                        <img
+                            src={
+                                coverImage.name
+                                    ? URL.createObjectURL(coverImage)
+                                    : coverImage
+                            }
+                        />
                         <button type="button" onClick={removeImage}>
                             X
                         </button>
